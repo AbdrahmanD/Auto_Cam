@@ -452,10 +452,9 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 InkWell(
                     onTap: () {
 
-Excel_Controller excel=Excel_Controller();
-// excel.create_sheet(draw_Controller.box_repository.box_model.value);
-excel.createmyexcel();
-                    },
+Excel_Controller my_excel=Excel_Controller();
+my_excel.create_excel(draw_Controller.box_repository.box_model.value);
+},
                     child: Icon(
                       Icons.file_open_rounded,
                       size: 36,
