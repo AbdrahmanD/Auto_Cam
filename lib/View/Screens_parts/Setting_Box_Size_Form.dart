@@ -1,45 +1,59 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
+import 'package:auto_cam/Controller/File_managing_Coltrollers/Excel_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/View/Main_Screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class Setting_Box_Size_Form extends StatelessWidget {
+class Setting_Box_Size_Form extends StatefulWidget {
+
+
+
+  @override
+  State<Setting_Box_Size_Form> createState() => _Setting_Box_Size_FormState();
+}
+
+class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
+
+  late Box_model box_model;
+
+
   GlobalKey<FormState> form_key = GlobalKey();
 
   Draw_Controller draw_Controller = Get.find();
 
-
   TextEditingController width_controller               =TextEditingController();
+
   TextEditingController hight_controller               =TextEditingController();
+
   TextEditingController depth_controller               =TextEditingController();
+
   TextEditingController material_thickness_controller  =TextEditingController();
+
   TextEditingController back_panel_thickness_controller=TextEditingController();
-
-  box_details(){
-
-    Box_model b = draw_Controller.get_default_box();
-    width_controller.text=b.box_width.toString();
-    hight_controller.text=b.box_height.toString();
-    depth_controller.text=b.box_depth.toString();
-    material_thickness_controller.text=b.material_thickness.toString();
-    back_panel_thickness_controller.text=b.backpanel_thickness.toString();
-  }
 
   @override
   Widget build(BuildContext context) {
-    box_details();
+
+    box_model=draw_Controller.get_box();
+
+
+    width_controller.text=               box_model.box_width.toString();
+    hight_controller.text=               box_model.box_height.toString();
+    depth_controller.text=               box_model.box_depth.toString();
+    material_thickness_controller.text=  box_model.init_material_thickness.toString();
+    back_panel_thickness_controller.text=box_model.backpanel_thickness.toString();
+
+
     return Form(
       key: form_key,
       child: Column(
         children: [
           SizedBox(
             height: 18,
-          ),
-
-          //back button and lable
+          ),       //back button and lable
           Row(
             children: [
               //Back button
@@ -60,7 +74,8 @@ class Setting_Box_Size_Form extends StatelessWidget {
               Container(
                 width: 200,
                 child: Center(
-                  child: Text(
+                  child:
+                  Text(
                     'setting up box size',
                     style: TextStyle(fontSize: 20),
                   ),
@@ -87,10 +102,7 @@ class Setting_Box_Size_Form extends StatelessWidget {
               SizedBox(
                 width: 16,
               ),
-              Text(
-                "Box Width   :",
-                style: TextStyle(fontSize: 14),
-              ),
+              Text(' Box Width  :'),
               SizedBox(
                 width: 12,
               ),
@@ -381,15 +393,17 @@ class Setting_Box_Size_Form extends StatelessWidget {
               onTap: () {
                 if(form_key.currentState!.validate()){
 
-                 double  width_value=double.parse(width_controller.text.toString());
-                 double  hight_value=double.parse(hight_controller.text.toString());
-                 double  depth_value=double.parse(depth_controller.text.toString());
-                 double  material_thickness_value=double.parse(material_thickness_controller  .text.toString());
-                 double  pack_panel_thickness_value=double.parse(back_panel_thickness_controller.text.toString());
+                  double  width_value=double.parse(width_controller.text.toString());
+                  double  hight_value=double.parse(hight_controller.text.toString());
+                  double  depth_value=double.parse(depth_controller.text.toString());
+                  double  material_thickness_value=double.parse(material_thickness_controller  .text.toString());
+                  double  pack_panel_thickness_value=double.parse(back_panel_thickness_controller.text.toString());
 
 
-                 draw_Controller.add_Box(Box_model(width_value, hight_value, depth_value,
-                      material_thickness_value, pack_panel_thickness_value));
+                  Box_model b=Box_model(width_value, hight_value, depth_value,
+                      material_thickness_value, pack_panel_thickness_value);
+                  draw_Controller.add_Box(b);
+
                 }
               },
               child: Container(
@@ -401,9 +415,9 @@ class Setting_Box_Size_Form extends StatelessWidget {
                 ),
                 child: Center(
                     child: Text(
-                  'Draw in the Screen',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                )),
+                      'Draw in the Screen',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    )),
               ),
             ),
           ),
@@ -436,7 +450,12 @@ class Setting_Box_Size_Form extends StatelessWidget {
                   width: 18,
                 ),
                 InkWell(
-                    onTap: () {},
+                    onTap: () {
+
+Excel_Controller excel=Excel_Controller();
+// excel.create_sheet(draw_Controller.box_repository.box_model.value);
+excel.createmyexcel();
+                    },
                     child: Icon(
                       Icons.file_open_rounded,
                       size: 36,
@@ -498,7 +517,9 @@ class Setting_Box_Size_Form extends StatelessWidget {
                   width: 18,
                 ),
                 InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      draw_Controller.print_pieces_coordinate();
+                    },
                     child: Icon(
                       Icons.margin_outlined,
                       size: 36,
@@ -529,7 +550,10 @@ class Setting_Box_Size_Form extends StatelessWidget {
                   width: 18,
                 ),
                 InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      draw_Controller.box_repository.box_model.value.pieces_id;
+                      print(                      draw_Controller.box_repository.box_model.value.pieces_id);
+                    },
                     child: Icon(
                       Icons.code,
                       size: 36,
@@ -541,5 +565,6 @@ class Setting_Box_Size_Form extends StatelessWidget {
         ],
       ),
     );
+
   }
 }

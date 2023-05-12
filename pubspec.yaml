@@ -38,6 +38,8 @@ dependencies:
 
   ##
   get:
+  excel: 2.1.0
+
   ##
 
 dev_dependencies:

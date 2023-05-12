@@ -16,7 +16,8 @@ class Piece_model{
   late Cordinate_3D cordinate_3d;
 
   late Point_model      piece_origin;
-  late List<Face_model> piece_faces;
+  late Point_model      piece_center;
+  late Face_model piece_faces;
 
   Piece_model(
 
@@ -30,7 +31,8 @@ class Piece_model{
       this.piece_origin,
       this.piece_faces
 
-      ){
+      )
+  {
     late Point_model p0_1;
     late Point_model p0_2;
     late Point_model p0_3;
@@ -74,6 +76,8 @@ class Piece_model{
       pz_4=Point_model(Piece_width +piece_origin.x_coordinate,piece_origin.y_coordinate+ 0, Piece_thickness);
     }
 
+    piece_center=Point_model((p0_1.x_coordinate+pz_3.x_coordinate)/2,
+        (p0_1.y_coordinate+p0_3.y_coordinate)/2, p0_1.z_coordinate);
     List<Point_model> xy_0_plane=[p0_1,p0_2,p0_3,p0_4];
     List<Point_model> xy_z_plane=[pz_1,pz_2,pz_3,pz_4];
 
