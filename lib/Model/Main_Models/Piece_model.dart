@@ -15,9 +15,9 @@ class Piece_model{
   late double Piece_thickness;
   late Cordinate_3D cordinate_3d;
 
-  late Point_model      piece_origin;
-  late Point_model      piece_center;
-  late Face_model piece_faces;
+  late Point_model  piece_origin;
+  late Point_model  piece_center;
+  late Face_model   piece_faces;
 
   Piece_model(
 

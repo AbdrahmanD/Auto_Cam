@@ -453,7 +453,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                                 .box_pieces[draw_controller.hover_id]
                                 .Piece_height -
                             double_drawer_quantity * double_drawer_box_height) >
-                        (double_drawer_quantity + 1) * 5) {
+                        (double_drawer_quantity + 1) * 15) {
                       draw_controller.add_drawer(
                           double_drawer_box_material_thickness,
                           double_drawer_box_height,

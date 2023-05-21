@@ -2,6 +2,7 @@ import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/File_managing_Coltrollers/Excel_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/View/Main_Screen.dart';
+import 'package:auto_cam/View/Piece_List_view.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -433,6 +434,41 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 56,
           ),
 
+          //review cut list
+          Container(
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 18,
+                ),
+                Container(
+                    width: 180,
+                    child: Text('Review cut list  ',
+                        style: TextStyle(
+                          fontSize: 14,
+                        ))),
+                SizedBox(
+                  width: 18,
+                ),
+                InkWell(
+                    onTap: () {
+Get.to(Piece_List_view());
+
+                    },
+                    child: Icon(
+                      Icons.list,
+                      size: 36,
+                      color: Colors.teal,
+                    )),
+              ],
+            ),
+          ),
+
+          SizedBox(
+            height: 22,
+          ),
+
+
           //Export cut list as excel
           Container(
             child: Row(
@@ -452,9 +488,11 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 InkWell(
                     onTap: () {
 
-Excel_Controller my_excel=Excel_Controller();
-my_excel.create_excel(draw_Controller.box_repository.box_model.value);
-},
+                      Excel_Controller my_excel=Excel_Controller();
+                      my_excel.create_excel(draw_Controller.box_repository.box_model.value);
+// my_excel.create_excel();
+
+                    },
                     child: Icon(
                       Icons.file_open_rounded,
                       size: 36,

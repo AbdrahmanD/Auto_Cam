@@ -104,7 +104,7 @@ class Draw_Controller extends GetxController {
       double top_Distence, double frontage_Gap, double material_thickness,int quantity)
   {
     box_repository.box_model.value.add_Shelf(hover_id, top_Distence, frontage_Gap, material_thickness,quantity);
-    print_pieces_coordinate();
+    // print_pieces_coordinate();
 
   }
 
@@ -112,7 +112,7 @@ class Draw_Controller extends GetxController {
       double top_Distence, double frontage_Gap, double material_thickness,int quantity)
   {
     box_repository.box_model.value.add_Partition(hover_id, top_Distence, frontage_Gap, material_thickness,quantity);
-    print_pieces_coordinate();
+    // print_pieces_coordinate();
 
   }
 

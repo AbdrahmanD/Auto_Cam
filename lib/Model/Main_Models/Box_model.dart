@@ -1,6 +1,8 @@
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Drawer_model.dart';
 import 'package:auto_cam/Model/Main_Models/Face_model.dart';
+import 'package:auto_cam/Model/Main_Models/Groove_model.dart';
+import 'package:auto_cam/Model/Main_Models/Join_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Model/Main_Models/Point_model.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +35,31 @@ class Box_model {
 
     /// 1- initiate the (top) piece of the box
     /// 1-1 initiate the Faces of the top piece
+    ///
 
-    Single_Face top_Piece_top_face = Single_Face([0], [], []);
-    Single_Face top_Piece_right_face = Single_Face([2], [], []);
-    Single_Face top_Piece_base_face = Single_Face([5], [], []);
-    Single_Face top_Piece_left_face = Single_Face([4], [], []);
+
+    Groove_model top_back_panel_grove =Groove_model( Point_model(0,21,0),
+        Point_model(box_width-2*init_material_thickness,21,0), 6,10);
+
+    Join_model j1=Join_model( Point_model(init_material_thickness/2,50,0), 8, 'boring');
+    Join_model j2=Join_model( Point_model(init_material_thickness/2,82,0), 8, 'boring');
+    Join_model j3=Join_model( Point_model(init_material_thickness/2,box_depth/2,0), 8, 'boring');
+    Join_model j4=Join_model( Point_model(init_material_thickness/2,box_depth-50,0), 8, 'boring');
+    Join_model j5=Join_model( Point_model(init_material_thickness/2,box_depth-83,0), 8, 'boring');
+    Join_model j_back_1=Join_model( Point_model(34,82,0), 15, 'boring');
+    Join_model j_back_2=Join_model( Point_model(34,box_depth-82,0), 15, 'boring');
+    Join_model j_back_3=Join_model( Point_model(box_width-2*init_material_thickness-34,82,0), 15, 'boring');
+    Join_model j_back_4=Join_model( Point_model(box_width-2*init_material_thickness-34,box_depth-82,0), 15, 'boring');
+
+
+
+    Single_Face top_Piece_top_face = Single_Face([0], [j_back_1,j_back_2,j_back_3,j_back_4], []);
+    Single_Face top_Piece_right_face = Single_Face([2], [j1, j2, j3, j4, j5], []);
+    Single_Face top_Piece_base_face = Single_Face([5], [], [top_back_panel_grove]);
+    Single_Face top_Piece_left_face = Single_Face([4], [j1, j2, j3, j4, j5], []);
     Single_Face top_Piece_front_face = Single_Face([0], [], []);
     Single_Face top_Piece_back_face = Single_Face([0], [], []);
+
 
     Face_model top_faces = Face_model(
         top_Piece_top_face,
@@ -68,10 +88,36 @@ class Box_model {
     /// 2-1 initiate the Faces of the right piece
     ///
 
+    //back panel grove
+    Groove_model right_back_panel_grove=Groove_model( Point_model(21,9,0), Point_model(21,box_height-9,0), 6,10);
+
+    Join_model right_j1      =Join_model( Point_model(50          ,init_material_thickness/2,0), 8, 'boring');
+    Join_model right_j2      =Join_model( Point_model(82          ,init_material_thickness/2,0), 10, 'boring');
+    Join_model right_j3      =Join_model( Point_model(box_depth/2 ,init_material_thickness/2,0), 8, 'boring');
+    Join_model right_j4      =Join_model( Point_model(box_depth-50,init_material_thickness/2,0), 8, 'boring');
+    Join_model right_j5      =Join_model( Point_model(box_depth-83,init_material_thickness/2,0), 10, 'boring');
+    Join_model right_j6      =Join_model( Point_model(50          ,box_height-init_material_thickness/2,0), 8, 'boring');
+    Join_model right_j7      =Join_model( Point_model(82          ,box_height-init_material_thickness/2,0), 10, 'boring');
+    Join_model right_j8      =Join_model( Point_model(box_depth/2 ,box_height-init_material_thickness/2,0), 8, 'boring');
+    Join_model right_j9      =Join_model( Point_model(box_depth-50,box_height-init_material_thickness/2,0), 8, 'boring');
+    Join_model right_j10      =Join_model( Point_model(box_depth-83,box_height-init_material_thickness/2,0), 10, 'boring');
+
+
     Single_Face right_Piece_top_face = Single_Face([0], [], []);
     Single_Face right_Piece_right_face = Single_Face([0], [], []);
     Single_Face right_Piece_base_face = Single_Face([0], [], []);
-    Single_Face right_Piece_left_face = Single_Face([1, 5, 3], [], []);
+    Single_Face right_Piece_left_face = Single_Face([1, 5, 3], [
+      right_j1,
+      right_j2,
+      right_j3,
+      right_j4,
+      right_j5,
+      right_j6  ,
+      right_j7  ,
+      right_j8  ,
+      right_j9  ,
+      right_j10  ,
+    ], [right_back_panel_grove]);
     Single_Face right_Piece_front_face = Single_Face([0], [], []);
     Single_Face right_Piece_back_face = Single_Face([0], [], []);
 
@@ -103,11 +149,47 @@ class Box_model {
     /// 4- initiate the (base) piece of the box
     /// 4-1 initiate the Faces of the base piece
 
-    Single_Face base_Piece_top_face = Single_Face([5], [], []);
-    Single_Face base_Piece_right_face = Single_Face([2], [], []);
-    Single_Face base_Piece_base_face = Single_Face([0], [], []);
-    Single_Face base_Piece_left_face = Single_Face([4], [], []);
-    Single_Face base_Piece_front_face = Single_Face([0], [], []);
+    Groove_model base_back_panel_grove =Groove_model( Point_model(0,box_depth-21,0),
+        Point_model(box_width-2*init_material_thickness,box_depth-21,0), 6,10);
+
+
+    Join_model base_j1=Join_model( Point_model(init_material_thickness/2,50,0), 8, 'boring');
+    Join_model base_j2=Join_model( Point_model(init_material_thickness/2,82,0), 8, 'boring');
+    Join_model base_j3=Join_model( Point_model(init_material_thickness/2,box_depth/2,0), 8, 'boring');
+    Join_model base_j4=Join_model( Point_model(init_material_thickness/2,box_depth-50,0), 8, 'boring');
+    Join_model base_j5=Join_model( Point_model(init_material_thickness/2,box_depth-83,0), 8, 'boring');
+    Join_model base_j_back_1=Join_model( Point_model(34,82,0), 15, 'boring');
+    Join_model base_j_back_2=Join_model( Point_model(34,box_depth-82,0), 15, 'boring');
+    Join_model base_j_back_3=Join_model( Point_model(box_width-2*init_material_thickness-34,82,0), 15, 'boring');
+    Join_model base_j_back_4=Join_model( Point_model(box_width-2*init_material_thickness-34,box_depth-82,0), 15, 'boring');
+
+
+
+
+    Single_Face base_Piece_top_face = Single_Face([5], [], [base_back_panel_grove]);
+    Single_Face base_Piece_right_face = Single_Face([2], [
+      base_j1,
+      base_j2,
+      base_j3,
+      base_j4,
+      base_j5,
+    ], []);
+    Single_Face base_Piece_base_face = Single_Face([0], [
+      base_j_back_1,
+      base_j_back_2,
+      base_j_back_3,
+      base_j_back_4,
+    ], []);
+    Single_Face base_Piece_left_face = Single_Face([4], [
+      base_j1,
+      base_j2,
+      base_j3,
+      base_j4,
+      base_j5,
+    ], []);
+    Single_Face base_Piece_front_face = Single_Face([0], [
+
+    ], []);
     Single_Face base_Piece_back_face = Single_Face([0], [], []);
 
     Face_model base_faces = Face_model(
@@ -135,9 +217,37 @@ class Box_model {
 
     /// 3- initiate the (left) piece of the box
     /// 3-1 initiate the Faces of the left piece
+    ///
+    ///
+    ///
+    Groove_model left_panel_grove=Groove_model( Point_model(box_depth-21,9,0),
+        Point_model(box_depth-21,box_height-9,0), 6,10);
+
+    Join_model left_j1      =Join_model( Point_model(50          ,init_material_thickness/2,0), 8, 'boring');
+    Join_model left_j2      =Join_model( Point_model(82          ,init_material_thickness/2,0), 10, 'boring');
+    Join_model left_j3      =Join_model( Point_model(box_depth/2 ,init_material_thickness/2,0), 8, 'boring');
+    Join_model left_j4      =Join_model( Point_model(box_depth-50,init_material_thickness/2,0), 8, 'boring');
+    Join_model left_j5      =Join_model( Point_model(box_depth-83,init_material_thickness/2,0), 10, 'boring');
+    Join_model left_j6      =Join_model( Point_model(50          ,box_height-init_material_thickness/2,0), 8, 'boring');
+    Join_model left_j7      =Join_model( Point_model(82          ,box_height-init_material_thickness/2,0), 10, 'boring');
+    Join_model left_j8      =Join_model( Point_model(box_depth/2 ,box_height-init_material_thickness/2,0), 8, 'boring');
+    Join_model left_j9      =Join_model( Point_model(box_depth-50,box_height-init_material_thickness/2,0), 8, 'boring');
+    Join_model left_j10      =Join_model( Point_model(box_depth-83,box_height-init_material_thickness/2,0), 10, 'boring');
+
 
     Single_Face left_Piece_top_face = Single_Face([0], [], []);
-    Single_Face left_Piece_right_face = Single_Face([1, 5, 3], [], []);
+    Single_Face left_Piece_right_face = Single_Face([1, 5, 3], [
+      left_j1,
+      left_j2,
+      left_j3,
+      left_j4,
+      left_j5,
+      left_j6,
+      left_j7,
+      left_j8,
+      left_j9,
+      left_j10,
+    ], [left_panel_grove]);
     Single_Face left_Piece_base_face = Single_Face([0], [], []);
     Single_Face left_Piece_left_face = Single_Face([0], [], []);
     Single_Face left_Piece_front_face = Single_Face([0], [], []);
@@ -250,6 +360,7 @@ class Box_model {
 
   add_Shelf_pattern(int inner, double top_Distence, double frontage_Gap,
       double shelf_material_thickness) {
+
     double down_Distence = box_pieces[inner].Piece_height -
         top_Distence -
         shelf_material_thickness;
@@ -370,6 +481,28 @@ class Box_model {
             .add(right_side_piece.piece_faces.left_face.face_item[i]);
       }
     }
+
+    Point_model right_side_shelf_hole_point_1=
+    Point_model(box_depth-frontage_Gap-40,
+       box_pieces[inner].piece_origin.y_coordinate+ down_Distence-2
+        , 0);
+    Point_model right_side_shelf_hole_point_2=
+    Point_model(64,
+        box_pieces[inner].piece_origin.y_coordinate+ down_Distence-2
+        , 0);
+
+
+    Join_model right_shelf_hole_1=Join_model(right_side_shelf_hole_point_1, 5, 'shelf');
+    Join_model right_shelf_hole_2=Join_model(right_side_shelf_hole_point_2, 5, 'shelf');
+
+    List<Join_model> n_join_list=[];
+
+    right_side_piece.piece_faces.left_face.join_list.forEach((element) {n_join_list.add(element);});
+
+    n_join_list.add(right_shelf_hole_1);
+    n_join_list.add(right_shelf_hole_2);
+
+
     Piece_model right_piece_new = Piece_model(
         right_side_piece.piece_id,
         right_side_piece.piece_name,
@@ -379,11 +512,14 @@ class Box_model {
         right_side_piece.Piece_height,
         right_side_piece.Piece_thickness,
         right_side_piece.piece_origin,
+
         Face_model(
             right_side_piece.piece_faces.top_face,
             right_side_piece.piece_faces.right_face,
             right_side_piece.piece_faces.base_face,
-            Single_Face(right_side_new_left_face_items, [], []),
+            Single_Face(right_side_new_left_face_items,
+                n_join_list,
+                right_side_piece.piece_faces.left_face.groove_list),
             right_side_piece.piece_faces.front_face,
             right_side_piece.piece_faces.back_face));
 
@@ -411,6 +547,30 @@ class Box_model {
             .add(left_side_piece.piece_faces.right_face.face_item[i]);
       }
     }
+
+
+    Point_model left_side_shelf_hole_point_1=
+    Point_model(box_depth-frontage_Gap-40,
+        box_pieces[inner].piece_origin.y_coordinate+ down_Distence-2
+        , 0);
+    Point_model left_side_shelf_hole_point_2=
+    Point_model(64,
+        box_pieces[inner].piece_origin.y_coordinate+ down_Distence-2
+        , 0);
+
+
+    Join_model left_shelf_hole_1=Join_model(left_side_shelf_hole_point_1, 5, 'shelf');
+    Join_model left_shelf_hole_2=Join_model(left_side_shelf_hole_point_2, 5, 'shelf');
+
+    List<Join_model> left_n_join_list=[];
+
+    left_side_piece.piece_faces.right_face.join_list.forEach((element) {left_n_join_list.add(element);});
+
+   left_n_join_list.add(left_shelf_hole_1);
+   left_n_join_list.add(left_shelf_hole_2);
+
+
+
     Piece_model left_piece_new = Piece_model(
         left_side_piece.piece_id,
         left_side_piece.piece_name,
@@ -422,7 +582,9 @@ class Box_model {
         left_side_piece.piece_origin,
         Face_model(
             left_side_piece.piece_faces.top_face,
-            Single_Face(left_side_new_right_face_items, [], []),
+            Single_Face(left_side_new_right_face_items,
+                left_n_join_list,
+                left_side_piece.piece_faces.right_face.groove_list),
             left_side_piece.piece_faces.base_face,
             left_side_piece.piece_faces.left_face,
             left_side_piece.piece_faces.front_face,
@@ -699,7 +861,7 @@ class Box_model {
             right_side_piece.piece_faces.top_face,
             right_side_piece.piece_faces.right_face,
             right_side_piece.piece_faces.base_face,
-            Single_Face(right_side_new_left_face_items, [], []),
+            Single_Face(right_side_new_left_face_items, right_side_piece.piece_faces.left_face.join_list, right_side_piece.piece_faces.left_face.groove_list),
             right_side_piece.piece_faces.front_face,
             right_side_piece.piece_faces.back_face));
 
@@ -736,7 +898,7 @@ class Box_model {
         left_side_piece.piece_origin,
         Face_model(
             left_side_piece.piece_faces.top_face,
-            Single_Face(left_side_new_right_face_items, [], []),
+            Single_Face(left_side_new_right_face_items, left_side_piece.piece_faces.right_face.join_list, left_side_piece.piece_faces.right_face.groove_list),
             left_side_piece.piece_faces.base_face,
             left_side_piece.piece_faces.left_face,
             left_side_piece.piece_faces.front_face,

@@ -31,7 +31,7 @@ class Drawer_model{
       this.drawer_origin) {
 
 if(drawer_type==1){
-  drawer_box_width=inner_width-2*side_gape;
+  drawer_box_width=inner_width-side_gape;
 }
 
     Draw_Controller draw_controller=Get.find();
@@ -47,7 +47,7 @@ if(drawer_type==1){
       Single_Face([],[],[]),
     );
     Point_model drawer_box_right_side_ogirin=Point_model(
-        drawer_origin.x_coordinate+drawer_box_width-drawer_box_material_thickness+side_gape,
+        drawer_origin.x_coordinate+drawer_box_width-drawer_box_material_thickness+side_gape/2,
         drawer_origin.y_coordinate+(inner_height-drawer_box_height)/2,
         drawer_origin.z_coordinate
     );
@@ -70,7 +70,7 @@ if(drawer_type==1){
       Single_Face([],[],[]),
     );
     Point_model drawer_box_left_side_ogirin=Point_model(
-        drawer_origin.x_coordinate+side_gape,
+        drawer_origin.x_coordinate+side_gape/2,
         drawer_origin.y_coordinate+(inner_height-drawer_box_height)/2,
         drawer_origin.z_coordinate
     );
@@ -93,7 +93,7 @@ if(drawer_type==1){
       Single_Face([],[],[]),
     );
     Point_model drawer_box_front_side_ogirin=Point_model(
-        drawer_origin.x_coordinate+side_gape+drawer_box_material_thickness,
+        drawer_origin.x_coordinate+side_gape/2+drawer_box_material_thickness,
         drawer_origin.y_coordinate+(inner_height-drawer_box_height)/2,
         drawer_origin.z_coordinate
     );
@@ -118,7 +118,7 @@ if(drawer_type==1){
       Single_Face([],[],[]),
     );
     Point_model drawer_box_back_side_ogirin=Point_model(
-        drawer_origin.x_coordinate+side_gape+drawer_box_material_thickness,
+        drawer_origin.x_coordinate+side_gape/2+drawer_box_material_thickness,
         drawer_origin.y_coordinate+(inner_height-drawer_box_height)/2,
         drawer_origin.z_coordinate-drawer_box_depth-drawer_box_material_thickness
     );
