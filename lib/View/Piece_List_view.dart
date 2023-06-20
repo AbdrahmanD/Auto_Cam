@@ -32,10 +32,17 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                     child: ListView.builder(
                         itemCount: draw_controller.box_repository.box_model.value.box_pieces.length,
                         itemBuilder: (context,i){
-                          if(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name=='inner'){return SizedBox();}
+                          if(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name=='inner'||
+                          draw_controller.box_repository.box_model.value.box_pieces[i].piece_direction=='help_shelf'){return SizedBox();}
                           else {return Row(
                             children: [
-                              Checkbox(value: false, onChanged: (v){}),
+                              Checkbox(value: draw_controller.box_repository.box_model.value.box_pieces[i].piece_inable,
+                                  onChanged: (v){
+                                    draw_controller.box_repository.box_model.value.box_pieces[i].piece_inable=!draw_controller.box_repository.box_model.value.box_pieces[i].piece_inable;
+                              setState(() {
+
+                              });
+                              }),
                               SizedBox(height: 12,),
                               Text(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name)
                             ],
@@ -52,9 +59,12 @@ class _Piece_List_viewState extends State<Piece_List_view> {
               child: ListView.builder(
                   itemCount: draw_controller.box_repository.box_model.value.box_pieces.length,
                   itemBuilder: (context,i){
-                    if(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name=='inner'){return SizedBox();}
+                    if(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name=='inner'||
+                        draw_controller.box_repository.box_model.value.box_pieces[i].piece_direction=='help_shelf')
+                    {return SizedBox();}
 
-                    else{
+                    else if(draw_controller.box_repository.box_model.value.box_pieces[i].piece_inable){
+
                       return Column(
                         children: [
                           Container(width: 500,color: Colors.white,height: 700,child:
@@ -64,6 +74,8 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                           SizedBox(height: 33,)
                         ],
                       );
+                    }else{
+                      return SizedBox();
                     }
               }),
             ),

@@ -5,9 +5,9 @@ import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Coordinate_3D.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
-import 'package:auto_cam/Model/Main_Models/Drawer_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Model/Main_Models/Point_model.dart';
+import 'package:auto_cam/Model/Manufacturing_Models/kdt_file.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,9 +21,10 @@ class Draw_Controller extends GetxController {
   Box_Repository box_repository = Get.find();
   int hover_id = 90;
 
-  Draw_Controller() {
-    // print('DRaw ..... here ########################');
-  }
+  String box_type="wall_box";
+
+
+  Draw_Controller() {}
 
   Box_model get_box() {
     return box_repository.box_model.value;
@@ -97,13 +98,14 @@ class Draw_Controller extends GetxController {
     if (x_compare && y_compare) {
       is_hover = true;
     }
+
     return is_hover;
   }
 
   add_shelf(
-      double top_Distence, double frontage_Gap, double material_thickness,int quantity)
+      double top_Distence, double frontage_Gap, double material_thickness,int quantity,String shelf_type)
   {
-    box_repository.box_model.value.add_Shelf(hover_id, top_Distence, frontage_Gap, material_thickness,quantity);
+    box_repository.box_model.value.add_Shelf(hover_id, top_Distence, frontage_Gap, material_thickness,quantity,shelf_type);
     // print_pieces_coordinate();
 
   }
@@ -161,92 +163,6 @@ class Draw_Controller extends GetxController {
     box_repository.box_model.value.add_door(door_model);
   }
 
-  add_drawer_pattern(
-      double inner_height,
-      double double_drawer_box_material_thickness,
-      double double_drawer_box_height,
-      double double_drawer_box_depth,
-      int drawer_type,
-      Point_model drawer_origin
-      )
-  {
-    late double side_gape;
-    if(drawer_type==1){
-      side_gape=24;
-    }
-    double inner_width=box_repository.box_model.value.box_pieces[hover_id].Piece_width;
-    Drawer_model drawer_model=Drawer_model(
-        box_repository.box_model.value.box_drawers.length+1
-    ,  inner_height,inner_width, drawer_type, side_gape,
-        double_drawer_box_material_thickness,
-       double_drawer_box_height,
-       double_drawer_box_depth,
-        drawer_origin);
-    box_repository.box_model.value.box_drawers.add(drawer_model);
-
-  }
-
-
-
-
-  add_drawer(double double_drawer_box_material_thickness,
-      double double_drawer_box_height,
-      double double_drawer_box_depth,
-      int drawer_type,
-      int drawers_quantity,
-      List<double> over_lap
-      ){
-
-    Point_model inner_origin=box_repository.box_model.value.box_pieces[hover_id].piece_origin;
-
-    if(drawers_quantity==1){
-
-      add_drawer_pattern(box_repository.box_model.value.box_pieces[hover_id].Piece_height,
-          double_drawer_box_material_thickness,
-         double_drawer_box_height,
-         double_drawer_box_depth,
-         drawer_type,
-          inner_origin);
-      Door_Model door_model = Door_Model(1, double_drawer_box_material_thickness, 2, hover_id
-          , over_lap[0], over_lap[1], over_lap[2] ,over_lap[3]);
-
-      box_repository.box_model.value.add_horisontal_door_pattern(door_model);
-
-    }else{
-      double inner_height=box_repository.box_model.value.box_pieces[hover_id].Piece_height/drawers_quantity;
-      // double single_inner_height=inner_height/drawers_quantity;
-
-      for(int i=0;i<drawers_quantity;i++){
-
-          Point_model inner_origin_i=Point_model(
-              inner_origin.x_coordinate,
-              inner_origin.y_coordinate
-                  + inner_height*i
-            ,
-              inner_origin.z_coordinate,
-          );
-
-          add_drawer_pattern(inner_height,
-              double_drawer_box_material_thickness,
-              double_drawer_box_height,
-              double_drawer_box_depth,
-              drawer_type,
-              inner_origin_i
-          );
-
-        }
-
-      Door_Model door_model = Door_Model(drawers_quantity, double_drawer_box_material_thickness, 2, hover_id
-          , over_lap[0], over_lap[1], over_lap[2] ,over_lap[3]);
-
-      box_repository.box_model.value.add_horisontal_door_pattern(door_model);
-
-      }
-    }
-
-
-
-
 
   print_pieces_coordinate() {
 
@@ -264,8 +180,32 @@ class Draw_Controller extends GetxController {
       print('---------');
       box_repository.box_model.value.box_pieces[i].piece_faces.left_face .face_item.forEach((element) {print('left  : $element');});
       print('---------');
+      print('(# Y #) = ${box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate}');
+      print('---------');
 
-      print('=============');
+    }
+  }
+
+  extract_xml_files(){
+
+    DateTime dateTime =DateTime.now();
+    String date = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
+
+
+    String box_name='(${box_repository.box_model.value.box_width}X${box_repository.box_model.value.box_height}X'
+        '${box_repository.box_model.value.box_depth})-${date}';
+
+    print(box_name);
+    for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
+      if( box_repository.box_model.value.box_pieces[i].piece_name=="inner" ||
+          box_repository.box_model.value.box_pieces[i].piece_name.startsWith("back_panel")||
+          box_repository.box_model.value.box_pieces[i].piece_name=="help_shelf"
+      ){
+       continue;
+      }else{
+        kdt_file kdt=kdt_file(box_repository.box_model.value.box_pieces[i],box_name);
+      }
+
     }
   }
 

@@ -18,9 +18,13 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
   TextEditingController material_controller = TextEditingController();
 
   TextEditingController round_gap_controller = TextEditingController();
+
   Draw_Controller draw_controller=Get.find();
 
   bool single_door=true;
+
+  bool right_door=true;
+  bool left_door=false;
 
   double up_over_lap    =1;
 
@@ -53,6 +57,18 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
   bool bool_right_over_lap_h=false;
 
   bool bool_right_over_lap_i=false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    material_controller.text="${draw_controller.box_repository.box_model.value.init_material_thickness}";
+    round_gap_controller.text="2";
+
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -299,13 +315,20 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 12,
+                  height: 4,
                 ),
 
                 Row(
                   children: [
                     Checkbox(value: single_door, onChanged: (_) {
                       single_door=!single_door;
+                      if(single_door){
+                        right_door=true;
+                        left_door=false;
+                      }else{
+                        right_door=true;
+                        left_door=true;
+                      }
                       setState(() {
 
                       });
@@ -317,12 +340,16 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                   ],
                 ),
                 SizedBox(
-                  height: 12,
+                  height: 4,
                 ),
                 Row(
                   children: [
                     Checkbox(value: !single_door, onChanged: (_) {
                       single_door=!single_door;
+                      if(!single_door){
+                        right_door=true;
+                        left_door=true;
+                      }
                       setState(() {
 
                       });
@@ -333,6 +360,46 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                     ),
                   ],
                 ),
+
+                SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  children: [
+                    Checkbox(value: left_door, onChanged: (_) {
+                      left_door=!left_door;
+                      right_door=!right_door;
+                      setState(() {
+
+                      });
+                    }),
+                    Text('Left Door'),
+                    SizedBox(
+                      width: 4,
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  children: [
+                    Checkbox(value: right_door, onChanged: (_) {
+                      right_door=!right_door;
+                      left_door=!left_door;
+
+                      setState(() {
+
+                      });
+                    }),
+                    Text('Right Door'),
+                    SizedBox(
+                      width: 4,
+                    ),
+                  ],
+                ),
+
 
                 //divider
                 Padding(
@@ -429,11 +496,19 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                     ),
                     InkWell(
                       onTap: () {
-
+late String door_direction;
+if(single_door){
+  if(right_door)
+    door_direction="R";
+  else
+    door_direction="L";
+}else{
+  door_direction="D";
+}
                        Door_Model door_model=Door_Model(single_door?1:2,
                            double.parse(material_controller.text.toString()),
                            double.parse(round_gap_controller.text.toString()),draw_controller.hover_id,
-                           up_over_lap, right_over_lap, down_over_lap, left_over_lap);
+                           up_over_lap, right_over_lap, down_over_lap, left_over_lap,door_direction);
                        draw_controller.add_door(door_model);
                        Navigator.of(Get.overlayContext!).pop();
 

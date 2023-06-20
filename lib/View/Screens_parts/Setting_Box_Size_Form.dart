@@ -20,6 +20,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
   late Box_model box_model;
 
+  bool is_back_panel=true;
 
   GlobalKey<FormState> form_key = GlobalKey();
 
@@ -349,7 +350,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           SizedBox(
             height: 12,
           ),
-
           //chose or Edit fitting type
           Container(
             child: Row(
@@ -385,6 +385,41 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
           ///////////////////////
+          SizedBox(
+            height: 12,
+          ),
+          //chose is there back panel or not
+          Container(
+            child: Row(
+              children: [
+                SizedBox(width: 18),
+                Container(
+                    width: 180,
+                    child: Text('               with back panel ',
+                        style: TextStyle(
+                          fontSize: 14,
+                        ))),
+                SizedBox(
+                  width: 18,
+                ),
+                Checkbox(value: is_back_panel, onChanged: (v){
+                  is_back_panel=!is_back_panel;
+                  setState(() {
+
+                  });
+                })
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 12,
+          ),
+
+          //divider
+          Container(
+            height: 1,
+            color: Colors.grey,
+          ),
           ///////////////////////
           ///Draw in the Screen button
           Padding(
@@ -402,7 +437,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
 
                   Box_model b=Box_model(width_value, hight_value, depth_value,
-                      material_thickness_value, pack_panel_thickness_value);
+                      material_thickness_value, pack_panel_thickness_value,is_back_panel,draw_Controller.box_type);
                   draw_Controller.add_Box(b);
 
                 }
@@ -430,9 +465,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             color: Colors.grey,
           ),
 
-          SizedBox(
-            height: 56,
-          ),
 
           //review cut list
           Container(
@@ -588,8 +620,7 @@ Get.to(Piece_List_view());
                 ),
                 InkWell(
                     onTap: () {
-                      draw_Controller.box_repository.box_model.value.pieces_id;
-                      print(                      draw_Controller.box_repository.box_model.value.pieces_id);
+                      draw_Controller.extract_xml_files();
                     },
                     child: Icon(
                       Icons.code,

@@ -1,11 +1,17 @@
-
+import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/View/Cabinet_Editor.dart';
-import 'package:auto_cam/View/Screens_parts/Box_Type.dart';
-import 'package:auto_cam/View/Single_Piece_Editor.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Main_Screen extends StatelessWidget {
+class Box_Type extends StatefulWidget {
+
+  @override
+  State<Box_Type> createState() => _Box_TypeState();
+}
+
+class _Box_TypeState extends State<Box_Type> {
+
+  Draw_Controller draw_controller=Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +33,18 @@ class Main_Screen extends StatelessWidget {
             children: [
 
               SizedBox(
-                height: 64,
+                height: w/4,
               ),
 
               // auto cam lable
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(22),
+                  color: Colors.red[400],
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  "   AUTO CAM   ",
-                  style: TextStyle(fontSize: w / 14, color: Colors.white),
+                  "  chose the type of box you want to build    ",
+                  style: TextStyle(fontSize: 32, color: Colors.white),
                 ),
               ),
 
@@ -58,7 +64,7 @@ class Main_Screen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Project",
+                          "wall cabinet",
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
@@ -68,22 +74,20 @@ class Main_Screen extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             // Get.to(Project_Screen());
-                            Get.defaultDialog(title:'ERROR',content: Text('sorry , this choice not ready yet'));
+                            draw_controller.box_type="wall_box";
+                            Get.to(Cabinet_Editor());
 
                           },
                           child: Container(
-                              height: 150,
+                              height: 200,
                               // color: Colors.red,
                               child: Image.asset(
-                                "lib/assets/images/pr.png",
+                                "lib/assets/images/normal.png",
                               )),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Text(
-                            "build full project ,like wardrobes or kitchens",
-                            style: TextStyle(fontSize: 14),
-                          ),
+                        Text(
+                          "normal cabinet",
+                          style: TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
@@ -96,7 +100,7 @@ class Main_Screen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Single Cabinet",
+                          "Base Cabinet",
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
@@ -105,21 +109,20 @@ class Main_Screen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            Get.to(Box_Type());
+                            draw_controller.box_type="base_box";
+
+                            Get.to(Cabinet_Editor());
                           },
                           child: Container(
-                              height: 150,
+                              height: 200,
                               // color: Colors.red,
                               child: Image.asset(
-                                "lib/assets/images/sc.png",
+                                "lib/assets/images/10u.png",
                               )),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Text(
-                            "build single cabinet to use alone or in project",
-                            style: TextStyle(fontSize: 14),
-                          ),
+                        Text(
+                          "box with 10 cm top and normal base",
+                          style: TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
@@ -132,7 +135,7 @@ class Main_Screen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Single Piece",
+                          "Inner Box",
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
@@ -142,24 +145,19 @@ class Main_Screen extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             // Get.to(Single_Piece_Editor());
-                            Get.defaultDialog(title:'ERROR',content: Text('sorry , this choice not ready yet'));
+                            draw_controller.box_type="inner_box";
+                            Get.to(Cabinet_Editor());
                           },
                           child: Container(
-                              height: 150,
+                              height: 200,
                               // color: Colors.red,
-                              child: Padding(
-                                padding: const EdgeInsets.all(18.0),
-                                child: Image.asset(
-                                  "lib/assets/images/sp.png",
-                                ),
+                              child: Image.asset(
+                                "lib/assets/images/10ud.png",
                               )),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Text(
-                            "set fitting for single piece  ",
-                            style: TextStyle(fontSize: 14),
-                          ),
+                        Text(
+                          "box with 10 cm  top and base",
+                          style: TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
@@ -177,6 +175,5 @@ class Main_Screen extends StatelessWidget {
         ),
       ),
     );
-
   }
 }

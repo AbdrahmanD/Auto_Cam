@@ -22,10 +22,12 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
 
   GlobalKey<FormState> my_key = GlobalKey();
 
-  Draw_Controller drawerController = Get.find();
+  Draw_Controller draw_Controller = Get.find();
 
   bool quantity = true;
   bool shelf_center = false;
+  bool help_shelf = false;
+  bool fixed_shelf = false;
   bool distance = true;
   bool proportional = false;
   bool edit_enable = true;
@@ -36,7 +38,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
       if (Top_Distance.text.toString() != '') {
         double_top_distance = double.parse(Top_Distance.text.toString());
         Bottom_Distance.text =
-            '${drawerController.box_repository.box_model.value.box_pieces[drawerController.hover_id].Piece_height - double_top_distance}';
+            '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].Piece_height - double_top_distance}';
       }
     } else if (proportional) {
       if (Top_Distance.text.toString() != '') {
@@ -54,7 +56,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
       if (Bottom_Distance.text.toString() != '') {
         double_bottom_distance = double.parse(Bottom_Distance.text.toString());
         Top_Distance.text = ''
-            '${drawerController.box_repository.box_model.value.box_pieces[drawerController.hover_id].Piece_height - double_bottom_distance}';
+            '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].Piece_height - double_bottom_distance}';
       }
     } else if (proportional) {
       if (Bottom_Distance.text.toString() != '') {
@@ -67,44 +69,54 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
   }
 
   add_shelf() {
+
     if (my_key.currentState!.validate()) {
+      String shelf_type;
+      if(fixed_shelf){
+        shelf_type='fixed_shelf';
+      }else if (help_shelf){
+        shelf_type='help_shelf';
+      }else{
+        shelf_type='shelf';
+      }
       if (!shelf_center) {
         if (distance) {
           double top_Distence =
               quantity ? double.parse(Top_Distance.text.toString()) : 0;
           double frontage_Gap = double.parse(Front_Gap.text.toString());
           double material = double.parse(Material.text.toString());
-          drawerController.add_shelf(top_Distence, frontage_Gap, material,
-              double.parse(Quantity.text.toString()).toInt());
+          draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
+              double.parse(Quantity.text.toString()).toInt(),shelf_type);
         } else if (proportional) {
           double top_Distence =
               (double.parse(Top_Distance.text.toString()) / 100) *
-                      (drawerController.box_repository.box_model.value
-                          .box_pieces[drawerController.hover_id].Piece_height) -
+                      (draw_Controller.box_repository.box_model.value
+                          .box_pieces[draw_Controller.hover_id].Piece_height) -
                   double.parse(Material.text.toString()) / 2;
           double frontage_Gap = double.parse(Front_Gap.text.toString());
           double material = double.parse(Material.text.toString());
-          drawerController.add_shelf(top_Distence, frontage_Gap, material,
-              double.parse(Quantity.text.toString()).toInt());
+          draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
+              double.parse(Quantity.text.toString()).toInt(),shelf_type);
         }
       } else {
-        double top_Distence = drawerController.box_repository.box_model.value
-                    .box_pieces[drawerController.hover_id].Piece_height /
+        double top_Distence = draw_Controller.box_repository.box_model.value
+                    .box_pieces[draw_Controller.hover_id].Piece_height /
                 2 -
             double.parse(Material.text.toString()) / 2;
         double frontage_Gap = double.parse(Front_Gap.text.toString());
         double material = double.parse(Material.text.toString());
-        drawerController.add_shelf(top_Distence, frontage_Gap, material,
-            double.parse(Quantity.text.toString()).toInt());
+        draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
+            double.parse(Quantity.text.toString()).toInt(),shelf_type);
       }
     }
   }
 
   shelf_center_change() {
     Quantity.text='1';
-    Material.text='${drawerController.box_repository.box_model.value.init_material_thickness}';
+    Material.text='${draw_Controller.box_repository.box_model.value.init_material_thickness}';
     Front_Gap.text='24';
     if (!shelf_center) {
+      help_shelf=false;
       shelf_center = true;
       distance = false;
       proportional = false;
@@ -120,6 +132,64 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
     setState(() {});
   }
 
+  helper_shelf_change() {
+
+    if(help_shelf){
+      Quantity.text='1';
+      Material.text='${draw_Controller.box_repository.box_model.value.init_material_thickness}';
+      Front_Gap.text='24';
+      shelf_center = false;
+      distance = true;
+      proportional = false;
+      edit_enable = true;
+      Top_Distance.text = '0';
+      Bottom_Distance.text = '0';
+      help_shelf=false;
+    }else{
+      Quantity.text='1';
+      Material.text='0';
+      Front_Gap.text='0';
+      shelf_center = false;
+      distance = true;
+      proportional = false;
+      edit_enable = true;
+      Top_Distance.text = '0';
+      Bottom_Distance.text = '0';
+      help_shelf=true;
+      fixed_shelf=false;
+
+    }
+
+
+    setState(() {});
+  }
+
+  fixed_shelf_change() {
+
+    if(fixed_shelf){
+      fixed_shelf=false;
+    }else{
+      help_shelf=false;
+      fixed_shelf=true;
+    }
+
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Quantity.text='1';
+    Material.text='${draw_Controller.box_repository.box_model.value.init_material_thickness}';
+    Front_Gap.text='24';
+    shelf_center = true;
+    distance = false;
+    proportional = false;
+    edit_enable = false;
+    Top_Distance.text = '0';
+    Bottom_Distance.text = '0';
+  }
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -172,6 +242,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
             ),
           ],
         ),
+
         SizedBox(
           width: 24,
         ),
@@ -249,7 +320,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                         validator: (v) {
                           if (!v!.isEmpty) {
                             double dv = double.parse(v.toString());
-                            if (dv < 200) {
+                            if (dv <= (draw_Controller.box_repository.box_model.value.box_depth-100-24)) {
                               print('ok');
                             } else {
                               return 'the Gap big';
@@ -326,10 +397,38 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                           },
                         )),
                     Container(
-                        width: 180,
                         child: Text(
-                          'Center',
+                          'Center',style: TextStyle(fontSize: 14),
                         )),
+                    SizedBox(width: 12,),
+                    Container(
+                        width: 40,
+                        child: Checkbox(
+                          value: help_shelf,
+                          onChanged: (bool? value) {
+
+                            helper_shelf_change();
+
+                          },
+                        )),
+                    Container(child: Text(
+                          'helpe divider',style: TextStyle(fontSize: 14),
+                        )),
+                    SizedBox(width: 12,),
+                    Container(
+                        width: 40,
+                        child: Checkbox(
+                          value: fixed_shelf,
+                          onChanged: (bool? value) {
+
+                            fixed_shelf_change();
+
+                          },
+                        )),
+                    Container(child: Text(
+                      'Fixed shelf',style: TextStyle(fontSize: 14),
+                    )),
+                    SizedBox(width: 12,),
                   ],
                 ),
                 Padding(

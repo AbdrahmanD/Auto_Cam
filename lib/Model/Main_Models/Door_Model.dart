@@ -10,6 +10,8 @@ class Door_Model{
   late double down_over_lap;
   late double left_over_lap;
 
+  late String direction;
+
   Door_Model(
       this.door_num,
       this.material_thickness,
@@ -18,5 +20,7 @@ class Door_Model{
       this.up_over_lap,
       this.right_over_lap,
       this.down_over_lap,
-      this.left_over_lap);
+      this.left_over_lap,
+      this.direction
+      );
 }

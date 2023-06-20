@@ -30,6 +30,8 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
   bool proportional = false;
   bool edit_enable = true;
 
+
+
   left_changed() {
     double double_left_distance;
     if (distance) {
@@ -70,6 +72,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
   }
 
   add_partition() {
+
     if (my_key.currentState!.validate()) {
       if (!partition_center) {
         if (distance) {
@@ -114,10 +117,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
   }
 
   partition_center_change() {
-    Quantity.text='1';
-    Material.text='${drawerController.box_repository.box_model.
-    value.init_material_thickness}';
-    Front_Gap.text='24';
+
     if (!partition_center) {
       partition_center = true;
       distance = false;
@@ -133,6 +133,19 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
     }
     setState(() {});
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Quantity.text='1';
+    Material.text='${drawerController.box_repository.box_model.
+    value.init_material_thickness}';
+    Front_Gap.text='0';
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +199,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
             ),
           ],
         ),
+
         SizedBox(
           width: 24,
         ),
@@ -263,7 +277,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                         validator: (v) {
                           if (!v!.isEmpty) {
                             double dv = double.parse(v.toString());
-                            if (dv < 200) {
+                            if (dv <= (drawerController.box_repository.box_model.value.box_depth-100-24)) {
                               print('ok');
                             } else {
                               return 'the Gap big';

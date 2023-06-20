@@ -16,12 +16,19 @@ class Excel_Controller extends GetxController {
 
   create_excel( Box_model my_box) async {
 
+    DateTime dateTime =DateTime.now();
+    String date = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
+
+
+    String box_name='(${my_box.box_width}X${my_box.box_height}X'
+        '${my_box.box_depth})-${date}';
+
     final Directory appDocDir = await getApplicationDocumentsDirectory();
     final Directory newDirectory = Directory('${appDocDir.path}/Cutting_Lists');
     newDirectory.createSync();
 
     final path = newDirectory.path;
-    File file= File('$path/my_box_cut_list.xlsx');
+    File file= File('$path/$box_name.xlsx');
 
 
 

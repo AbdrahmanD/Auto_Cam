@@ -77,6 +77,9 @@ flutter:
     - lib/assets/images/range.png
     - lib/assets/images/shelfe.png
     - lib/assets/images/partition.png
+    - lib/assets/images/10ud.png
+    - lib/assets/images/10u.png
+    - lib/assets/images/normal.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
