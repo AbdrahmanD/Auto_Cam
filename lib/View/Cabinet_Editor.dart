@@ -22,9 +22,11 @@ Draw_Controller draw_controller=Get.find();
           ),
 
           // main Box Painter
-          Container(width: screen_size.width-300,
-          child:Drawing_Screen(screen_size.width-300)
+          Container(width: screen_size.width-350,
+          child:Drawing_Screen(screen_size.width-350)
           ),
+
+
 
         ],
       ),

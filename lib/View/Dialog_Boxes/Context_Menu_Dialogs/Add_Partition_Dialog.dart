@@ -25,8 +25,9 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
   Draw_Controller drawerController = Get.find();
 
   bool quantity = true;
-  bool partition_center = false;
-  bool distance = true;
+  bool partition_center = true;
+  bool distance = false
+  ;
   bool proportional = false;
   bool edit_enable = true;
 
@@ -143,6 +144,14 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
     Material.text='${drawerController.box_repository.box_model.
     value.init_material_thickness}';
     Front_Gap.text='0';
+
+    partition_center = true;
+    distance = false;
+    proportional = false;
+    edit_enable = false;
+    Left_Distance.text = '0';
+    Right_Distance.text = '0';
+
 
   }
 

@@ -137,24 +137,12 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
     if(help_shelf){
       Quantity.text='1';
       Material.text='${draw_Controller.box_repository.box_model.value.init_material_thickness}';
-      Front_Gap.text='24';
-      shelf_center = false;
-      distance = true;
-      proportional = false;
-      edit_enable = true;
-      Top_Distance.text = '0';
-      Bottom_Distance.text = '0';
+      Front_Gap.text='0';
       help_shelf=false;
     }else{
       Quantity.text='1';
       Material.text='0';
       Front_Gap.text='0';
-      shelf_center = false;
-      distance = true;
-      proportional = false;
-      edit_enable = true;
-      Top_Distance.text = '0';
-      Bottom_Distance.text = '0';
       help_shelf=true;
       fixed_shelf=false;
 

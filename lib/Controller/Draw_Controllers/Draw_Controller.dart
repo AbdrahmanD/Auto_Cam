@@ -7,7 +7,7 @@ import 'package:auto_cam/Model/Main_Models/Coordinate_3D.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Model/Main_Models/Point_model.dart';
-import 'package:auto_cam/Model/Manufacturing_Models/kdt_file.dart';
+import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,8 +23,6 @@ class Draw_Controller extends GetxController {
 
   String box_type="wall_box";
 
-
-  Draw_Controller() {}
 
   Box_model get_box() {
     return box_repository.box_model.value;
@@ -47,9 +45,9 @@ class Draw_Controller extends GetxController {
 
   /// here tow method :
   /// 1-hover_id_finder :
-  ///      to loop around box pieces and heck if the mouse cursor is hover on using the second method
+  ///      to loop around box pieces and check if the mouse cursor is hover on , using the second method : check_position
   /// 2-check_position :
-  ///      this method will receive one piece model and check if cursor hover on it .
+  ///      this method  piece_model as parameter  and check if cursor hover on it .
 
   /// the first one :
   hover_id_find(Box_model box_model) {
@@ -59,7 +57,7 @@ class Draw_Controller extends GetxController {
     hover_id = 100;
     for (int i = 0; i < box_pieces.length; i++) {
       Piece_model p = box_pieces[i];
-      if (p.piece_name == 'back_panel') {
+      if (p.piece_name.contains('back_panel')) {
         continue;
       } else if (check_position(p, my_origin)) {
         hover_id = i;
@@ -102,24 +100,10 @@ class Draw_Controller extends GetxController {
     return is_hover;
   }
 
-  add_shelf(
-      double top_Distence, double frontage_Gap, double material_thickness,int quantity,String shelf_type)
-  {
-    box_repository.box_model.value.add_Shelf(hover_id, top_Distence, frontage_Gap, material_thickness,quantity,shelf_type);
-    // print_pieces_coordinate();
-
-  }
-
-  add_partition(
-      double top_Distence, double frontage_Gap, double material_thickness,int quantity)
-  {
-    box_repository.box_model.value.add_Partition(hover_id, top_Distence, frontage_Gap, material_thickness,quantity);
-    // print_pieces_coordinate();
-
-  }
 
 
-  String minu_title()
+  /// general list will appear when the customer make long press out of any enner area
+  String general_list()
   {
     String dialogs_titles = '';
 
@@ -135,7 +119,10 @@ class Draw_Controller extends GetxController {
     return dialogs_titles;
   }
 
-  Widget Context_Menu()
+  /// Context list will appear when the customer make long press on one of enners areas
+  /// this dialog will give customer all available choices as :
+  /// add shelf , partition , door , or drawer
+  Widget Context_list()
   {
     late Widget my_widget;
 
@@ -158,34 +145,36 @@ class Draw_Controller extends GetxController {
   }
 
 
+
+  /// add shelf method
+  add_shelf(
+      double top_Distence, double frontage_Gap, double material_thickness,int quantity,String shelf_type)
+  {
+    box_repository.box_model.value.add_Shelf(hover_id, top_Distence, frontage_Gap, material_thickness,quantity,shelf_type);
+    // print_pieces_coordinate();
+
+  }
+
+
+  /// add partition method
+  add_partition(
+      double top_Distence, double frontage_Gap, double material_thickness,int quantity)
+  {
+    box_repository.box_model.value.add_Partition(hover_id, top_Distence, frontage_Gap, material_thickness,quantity);
+    // print_pieces_coordinate();
+
+  }
+
+
+
+/// add door method
   add_door(Door_Model door_model){
     door_model.inner_id=hover_id;
     box_repository.box_model.value.add_door(door_model);
   }
 
 
-  print_pieces_coordinate() {
-
-    for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
-      print('index : $i;; piece id :${box_repository.box_model.value.box_pieces[i].piece_id} ;; name  :${box_repository.box_model.value.box_pieces[i].piece_name}');
-      print('height :  ${box_repository.box_model.value.box_pieces[i].Piece_height} ;;'
-          ' width :  ${box_repository.box_model.value.box_pieces[i].Piece_width}');
-      print('thickness :  ${box_repository.box_model.value.box_pieces[i].Piece_thickness}');
-
-      box_repository.box_model.value.box_pieces[i].piece_faces.top_face.face_item.forEach((element) {print('top   : $element');});
-      print('---------');
-      box_repository.box_model.value.box_pieces[i].piece_faces.right_face.face_item.forEach((element) {print('right : $element');});
-      print('---------');
-      box_repository.box_model.value.box_pieces[i].piece_faces.base_face .face_item.forEach((element) {print('base  : $element');});
-      print('---------');
-      box_repository.box_model.value.box_pieces[i].piece_faces.left_face .face_item.forEach((element) {print('left  : $element');});
-      print('---------');
-      print('(# Y #) = ${box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate}');
-      print('---------');
-
-    }
-  }
-
+/// extract executable files with xml extension  to use in this case with kdt drilling machine
   extract_xml_files(){
 
     DateTime dateTime =DateTime.now();
@@ -195,20 +184,46 @@ class Draw_Controller extends GetxController {
     String box_name='(${box_repository.box_model.value.box_width}X${box_repository.box_model.value.box_height}X'
         '${box_repository.box_model.value.box_depth})-${date}';
 
-    print(box_name);
     for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
       if( box_repository.box_model.value.box_pieces[i].piece_name=="inner" ||
-          box_repository.box_model.value.box_pieces[i].piece_name.startsWith("back_panel")||
-          box_repository.box_model.value.box_pieces[i].piece_name=="help_shelf"
+          box_repository.box_model.value.box_pieces[i].piece_name.contains("back_panel")||
+          box_repository.box_model.value.box_pieces[i].piece_name.contains("base_panel")||
+          box_repository.box_model.value.box_pieces[i].piece_name=="help_shelf"||
+          box_repository.box_model.value.box_pieces[i].piece_inable==false||
+          box_repository.box_model.value.box_pieces[i].is_copy==true
       ){
        continue;
       }else{
-        kdt_file kdt=kdt_file(box_repository.box_model.value.box_pieces[i],box_name);
+        kdt_file kdt=kdt_file(box_repository.box_model.value.box_pieces[i],box_repository.box_model.value.box_name);
       }
 
     }
   }
 
+
+  /// this only debug mode method to get information off the box pieces
+  print_pieces_coordinate() {
+
+    for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
+      print('index : $i;; piece id :${box_repository.box_model.value.box_pieces[i].piece_id} ;; name  :${box_repository.box_model.value.box_pieces[i].piece_name}');
+      print('height :  ${box_repository.box_model.value.box_pieces[i].Piece_height} ;;'
+          ' width :  ${box_repository.box_model.value.box_pieces[i].Piece_width}');
+      print('thickness :  ${box_repository.box_model.value.box_pieces[i].Piece_thickness}');
+      print('quantity :  ${box_repository.box_model.value.box_pieces[i].piece_quantity}');
+      //
+      // box_repository.box_model.value.box_pieces[i].piece_faces.top_face.face_item.forEach((element) {print('top   : $element');});
+      // print('---------');
+      // box_repository.box_model.value.box_pieces[i].piece_faces.right_face.face_item.forEach((element) {print('right : $element');});
+      // print('---------');
+      // box_repository.box_model.value.box_pieces[i].piece_faces.base_face .face_item.forEach((element) {print('base  : $element');});
+      // print('---------');
+      // box_repository.box_model.value.box_pieces[i].piece_faces.left_face .face_item.forEach((element) {print('left  : $element');});
+      // print('---------');
+      // print('(# Y #) = ${box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate}');
+      print('---------');
+
+    }
+  }
 
 
 }

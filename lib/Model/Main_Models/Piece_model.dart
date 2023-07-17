@@ -6,6 +6,9 @@ import 'package:auto_cam/Model/Main_Models/Point_model.dart';
 class Piece_model{
 
   late int    piece_id;
+  late int    piece_quantity;
+  late bool is_copy;
+
   late String piece_name;
   late String piece_direction;
   late String material_name;
@@ -23,6 +26,8 @@ class Piece_model{
   Piece_model(
 
       this.piece_id,
+      this.piece_quantity,
+      this.is_copy,
       this.piece_name,
       this.piece_direction,
       this.material_name,
@@ -76,7 +81,6 @@ class Piece_model{
       pz_3=Point_model(Piece_width +piece_origin.x_coordinate,piece_origin.y_coordinate+ Piece_height , Piece_thickness);
       pz_4=Point_model(Piece_width +piece_origin.x_coordinate,piece_origin.y_coordinate+ 0, Piece_thickness);
     }
-
     else {
       p0_1=Point_model(0,0,0);
       p0_2=Point_model(0,0,0);
@@ -88,6 +92,9 @@ class Piece_model{
       pz_3=Point_model(0,0,0);
       pz_4=Point_model(0,0,0);
     }
+
+
+
     piece_center=Point_model((p0_1.x_coordinate+pz_3.x_coordinate)/2,
         (p0_1.y_coordinate+p0_3.y_coordinate)/2, p0_1.z_coordinate);
     List<Point_model> xy_0_plane=[p0_1,p0_2,p0_3,p0_4];

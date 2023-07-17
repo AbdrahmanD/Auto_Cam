@@ -22,6 +22,7 @@ class Drawer_model {
   late double right_gape;
 
   late double drawer_face_material_thickness;
+  late String drawer_face_material_name;
 
   late double drawer_box_material_thickness;
   late double drawer_base_material_thickness;
@@ -42,14 +43,15 @@ class Drawer_model {
       this.left_gape,
       this.right_gape,
       this.drawer_face_material_thickness,
+      this.drawer_face_material_name,
       this.drawer_box_material_thickness,
       this.drawer_base_material_thickness,
       this.drawer_box_height,
       this.drawer_box_depth) {
+
     Draw_Controller draw_controller = Get.find();
-    int drawer_id =
-        draw_controller.box_repository.box_model.value.box_drawers.length;
-    int piece_id = draw_controller.box_repository.box_model.value.pieces_id;
+    int drawer_id = draw_controller.box_repository.box_model.value.box_drawers.length;
+    int piece_id  = draw_controller.box_repository.box_model.value.pieces_id;
 
 
 
@@ -58,6 +60,7 @@ class Drawer_model {
       drawer_id,
     );
     edit_sides();
+    draw_controller.box_repository.box_model.value.box_drawers.add(this);
   }
 
   edit_sides(){
@@ -131,30 +134,38 @@ class Drawer_model {
         top_thickness +
         base_thickness;
 
-    double single_inner = total_inners / drawer_quantity;
+    double single_inner = double.parse((total_inners / drawer_quantity).toStringAsFixed(1));
     double face_height = single_inner;
     double box_height;
 
     if (drawer_box_height + 40 < face_height) {
       box_height = drawer_box_height;
     } else {
-      box_height = single_inner - 40;
+      box_height = double.parse((single_inner - 40).toStringAsFixed(1));
 
     }
+    print(box_height);
 
-    double face_width = inner.Piece_width +
+    double face_width = double.parse((inner.Piece_width +
         left_thickness +
         right_thickness -
         left_gape -
-        right_gape;
-    double drawer_box_width = inner.Piece_width - 26;
+        right_gape).toStringAsFixed(1));
+    double drawer_box_width = double.parse((inner.Piece_width - 26).toStringAsFixed(1));
 
     for (int i = 0; i < drawer_quantity; i++) {
+     late  bool is_copy;
+      if(i==0)
+        is_copy=false;
+      else
+        is_copy=true;
+
       late double y_distence;
       if (drawer_quantity == 1) {
         y_distence =
             All_base_gape + inner.piece_origin.y_coordinate - base_thickness;
-      } else {
+      }
+      else {
         y_distence = All_base_gape+ inner.piece_origin.y_coordinate- base_thickness + (face_height + each_top_gape) * i;
       }
       Point_model drawer_face_origin = Point_model(
@@ -175,13 +186,14 @@ class Drawer_model {
       }
 
       draw_controller.box_repository.box_model.value.box_pieces.add(
-          add_drawer_face(piece_id + 1, drawer_id + i + 1, drawer_face_origin,
-              face_height, face_width,dx,dy,y_space,box_height,drawer_box_width));
+          add_drawer_face(piece_id + 1, drawer_id + 1,i+1, drawer_face_origin,
+              face_height, face_width,dx,dy,y_space,box_height,drawer_box_width,is_copy));
 
       draw_controller.box_repository.box_model.value.pieces_id++;
 
-      var drawer_pieces = add_drawer_box(piece_id + 2, drawer_id + i + 1,
-          drawer_box_origin, drawer_box_width, box_height,dx,dy,y_space);
+      var drawer_pieces = add_drawer_box(piece_id + 2, drawer_id +1, i + 1,
+          drawer_box_origin, drawer_box_width, box_height,dx,dy,y_space,is_copy);
+
       draw_controller.box_repository.box_model.value.pieces_id += 4;
       drawer_pieces.forEach((element) {
         draw_controller.box_repository.box_model.value.box_pieces.add(element);
@@ -212,9 +224,9 @@ class Drawer_model {
 
 
   /// add drawer face
-  Piece_model add_drawer_face(int id, int drawer_id, Point_model face_origin,
+  Piece_model add_drawer_face(int id, int drawer_id,int num, Point_model face_origin,
       double height, double face_width,
-      double dx,double dy,double y_space,double box_height,double box_width
+      double dx,double dy,double y_space,double box_height,double box_width,bool is_copy
       ) {
 
     Point_model p1=Point_model(dx+drawer_box_material_thickness/2,                                         dy+y_space, 0);
@@ -232,10 +244,10 @@ class Drawer_model {
 
 
     Piece_model piece_model = Piece_model(
-        id,
-        'drawer ${drawer_id} Face',
+        id,drawer_quantity,is_copy,
+        'drawer ${drawer_id} Face ',
         'F',
-        'drawer face',
+        '${drawer_face_material_thickness} mm ${drawer_face_material_name}',
         face_width,
         height,
         drawer_face_material_thickness,
@@ -257,13 +269,14 @@ class Drawer_model {
         ));
 
     return piece_model;
+
   }
 
 
   /// add drawer box pieces
-  List<Piece_model> add_drawer_box(int piece_id, int drawer_id,
+  List<Piece_model> add_drawer_box(int piece_id, int drawer_id,int num,
       Point_model box_origin, double box_width, double box_height,
-      double dx,double dy,double y_space
+      double dx,double dy,double y_space,bool is_cope
       ) {
 
     List<Piece_model> drawer_box = [];
@@ -295,10 +308,10 @@ class Drawer_model {
     /// left side
 
     Piece_model drawer_box_left = Piece_model(
-        piece_id,
-        'drawer ${drawer_id} left',
+        piece_id,drawer_quantity,is_cope,
+        'drawer ${drawer_id} left ',
         'V',
-        "1",
+        "${drawer_box_material_thickness} mm",
         drawer_box_depth,
         box_height,
         drawer_box_material_thickness,
@@ -331,10 +344,10 @@ class Drawer_model {
 
     /// right side
     Piece_model drawer_box_right = Piece_model(
-        piece_id + 1,
-        'drawer ${drawer_id} right',
+        piece_id + 1,drawer_quantity,is_cope,
+        'drawer ${drawer_id} right ',
         'V',
-        "1",
+        "${drawer_box_material_thickness} mm",
         drawer_box_depth,
         box_height,
         drawer_box_material_thickness,
@@ -382,10 +395,10 @@ class Drawer_model {
         drawer_base_material_thickness+0.1, 10);
 
     Piece_model drawer_box_front = Piece_model(
-        piece_id + 2,
-        'drawer ${drawer_id} front',
+        piece_id + 2,drawer_quantity,is_cope,
+        'drawer ${drawer_id} front ',
         'F',
-        "1",
+        "${drawer_box_material_thickness} mm",
         box_width - drawer_box_material_thickness * 2,
         box_height,
         drawer_box_material_thickness,
@@ -423,10 +436,10 @@ class Drawer_model {
 
 
     Piece_model drawer_box_back = Piece_model(
-        piece_id + 3,
+        piece_id + 3,drawer_quantity,is_cope,
         'drawer ${drawer_id} back ',
         'F',
-        "1",
+        "${drawer_box_material_thickness} mm",
         box_width - drawer_box_material_thickness * 2,
         box_height,
         drawer_box_material_thickness,
@@ -453,10 +466,10 @@ class Drawer_model {
         ));
 
     Piece_model drawer_box_base_panel = Piece_model(
-        piece_id + 4,
-        'drawer ${drawer_id} base_panel ',
+        piece_id + 4,drawer_quantity,is_cope,
+        'drawer ${drawer_id} base_panel',
         'H',
-        "1",
+        "${drawer_base_material_thickness} mm",
 
         drawer_box_depth-20,drawer_box_front.Piece_width + 20,
         drawer_base_material_thickness,

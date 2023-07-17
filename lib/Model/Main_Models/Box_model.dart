@@ -9,23 +9,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Box_model {
+  late String box_name;
   late int box_id;
   late double box_width;
   late double box_height;
   late double box_depth;
   late double init_material_thickness;
+  late String init_material_name;
   late double backpanel_thickness;
   late bool is_back_panel;
   late Point_model box_origin;
   late List<Piece_model> box_pieces;
   late List<Drawer_model> box_drawers;
-  int pieces_id = 1;
   late String box_type;
 
+
+  int pieces_id = 8;
   double fix_shelf_limet = 200;
 
-  Box_model(this.box_width, this.box_height, this.box_depth,
-      this.init_material_thickness, this.backpanel_thickness,this.is_back_panel,this.box_type) {
+  Box_model(this.box_name,this.box_width, this.box_height, this.box_depth,
+      this.init_material_thickness,this.init_material_name, this.backpanel_thickness,this.is_back_panel,this.box_type) {
     box_id = 0;
     box_origin = Point_model(0, 0, 0);
     ////////////////////////////////////////////////////////////////////////////
@@ -63,11 +66,11 @@ class Box_model {
       Single_Face top_Piece_top_face =
       Single_Face([0], [j_back_1, j_back_2, j_back_3, j_back_4], []);
       Single_Face top_Piece_right_face =
-      Single_Face([2], [j1, j2, j3, j4, j5], []);
-      Single_Face top_Piece_base_face =
-      Single_Face([5], [], is_back_panel?[top_back_panel_grove]:[]);
-      Single_Face top_Piece_left_face =
       Single_Face([4], [j1, j2, j3, j4, j5], []);
+      Single_Face top_Piece_base_face =
+      Single_Face([1], [], is_back_panel?[top_back_panel_grove]:[]);
+      Single_Face top_Piece_left_face =
+      Single_Face([7], [j1, j2, j3, j4, j5], []);
       Single_Face top_Piece_front_face = Single_Face([0], [], []);
       Single_Face top_Piece_back_face = Single_Face([0], [], []);
 
@@ -81,18 +84,17 @@ class Box_model {
 
       ///1-2 initiate the top piece itself
        top_piece = Piece_model(
-          pieces_id,
+          2,1,false,
           'top',
           'H',
-          'box_material',
+           init_material_name,
           box_depth,
           box_width - 2 * init_material_thickness,
           init_material_thickness,
           Point_model(box_origin.x_coordinate + init_material_thickness,
               box_origin.y_coordinate + box_height - init_material_thickness, 0),
           top_faces);
-      pieces_id++;
-    }
+     }
    else {
       Groove_model top_back_panel_grove = Groove_model(Point_model(0, 21, 0),
           Point_model(box_width - 2 * init_material_thickness, 21, 0), 6, 10);
@@ -151,30 +153,28 @@ class Box_model {
 
       ///1-2 initiate the top piece itself
        top_piece_1 = Piece_model(
-          pieces_id,
-          'top_1',
+          2,1,false,
+          'top',
           'H',
-          'box_material',
+           init_material_name,
           100,
           box_width - 2 * init_material_thickness,
           init_material_thickness,
           Point_model(box_origin.x_coordinate + init_material_thickness,
               box_origin.y_coordinate + box_height - init_material_thickness, 0),
           top_faces_1);
-      pieces_id++;
 
        top_piece_2 = Piece_model(
-          pieces_id,
-          'top_2',
+          3,1,false,
+          'top',
           'H',
-          'box_material',
+           init_material_name,
           100,
           box_width - 2 * init_material_thickness,
           init_material_thickness,
           Point_model(box_origin.x_coordinate + init_material_thickness,
               box_origin.y_coordinate + box_height - init_material_thickness,box_depth-100),
           top_faces_2);
-      pieces_id++;
 
     }
 
@@ -252,9 +252,9 @@ class Box_model {
     Single_Face right_Piece_right_face = Single_Face([0], [], []);
     Single_Face right_Piece_base_face = Single_Face([0], [], []);
     Single_Face right_Piece_left_face = Single_Face([
+      2,
       1,
-      5,
-      3
+      5
     ], rplsj,
       is_back_panel?[right_back_panel_grove] :[]
     );
@@ -271,10 +271,10 @@ class Box_model {
 
     ///2-2 initiate the right piece itself
     Piece_model right_piece = Piece_model(
-        pieces_id,
+        4,1,false,
         'right',
         'V',
-        'box_material',
+        init_material_name,
         box_depth,
         box_height,
         init_material_thickness,
@@ -283,8 +283,7 @@ class Box_model {
             box_origin.y_coordinate,
             0),
         right_faces);
-    pieces_id++;
-    ////////////////////////////////////////////////////////////////////////////
+     ////////////////////////////////////////////////////////////////////////////
 
     /// 4- initiate the (base) piece of the box
     /// 4-1 initiate the Faces of the base piece
@@ -310,9 +309,9 @@ class Box_model {
       Join_model base_j_back_4 = Join_model(Point_model(box_width - 2 * init_material_thickness - 34, box_depth - 82, 0), 15, 13, 'boring');
 
       Single_Face base_Piece_top_face =
-      Single_Face([5], [], is_back_panel?[base_back_panel_grove]:[]);
+      Single_Face([1], [], is_back_panel?[base_back_panel_grove]:[]);
       Single_Face base_Piece_right_face = Single_Face([
-        2
+        4
       ], [
         base_j1,
         base_j2,
@@ -329,7 +328,7 @@ class Box_model {
         base_j_back_4,
       ], []);
       Single_Face base_Piece_left_face = Single_Face([
-        4
+        7
       ], [
         base_j1,
         base_j2,
@@ -350,18 +349,17 @@ class Box_model {
 
       ///4-2 initiate the base piece itself
        base_piece = Piece_model(
-          pieces_id,
+          5,1,false,
           'base',
           'H',
-          'box_material',
+           init_material_name,
           box_depth,
           box_width - 2 * init_material_thickness,
           init_material_thickness,
           Point_model(box_origin.x_coordinate + init_material_thickness,
               box_origin.y_coordinate, 0),
           base_faces);
-      pieces_id++;
-    }
+     }
     else {
       Groove_model base_back_panel_grove =
       Groove_model(Point_model(0, 100 - 21, 0),
@@ -380,9 +378,9 @@ class Box_model {
       Join_model base_j_back_2 = Join_model(Point_model( box_width - 2 * init_material_thickness-34,50, 0), 15, 13, 'boring');
 
       Single_Face base_Piece_top_face =
-      Single_Face([5], [], is_back_panel?[base_back_panel_grove]:[]);
+      Single_Face([1], [], is_back_panel?[base_back_panel_grove]:[]);
       Single_Face base_Piece_right_face = Single_Face([
-        2
+        4
       ], [
         base_j1,
         base_j2,
@@ -395,7 +393,7 @@ class Box_model {
         base_j_back_2,
       ], []);
       Single_Face base_Piece_left_face = Single_Face([
-        4
+        7
       ], [
         base_j1,
         base_j2,
@@ -407,7 +405,7 @@ class Box_model {
       Face_model base_faces_1 = Face_model(
           base_Piece_top_face,
           Single_Face([
-            2
+           4
           ], [
             base_j1_f,
             base_j2_f,
@@ -415,7 +413,7 @@ class Box_model {
           ], []),
           base_Piece_base_face,
           Single_Face([
-            4
+            7
           ], [
             base_j1_f,
             base_j2_f,
@@ -426,7 +424,7 @@ class Box_model {
 
 
       Face_model base_faces_2 = Face_model(
-          Single_Face([5], [],[]),
+          Single_Face([1], [],[]),
           base_Piece_right_face,
           base_Piece_base_face,
           base_Piece_left_face,
@@ -435,30 +433,28 @@ class Box_model {
 
       ///4-2 initiate the base piece itself
        base_piece_1 = Piece_model(
-          pieces_id,
-          'base_1',
+          5,1,false,
+          'base',
           'H',
-          'box_material',
+           init_material_name,
           100,
           box_width - 2 * init_material_thickness,
           init_material_thickness,
           Point_model(box_origin.x_coordinate + init_material_thickness,
               box_origin.y_coordinate, box_depth-100),
           base_faces_1);
-      pieces_id++;
 
       base_piece_2 = Piece_model(
-          pieces_id,
-          'base_2',
+          6,1,false,
+          'base',
           'H',
-          'box_material',
+          init_material_name,
           100,
           box_width - 2 * init_material_thickness,
           init_material_thickness,
           Point_model(box_origin.x_coordinate + init_material_thickness,
               box_origin.y_coordinate, 0),
           base_faces_2);
-      pieces_id++;
 
 
     }
@@ -529,9 +525,9 @@ class Box_model {
 
     Single_Face left_Piece_top_face = Single_Face([0], [], []);
     Single_Face left_Piece_right_face = Single_Face([
+      2,
       1,
-      5,
-      3
+      5
     ], lplsj, is_back_panel?[
       left_panel_grove
     ]:[]);
@@ -550,26 +546,25 @@ class Box_model {
 
     ///3-2 initiate the left piece itself
     Piece_model left_piece = Piece_model(
-        pieces_id,
+        7,1,false,
         'left',
         'V',
-        'box_material',
+        init_material_name,
         box_depth,
         box_height,
         init_material_thickness,
         Point_model(box_origin.x_coordinate, box_origin.y_coordinate, 0),
         left_faces);
-    pieces_id++;
 
     ////////////////////////////////////////////////////////////////////////////
 
     /// 6- initiate the (main inner) piece of the box
     /// 6-1 initiate the Faces of the inner piece
 
-    Single_Face inner_Piece_top_face = Single_Face([1], [], []);
-    Single_Face inner_Piece_right_face = Single_Face([2], [], []);
-    Single_Face inner_Piece_base_face = Single_Face([3], [], []);
-    Single_Face inner_Piece_left_face = Single_Face([4], [], []);
+    Single_Face inner_Piece_top_face = Single_Face([2], [], []);
+    Single_Face inner_Piece_right_face = Single_Face([4], [], []);
+    Single_Face inner_Piece_base_face = Single_Face([5], [], []);
+    Single_Face inner_Piece_left_face = Single_Face([7], [], []);
     Single_Face inner_Piece_front_face = Single_Face([0], [], []);
     Single_Face inner_Piece_back_face = Single_Face([0], [], []);
 
@@ -584,18 +579,17 @@ class Box_model {
 
     ///6-2 initiate the inner piece itself
     Piece_model inner_piece = Piece_model(
-        pieces_id,
+        1,1,false,
         'inner',
         'F',
-        'inner_id_material',
+        init_material_name,
         box_width - init_material_thickness * 2,
         box_height - init_material_thickness * 2,
         backpanel_thickness,
         Point_model(box_origin.x_coordinate + init_material_thickness,
             box_origin.y_coordinate + init_material_thickness, 0),
         inner_panel_faces);
-    pieces_id++;
-    ////////////////////////////////////////////////////////////////////////////
+     ////////////////////////////////////////////////////////////////////////////
 
     box_pieces = [];
 if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
@@ -617,10 +611,10 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     /// 5- initiate the (back_panel) piece of the box
     /// 5-1 initiate the Faces of the back_panel piece
 
-    Single_Face back_panel_Piece_top_face = Single_Face([1], [], []);
-    Single_Face back_panel_Piece_right_face = Single_Face([2], [], []);
-    Single_Face back_panel_Piece_base_face = Single_Face([3], [], []);
-    Single_Face back_panel_Piece_left_face = Single_Face([4], [], []);
+    Single_Face back_panel_Piece_top_face = Single_Face([2], [], []);
+    Single_Face back_panel_Piece_right_face = Single_Face([4], [], []);
+    Single_Face back_panel_Piece_base_face = Single_Face([5], [], []);
+    Single_Face back_panel_Piece_left_face = Single_Face([7], [], []);
     Single_Face back_panel_Piece_front_face = Single_Face([0], [], []);
     Single_Face back_panel_Piece_back_face = Single_Face([0], [], []);
 
@@ -640,10 +634,10 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     else {base_thickness=base_piece_1.Piece_thickness;}
 
     Piece_model back_panel_piece = Piece_model(
-        pieces_id,
-        'back_panel',
+        pieces_id,1,false,
+        "Box back_panel",
         'F',
-        'back_panel_id_material',
+        'back panel material',
         box_width -
             (left_piece.Piece_thickness + right_piece.Piece_thickness) +
             18,
@@ -662,8 +656,9 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
 
   }
 
+
   add_Shelf_pattern(int inner, double top_Distence, double frontage_Gap,
-      double shelf_material_thickness, String shelf_type) {
+      double shelf_material_thickness, String shelf_type,bool is_copy,int shelf_quantity) {
     double down_Distence = box_pieces[inner].Piece_height -
         top_Distence -
         shelf_material_thickness;
@@ -687,7 +682,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     );
 
     Piece_model old_inner = Piece_model(
-        pieces_id,
+        pieces_id,1,false,
         'inner',
         'F',
         'inner',
@@ -716,7 +711,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     );
 
     Piece_model new_inner = Piece_model(
-        pieces_id,
+        pieces_id,1,false,
         'inner',
         'F',
         'inner',
@@ -833,10 +828,10 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
         new_Piece_back_face);
 
     Piece_model new_piece = Piece_model(
-        pieces_id,
+        pieces_id,shelf_quantity,is_copy,
         '$shelf_type',
         !(shelf_type == 'help_shelf') ? 'H' : 'help_shelf',
-        'material_name',
+        init_material_name,
         depth_of_shelf,
         box_pieces[inner].Piece_width,
         shelf_material_thickness,
@@ -929,7 +924,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
           .add(Join_model(right_side_shelf_hole_point_2, 5, 10, 'shelf'));
     }
     Piece_model right_piece_new = Piece_model(
-        right_side_piece.piece_id,
+        right_side_piece.piece_id,right_side_piece.piece_quantity,right_side_piece.is_copy,
         right_side_piece.piece_name,
         right_side_piece.piece_direction,
         right_side_piece.material_name,
@@ -1083,7 +1078,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     }
 
     Piece_model left_piece_new = Piece_model(
-        left_side_piece.piece_id,
+        left_side_piece.piece_id,left_side_piece.piece_quantity,left_side_piece.is_copy,
         left_side_piece.piece_name,
         left_side_piece.piece_direction,
         left_side_piece.material_name,
@@ -1125,7 +1120,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
       }
     }
     Piece_model top_piece_new = Piece_model(
-        top_side_piece.piece_id,
+        top_side_piece.piece_id,top_side_piece.piece_quantity,top_side_piece.is_copy,
         top_side_piece.piece_name,
         top_side_piece.piece_direction,
         top_side_piece.material_name,
@@ -1168,7 +1163,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
       }
     }
     Piece_model base_piece_new = Piece_model(
-        base_side_piece.piece_id,
+        base_side_piece.piece_id,base_side_piece.piece_quantity,base_side_piece.is_copy,
         base_side_piece.piece_name,
         base_side_piece.piece_direction,
         base_side_piece.material_name,
@@ -1205,6 +1200,8 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     box_pieces.add(base_piece_new);
 
     box_pieces.add(new_inner);
+
+
   }
 
   add_Shelf(int inner, double top_Distence, double frontage_Gap,
@@ -1212,7 +1209,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     if (Quantity == 1) {
       if (box_pieces[inner].Piece_height > top_Distence && top_Distence > 0) {
         add_Shelf_pattern(inner, top_Distence, frontage_Gap,
-            shelf_material_thickness, shelf_type);
+            shelf_material_thickness, shelf_type,false,Quantity);
         Navigator.of(Get.overlayContext!).pop();
       } else {
         Get.defaultDialog(
@@ -1223,16 +1220,17 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
       if (((Quantity - 1) * top_Distence +
               Quantity * shelf_material_thickness) <
           box_pieces[inner].Piece_height) {
-        double distance = (box_pieces[inner].Piece_height -
-                Quantity * shelf_material_thickness) /
-            (Quantity + 1);
+        double distance = double.parse(((box_pieces[inner].Piece_height -
+            Quantity * shelf_material_thickness) /
+            (Quantity + 1)).toStringAsFixed(1));
 
         add_Shelf_pattern(inner, distance, frontage_Gap,
-            shelf_material_thickness, shelf_type);
+            shelf_material_thickness, shelf_type,false,Quantity);
 
         for (int i = 1; i < Quantity; i++) {
           add_Shelf_pattern(box_pieces.length - 1, distance, frontage_Gap,
-              shelf_material_thickness, shelf_type);
+              shelf_material_thickness, shelf_type,true,Quantity);
+
         }
 
         Navigator.of(Get.overlayContext!).pop();
@@ -1247,7 +1245,9 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
   ///start Partition
 
   add_Partition_pattern(int inner, double left_Distence, double frontage_Gap,
-      double partition_material_thickness) {
+      double partition_material_thickness,bool is_copy,int Partition_quantity) {
+
+
     double right_Distence = box_pieces[inner].Piece_width -
         left_Distence -
         partition_material_thickness;
@@ -1271,7 +1271,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     );
 
     Piece_model old_inner = Piece_model(
-        pieces_id,
+        pieces_id,1,false,
         'inner',
         'F',
         'inner',
@@ -1298,7 +1298,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     );
 
     Piece_model new_inner = Piece_model(
-        pieces_id,
+        pieces_id,1,false,
         'inner',
         'F',
         'inner',
@@ -1319,43 +1319,17 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     List<Join_model> partition_joins = [];
     List<Join_model> partition_joins_15mm = [];
 
-    Join_model j1 = Join_model(
-        Point_model(35, partition_material_thickness / 2, 0), 8, 10, 'boring');
-    Join_model j2 = Join_model(
-        Point_model(65, partition_material_thickness / 2, 0), 8, 10, 'boring');
-    Join_model j3 = Join_model(
-        Point_model(
-            depth_of_partition / 2, partition_material_thickness / 2, 0),
-        8,
-        10,
-        'boring');
-    Join_model j4 = Join_model(
-        Point_model(
-            depth_of_partition - 65, partition_material_thickness / 2, 0),
-        8,
-        10,
-        'boring');
-    Join_model j5 = Join_model(
-        Point_model(
-            depth_of_partition - 35, partition_material_thickness / 2, 0),
-        8,
-        10,
-        'boring');
-
+    Join_model j1    = Join_model(Point_model(35, partition_material_thickness / 2, 0), 8, 10, 'boring');
+    Join_model j2    = Join_model(Point_model(65, partition_material_thickness / 2, 0), 8, 10, 'boring');
+    Join_model j3    = Join_model(Point_model(depth_of_partition / 2, partition_material_thickness / 2, 0), 8, 10, 'boring');
+    Join_model j4    = Join_model(Point_model(depth_of_partition - 65, partition_material_thickness / 2, 0), 8, 10, 'boring');
+    Join_model j5    = Join_model(Point_model(depth_of_partition - 35, partition_material_thickness / 2, 0), 8, 10, 'boring');
     Join_model f_j_1 = Join_model(Point_model(65, 34, 0), 15, 13, 'boring');
-    Join_model f_j_2 = Join_model(
-        Point_model(depth_of_partition - 65, 34, 0), 15, 13, 'boring');
-    Join_model f_j_3 = Join_model(
-        Point_model(65, box_pieces[inner].Piece_height - 34, 0),
-        15,
-        13,
-        'boring');
-    Join_model f_j_4 = Join_model(
-        Point_model(
-            depth_of_partition - 65, box_pieces[inner].Piece_height - 34, 0),
-        15,
-        13,
-        'boring');
+    Join_model f_j_2 = Join_model(Point_model(depth_of_partition - 65, 34, 0), 15, 13, 'boring');
+    Join_model f_j_3 = Join_model(Point_model(65, box_pieces[inner].Piece_height - 34, 0), 15, 13, 'boring');
+    Join_model f_j_4 = Join_model(Point_model(depth_of_partition - 65, box_pieces[inner].Piece_height - 34, 0), 15, 13, 'boring');
+
+
 
     if (depth_of_partition > fix_shelf_limet) {
       partition_joins.add(j1);
@@ -1373,6 +1347,9 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
       partition_joins.add(j3);
       partition_joins.add(j5);
 
+
+
+
       partition_joins_15mm.add(Join_model(
           Point_model(depth_of_partition / 2, 34, 0), 15, 13, 'boring'));
       partition_joins_15mm.add(Join_model(
@@ -1383,12 +1360,9 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
           'boring'));
     }
 
-    Single_Face new_Piece_top_face = Single_Face(
-        box_pieces[inner].piece_faces.top_face.face_item, partition_joins, []);
-    Single_Face new_Piece_right_face =
-        Single_Face([new_inner_id], partition_joins_15mm, []);
-    Single_Face new_Piece_base_face = Single_Face(
-        box_pieces[inner].piece_faces.base_face.face_item, partition_joins, []);
+    Single_Face new_Piece_top_face = Single_Face(box_pieces[inner].piece_faces.top_face.face_item, partition_joins, []);
+    Single_Face new_Piece_right_face = Single_Face([new_inner_id], partition_joins_15mm, []);
+    Single_Face new_Piece_base_face = Single_Face(box_pieces[inner].piece_faces.base_face.face_item, partition_joins, []);
     Single_Face new_Piece_left_face = Single_Face([old_inner_id], [], []);
     Single_Face new_Piece_front_face = Single_Face([0], [], []);
     Single_Face new_Piece_back_face = Single_Face([0], [], []);
@@ -1402,10 +1376,10 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
         new_Piece_back_face);
 
     Piece_model new_piece = Piece_model(
-        pieces_id,
+        pieces_id,Partition_quantity,is_copy,
         'partition',
         'V',
-        'material_name',
+        init_material_name,
         depth_of_partition,
         box_pieces[inner].Piece_height,
         partition_material_thickness,
@@ -1414,16 +1388,15 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
             box_pieces[inner].piece_origin.y_coordinate,
             box_pieces[inner].piece_origin.z_coordinate),
         new_piece_faces);
+
     pieces_id++;
 
     /// EDIT ALL SIDES
     /// 1-RIGHT
     ///edit right side
 
-    int right_side_id =
-        box_pieces[inner].piece_faces.right_face.face_item.first;
-    Piece_model right_side_piece =
-        box_pieces.where((element) => element.piece_id == right_side_id).first;
+    int right_side_id = box_pieces[inner].piece_faces.right_face.face_item.first;
+    Piece_model right_side_piece = box_pieces.where((element) => element.piece_id == right_side_id).first;
 
     List<int> right_side_new_left_face_items = [];
 
@@ -1439,7 +1412,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
       }
     }
     Piece_model right_piece_new = Piece_model(
-        right_side_piece.piece_id,
+        right_side_piece.piece_id,right_side_piece.piece_quantity,right_side_piece.is_copy,
         right_side_piece.piece_name,
         right_side_piece.piece_direction,
         right_side_piece.material_name,
@@ -1481,7 +1454,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
       }
     }
     Piece_model left_piece_new = Piece_model(
-        left_side_piece.piece_id,
+        left_side_piece.piece_id,left_side_piece.piece_quantity,left_side_piece.is_copy,
         left_side_piece.piece_name,
         left_side_piece.piece_direction,
         left_side_piece.material_name,
@@ -1555,9 +1528,12 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     ///edit top side
 
     int top_side_id = box_pieces[inner].piece_faces.top_face.face_item.first;
-    Piece_model top_side_piece =
-        box_pieces.where((element) => element.piece_id == top_side_id).first;
+    Piece_model top_side_piece = box_pieces.where((element) => element.piece_id == top_side_id).first;
+   late Piece_model top_side_piece_2 ;
 
+   if(box_type!="wall_box"){
+     top_side_piece_2 = box_pieces.where((element) => element.piece_id == top_side_id+1).first;
+   }
     List<int> top_side_new_base_face_items = [];
 
     for (int i = 0;
@@ -1574,55 +1550,60 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
       }
     }
 
-    Join_model p_j_1;
-    Join_model p_j_2;
-    Join_model p_j_3;
-    Join_model p_j_4;
-    Join_model p_j_5;
+    List<Join_model> top_piece_bace_face = [];
+    List<Join_model> top_2_piece_bace_face = [];
 
     if (top_side_piece.piece_name == 'shelf' ||
         top_side_piece.piece_name == "fixed_shelf") {
-      p_j_1 = Join_model(Point_model(top_des, 35, 0), 8, 10, 'boring');
-      p_j_2 = Join_model(Point_model(top_des, 65, 0), 10, 10, 'boring');
-      p_j_3 = Join_model(
-          Point_model(top_des, depth_of_partition / 2, 0), 8, 10, 'boring');
-      p_j_4 = Join_model(
-          Point_model(top_des, depth_of_partition - 65, 0), 10, 10, 'boring');
-      p_j_5 = Join_model(
-          Point_model(top_des, depth_of_partition - 35, 0), 8, 10, 'boring');
-    } else {
-      p_j_1 = Join_model(Point_model(top_des, 24 + 35, 0), 8, 10, 'boring');
-      p_j_2 = Join_model(Point_model(top_des, 24 + 65, 0), 10, 10, 'boring');
-      p_j_3 = Join_model(Point_model(top_des, 24 + depth_of_partition / 2, 0),
-          8, 10, 'boring');
-      p_j_4 = Join_model(Point_model(top_des, 24 + depth_of_partition - 65, 0),
-          10, 10, 'boring');
-      p_j_5 = Join_model(Point_model(top_des, 24 + depth_of_partition - 35, 0),
-          8, 10, 'boring');
-    }
+      if (depth_of_partition > fix_shelf_limet) {
+        top_piece_bace_face.add(Join_model(Point_model(top_des, 35, 0), 8, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, 65, 0), 10, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, depth_of_partition / 2, 0), 8, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, depth_of_partition - 65, 0), 10, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, depth_of_partition - 35, 0), 8, 10, 'boring'));
+      } else {
+        top_piece_bace_face.add(Join_model(Point_model(top_des, 35, 0), 8, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, 24 + depth_of_partition / 2, 0), 10, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, depth_of_partition - 35, 0), 8, 10, 'boring'));
+      }
+      top_side_piece.piece_faces.base_face.join_list.forEach((element) {
+          top_piece_bace_face.add(element);
+        });
 
-    List<Join_model> top_piece_bace_face = [];
+    }
+    else {
+      if(box_type=="wall_box"){
+        top_piece_bace_face.add(Join_model(Point_model(top_des,24+ 35, 0), 8, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des,24+ 65, 0), 10, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, depth_of_partition / 2, 0), 8, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, 24+depth_of_partition - 65, 0), 10, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, 24+depth_of_partition - 35, 0), 8, 10, 'boring'));
     top_side_piece.piece_faces.base_face.join_list.forEach((element) {
-      top_piece_bace_face.add(element);
+    top_piece_bace_face.add(element);
     });
+      }
+      else{
+        top_piece_bace_face.add(Join_model(Point_model(top_des, 30, 0), 8, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, 50, 0), 10, 10, 'boring'));
+        top_piece_bace_face.add(Join_model(Point_model(top_des, 80, 0), 8, 10, 'boring'));
 
-    if (depth_of_partition > fix_shelf_limet) {
-      top_piece_bace_face.add(p_j_1);
-      top_piece_bace_face.add(p_j_2);
-      top_piece_bace_face.add(p_j_3);
-      top_piece_bace_face.add(p_j_4);
-      top_piece_bace_face.add(p_j_5);
-    } else {
-      top_piece_bace_face.add(p_j_1);
-      top_piece_bace_face.add(Join_model(
-          Point_model(top_des, 24 + depth_of_partition / 2, 0),
-          10,
-          10,
-          'boring'));
-      top_piece_bace_face.add(p_j_5);
+
+        top_2_piece_bace_face.add(Join_model(Point_model(top_des, 25, 0), 8, 10, 'boring'));
+        top_2_piece_bace_face.add(Join_model(Point_model(top_des, 50, 0), 10, 10, 'boring'));
+        top_2_piece_bace_face.add(Join_model(Point_model(top_des, 75, 0), 8, 10, 'boring'));
+
+    top_side_piece.piece_faces.base_face.join_list.forEach((element) {top_piece_bace_face.add(element);});
+    top_side_piece_2.piece_faces.base_face.join_list.forEach((element) {top_2_piece_bace_face.add(element);});
+
+
     }
-    Piece_model top_piece_new = Piece_model(
-        top_side_piece.piece_id,
+
+    }
+
+
+
+    Piece_model top_1_piece_new = Piece_model(
+        top_side_piece.piece_id,1,top_side_piece.is_copy,
         top_side_piece.piece_name,
         top_side_piece.piece_direction,
         top_side_piece.material_name,
@@ -1639,6 +1620,26 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
             top_side_piece.piece_faces.front_face,
             top_side_piece.piece_faces.back_face));
 
+    late Piece_model top_2_piece_new;
+    if(box_type!="wall_box") {
+       top_2_piece_new = Piece_model(
+          top_side_piece_2.piece_id,1,top_side_piece_2.is_copy,
+          top_side_piece_2.piece_name,
+          top_side_piece_2.piece_direction,
+          top_side_piece_2.material_name,
+          top_side_piece_2.Piece_width,
+          top_side_piece_2.Piece_height,
+          top_side_piece_2.Piece_thickness,
+          top_side_piece_2.piece_origin,
+          Face_model(
+              top_side_piece_2.piece_faces.top_face,
+              top_side_piece_2.piece_faces.right_face,
+              Single_Face(
+                  top_side_new_base_face_items, top_2_piece_bace_face, []),
+              top_side_piece_2.piece_faces.left_face,
+              top_side_piece_2.piece_faces.front_face,
+              top_side_piece_2.piece_faces.back_face));
+    }
     ///
     ///
 
@@ -1646,99 +1647,206 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     ///edit base side
 
     int base_side_id = box_pieces[inner].piece_faces.base_face.face_item.first;
-    Piece_model base_side_piece =
-        box_pieces.where((element) => element.piece_id == base_side_id).first;
+    Piece_model base_side_piece = box_pieces.where((element) => element.piece_id == base_side_id).first;
+    late Piece_model base_2_side_piece ;
+    if(box_type=="inner_box"){
+      base_2_side_piece = box_pieces.where((element) => element.piece_id == base_side_id+1).first;
+    }
 
     List<int> base_side_new_base_face_items = [];
 
-    for (int i = 0;
-        i < base_side_piece.piece_faces.top_face.face_item.length;
-        i++) {
-      if (base_side_piece.piece_faces.top_face.face_item[i] ==
-          box_pieces[inner].piece_id) {
-        base_side_new_base_face_items.add(old_inner_id);
-        base_side_new_base_face_items.add(new_piece_id);
-        base_side_new_base_face_items.add(new_inner_id);
-      } else {
-        base_side_new_base_face_items
-            .add(base_side_piece.piece_faces.top_face.face_item[i]);
+    late Piece_model base_piece_new_1;
+    late Piece_model base_piece_new_2;
+
+
+    for (int i = 0; i < base_side_piece.piece_faces.top_face.face_item.length; i++) {
+        if (base_side_piece.piece_faces.top_face.face_item[i] == box_pieces[inner].piece_id)
+        {
+          base_side_new_base_face_items.add(old_inner_id);
+          base_side_new_base_face_items.add(new_piece_id);
+          base_side_new_base_face_items.add(new_inner_id);
+
+        }
+        else {
+          base_side_new_base_face_items.add(base_side_piece.piece_faces.top_face.face_item[i]);
+        }
       }
-    }
-    Join_model BASE_p_j_1;
-    Join_model BASE_p_j_2;
-    Join_model BASE_p_j_3;
-    Join_model BASE_p_j_4;
-    Join_model BASE_p_j_5;
 
-    if (base_side_piece.piece_name == 'shelf' ||
-        base_side_piece.piece_name == 'fixed_shelf') {
-      BASE_p_j_1 = Join_model(Point_model(base_des, 35, 0), 8, 10, 'boring');
-      BASE_p_j_2 = Join_model(Point_model(base_des, 65, 0), 10, 10, 'boring');
-      BASE_p_j_3 = Join_model(
-          Point_model(base_des, depth_of_partition / 2, 0), 8, 10, 'boring');
-      BASE_p_j_4 = Join_model(
-          Point_model(base_des, depth_of_partition - 65, 0), 10, 10, 'boring');
-      BASE_p_j_5 = Join_model(
-          Point_model(base_des, depth_of_partition - 35, 0), 8, 10, 'boring');
-    } else {
-      BASE_p_j_1 = Join_model(
-          Point_model(base_des, box_depth - 24 - 35, 0), 8, 10, 'boring');
-      BASE_p_j_2 = Join_model(
-          Point_model(base_des, box_depth - 24 - 65, 0), 10, 10, 'boring');
-      BASE_p_j_3 = Join_model(
-          Point_model(base_des, box_depth - 24 - depth_of_partition / 2, 0),
-          8,
-          10,
-          'boring');
-      BASE_p_j_4 = Join_model(
-          Point_model(base_des, box_depth - 24 - depth_of_partition + 65, 0),
-          10,
-          10,
-          'boring');
-      BASE_p_j_5 = Join_model(
-          Point_model(base_des, box_depth - 24 - depth_of_partition + 35, 0),
-          8,
-          10,
-          'boring');
-    }
-    List<Join_model> base_piece_top_face = [];
-    base_side_piece.piece_faces.top_face.join_list.forEach((element) {
-      base_piece_top_face.add(element);
-    });
 
-    if (depth_of_partition > fix_shelf_limet) {
-      base_piece_top_face.add(BASE_p_j_1);
-      base_piece_top_face.add(BASE_p_j_2);
-      base_piece_top_face.add(BASE_p_j_3);
-      base_piece_top_face.add(BASE_p_j_4);
-      base_piece_top_face.add(BASE_p_j_5);
-    } else {
-      base_piece_top_face.add(BASE_p_j_1);
-      base_piece_top_face.add(Join_model(
-          Point_model(top_des, box_depth - 24 - depth_of_partition / 2, 0),
-          10,
-          10,
-          'boring'));
-      base_piece_top_face.add(BASE_p_j_5);
-    }
+      Join_model BASE_p_j_1;
+      Join_model BASE_p_j_2;
+      Join_model BASE_p_j_3;
+      Join_model BASE_p_j_4;
+      Join_model BASE_p_j_5;
 
-    Piece_model base_piece_new = Piece_model(
-        base_side_piece.piece_id,
-        base_side_piece.piece_name,
-        base_side_piece.piece_direction,
-        base_side_piece.material_name,
-        base_side_piece.Piece_width,
-        base_side_piece.Piece_height,
-        base_side_piece.Piece_thickness,
-        base_side_piece.piece_origin,
-        Face_model(
-            Single_Face(base_side_new_base_face_items, base_piece_top_face,
-                base_side_piece.piece_faces.top_face.groove_list),
-            base_side_piece.piece_faces.right_face,
-            base_side_piece.piece_faces.base_face,
-            base_side_piece.piece_faces.left_face,
-            base_side_piece.piece_faces.front_face,
-            base_side_piece.piece_faces.back_face));
+      if (base_side_piece.piece_name == 'shelf' || base_side_piece.piece_name == 'fixed_shelf') {
+        BASE_p_j_1 = Join_model(Point_model(base_des, 35, 0), 8, 10, 'boring');
+        BASE_p_j_2 = Join_model(Point_model(base_des, 65, 0), 10, 10, 'boring');
+        BASE_p_j_3 = Join_model(
+            Point_model(base_des, depth_of_partition / 2, 0), 8, 10, 'boring');
+        BASE_p_j_4 = Join_model(
+            Point_model(base_des, depth_of_partition - 65, 0), 10, 10, 'boring');
+        BASE_p_j_5 = Join_model(
+            Point_model(base_des, depth_of_partition - 35, 0), 8, 10, 'boring');
+
+
+        List<Join_model> base_piece_top_face = [];
+        base_side_piece.piece_faces.top_face.join_list.forEach((element) {
+          base_piece_top_face.add(element);
+        });
+
+        if (depth_of_partition > fix_shelf_limet) {
+          base_piece_top_face.add(BASE_p_j_1);
+          base_piece_top_face.add(BASE_p_j_2);
+          base_piece_top_face.add(BASE_p_j_3);
+          base_piece_top_face.add(BASE_p_j_4);
+          base_piece_top_face.add(BASE_p_j_5);
+        } else {
+          base_piece_top_face.add(BASE_p_j_1);
+          base_piece_top_face.add(Join_model(
+              Point_model(top_des, box_depth - 24 - depth_of_partition / 2, 0),
+              10,
+              10,
+              'boring'));
+          base_piece_top_face.add(BASE_p_j_5);
+        }
+
+         base_piece_new_1 = Piece_model(
+            base_side_piece.piece_id,1,base_side_piece.is_copy,
+            base_side_piece.piece_name,
+            base_side_piece.piece_direction,
+            base_side_piece.material_name,
+            base_side_piece.Piece_width,
+            base_side_piece.Piece_height,
+            base_side_piece.Piece_thickness,
+            base_side_piece.piece_origin,
+            Face_model(
+                Single_Face(base_side_new_base_face_items, base_piece_top_face,
+                    base_side_piece.piece_faces.top_face.groove_list),
+                base_side_piece.piece_faces.right_face,
+                base_side_piece.piece_faces.base_face,
+                base_side_piece.piece_faces.left_face,
+                base_side_piece.piece_faces.front_face,
+                base_side_piece.piece_faces.back_face));
+
+
+      }
+
+      else {
+
+        if(box_type=="inner_box"){
+
+          List<Join_model> base_1_piece_top_face=[];
+          List<Join_model> base_2_piece_top_face=[];
+
+          base_1_piece_top_face.add(Join_model(Point_model(base_des, 70, 0), 8, 10, 'boring'));
+          base_1_piece_top_face.add(Join_model(Point_model(base_des, 50, 0), 10, 10, 'boring'));
+          base_1_piece_top_face.add(Join_model(Point_model(base_des, 20, 0), 8, 10, 'boring'));
+
+          base_2_piece_top_face.add(Join_model(Point_model(base_des, 25, 0), 8, 10, 'boring'));
+          base_2_piece_top_face.add(Join_model(Point_model(base_des, 50, 0), 10, 10, 'boring'));
+          base_2_piece_top_face.add(Join_model(Point_model(base_des, 75, 0), 8, 10, 'boring'));
+
+
+         Join_model j_1=(Join_model(Point_model(init_material_thickness/2, 25, 0), 8, 33, 'boring'));
+         Join_model j_2=(Join_model(Point_model(init_material_thickness/2, 50, 0), 8, 33, 'boring'));
+         Join_model j_3=(Join_model(Point_model(init_material_thickness/2, 75, 0), 8, 33, 'boring'));
+
+
+          base_piece_new_1 = Piece_model(
+              base_side_piece.piece_id,1,base_side_piece.is_copy,
+              base_side_piece.piece_name,
+              base_side_piece.piece_direction,
+              base_side_piece.material_name,
+              base_side_piece.Piece_width,
+              base_side_piece.Piece_height,
+              base_side_piece.Piece_thickness,
+              base_side_piece.piece_origin,
+              Face_model(
+                  Single_Face(base_side_new_base_face_items, base_1_piece_top_face,
+                      base_side_piece.piece_faces.top_face.groove_list),
+                  base_side_piece.piece_faces.right_face,
+                  base_side_piece.piece_faces.base_face,
+                  base_side_piece.piece_faces.left_face,
+                  base_side_piece.piece_faces.front_face,
+                  base_side_piece.piece_faces.back_face));
+
+
+          base_piece_new_2 = Piece_model(
+              base_side_piece.piece_id+1,1,base_side_piece.is_copy,
+              base_side_piece.piece_name,
+              base_side_piece.piece_direction,
+              base_side_piece.material_name,
+              base_side_piece.Piece_width,
+              base_side_piece.Piece_height,
+              base_side_piece.Piece_thickness,
+              base_side_piece.piece_origin,
+              Face_model(
+                  Single_Face(base_side_new_base_face_items, base_2_piece_top_face,[]),
+                  Single_Face(base_side_piece.piece_faces.right_face.face_item, [j_1,j_2, j_3,],[]),
+                  base_side_piece.piece_faces.base_face,
+                  Single_Face(base_side_piece.piece_faces.left_face.face_item,  [j_1,j_2, j_3,],[]),
+                  base_side_piece.piece_faces.front_face,
+                  base_side_piece.piece_faces.back_face));
+
+
+
+
+
+
+
+        }
+        else{
+          BASE_p_j_1 = Join_model(Point_model(base_des, box_depth - 24 - 35, 0), 8, 10, 'boring');
+          BASE_p_j_2 = Join_model(Point_model(base_des, box_depth - 24 - 65, 0), 10, 10, 'boring');
+          BASE_p_j_3 = Join_model(Point_model(base_des, box_depth - 24 - depth_of_partition / 2, 0), 8, 10, 'boring');
+          BASE_p_j_4 = Join_model(Point_model(base_des, box_depth - 24 - depth_of_partition + 65, 0), 10, 10, 'boring');
+          BASE_p_j_5 = Join_model(Point_model(base_des, box_depth - 24 - depth_of_partition + 35, 0), 8, 10, 'boring');
+
+          List<Join_model> base_piece_top_face = [];
+          base_side_piece.piece_faces.top_face.join_list.forEach((element) {
+            base_piece_top_face.add(element);
+          });
+
+          if (depth_of_partition > fix_shelf_limet) {
+            base_piece_top_face.add(BASE_p_j_1);
+            base_piece_top_face.add(BASE_p_j_2);
+            base_piece_top_face.add(BASE_p_j_3);
+            base_piece_top_face.add(BASE_p_j_4);
+            base_piece_top_face.add(BASE_p_j_5);
+          }
+          else {
+            base_piece_top_face.add(BASE_p_j_1);
+            base_piece_top_face.add(Join_model(Point_model(top_des, box_depth - 24 - depth_of_partition / 2, 0), 10, 10, 'boring'));
+            base_piece_top_face.add(BASE_p_j_5);
+          }
+
+          base_piece_new_1 = Piece_model(
+              base_side_piece.piece_id,1,base_side_piece.is_copy,
+              base_side_piece.piece_name,
+              base_side_piece.piece_direction,
+              base_side_piece.material_name,
+              base_side_piece.Piece_width,
+              base_side_piece.Piece_height,
+              base_side_piece.Piece_thickness,
+              base_side_piece.piece_origin,
+              Face_model(
+                  Single_Face(base_side_new_base_face_items, base_piece_top_face,
+                      base_side_piece.piece_faces.top_face.groove_list),
+                  base_side_piece.piece_faces.right_face,
+                  base_side_piece.piece_faces.base_face,
+                  base_side_piece.piece_faces.left_face,
+                  base_side_piece.piece_faces.front_face,
+                  base_side_piece.piece_faces.back_face));
+
+
+        }
+
+
+      }
+
+
+
 
     ///
     ///
@@ -1747,17 +1855,55 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
 
     box_pieces.removeWhere((element) => element.piece_id == left_side_id);
     box_pieces.removeWhere((element) => element.piece_id == right_side_id);
-    box_pieces.removeWhere((element) => element.piece_id == top_side_id);
+
+    if(box_type=="wall_box"){
+      box_pieces.removeWhere((element) => element.piece_id == top_side_id);
+
+    }else{
+          box_pieces.removeWhere((element) => element.piece_id == top_side_id);
+          box_pieces.removeWhere((element) => element.piece_id == top_side_id+1);
+
+    }
+
+    if(box_type=="inner_box"){
+      box_pieces.removeWhere((element) => element.piece_id == base_piece_new_1.piece_id);
+      box_pieces.removeWhere((element) => element.piece_id == base_piece_new_1.piece_id+1);
+
+    }else{
+      box_pieces.removeWhere((element) => element.piece_id == base_piece_new_1);
+
+    }
+
+
     box_pieces.removeWhere((element) => element.piece_id == base_side_id);
 
     box_pieces.add(old_inner);
     box_pieces.add(new_piece);
     box_pieces.add(right_piece_new);
     box_pieces.add(left_piece_new);
-    box_pieces.add(top_piece_new);
-    box_pieces.add(base_piece_new);
+
+
+
+    if(box_type=="wall_box"){
+      box_pieces.add(top_1_piece_new);
+
+    }else{
+      box_pieces.add(top_1_piece_new);
+      box_pieces.add(top_2_piece_new);
+
+    }
+    if(box_type=="inner_box"){
+      box_pieces.add(base_piece_new_1);
+      box_pieces.add(base_piece_new_2);
+
+    }else{
+      box_pieces.add(base_piece_new_1);
+    }
+
 
     box_pieces.add(new_inner);
+
+
   }
 
   add_Partition(int inner, double left_Distence, double frontage_Gap,
@@ -1765,31 +1911,37 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     if (Quantity == 1) {
       if (box_pieces[inner].Piece_width > left_Distence && left_Distence > 0) {
         add_Partition_pattern(
-            inner, left_Distence, frontage_Gap, partition_material_thickness);
+            inner, left_Distence, frontage_Gap, partition_material_thickness,false,Quantity);
         Navigator.of(Get.overlayContext!).pop();
       } else {
         Get.defaultDialog(
             title: 'Error',
             content: Text('you enter wrong value , please check again'));
       }
-    } else {
-      if (((Quantity - 1) * left_Distence +
-              Quantity * partition_material_thickness) <
-          box_pieces[inner].Piece_width) {
-        double distance = (box_pieces[inner].Piece_width -
-                Quantity * partition_material_thickness) /
-            (Quantity + 1);
+    }
 
-        add_Partition_pattern(
-            inner, distance, frontage_Gap, partition_material_thickness);
+
+    else {
+
+      if (
+      ( (Quantity - 1) * left_Distence + Quantity * partition_material_thickness) < box_pieces[inner].Piece_width
+         )
+      {
+        double distance = double.parse(((box_pieces[inner].Piece_width - Quantity * partition_material_thickness) / (Quantity + 1)).toStringAsFixed(1));
+
+          add_Partition_pattern(inner                , distance, frontage_Gap, partition_material_thickness,false,Quantity);
 
         for (int i = 1; i < Quantity; i++) {
-          add_Partition_pattern(box_pieces.length - 1, distance, frontage_Gap,
-              partition_material_thickness);
+          add_Partition_pattern(box_pieces.length - 1, distance, frontage_Gap, partition_material_thickness,true ,Quantity);
         }
 
+
         Navigator.of(Get.overlayContext!).pop();
-      } else {
+
+
+      }
+      else
+      {
         Get.defaultDialog(
             title: 'Error',
             content: Text('you enter wrong value , please check again'));
@@ -1873,9 +2025,16 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
       x_cord_1=door_width-22.5-6;
     }
 
-    double y_cord=100 ;
+    late double intiat_distence;
+    if(((door_hight)/(hinges_quantity+1))<100){
+      intiat_distence=70;
+    }else{
+      intiat_distence=100;
+    }
+
+    double y_cord=intiat_distence ;
     List<Join_model> hinges=[];
-    double dis_between_hinges=(door_hight-240)/(hinges_quantity-1);
+    double dis_between_hinges=(door_hight-2*intiat_distence)/(hinges_quantity-1);
 
     for(int i=0;i<hinges_quantity;i++){
 
@@ -1913,10 +2072,10 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
         Single_Face([], hinges, []));
 
     Piece_model door_piece = Piece_model(
-        pieces_id,
+        pieces_id,1,false,
         'Door',
         'F',
-        'material_name',
+        door_model.material_name,
         door_width,
         door_hight,
         door_model.material_thickness,
@@ -1961,16 +2120,17 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
             .Piece_thickness *
         door_model.down_over_lap;
 
-    double door_width = (door_inner.Piece_width +
-                right_thickness +
-                left_thickness -
-                2 * door_model.round_gap) /
-            2 -
-        door_model.round_gap / 2;
-    double door_hight = door_inner.Piece_height +
+    double door_width = double.parse(((door_inner.Piece_width +
+        right_thickness +
+        left_thickness -
+        2 * door_model.round_gap) /
+        2 -
+        door_model.round_gap / 2).toStringAsFixed(1));
+
+    double door_hight = double.parse((door_inner.Piece_height +
         top_thickness +
         base_thickness -
-        2 * door_model.round_gap;
+        2 * door_model.round_gap).toStringAsFixed(1));
 
     Point_model door_origin_1 = Point_model(
         door_inner.piece_origin.x_coordinate -
@@ -2007,14 +2167,26 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
       hinges_quantity=5;
 
 
-    double y_cord=100+door_origin_1.y_coordinate;
+
+
 
 
     List<Join_model> Right_door_hinges=[];
     List<Join_model> Left_door_hinges=[];
 
 
-    double dis_between_hinges=(door_hight-200)/(hinges_quantity-1);
+    late double intiat_distence;
+    if(((door_hight)/(hinges_quantity+1))<100){
+      intiat_distence=70;
+    }else{
+      intiat_distence=100;
+    }
+
+    double dis_between_hinges=(door_hight-2*intiat_distence)/(hinges_quantity-1);
+
+
+
+    double y_cord=intiat_distence;
 
     for(int i=0;i<hinges_quantity;i++){
 
@@ -2034,7 +2206,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
 
     }
 
-     y_cord=100+door_origin_1.y_coordinate;
+     y_cord=intiat_distence;
     for(int i=0;i<hinges_quantity;i++){
 
       Point_model point_model_1=Point_model(22.5, y_cord, 0);
@@ -2076,20 +2248,20 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
 
 
     Piece_model door_piece_1 = Piece_model(
-        pieces_id,
+        pieces_id,1,false,
         'Right Door',
         'F',
-        'material_name',
+        door_model.material_name,
         door_width,
         door_hight,
         door_model.material_thickness,
         door_origin_1,
         Right_door_faces);
     Piece_model door_piece_2 = Piece_model(
-        pieces_id,
+        pieces_id,1,false,
         'Left Door',
         'F',
-        'material_name',
+        door_model.material_name,
         door_width,
         door_hight,
         door_model.material_thickness,

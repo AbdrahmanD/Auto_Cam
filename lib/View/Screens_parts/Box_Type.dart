@@ -33,7 +33,7 @@ class _Box_TypeState extends State<Box_Type> {
             children: [
 
               SizedBox(
-                height: w/4,
+                height: 100,
               ),
 
               // auto cam lable
@@ -167,7 +167,23 @@ class _Box_TypeState extends State<Box_Type> {
               ),
 
               SizedBox(
-                height: 128,
+                height: 64,
+              ),
+
+              Container(width: w,
+                child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+                    InkWell(onTap: (){
+                      Get.defaultDialog(
+                          title: "Archives",
+                          content: Text('no saved boxes in your repository !!'));
+                    }
+                        ,child: Icon(Icons.file_open,size: 42,color: Colors.red[500],)),
+                    SizedBox(width: 32,),
+                    Text("open box from repository",style: TextStyle(fontSize: 22),)
+                  ],
+                ),
               ),
 
             ],

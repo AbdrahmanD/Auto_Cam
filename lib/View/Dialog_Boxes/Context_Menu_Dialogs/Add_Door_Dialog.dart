@@ -16,6 +16,7 @@ class Add_Door_Dialog extends StatefulWidget {
 class _Add_Door_DialogState extends State<Add_Door_Dialog> {
 
   TextEditingController material_controller = TextEditingController();
+  TextEditingController material_name_controller = TextEditingController();
 
   TextEditingController round_gap_controller = TextEditingController();
 
@@ -73,8 +74,8 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 518,
-      height: 325,
+      width: 540,
+      height: 350,
       child: Row(
         children: [
           SizedBox(
@@ -311,7 +312,6 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
 
           Container(
             width: 200,
-            height: 500,
             child: Column(
               children: [
                 SizedBox(
@@ -412,7 +412,40 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
 
                 Row(
                   children: [
-                    Text('material      '),
+                    Text('material name'),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 80,
+                      height: 30,
+                      child: TextFormField(
+                        onChanged: (_) {
+                          // bottom_changed();
+                        },
+                        enabled: true,
+                        controller: material_name_controller,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+
+                Row(
+                  children: [
+                    Text('material          '),
                     SizedBox(
                       width: 12,
                     ),
@@ -445,9 +478,10 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                 SizedBox(
                   height: 12,
                 ),
+
                 Row(
                   children: [
-                    Text('Round Gap '),
+                    Text('Round Gap     '),
                     SizedBox(
                       width: 12,
                     ),
@@ -506,7 +540,7 @@ if(single_door){
   door_direction="D";
 }
                        Door_Model door_model=Door_Model(single_door?1:2,
-                           double.parse(material_controller.text.toString()),
+                           double.parse(material_controller.text.toString()),material_name_controller.text.toString(),
                            double.parse(round_gap_controller.text.toString()),draw_controller.hover_id,
                            up_over_lap, right_over_lap, down_over_lap, left_over_lap,door_direction);
                        draw_controller.add_door(door_model);

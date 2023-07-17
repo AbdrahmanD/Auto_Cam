@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class Box_Repository extends GetxController{
 
-   Rx<Box_model> box_model=Box_model(400, 600, 600, 18, 6,true,"wall_box").obs;
+   Rx<Box_model> box_model=Box_model("test",400, 600, 600, 18,'MDF', 6,true,"wall_box").obs;
 
   Box_Repository();
 

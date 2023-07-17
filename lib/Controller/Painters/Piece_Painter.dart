@@ -518,6 +518,7 @@ print(scal);
       }
 
       if(piece_model.piece_faces.back_face.join_list.length>0){
+
         for(int i=0;i<piece_model.piece_faces.back_face.join_list.length;i++){
           Offset join_point=Offset(
               back_origin.dx +piece_model.piece_faces.back_face.join_list[i].hole_point.x_coordinate*my_scale,
@@ -611,13 +612,13 @@ print(scal);
     draw_text(canvas, 'width :${piece_model.Piece_width}',           Offset(300, 50),  6.5, 2);
     draw_text(canvas, 'height :${piece_model.Piece_height}',         Offset(300, 70),  6.5, 2);
     draw_text(canvas, 'thickness :${piece_model.Piece_thickness}',   Offset(300, 90),  6.5, 2);
-    draw_text(canvas, 'material name : \n   ${piece_model.material_name}', Offset(300, 110), 6.5, 2);
+    draw_text(canvas, 'quantity :${piece_model.piece_quantity}',   Offset(300, 110),  6.5, 2);
+    draw_text(canvas, 'material name :    ${piece_model.material_name}', Offset(300, 130), 6.5, 2);
 
 
   }
 
-  draw_text(
-      Canvas c, String text, Offset offset, double t_size, int my_text_size) {
+  draw_text(Canvas c, String text, Offset offset, double t_size, int my_text_size) {
     TextSpan ts = TextSpan(
         text: text,
         style: TextStyle(fontSize: t_size * my_text_size, color: Colors.black));
@@ -626,4 +627,6 @@ print(scal);
 
     tp.paint(c, offset);
   }
+
+
 }

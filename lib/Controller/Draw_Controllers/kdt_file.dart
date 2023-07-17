@@ -7,12 +7,13 @@ import 'package:path_provider/path_provider.dart';
 
 class kdt_file {
 
-  String box_name = "d";
+  late String box_name;
   String kdt_file_content = "";
   late Piece_model piece_model;
 
 
   kdt_file(this.piece_model,this.box_name) {
+
 
     kdt_file_content += "<KDTPanelFormat>\n";
 
@@ -45,7 +46,7 @@ class kdt_file {
     kdt_file_content += "<PanelName>${piece_model.piece_name}</PanelName>\n";
     kdt_file_content += "<PanelMaterial>${piece_model.material_name}</PanelMaterial>\n";
     kdt_file_content += "<PanelTexture>0</PanelTexture>\n";
-    kdt_file_content += "<PanelQuantity>1</PanelQuantity>\n";
+    kdt_file_content += "<PanelQuantity>${piece_model.piece_quantity}</PanelQuantity>\n";
 
     kdt_file_content += "<Params>\n";
     kdt_file_content += '<Param Value=\'${piece_model
@@ -597,14 +598,24 @@ class kdt_file {
 
   extract_xml_file(String file_name)async{
 
-    final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final Directory newDirectory = Directory('${appDocDir.path}/XML_Files/${box_name}');
+
+    final directory = await getApplicationDocumentsDirectory();
+
+    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    oldDirectory.createSync();
+
+
+    final Directory newDirectory = Directory('${oldDirectory.path}/$box_name');
     newDirectory.createSync();
 
-    final path = newDirectory.path;
-    File file= File('$path/$file_name.xml');
+    final Directory finalDirectory = Directory('${newDirectory.path}/XML_files');
+    finalDirectory.createSync();
 
-    file.writeAsString(kdt_file_content);
+    final path = await finalDirectory.path;
+    File file =await File('$path/$file_name.xml');
+    file.writeAsString('$kdt_file_content');
+
+
 
 
   }

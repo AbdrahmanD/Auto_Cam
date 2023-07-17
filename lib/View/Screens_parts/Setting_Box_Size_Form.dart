@@ -1,5 +1,5 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
-import 'package:auto_cam/Controller/File_managing_Coltrollers/Excel_Controller.dart';
+import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/View/Main_Screen.dart';
 import 'package:auto_cam/View/Piece_List_view.dart';
@@ -26,6 +26,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
   Draw_Controller draw_Controller = Get.find();
 
+  TextEditingController box_name_controller               =TextEditingController();
   TextEditingController width_controller               =TextEditingController();
 
   TextEditingController hight_controller               =TextEditingController();
@@ -33,6 +34,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
   TextEditingController depth_controller               =TextEditingController();
 
   TextEditingController material_thickness_controller  =TextEditingController();
+  TextEditingController material_name_controller  =TextEditingController();
 
   TextEditingController back_panel_thickness_controller=TextEditingController();
 
@@ -42,16 +44,17 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
     box_model=draw_Controller.get_box();
 
 
+    box_name_controller.text="test box";
     width_controller.text=               box_model.box_width.toString();
     hight_controller.text=               box_model.box_height.toString();
     depth_controller.text=               box_model.box_depth.toString();
     material_thickness_controller.text=  box_model.init_material_thickness.toString();
     back_panel_thickness_controller.text=box_model.backpanel_thickness.toString();
-
+    material_name_controller.text='MDF';
 
     return Form(
       key: form_key,
-      child: Column(
+      child: ListView(
         children: [
           SizedBox(
             height: 18,
@@ -96,8 +99,47 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
           SizedBox(
-            height: 18,
+            height: 12,
           ),
+
+          Row(
+            children: [
+              SizedBox(
+                width: 16,
+              ),
+              Text(' Box name  :'),
+              SizedBox(
+                width: 12,
+              ),
+              Container(
+                width: 100,
+                height: 26,
+                child: TextFormField(
+                  controller: box_name_controller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (d) {
+                    if (d!.isEmpty) {
+                      return 'please add value';
+                    }
+                  },
+
+                ),
+              ),
+              Text(
+                "  mm",
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 12,
+          ),
+
+
           //width
           Row(
             children: [
@@ -237,13 +279,15 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             width: 18,
           ),
 
-          Text(
-            "thickness :",
-            style: TextStyle(fontSize: 14),
+          Center(
+            child: Text(
+              "Materials ",
+              style: TextStyle(fontSize: 14),
+            ),
           ),
 
           SizedBox(
-            height: 12,
+            height: 14,
           ),
 
           //material thickness form field
@@ -253,7 +297,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 width: 18,
               ),
               Text(
-                "Material      :",
+                "thickness   :",
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(
@@ -287,11 +331,52 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
           SizedBox(
-            height: 12,
+            height: 6,
+          ),
+
+          //material name form field
+          Row(
+            children: [
+              SizedBox(
+                width: 18,
+              ),
+              Text(
+                " name         :",
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Container(
+                width: 100,
+                height: 26,
+                child: TextFormField(
+                  controller: material_name_controller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (d) {
+                    if (d!.isEmpty) {
+                      return 'please add value';
+                    }
+                  },
+
+                ),
+              ),
+              Text(
+                "  mm",
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
           ),
 
           SizedBox(
-            height: 12,
+            height: 6,
+          ),
+          SizedBox(
+            height: 6,
           ),
 
           //back Panel thickness form field
@@ -335,7 +420,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
           SizedBox(
-            height: 16,
+            height: 12,
           ),
 
           //divider
@@ -348,7 +433,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           // Action part (buttons for : draw , export as excel , export as G_code .. )
 
           SizedBox(
-            height: 12,
+            height: 6,
           ),
           //chose or Edit fitting type
           Container(
@@ -375,7 +460,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             ),
           ),
           SizedBox(
-            height: 12,
+            height: 6,
           ),
 
           //divider
@@ -386,7 +471,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
           ///////////////////////
           SizedBox(
-            height: 12,
+            height: 6,
           ),
           //chose is there back panel or not
           Container(
@@ -412,7 +497,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             ),
           ),
           SizedBox(
-            height: 12,
+            height: 6,
           ),
 
           //divider
@@ -424,7 +509,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ///Draw in the Screen button
           Padding(
             padding: const EdgeInsets.only(
-                left: 18.0, right: 52, top: 24, bottom: 24),
+                left: 18.0, right: 52, top: 18, bottom: 18),
             child: InkWell(
               onTap: () {
                 if(form_key.currentState!.validate()){
@@ -433,11 +518,12 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                   double  hight_value=double.parse(hight_controller.text.toString());
                   double  depth_value=double.parse(depth_controller.text.toString());
                   double  material_thickness_value=double.parse(material_thickness_controller  .text.toString());
+                  String  material_name_value=material_name_controller.text.toString();
                   double  pack_panel_thickness_value=double.parse(back_panel_thickness_controller.text.toString());
 
 
-                  Box_model b=Box_model(width_value, hight_value, depth_value,
-                      material_thickness_value, pack_panel_thickness_value,is_back_panel,draw_Controller.box_type);
+                  Box_model b=Box_model(box_name_controller.text.toString(),width_value, hight_value, depth_value,
+                      material_thickness_value,material_name_value ,pack_panel_thickness_value,is_back_panel,draw_Controller.box_type);
                   draw_Controller.add_Box(b);
 
                 }
@@ -497,7 +583,7 @@ Get.to(Piece_List_view());
           ),
 
           SizedBox(
-            height: 22,
+            height: 12,
           ),
 
 
@@ -535,7 +621,7 @@ Get.to(Piece_List_view());
           ),
 
           SizedBox(
-            height: 22,
+            height: 12,
           ),
 
           //Export Details sheets as PDF
@@ -566,7 +652,7 @@ Get.to(Piece_List_view());
           ),
 
           SizedBox(
-            height: 22,
+            height: 12,
           ),
 
           //preview Nesting sheets
@@ -599,7 +685,7 @@ Get.to(Piece_List_view());
           ),
 
           SizedBox(
-            height: 22,
+            height: 12,
           ),
 
           //Export every piece \n  as G_code file

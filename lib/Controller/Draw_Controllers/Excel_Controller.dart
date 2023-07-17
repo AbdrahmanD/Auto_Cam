@@ -9,22 +9,17 @@ import 'package:path_provider/path_provider.dart';
 
 
 class Excel_Controller extends GetxController {
-  late Directory myDir;
 
-  Excel_Controller(){
-  }
 
   create_excel( Box_model my_box) async {
 
-    DateTime dateTime =DateTime.now();
-    String date = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
-
-
-    String box_name='(${my_box.box_width}X${my_box.box_height}X'
-        '${my_box.box_depth})-${date}';
+    String box_name=my_box.box_name;
 
     final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final Directory newDirectory = Directory('${appDocDir.path}/Cutting_Lists');
+    final Directory oldDirectory = Directory('${appDocDir.path}/Auto_Cam');
+    oldDirectory.createSync();
+
+    final Directory newDirectory = Directory('${oldDirectory.path}/$box_name');
     newDirectory.createSync();
 
     final path = newDirectory.path;
@@ -47,6 +42,7 @@ class Excel_Controller extends GetxController {
     var title5=sheet.cell(CellIndex.indexByString('E1'));title5.value='Height';
     var title6=sheet.cell(CellIndex.indexByString('F1'));title6.value='Width';
     var title7=sheet.cell(CellIndex.indexByString('G1'));title7.value='Quantity';
+    var title8=sheet.cell(CellIndex.indexByString('H1'));title8.value='copy';
 
     ///
     ///
@@ -54,7 +50,7 @@ class Excel_Controller extends GetxController {
 int n=2;
     for(int i=0;i<my_box.box_pieces.length;i++){
 
-      if(my_box.box_pieces[i].piece_name=='inner'){
+      if(my_box.box_pieces[i].piece_name=='inner' || my_box.box_pieces[i].is_copy || !my_box.box_pieces[i].piece_inable){
         continue;
       }else {
 
@@ -71,7 +67,9 @@ int n=2;
         var title6 = sheet.cell(CellIndex.indexByString('F$n'));
         title6.value = '${my_box.box_pieces[i].Piece_width}';
         var title7 = sheet.cell(CellIndex.indexByString('G$n'));
-        title7.value = '${1}';
+        title7.value = '${my_box.box_pieces[i].piece_quantity}';
+        var title8 = sheet.cell(CellIndex.indexByString('H$n'));
+        title8.value = '${my_box.box_pieces[i].is_copy}';
         n++;
       }
     }
@@ -79,7 +77,6 @@ int n=2;
 
     List<int>? fileBytes = excel.save();
 
-    //print('saving executed in ${stopwatch.elapsed}');
     if (fileBytes != null) {
       File(file.path)
         ..createSync(recursive: true)

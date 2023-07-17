@@ -16,6 +16,8 @@ class Box_Painter extends CustomPainter {
     this.screen_Size = screen_size;
     this.hover_id = hover_id;
 
+
+
     box_model.box_origin.x_coordinate =
         screen_size.width / 2 - box_model.box_width * drawing_scale / 2;
     box_model.box_origin.y_coordinate =
@@ -126,4 +128,6 @@ bool inner=(piece_model.piece_name=='inner');
 
     tp.paint(c, offset);
   }
+
+
 }
