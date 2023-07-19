@@ -16,7 +16,6 @@ class Drawer_model {
 
   late double All_base_gape;
 
-  // late double All_top_gape;
   late double each_top_gape;
   late double left_gape;
   late double right_gape;
@@ -50,6 +49,7 @@ class Drawer_model {
       this.drawer_box_depth) {
 
     Draw_Controller draw_controller = Get.find();
+
     int drawer_id = draw_controller.box_repository.box_model.value.box_drawers.length;
     int piece_id  = draw_controller.box_repository.box_model.value.pieces_id;
 
@@ -94,12 +94,6 @@ class Drawer_model {
 
     ///
   }
-
-
-
-
-
-
 
   add_drawer(int piece_id, int drawer_id) {
 
@@ -201,18 +195,45 @@ class Drawer_model {
 
       double side_width=draw_controller.box_repository.box_model.value.box_depth;
 
-      Join_model drawer_rail_r_1=Join_model(Point_model(side_width-8 , y_distence+45, 0), 3,1, 'boring');
-      Join_model drawer_rail_r_2=Join_model(Point_model(side_width-182,y_distence+45, 0), 3,1, 'boring');
-      Join_model drawer_rail_r_3=Join_model(Point_model(side_width-252,y_distence+45, 0), 3,1, 'boring');
+     Join_model drawer_rail_r_1;
+     Join_model drawer_rail_r_2;
+     Join_model drawer_rail_r_3;
+
+     Join_model drawer_rail_l_1;
+     Join_model drawer_rail_l_2;
+     Join_model drawer_rail_l_3;
+
+
+      if(my_right.first.piece_name=='partition'){
+
+        drawer_rail_r_1=Join_model(Point_model(side_width-8-24 , y_distence+45, 0), 3,1, 'boring');
+        drawer_rail_r_2=Join_model(Point_model(side_width-182-24,y_distence+45, 0), 3,1, 'boring');
+        drawer_rail_r_3=Join_model(Point_model(side_width-252-24,y_distence+45, 0), 3,1, 'boring');
+
+
+      }else{
+
+      drawer_rail_r_1=Join_model(Point_model(side_width-8 , y_distence+45, 0), 3,1, 'boring');
+      drawer_rail_r_2=Join_model(Point_model(side_width-182,y_distence+45, 0), 3,1, 'boring');
+      drawer_rail_r_3=Join_model(Point_model(side_width-252,y_distence+45, 0), 3,1, 'boring');
+      }
+     if(my_left.first.piece_name=='partition'){
+
+        drawer_rail_l_1=Join_model(Point_model(side_width-8  -24, y_distence+45, 0), 3,1, 'boring');
+        drawer_rail_l_2=Join_model(Point_model(side_width-182-24,y_distence+45, 0), 3,1, 'boring');
+        drawer_rail_l_3=Join_model(Point_model(side_width-252-24,y_distence+45, 0), 3,1, 'boring');
+     }else{
+        drawer_rail_l_1=Join_model(Point_model(side_width-8 , y_distence+45, 0), 3,1, 'boring');
+        drawer_rail_l_2=Join_model(Point_model(side_width-182,y_distence+45, 0), 3,1, 'boring');
+        drawer_rail_l_3=Join_model(Point_model(side_width-252,y_distence+45, 0), 3,1, 'boring');
+     }
+
 
       right_rail_joins.add(drawer_rail_r_1);
       right_rail_joins.add(drawer_rail_r_2);
       right_rail_joins.add(drawer_rail_r_3);
 
 
-      Join_model drawer_rail_l_1=Join_model(Point_model(side_width-8 , y_distence+45, 0), 3,1, 'boring');
-      Join_model drawer_rail_l_2=Join_model(Point_model(side_width-182,y_distence+45, 0), 3,1, 'boring');
-      Join_model drawer_rail_l_3=Join_model(Point_model(side_width-252,y_distence+45, 0), 3,1, 'boring');
 
       left_rail_joins.add(drawer_rail_l_1);
      left_rail_joins.add(drawer_rail_l_2);
@@ -494,4 +515,6 @@ class Drawer_model {
 
     return drawer_box;
   }
+
+
 }

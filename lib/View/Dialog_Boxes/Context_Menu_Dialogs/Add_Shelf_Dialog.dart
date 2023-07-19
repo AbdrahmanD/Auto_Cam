@@ -80,14 +80,15 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
         shelf_type='shelf';
       }
       if (!shelf_center) {
+
         if (distance) {
-          double top_Distence =
-              quantity ? double.parse(Top_Distance.text.toString()) : 0;
+          double top_Distence = quantity ? double.parse(Top_Distance.text.toString()) : 0;
           double frontage_Gap = double.parse(Front_Gap.text.toString());
           double material = double.parse(Material.text.toString());
           draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
               double.parse(Quantity.text.toString()).toInt(),shelf_type);
-        } else if (proportional) {
+        }
+        else if (proportional) {
           double top_Distence =
               (double.parse(Top_Distance.text.toString()) / 100) *
                       (draw_Controller.box_repository.box_model.value
@@ -98,7 +99,8 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
           draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
               double.parse(Quantity.text.toString()).toInt(),shelf_type);
         }
-      } else {
+      }
+      else {
         double top_Distence = draw_Controller.box_repository.box_model.value
                     .box_pieces[draw_Controller.hover_id].Piece_height /
                 2 -
@@ -176,8 +178,10 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
     proportional = false;
     edit_enable = false;
     Top_Distance.text = '0';
-    Bottom_Distance.text = '0';
+    Bottom_Distance.text = '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].Piece_height}';
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -241,6 +245,8 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
             key: my_key,
             child: Column(
               children: [
+
+                ///quantity
                 Row(
                   children: [
                     Container(
@@ -249,9 +255,11 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                         'Quantity',
                       ),
                     ),
+
                     Container(
                       width: 120,
                       height: 40,
+
                       child: TextFormField(
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
@@ -283,12 +291,16 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                         ),
                       ),
                     ),
+
                     Container(width: 45, child: Text('  mm'))
                   ],
                 ),
+
                 SizedBox(
                   height: 6,
                 ),
+
+                ///Front Gap
                 Row(
                   children: [
                     Container(
@@ -327,9 +339,12 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                     Container(width: 45, child: Text('  mm'))
                   ],
                 ),
+
                 SizedBox(
                   height: 6,
                 ),
+
+                ///thickness
                 Row(
                   children: [
                     Container(
@@ -361,6 +376,8 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                     Container(width: 45, child: Text('  mm'))
                   ],
                 ),
+
+                ///divider
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -372,6 +389,8 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                     ),
                   ),
                 ),
+
+                ///center shelf
                 Row(
                   children: [
                     Container(
@@ -419,6 +438,8 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                     SizedBox(width: 12,),
                   ],
                 ),
+
+                ///divider
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -430,8 +451,12 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                     ),
                   ),
                 ),
+
+
                 Row(
                   children: [
+
+                    ///distance
                     Container(
                         width: 30,
                         child: Checkbox(
@@ -446,11 +471,15 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                             }
                           },
                         )),
+
+
                     Container(
                         width: 80,
                         child: Text(
                           'Distence',
                         )),
+
+                    ///proportional
                     Container(
                         width: 30,
                         child: Checkbox(
@@ -465,16 +494,23 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                             }
                           },
                         )),
+
+
                     Container(
                         width: 100,
                         child: Text(
                           'Proportional',
                         )),
+
+
                   ],
                 ),
+
                 SizedBox(
                   height: 6,
                 ),
+
+
                 Row(
                   children: [
                     Container(
@@ -490,7 +526,8 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                         onChanged: (_) {
                           top_changed();
                         },
-                        enabled: (quantity && edit_enable),
+                        enabled: (quantity
+                            && edit_enable),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
@@ -501,7 +538,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                           ),
                         ),
                         validator: (d) {
-                          if (d!.isEmpty) {
+                          if (d=='') {
                             return 'add value please';
                           }
                         },
@@ -510,9 +547,12 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                     Container(width: 45, child: Text(distance ? '  mm' : '  %'))
                   ],
                 ),
+
+
                 SizedBox(
                   height: 6,
                 ),
+
                 Row(
                   children: [
                     Container(

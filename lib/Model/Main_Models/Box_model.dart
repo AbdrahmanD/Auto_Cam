@@ -1949,7 +1949,7 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     }
   }
 
-  /// end partition
+  /// end door
 
   add_door(Door_Model door_model) {
     if (door_model.door_num == 1) {
@@ -2271,4 +2271,8 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
     box_pieces.add(door_piece_1);
     box_pieces.add(door_piece_2);
   }
+
+
+
+
 }
