@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Drawer_model.dart';
 import 'package:auto_cam/Model/Main_Models/Face_model.dart';
@@ -2273,6 +2275,9 @@ if(box_type=="wall_box"){box_pieces.add(top_piece);}else{
   }
 
 
+  add_Join(Piece_model piece_model , Point_model p1,Point p2){
+
+  }
 
 
 }
