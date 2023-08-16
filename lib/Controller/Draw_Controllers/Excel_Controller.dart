@@ -50,7 +50,7 @@ class Excel_Controller extends GetxController {
 int n=2;
     for(int i=0;i<my_box.box_pieces.length;i++){
 
-      if(my_box.box_pieces[i].piece_name=='inner' || my_box.box_pieces[i].is_copy || !my_box.box_pieces[i].piece_inable){
+      if(my_box.box_pieces[i].piece_name=='inner' || my_box.box_pieces[i].is_changed || !my_box.box_pieces[i].piece_inable){
         continue;
       }else {
 
@@ -59,17 +59,17 @@ int n=2;
         var title2 = sheet.cell(CellIndex.indexByString('B$n'));
         title2.value = '${my_box.box_pieces[i].piece_name}';
         var title3 = sheet.cell(CellIndex.indexByString('C$n'));
-        title3.value = '${my_box.box_pieces[i].Piece_thickness}';
+        title3.value = '${my_box.box_pieces[i].piece_thickness}';
         var title4 = sheet.cell(CellIndex.indexByString('D$n'));
         title4.value = '${my_box.box_pieces[i].material_name}';
         var title5 = sheet.cell(CellIndex.indexByString('E$n'));
-        title5.value = '${my_box.box_pieces[i].Piece_height}';
+        title5.value = '${my_box.box_pieces[i].piece_height}';
         var title6 = sheet.cell(CellIndex.indexByString('F$n'));
-        title6.value = '${my_box.box_pieces[i].Piece_width}';
+        title6.value = '${my_box.box_pieces[i].piece_width}';
         var title7 = sheet.cell(CellIndex.indexByString('G$n'));
-        title7.value = '${my_box.box_pieces[i].piece_quantity}';
+        title7.value = '1}';
         var title8 = sheet.cell(CellIndex.indexByString('H$n'));
-        title8.value = '${my_box.box_pieces[i].is_copy}';
+        title8.value = '${my_box.box_pieces[i].is_changed}';
         n++;
       }
     }

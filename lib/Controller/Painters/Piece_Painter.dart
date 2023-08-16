@@ -11,8 +11,8 @@ class Piece_Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
 
-    double pw=piece_model.Piece_width;
-    double ph=piece_model.Piece_height;
+    double pw=piece_model.piece_width;
+    double ph=piece_model.piece_height;
 
     var scal;
 var value =math.sqrt(math.pow(pw, 2)+math.pow(ph, 2));
@@ -64,9 +64,9 @@ print(scal);
     /// vertical pieces
     if (piece_model.piece_direction == 'V') {
 
-      w = piece_model.Piece_width * my_scale;
-      h = piece_model.Piece_height * my_scale;
-      th = piece_model.Piece_thickness * my_scale;
+      w = piece_model .piece_width * my_scale;
+      h = piece_model .piece_height * my_scale;
+      th = piece_model.piece_thickness * my_scale;
 
 
       Offset top_origin=Offset(100,650-2*h-4*th);
@@ -238,9 +238,9 @@ print(scal);
     ///horisontal pieces
     else if (piece_model.piece_direction == 'H') {
 
-      h = piece_model.Piece_width * my_scale;
-      w = piece_model.Piece_height * my_scale;
-      th = piece_model.Piece_thickness * my_scale;
+      h = piece_model .piece_width * my_scale;
+      w = piece_model .piece_height * my_scale;
+      th = piece_model.piece_thickness * my_scale;
 
 
       Offset front_origin=Offset(100,650-2*h-4*th);
@@ -395,9 +395,9 @@ print(scal);
     ///Faces pieces
     else if (piece_model.piece_direction == 'F') {
 
-      w = piece_model.Piece_width * my_scale;
-      h = piece_model.Piece_height * my_scale;
-      th = piece_model.Piece_thickness * my_scale;
+      w = piece_model. piece_width * my_scale;
+      h = piece_model. piece_height * my_scale;
+      th = piece_model.piece_thickness * my_scale;
 
       Offset top_origin=  Offset(100+2*th, 650-2*h-4*th);
       Offset front_origin=Offset(100+2*th , 650-h-3*th);
@@ -609,10 +609,9 @@ print(scal);
 
     draw_text(canvas, 'id:${piece_model.piece_id}',                  Offset(300, 10),  6.5, 2);
     draw_text(canvas, 'name :${piece_model.piece_name}',             Offset(300, 30),  6.5, 2);
-    draw_text(canvas, 'width :${piece_model.Piece_width}',           Offset(300, 50),  6.5, 2);
-    draw_text(canvas, 'height :${piece_model.Piece_height}',         Offset(300, 70),  6.5, 2);
-    draw_text(canvas, 'thickness :${piece_model.Piece_thickness}',   Offset(300, 90),  6.5, 2);
-    draw_text(canvas, 'quantity :${piece_model.piece_quantity}',   Offset(300, 110),  6.5, 2);
+    draw_text(canvas, 'width :${piece_model.    piece_width}',           Offset(300, 50),  6.5, 2);
+    draw_text(canvas, 'height :${piece_model.   piece_height}',         Offset(300, 70),  6.5, 2);
+    draw_text(canvas, 'thickness :${piece_model.piece_thickness}',   Offset(300, 90),  6.5, 2);
     draw_text(canvas, 'material name :    ${piece_model.material_name}', Offset(300, 130), 6.5, 2);
 
 

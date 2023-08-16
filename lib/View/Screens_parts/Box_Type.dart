@@ -74,7 +74,7 @@ class _Box_TypeState extends State<Box_Type> {
                         InkWell(
                           onTap: () {
                             // Get.to(Project_Screen());
-                            draw_controller.box_type="wall_box";
+                            draw_controller.box_type="wall_cabinet";
                             Get.to(Cabinet_Editor());
 
                           },
@@ -100,7 +100,7 @@ class _Box_TypeState extends State<Box_Type> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Base Cabinet",
+                          "base _cabinet",
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
@@ -145,7 +145,7 @@ class _Box_TypeState extends State<Box_Type> {
                         InkWell(
                           onTap: () {
                             // Get.to(Single_Piece_Editor());
-                            draw_controller.box_type="inner_box";
+                            draw_controller.box_type="inner_cabinet";
                             Get.to(Cabinet_Editor());
                           },
                           child: Container(

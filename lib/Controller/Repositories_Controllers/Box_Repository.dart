@@ -1,4 +1,5 @@
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:get/get.dart';
 
 class Box_Repository extends GetxController{
@@ -23,11 +24,18 @@ class Box_Repository extends GetxController{
   double minifix_distence=32;
 
 
+  double top_base_piece_width=100;
+
+  double pack_panel_grove_depth=9;
+  double pack_panel_distence=18;
 
 
+  Rx<Box_model> box_model=Box_model(
+      'box_name',"wall_cabinet", 400, 600, 500, 18, 'MDF',5,
+      9,18,
+      100,  true, Point_model(0,0,0)).obs;
 
-
-  Rx<Box_model> box_model=Box_model("test",400, 600, 600, 18,'MDF', 6,true,"wall_box").obs;
+  Map<String,double> drawers_types_values={'normal_side':26,"concealed_hafle_1":10};
 
   Box_Repository();
 

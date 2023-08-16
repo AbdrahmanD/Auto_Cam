@@ -2,11 +2,12 @@ import 'dart:ui';
 
 import 'package:auto_cam/Controller/Painters/Box_Painter.dart';
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
+import 'package:auto_cam/Controller/View_3_D/three_D_Painter.dart';
+import 'package:auto_cam/Controller/View_3_D/transform_controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
-import 'package:auto_cam/Model/Main_Models/Coordinate_3D.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
-import 'package:auto_cam/Model/Main_Models/Point_model.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class Draw_Controller extends GetxController {
 
   String box_type="wall_box";
 
+  RxBool draw_3_D = false.obs;
 
   Box_model get_box() {
     return box_repository.box_model.value;
@@ -31,11 +33,18 @@ class Draw_Controller extends GetxController {
   Box_Painter draw_Box() {
 
     Box_model box_model = get_box() ;
-    double w = screen_size.value.width - 300;
+    double w = screen_size.value.width;
     hover_id_find(box_model);
     Box_Painter boxPainter = Box_Painter(box_model, drawing_scale.value,
         Size(w, screen_size.value.height), hover_id);
     return boxPainter;
+  }
+
+  three_D_Painter draw_3_D_box(){
+    transform_controller transform=transform_controller(screen_size.value);
+
+    three_D_Painter my_painter=transform.camera_cordinate_draw(screen_size.value);
+    return my_painter;
   }
 
   add_Box(Box_model box_model) {
@@ -70,9 +79,8 @@ class Draw_Controller extends GetxController {
   bool check_position(Piece_model p, Point_model my_origin) {
     bool is_hover = false;
 
-    Cordinate_3D cordinate_3d = p.cordinate_3d;
 
-    List<Point_model> piece_points = cordinate_3d.xy_0_plane;
+    List<Point_model> piece_points = p.piece_faces.front_face.corners;
 
     double left_down_point_x = (my_origin.x_coordinate +
         piece_points[0].x_coordinate * drawing_scale.value);
@@ -150,7 +158,8 @@ class Draw_Controller extends GetxController {
   add_shelf(
       double top_Distence, double frontage_Gap, double material_thickness,int quantity,String shelf_type)
   {
-    box_repository.box_model.value.add_Shelf(hover_id, top_Distence, frontage_Gap, material_thickness,quantity,shelf_type);
+    box_repository.box_model.value.add_Shelf(hover_id, top_Distence, frontage_Gap, material_thickness,quantity,shelf_type
+   , box_repository.box_model.value.bac_panel_distence + box_repository.box_model.value.back_panel_thickness);
     // print_pieces_coordinate();
 
   }
@@ -158,9 +167,10 @@ class Draw_Controller extends GetxController {
 
   /// add partition method
   add_partition(
-      double top_Distence, double frontage_Gap, double material_thickness,int quantity)
+      double top_Distence, double frontage_Gap, double material_thickness,int quantity,double back_distance)
   {
-    box_repository.box_model.value.add_Partition(hover_id, top_Distence, frontage_Gap, material_thickness,quantity);
+    box_repository.box_model.value.
+    add_Partition(hover_id, top_Distence, frontage_Gap, material_thickness,quantity,back_distance);
     // print_pieces_coordinate();
 
   }
@@ -190,7 +200,7 @@ class Draw_Controller extends GetxController {
           box_repository.box_model.value.box_pieces[i].piece_name.contains("base_panel")||
           box_repository.box_model.value.box_pieces[i].piece_name=="help_shelf"||
           box_repository.box_model.value.box_pieces[i].piece_inable==false||
-          box_repository.box_model.value.box_pieces[i].is_copy==true
+          box_repository.box_model.value.box_pieces[i].is_changed==true
       ){
        continue;
       }else{
@@ -206,10 +216,10 @@ class Draw_Controller extends GetxController {
 
     for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
       print('index : $i;; piece id :${box_repository.box_model.value.box_pieces[i].piece_id} ;; name  :${box_repository.box_model.value.box_pieces[i].piece_name}');
-      print('height :  ${box_repository.box_model.value.box_pieces[i].Piece_height} ;;'
-          ' width :  ${box_repository.box_model.value.box_pieces[i].Piece_width}');
-      print('thickness :  ${box_repository.box_model.value.box_pieces[i].Piece_thickness}');
-      print('quantity :  ${box_repository.box_model.value.box_pieces[i].piece_quantity}');
+      print('height :  ${box_repository.box_model.value.box_pieces[i].   piece_height} ;;'
+          ' width :  ${box_repository.box_model.value.box_pieces[i]     .piece_width}');
+      print('thickness :  ${box_repository.box_model.value.box_pieces[i].piece_thickness}');
+      print('quantity :  1');
       //
       // box_repository.box_model.value.box_pieces[i].piece_faces.top_face.face_item.forEach((element) {print('top   : $element');});
       // print('---------');
@@ -224,6 +234,11 @@ class Draw_Controller extends GetxController {
 
     }
   }
+
+
+
+
+
 
 
 }

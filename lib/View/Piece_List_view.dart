@@ -59,7 +59,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                       .box_pieces[i].piece_name ==
                                   'help_shelf' ||(
                                       draw_controller.box_repository.box_model.value
-                                          .box_pieces[i].is_copy && draw_controller.box_repository.box_model.value
+                                          .box_pieces[i].is_changed && draw_controller.box_repository.box_model.value
                                           .box_pieces[i].piece_name.contains('drawer'))
                           )
                           {
@@ -184,7 +184,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                 .box_pieces[i].piece_direction ==
                             'help_shelf'||(
                         draw_controller.box_repository.box_model.value
-                            .box_pieces[i].is_copy && draw_controller.box_repository.box_model.value
+                            .box_pieces[i].is_changed && draw_controller.box_repository.box_model.value
                             .box_pieces[i].piece_name.contains('drawer'))) {
                       return SizedBox();
                     } else if (draw_controller.box_repository.box_model.value
@@ -322,7 +322,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                             Piece_model p = draw_controller.box_repository
                                 .box_model.value.box_pieces[index];
 
-                            if (p.piece_name == "inner" || p.piece_name == "help_shelf" || p.is_copy || !p.piece_inable) {
+                            if (p.piece_name == "inner" || p.piece_name == "help_shelf" || p.is_changed || !p.piece_inable) {
                               return SizedBox();
                             } else {
                               return Column(
@@ -367,7 +367,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                             width: 60,
                                             child: Center(
                                                 child: Text(
-                                                    "${p.Piece_thickness}"))),
+                                                    "${p.piece_thickness}"))),
                                         Container(
                                             width: 2,
                                             height: 36,
@@ -376,7 +376,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                             width: 60,
                                             child: Center(
                                                 child:
-                                                    Text("${p.Piece_height}"))),
+                                                    Text("${p.piece_height}"))),
                                         Container(
                                             width: 2,
                                             height: 36,
@@ -385,7 +385,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                             width: 60,
                                             child: Center(
                                                 child:
-                                                    Text("${p.Piece_width}"))),
+                                                    Text("${p.piece_width}"))),
                                         Container(
                                             width: 2,
                                             height: 36,
@@ -394,7 +394,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                             width: 60,
                                             child: Center(
                                                 child:
-                                                Text("${p.piece_quantity}"))),
+                                                Text("1"))),
                                         Container(
                                             width: 2,
                                             height: 36,

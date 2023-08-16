@@ -1,9 +1,10 @@
+import 'package:auto_cam/Controller/DecimalTextInputFormatter.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/View/Main_Screen.dart';
 import 'package:auto_cam/View/Piece_List_view.dart';
-import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,11 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
   TextEditingController back_panel_thickness_controller=TextEditingController();
 
+
+  TextEditingController  pack_panel_grove_depth_controller =TextEditingController();
+  TextEditingController  pack_panel_distence_controller    =TextEditingController();
+  TextEditingController  top_base_piece_width_controller    =TextEditingController();
+
   @override
   Widget build(BuildContext context) {
 
@@ -49,12 +55,17 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
     hight_controller.text=               box_model.box_height.toString();
     depth_controller.text=               box_model.box_depth.toString();
     material_thickness_controller.text=  box_model.init_material_thickness.toString();
-    back_panel_thickness_controller.text=box_model.backpanel_thickness.toString();
+    back_panel_thickness_controller.text=box_model.back_panel_thickness.toString();
     material_name_controller.text='MDF';
+    pack_panel_grove_depth_controller.text='${draw_Controller.box_repository.pack_panel_grove_depth}';
+    pack_panel_distence_controller.text   ='${draw_Controller.box_repository.pack_panel_distence}';
+    top_base_piece_width_controller.text  ='${draw_Controller.box_repository.top_base_piece_width}';
+
 
     return Form(
       key: form_key,
-      child: ListView(
+      child: ListView(scrollDirection: Axis.vertical,
+
         children: [
           SizedBox(
             height: 18,
@@ -165,9 +176,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       return 'please add value';
                     }
                   },
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
+                  inputFormatters: [DecimalTextInputFormatter(2)],
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
               Text(
@@ -208,9 +218,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       return 'please add value';
                     }
                   },
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
+                  inputFormatters: [DecimalTextInputFormatter(2)],
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
               Text(
@@ -251,9 +260,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                         return 'please add value';
                       }
                     },
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [DecimalTextInputFormatter(2)],
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
                   )),
               Text(
                 "  mm",
@@ -318,9 +326,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       return 'please add value';
                     }
                   },
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
+                  inputFormatters: [DecimalTextInputFormatter(2)],
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
               Text(
@@ -407,9 +414,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       return 'please add value';
                     }
                   },
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
+                  inputFormatters: [DecimalTextInputFormatter(2)],
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
               Text(
@@ -418,6 +424,140 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               ),
             ],
           ),
+          SizedBox(
+            height: 6,
+          ),
+
+
+          ///pack_panel_grove_depth  form field
+          Row(
+            children: [
+              SizedBox(
+                width: 18,
+              ),
+              Text(
+                "grove depth:",
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Container(
+                width: 100,
+                height: 26,
+                child: TextFormField(
+                  controller: pack_panel_grove_depth_controller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (d) {
+                    if (d!.isEmpty) {
+                      return 'please add value';
+                    }
+                  },
+                  inputFormatters: [DecimalTextInputFormatter(2)],
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              Text(
+                "  mm",
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 6,
+          ),
+
+
+          ///pack_panel_distence_controller form field
+          Row(
+            children: [
+              SizedBox(
+                width: 18,
+              ),
+              Text(
+                "Back distence :",
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Container(
+                width: 100,
+                height: 26,
+                child: TextFormField(
+                  controller: pack_panel_distence_controller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (d) {
+                    if (d!.isEmpty) {
+                      return 'please add value';
+                    }
+                  },
+                  inputFormatters: [DecimalTextInputFormatter(2)],
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              Text(
+                "  mm",
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 6,
+          ),
+
+
+          ///top_base_piece_width_controller form field
+          Row(
+            children: [
+              SizedBox(
+                width: 18,
+              ),
+              Text(
+                "filler width :",
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Container(
+                width: 100,
+                height: 26,
+                child: TextFormField(
+                  controller: top_base_piece_width_controller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (d) {
+                    if (d!.isEmpty) {
+                      return 'please add value';
+                    }
+                  },
+                  inputFormatters: [DecimalTextInputFormatter(2)],
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              Text(
+                "  mm",
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 6,
+          ),
+
+
 
           SizedBox(
             height: 12,
@@ -521,9 +661,34 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                   String  material_name_value=material_name_controller.text.toString();
                   double  pack_panel_thickness_value=double.parse(back_panel_thickness_controller.text.toString());
 
+                  double pack_panel_grove_depth=double.parse(pack_panel_grove_depth_controller.text.toString());
+                  double    pack_panel_distence=double.parse(pack_panel_distence_controller.text   .toString());
+                  double   top_base_piece_width=double.parse(top_base_piece_width_controller.text  .toString());
 
-                  Box_model b=Box_model(box_name_controller.text.toString(),width_value, hight_value, depth_value,
-                      material_thickness_value,material_name_value ,pack_panel_thickness_value,is_back_panel,draw_Controller.box_type);
+
+                  draw_Controller.box_repository.pack_panel_distence=pack_panel_distence;
+                  draw_Controller.box_repository.pack_panel_grove_depth=pack_panel_grove_depth;
+                  draw_Controller.box_repository.top_base_piece_width=top_base_piece_width;
+
+
+
+                  Box_model b=Box_model(
+                      draw_Controller.box_repository.box_model.value.box_name,
+                      draw_Controller.box_type,
+                      width_value,
+                      hight_value,
+                      depth_value,
+                      material_thickness_value,
+                      material_name_value,
+                      pack_panel_thickness_value,
+                      pack_panel_grove_depth,
+                         pack_panel_distence,
+                        top_base_piece_width,
+
+                      is_back_panel,
+                      Point_model(0, 0, 0));
+
+
                   draw_Controller.add_Box(b);
 
                 }

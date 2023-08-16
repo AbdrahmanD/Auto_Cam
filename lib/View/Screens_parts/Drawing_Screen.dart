@@ -18,9 +18,12 @@ class Drawing_Screen extends StatelessWidget {
 
   Draw_Controller draw_controller=Get.find();
 
+
   @override
   Widget build(BuildContext context) {
-    draw_controller.screen_size.value = MediaQuery.of(context).size;
+
+    h=MediaQuery.of(context).size.height;
+    draw_controller.screen_size.value = Size(w,h);
     double f=1;
     return Container(
 
@@ -36,6 +39,7 @@ class Drawing_Screen extends StatelessWidget {
           }
         },
         child: GestureDetector(
+
           onLongPress: () {
             Get.defaultDialog(
               radius: 12,
@@ -48,14 +52,16 @@ class Drawing_Screen extends StatelessWidget {
             onHover: (d) {
               draw_controller.mouse_position.value = d.localPosition;
             },
-            child: Obx(
+
+            child:
+            Obx(
               () => CustomPaint(
-                painter: draw_controller.draw_Box(),
+                painter:draw_controller.draw_Box(),
                 child: Container(
                   width: w,
                 ),
               ),
-            ),
+            )
           ),
         ),
       ),

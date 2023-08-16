@@ -23,38 +23,38 @@ class kdt_file {
 
     if(piece_model.piece_direction=="V")
     {
-      kdt_file_content += "<PanelLength>${piece_model.Piece_width}</PanelLength>\n";
-      kdt_file_content += "<PanelWidth>${piece_model.Piece_height}</PanelWidth>\n";
+      kdt_file_content += "<PanelLength>${piece_model.piece_width}</PanelLength>\n";
+      kdt_file_content += "<PanelWidth>${piece_model.piece_height}</PanelWidth>\n";
 
     }
     else if(piece_model.piece_direction=="H")
     {
-      kdt_file_content += "<PanelLength>${piece_model.Piece_height}</PanelLength>\n";
-      kdt_file_content += "<PanelWidth>${piece_model.Piece_width}</PanelWidth>\n";
+      kdt_file_content += "<PanelLength>${piece_model.piece_height}</PanelLength>\n";
+      kdt_file_content += "<PanelWidth>${piece_model.piece_width}</PanelWidth>\n";
 
     }
     else if(piece_model.piece_direction=="F")
     {
-      kdt_file_content += "<PanelLength>${piece_model.Piece_width}</PanelLength>\n";
-      kdt_file_content += "<PanelWidth>${piece_model.Piece_height}</PanelWidth>\n";
+      kdt_file_content += "<PanelLength>${piece_model.piece_width}</PanelLength>\n";
+      kdt_file_content += "<PanelWidth>${piece_model.piece_height}</PanelWidth>\n";
 
     }
 
 
     kdt_file_content +=
-    "<PanelThickness>${piece_model.Piece_thickness}</PanelThickness>\n";
+    "<PanelThickness>${piece_model.piece_thickness}</PanelThickness>\n";
     kdt_file_content += "<PanelName>${piece_model.piece_name}</PanelName>\n";
     kdt_file_content += "<PanelMaterial>${piece_model.material_name}</PanelMaterial>\n";
     kdt_file_content += "<PanelTexture>0</PanelTexture>\n";
-    kdt_file_content += "<PanelQuantity>${piece_model.piece_quantity}</PanelQuantity>\n";
+    kdt_file_content += "<PanelQuantity>1</PanelQuantity>\n";
 
     kdt_file_content += "<Params>\n";
     kdt_file_content += '<Param Value=\'${piece_model
-        .Piece_height}\' Key=\'L\' Comment=\'Length\'/>\n';
+        .piece_height}\' Key=\'L\' Comment=\'Length\'/>\n';
     kdt_file_content += "<Param Value=\"${piece_model
-        .Piece_width}\" Key=\"W\" Comment=\"Width\"/>\n";
+        .piece_width}\" Key=\"W\" Comment=\"Width\"/>\n";
     kdt_file_content += "<Param Value=\"${piece_model
-        .Piece_thickness}\" Key=\"T\" Comment=\"Thickness\"/>\n";
+        .piece_thickness}\" Key=\"T\" Comment=\"Thickness\"/>\n";
     kdt_file_content += "</Params>\n";
 
     kdt_file_content += "</PANEL>\n";
@@ -68,7 +68,7 @@ class kdt_file {
             .x_coordinate;
         var y = piece_model.piece_faces.top_face.join_list[i].hole_point
             .y_coordinate;
-        var z = piece_model.Piece_thickness / 2;
+        var z = piece_model.piece_thickness / 2;
         var d = piece_model.piece_faces.top_face.join_list[i].hole_diameter;
         var dpth = piece_model.piece_faces.top_face.join_list[i].hole_depth;
 
@@ -119,7 +119,7 @@ class kdt_file {
             .x_coordinate;
         var y = piece_model.piece_faces.right_face.join_list[i].hole_point
             .y_coordinate;
-        var z = piece_model.Piece_thickness / 2;
+        var z = piece_model.piece_thickness / 2;
         var d = piece_model.piece_faces.right_face.join_list[i].hole_diameter;
         var dpth = piece_model.piece_faces.right_face.join_list[i].hole_depth;
 
@@ -170,7 +170,7 @@ class kdt_file {
             .x_coordinate;
         var y = piece_model.piece_faces.left_face.join_list[i].hole_point
             .y_coordinate;
-        var z = piece_model.Piece_thickness / 2;
+        var z = piece_model.piece_thickness / 2;
         var d = piece_model.piece_faces.left_face.join_list[i].hole_diameter;
         var dpth = piece_model.piece_faces.left_face.join_list[i].hole_depth;
 
@@ -189,7 +189,7 @@ class kdt_file {
           kdt_file_content += "<CAD>\n";
           kdt_file_content += "  <TypeNo>2</TypeNo>\n";
           kdt_file_content += "  <TypeName>Horizontal Hole</TypeName>\n";
-          kdt_file_content += "  <X1>${piece_model.Piece_height}</X1>\n";
+          kdt_file_content += "  <X1>${piece_model.piece_height}</X1>\n";
           kdt_file_content += "  <Y1>${y}</Y1>\n";
           kdt_file_content += "  <Z1>${z}</Z1>\n";
           kdt_file_content += "  <Quadrant>1</Quadrant>\n";
@@ -202,7 +202,7 @@ class kdt_file {
           kdt_file_content += "<CAD>\n";
           kdt_file_content += "  <TypeNo>2</TypeNo>\n";
           kdt_file_content += "  <TypeName>Horizontal Hole</TypeName>\n";
-          kdt_file_content += "  <X1>${piece_model.Piece_width}</X1>\n";
+          kdt_file_content += "  <X1>${piece_model.piece_width}</X1>\n";
           kdt_file_content += "  <Y1>${y}</Y1>\n";
           kdt_file_content += "  <Z1>${z}</Z1>\n";
           kdt_file_content += "  <Quadrant>1</Quadrant>\n";
@@ -221,7 +221,7 @@ class kdt_file {
             .x_coordinate;
         var y = piece_model.piece_faces.base_face.join_list[i].hole_point
             .y_coordinate;
-        var z = piece_model.Piece_thickness / 2;
+        var z = piece_model.piece_thickness / 2;
         var d = piece_model.piece_faces.base_face.join_list[i].hole_diameter;
         var dpth = piece_model.piece_faces.base_face.join_list[i].hole_depth;
 
@@ -272,7 +272,7 @@ class kdt_file {
             .x_coordinate;
         var y = piece_model.piece_faces.front_face.join_list[i].hole_point
             .y_coordinate;
-        var z = piece_model.Piece_thickness / 2;
+        var z = piece_model.piece_thickness / 2;
         var d = piece_model.piece_faces.front_face.join_list[i].hole_diameter;
         var dpth = piece_model.piece_faces.front_face.join_list[i].hole_depth;
 
@@ -291,7 +291,7 @@ class kdt_file {
           kdt_file_content += "<CAD>\n";
           kdt_file_content += "  <TypeNo>2</TypeNo>\n";
           kdt_file_content += "  <TypeName>Horizontal Hole</TypeName>\n";
-          kdt_file_content += "  <X1>${piece_model.Piece_width }</X1>\n";
+          kdt_file_content += "  <X1>${piece_model.piece_width }</X1>\n";
           kdt_file_content += "  <Y1>${y}</Y1>\n";
           kdt_file_content += "  <Z1>${z}</Z1>\n";
           kdt_file_content += "  <Quadrant>1</Quadrant>\n";
@@ -323,7 +323,7 @@ class kdt_file {
             .x_coordinate;
         var y = piece_model.piece_faces.back_face.join_list[i].hole_point
             .y_coordinate;
-        var z = piece_model.Piece_thickness / 2;
+        var z = piece_model.piece_thickness / 2;
         var d = piece_model.piece_faces.back_face.join_list[i].hole_diameter;
         var dpth = piece_model.piece_faces.back_face.join_list[i].hole_depth;
 
@@ -342,7 +342,7 @@ class kdt_file {
           kdt_file_content += "<CAD>\n";
           kdt_file_content += "  <TypeNo>2</TypeNo>\n";
           kdt_file_content += "  <TypeName>Horizontal Hole</TypeName>\n";
-          kdt_file_content += "  <X1>${piece_model.Piece_width}</X1>\n";
+          kdt_file_content += "  <X1>${piece_model.piece_width}</X1>\n";
           kdt_file_content += "  <Y1>${y}</Y1>\n";
           kdt_file_content += "  <Z1>${z}</Z1>\n";
           kdt_file_content += "  <Quadrant>1</Quadrant>\n";

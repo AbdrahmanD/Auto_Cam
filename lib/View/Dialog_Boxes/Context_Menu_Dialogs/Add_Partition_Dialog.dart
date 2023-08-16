@@ -31,6 +31,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
   bool proportional = false;
   bool edit_enable = true;
 
+ late  double back_distance;
 
 
   left_changed() {
@@ -40,7 +41,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
         double_left_distance = double.parse(Left_Distance.text.toString());
         Right_Distance.text =
         '${drawerController.box_repository.box_model.value.
-        box_pieces[drawerController.hover_id].Piece_width
+        box_pieces[drawerController.hover_id].piece_width
             - double_left_distance}';
       }
     } else if (proportional) {
@@ -59,7 +60,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
       if (Right_Distance.text.toString() != '') {
         double_right_distance = double.parse(Right_Distance.text.toString());
         Left_Distance.text = ''
-            '${drawerController.box_repository.box_model.value.box_pieces[drawerController.hover_id].Piece_width
+            '${drawerController.box_repository.box_model.value.box_pieces[drawerController.hover_id].piece_width
             - double_right_distance}';
       }
     } else if (proportional) {
@@ -74,6 +75,9 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
 
   add_partition() {
 
+    back_distance=drawerController.box_repository.pack_panel_distence;
+
+
     if (my_key.currentState!.validate()) {
       if (!partition_center) {
         if (distance) {
@@ -83,27 +87,27 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
           double material = double.parse(Material.text.toString());
 
           drawerController.add_partition(left_Distence, frontage_Gap, material,
-              double.parse(Quantity.text.toString()).toInt());
+              double.parse(Quantity.text.toString()).toInt(),back_distance);
 
         } else if (proportional) {
           double left_Distence =
               (double.parse(Left_Distance.text.toString()) / 100) *
                   (drawerController.box_repository.box_model.value
-                      .box_pieces[drawerController.hover_id].Piece_width) -
+                      .box_pieces[drawerController.hover_id].piece_width) -
                   double.parse(Material.text.toString()) / 2;
 
           double frontage_Gap = double.parse(Front_Gap.text.toString());
           double material = double.parse(Material.text.toString());
 
           drawerController.add_partition(left_Distence, frontage_Gap, material,
-              double.parse(Quantity.text.toString()).toInt());
+              double.parse(Quantity.text.toString()).toInt(),back_distance);
 
         }
       }
       ///if partation center
       else {
         double left_Distence = drawerController.box_repository.box_model.value
-            .box_pieces[drawerController.hover_id].Piece_width /
+            .box_pieces[drawerController.hover_id].piece_width /
             2 -
             double.parse(Material.text.toString()) / 2;
 
@@ -111,7 +115,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
         double material = double.parse(Material.text.toString());
 
         drawerController.add_partition(left_Distence, frontage_Gap, material,
-            double.parse(Quantity.text.toString()).toInt());
+            double.parse(Quantity.text.toString()).toInt(),back_distance);
 
       }
     }

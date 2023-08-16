@@ -1,6 +1,6 @@
 
-import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
-import 'package:auto_cam/Model/Main_Models/Point_model.dart';
+
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 
 class Join_model {
 
