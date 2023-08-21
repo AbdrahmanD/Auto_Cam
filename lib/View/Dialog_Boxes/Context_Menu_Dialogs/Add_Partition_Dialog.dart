@@ -119,6 +119,9 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
 
       }
     }
+    setState(() {
+
+    });
   }
 
   partition_center_change() {

@@ -427,7 +427,8 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                     Container(
                       width: 80,
                       height: 30,
-                      child: TextFormField(
+                      child:
+                      TextFormField(
                         onChanged: (_) {
                           // bottom_changed();
                         },

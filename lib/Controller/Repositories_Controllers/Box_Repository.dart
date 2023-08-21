@@ -39,6 +39,9 @@ class Box_Repository extends GetxController{
 
   Box_Repository();
 
+  add_box_to_repo(Box_model b){
+    box_model.value=b;
+  }
 
 
 }

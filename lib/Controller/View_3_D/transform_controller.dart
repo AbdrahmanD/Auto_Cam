@@ -35,7 +35,7 @@ class transform_controller {
 
 
 
-  three_D_Painter camera_cordinate_draw(Size screen_size ){
+  three_D_Painter camera_cordinate_draw(Size screen_size  ){
 
     cameraTransformer = CameraTransformer(
         camera_position.x_coordinate, camera_position.y_coordinate, camera_position.z_coordinate,
@@ -49,11 +49,12 @@ class transform_controller {
     // print("###########");
 
     Box_model b=box_repository.box_model.value;
+
     Box_model box_model=Box_model(b.box_name, b.box_type, b.box_width, b.box_height, b.box_depth,
         b.init_material_thickness, b.init_material_name, b.back_panel_thickness,
         b.grove_value, b.bac_panel_distence, b.top_base_piece_width, b.is_back_panel, Point_model(0,0,0));
-
-for(int i=0;i<b.box_pieces.length;i++){
+    box_model.box_pieces=[];
+    for(int i=0;i<b.box_pieces.length;i++){
   Piece_model p = Piece_model(b.box_pieces[i].piece_id, b.box_pieces[i].piece_name, b.box_pieces[i].piece_direction, b.box_pieces[i].material_name, b.box_pieces[i].piece_width, b.box_pieces[i].piece_height, b.box_pieces[i].piece_thickness, b.box_pieces[i].piece_origin);
   box_model.box_pieces.add(p);
 }
@@ -66,6 +67,7 @@ for(int i=0;i<b.box_pieces.length;i++){
        p.piece_faces.front_face.corners[1]=cameraTransformer.transform(p.piece_faces.front_face.corners[1]);
        p.piece_faces.front_face.corners[2]=cameraTransformer.transform(p.piece_faces.front_face.corners[2]);
        p.piece_faces.front_face.corners[3]=cameraTransformer.transform(p.piece_faces.front_face.corners[3]);
+
        p.piece_faces.back_face.corners[0]=cameraTransformer.transform(p.piece_faces.back_face.corners[0]);
        p.piece_faces.back_face.corners[1]=cameraTransformer.transform(p.piece_faces.back_face.corners[1]);
        p.piece_faces.back_face.corners[2]=cameraTransformer.transform(p.piece_faces.back_face.corners[2]);

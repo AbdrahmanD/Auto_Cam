@@ -4,6 +4,7 @@ import 'package:auto_cam/Controller/View_3_D/transform_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class View_Page extends StatefulWidget {
   late Size screen_size;
@@ -22,6 +23,7 @@ class _View_PageState extends State<View_Page> {
 
 
   late transform_controller transfomer = transform_controller(screen_size);
+
 
   bool shift_hold = false;
   bool alt_hold = false;
@@ -118,8 +120,9 @@ class _View_PageState extends State<View_Page> {
 
               },
 
-              child: CustomPaint(
-                painter: transfomer.camera_cordinate_draw(screen_size),
+              child: Obx(()=> CustomPaint(
+                  painter: transfomer.camera_cordinate_draw(screen_size),
+                ),
               ),
             ),
           ),

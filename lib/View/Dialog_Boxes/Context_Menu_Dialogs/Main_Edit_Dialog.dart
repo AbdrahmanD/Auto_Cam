@@ -3,6 +3,7 @@ import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Door_Dialog.
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Drawer_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Partition_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Shelf_Dialog.dart';
+import 'package:auto_cam/View/Screens_parts/Add_Filler_Dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,7 @@ class Main_Edit_Dialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        /// add shelf
         InkWell(
           onTap: () {
             Navigator.of(Get.overlayContext!).pop();
@@ -26,6 +28,7 @@ class Main_Edit_Dialog extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
         ),
+
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Divider(
@@ -33,6 +36,8 @@ class Main_Edit_Dialog extends StatelessWidget {
             color: Colors.blueGrey,
           ),
         ),
+
+        /// add Partition
         InkWell(
           onTap: () {
             Navigator.of(Get.overlayContext!).pop();
@@ -46,6 +51,7 @@ class Main_Edit_Dialog extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
         ),
+
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Divider(
@@ -53,6 +59,8 @@ class Main_Edit_Dialog extends StatelessWidget {
             color: Colors.blueGrey,
           ),
         ),
+
+        ///add Drawer
         InkWell(
           onTap: () {
             Navigator.of(Get.overlayContext!).pop();
@@ -66,6 +74,7 @@ class Main_Edit_Dialog extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
         ),
+
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Divider(
@@ -73,6 +82,8 @@ class Main_Edit_Dialog extends StatelessWidget {
             color: Colors.blueGrey,
           ),
         ),
+
+        ///add Door
         InkWell(
           onTap: () {
             Navigator.of(Get.overlayContext!).pop();
@@ -87,6 +98,32 @@ class Main_Edit_Dialog extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
         ),
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Divider(
+            height: 1,
+            color: Colors.blueGrey,
+          ),
+        ),
+
+
+        ///add filler
+        InkWell(
+          onTap: () {
+            Navigator.of(Get.overlayContext!).pop();
+            Get.defaultDialog(
+                title: 'add Filler',
+                content: Add_Filler_Dialog()
+            );
+            // draw_controller.add_door(1.5);
+          },
+          child: Text(
+            'Add Filler',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+
 
       ],
     );

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_cam/Controller/DecimalTextInputFormatter.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:flutter/material.dart';
@@ -18,46 +19,29 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
   TextEditingController material_controller = TextEditingController();
   TextEditingController material_name_controller = TextEditingController();
 
-  TextEditingController round_gap_controller = TextEditingController();
+  TextEditingController up_gap_controller     = TextEditingController();
+  TextEditingController right_gap_controller  = TextEditingController();
+  TextEditingController down_gap_controller   = TextEditingController();
+  TextEditingController left_gap_controller   = TextEditingController();
+  TextEditingController center_gap_controller = TextEditingController();
+
+
 
   Draw_Controller draw_controller=Get.find();
 
   bool single_door=true;
+  bool inner_door=false;
 
   bool right_door=true;
   bool left_door=false;
 
-  double up_over_lap    =1;
+  double up_gap       =1;
+  double down_gap    =1;
+  double left_gap   =1;
+  double right_gap   =1;
+  double center_gap  =2;
 
-  double down_over_lap  =1;
 
-  double left_over_lap =1;
-
-  double right_over_lap=1;
-
-  bool bool_up_over_lap_o  =true;
-
-  bool bool_up_over_lap_h   =false;
-
-  bool bool_up_over_lap_i   =false;
-
-  bool bool_down_over_lap_o =true;
-
-  bool bool_down_over_lap_h =false;
-
-  bool bool_down_over_lap_i =false;
-
-  bool bool_left_over_lap_o =true;
-
-  bool bool_left_over_lap_h =false;
-
-  bool bool_left_over_lap_i =false;
-
-  bool bool_right_over_lap_o=true;
-
-  bool bool_right_over_lap_h=false;
-
-  bool bool_right_over_lap_i=false;
 
   @override
   void initState() {
@@ -65,8 +49,12 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
     super.initState();
 
     material_controller.text="${draw_controller.box_repository.box_model.value.init_material_thickness}";
-    round_gap_controller.text="2";
 
+    up_gap_controller.text='1';
+    right_gap_controller.text='1';
+    down_gap_controller.text='1';
+    left_gap_controller.text='1';
+    center_gap_controller.text='1';
 
   }
 
@@ -75,7 +63,7 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
   Widget build(BuildContext context) {
     return Container(
       width: 540,
-      height: 350,
+      height: 400,
       child: Row(
         children: [
           SizedBox(
@@ -94,204 +82,169 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                 SizedBox(
                   height: 6,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('up :  '),
 
-                    Checkbox(value: bool_up_over_lap_o, onChanged: (_) {
-                      bool_up_over_lap_o=true;
-                      bool_up_over_lap_h=false;
-                      bool_up_over_lap_i=false;
-                      up_over_lap=1;
-                      setState(() {});
-
-                    }),
-                    Text('over'),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Checkbox(value: bool_up_over_lap_h, onChanged: (_) {
-                      bool_up_over_lap_h=true;
-                      bool_up_over_lap_o=false;
-                      bool_up_over_lap_i=false;
-                      up_over_lap=0.5;
-                      setState(() {});
-
-                    }),
-                    Text('half'),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Checkbox(value: bool_up_over_lap_i, onChanged: (_) {
-                      bool_up_over_lap_i=true;
-                      bool_up_over_lap_o=false;
-                      bool_up_over_lap_h=false;
-                      up_over_lap=0;
-                      setState(() {});
-
-                    }),
-                    Text('inner'),
-                    SizedBox(
-                      width: 4,
-                    ),
-                  ],
-                ),
-
-                Row(children: [
-                  Column(
+                /// up
+                Container(
+                  child:
+                  single_door?
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('left :  '),
-                      Row(
-                        children: [
-                          Checkbox(value: bool_left_over_lap_o, onChanged: (_) {
-                            bool_left_over_lap_o=true;
-                            bool_left_over_lap_h=false;
-                            bool_left_over_lap_i=false;
-                            left_over_lap=1;
-                            setState(() {});
+                      Text('up  gap :  '),
 
-                          }),
-                          Text('over'),
-                          SizedBox(
-                            width: 12,
-                          )
-                        ],
+                      /// text form field for up gap
+                      Container(
+                        width: 80,
+                        height: 32,
+                        child: TextFormField(
+                          inputFormatters: [DecimalTextInputFormatter(2)],
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          controller: up_gap_controller,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Checkbox(value: bool_left_over_lap_h, onChanged: (_) {
-                            bool_left_over_lap_h=true;
-                            bool_left_over_lap_o=false;
-                            bool_left_over_lap_i=false;
-                            left_over_lap=0.5;
-                            setState(() {});
-
-                          }),
-                          Text('half'),
-                          SizedBox(
-                            width: 12,
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Checkbox(value: bool_left_over_lap_i, onChanged: (_) {
-                            bool_left_over_lap_i=true;
-                            bool_left_over_lap_h=false;
-                            bool_left_over_lap_o=false;
-                            left_over_lap=0;
-                            setState(() {});
 
 
-                          }),
-                          Text('inner'),
-                          SizedBox(
-                            width: 12,
-                          )
-                        ],
+                      SizedBox(
+                        width: 4,
                       ),
                     ],
+                  ):
+
+                  /// if double door show up gap and center gap
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('up gap:',style: TextStyle(fontSize: 12),),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      /// text form field for up gap
+                      Container(
+                        width: 60,
+                        height: 24,
+                        child: TextFormField(
+                          inputFormatters: [DecimalTextInputFormatter(2)],
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          controller: up_gap_controller,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        width: 4,
+                      ),
+
+                      Text('center gap:',style: TextStyle(fontSize: 12),),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Container(
+                        width: 64,
+                        height: 24,
+                        child: TextFormField(
+                          inputFormatters: [DecimalTextInputFormatter(2)],
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          controller: center_gap_controller,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
+                      ),
+
+
+
+                    ],
+                  ) ,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                /// left foto right
+                Row(children: [
+                 Column(
+                    children: [
+                      Text('left :  '),
+
+                      Container(
+                        width: 80,
+                        height: 32,
+                        child: TextFormField(
+                          inputFormatters: [DecimalTextInputFormatter(2)],
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          controller: left_gap_controller,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
+                      ),
+
+
+                    ],
                   ),
+
                   Container(
                     width: 132,
                     height: 224,
                     color: Colors.yellow,
                     child: Text('ok'),
                   ),
-                  Column(
+                 Column(
                     children: [
                       Text('right :  '),
 
-                      Row(
-                        children: [
-
-                          Checkbox(value: bool_right_over_lap_o, onChanged: (_) {
-                            bool_right_over_lap_o=true;
-                            bool_right_over_lap_h=false;
-                            bool_right_over_lap_i=false;
-                            right_over_lap=1;
-                            setState(() {});
-
-                          }),
-                          Text('over'),
-                          SizedBox(
-                            width: 12,
-                          )
-                        ],
+                      Container(
+                        width: 80,
+                        height: 32,
+                        child: TextFormField(
+                          inputFormatters: [DecimalTextInputFormatter(2)],
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          controller: right_gap_controller,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Checkbox(value: bool_right_over_lap_h, onChanged: (_) {
-                            bool_right_over_lap_h=true;
-                            bool_right_over_lap_o=false;
-                            bool_right_over_lap_i=false;
-                            right_over_lap=0.5;
-                            setState(() {});
 
-                          }),
-                          Text('half'),
-                          SizedBox(
-                            width: 12,
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Checkbox(value: bool_right_over_lap_i, onChanged: (_) {
-                            bool_right_over_lap_i=true;
-                            bool_right_over_lap_o=false;
-                            bool_right_over_lap_h=false;
-                            right_over_lap=0;
-                            setState(() {});
 
-                          }),
-                          Text('inner'),
-                          SizedBox(
-                            width: 12,
-                          )
-                        ],
-                      ),
                     ],
                   ),
                 ]),
-                Row(
+
+                ///down
+               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('down :  '),
-                    Checkbox(value: bool_down_over_lap_o, onChanged: (_) {
-                      bool_down_over_lap_o=true;
-                      bool_down_over_lap_i=false;
-                      bool_down_over_lap_h=false;
-                      down_over_lap=1;
-                      setState(() {});
-
-                    }),
-                    Text('over'),
-                    SizedBox(
-                      width: 4,
+                    Container(
+                      width: 80,
+                      height: 32,
+                      child: TextFormField(
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        controller: down_gap_controller,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
                     ),
-                    Checkbox(value: bool_down_over_lap_h, onChanged: (_) {
-                      bool_down_over_lap_h=true;
-                      bool_down_over_lap_o=false;
-                      bool_down_over_lap_i=false;
-                      down_over_lap=0.5;
-                      setState(() {});
 
-                    }),
-                    Text('half'),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Checkbox(value: bool_down_over_lap_i, onChanged: (_) {
-                      bool_down_over_lap_i=true;
-                      bool_down_over_lap_o=false;
-                      bool_down_over_lap_h=false;
-                      down_over_lap=0;
-                      setState(() {});
-
-                    }),
-                    Text('inner'),
                     SizedBox(
                       width: 4,
                     ),
@@ -314,6 +267,26 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
             width: 200,
             child: Column(
               children: [
+                SizedBox(
+                  height: 4,
+                ),
+
+
+                /// inner  door
+                Row(
+                  children: [
+                    Checkbox(value: inner_door, onChanged: (_) {
+                      inner_door=!inner_door;
+                      setState(() {
+
+                      });
+                    }),
+                    Text('Inner Door'),
+                    SizedBox(
+                      width: 4,
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: 4,
                 ),
@@ -485,30 +458,7 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                     SizedBox(
                       width: 12,
                     ),
-                    Container(
-                      width: 80,
-                      height: 30,
-                      child: TextFormField(
-                        onChanged: (_) {
-                          // bottom_changed();
-                        },
-                        enabled: true,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        controller: round_gap_controller,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                        validator: (d) {
-                          if (d!.isEmpty) {
-                            return 'add value please';
-                          }
-                        },
-                      ),
-                    ),
+
                   ],
                 ),
                 //divider
@@ -539,10 +489,29 @@ if(single_door){
 }else{
   door_direction="D";
 }
+
+
+up_gap=double.parse(up_gap_controller.text.toString());
+down_gap=double.parse(down_gap_controller.text.toString());
+left_gap=double.parse(left_gap_controller.text.toString());
+right_gap=double.parse(right_gap_controller.text.toString());
+center_gap=double.parse(center_gap_controller.text.toString());
+
+
+
+
                        Door_Model door_model=Door_Model(single_door?1:2,
-                           double.parse(material_controller.text.toString()),material_name_controller.text.toString(),
-                           double.parse(round_gap_controller.text.toString()),draw_controller.hover_id,
-                           up_over_lap, right_over_lap, down_over_lap, left_over_lap,door_direction);
+                           double.parse(material_controller.text.toString()),
+                           material_name_controller.text.toString(),
+                           draw_controller.hover_id,
+                           up_gap,
+                           right_gap,
+                           down_gap,
+                           left_gap,
+                           center_gap,
+                         door_direction,
+                         inner_door
+                       );
                        draw_controller.add_door(door_model);
                        Navigator.of(Get.overlayContext!).pop();
 

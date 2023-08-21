@@ -8,10 +8,12 @@ class Box_Painter extends CustomPainter {
   late double drawing_scale;
   late Size screen_Size;
   late int hover_id;
+  late int selected_id;
   late Box_model box_model;
+  late String view_port;
 
 
-  Box_Painter(this.box_model,this.drawing_scale, this.screen_Size, this.hover_id) {
+  Box_Painter(this.box_model,this.drawing_scale, this.screen_Size, this.hover_id, this.selected_id,this.view_port) {
     this.box_model = box_model;
 
     this.hover_id = hover_id;
@@ -33,6 +35,7 @@ class Box_Painter extends CustomPainter {
   }
 
   draw_box(Canvas canvas) {
+
     Paint line_painter = Paint()
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke
@@ -41,6 +44,10 @@ class Box_Painter extends CustomPainter {
     Paint pieces_filler = Paint()
       ..style = PaintingStyle.fill
       ..color = Colors.blue[100]!;
+
+    Paint selected_pieces_filler = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.blue[300]!;
 
     Paint Doors_filler = Paint()
       ..style = PaintingStyle.fill
@@ -72,21 +79,44 @@ class Box_Painter extends CustomPainter {
 
 
       Path path = Path();
-      path.moveTo(
-          p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
-          box_model.box_origin.y_coordinate - p1.y_coordinate * drawing_scale);
-      path.lineTo(
-          p2.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
-          box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale);
-      path.lineTo(
-          p3.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
-          box_model.box_origin.y_coordinate - p3.y_coordinate * drawing_scale);
-      path.lineTo(
-          p4.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
-          box_model.box_origin.y_coordinate - p4.y_coordinate * drawing_scale);
-      path.lineTo(
-          p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
-          box_model.box_origin.y_coordinate - p1.y_coordinate * drawing_scale);
+
+      if(view_port=='F'){
+        path.moveTo(
+            p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
+            box_model.box_origin.y_coordinate - p1.y_coordinate * drawing_scale);
+        path.lineTo(
+            p2.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
+            box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale);
+        path.lineTo(
+            p3.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
+            box_model.box_origin.y_coordinate - p3.y_coordinate * drawing_scale);
+        path.lineTo(
+            p4.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
+            box_model.box_origin.y_coordinate - p4.y_coordinate * drawing_scale);
+        path.lineTo(
+            p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,
+            box_model.box_origin.y_coordinate - p1.y_coordinate * drawing_scale);
+
+
+      }
+      else if(view_port=='R'){
+        path.moveTo(screen_Size.height/2+p2.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale);
+        path.lineTo(screen_Size.height/2+p6.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p6.y_coordinate * drawing_scale);
+        path.lineTo(screen_Size.height/2+p7.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p7.y_coordinate * drawing_scale);
+        path.lineTo(screen_Size.height/2+p3.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p3.y_coordinate * drawing_scale);
+        path.lineTo(screen_Size.height/2+p2.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale);
+
+
+      }
+
+
+      else if(view_port=='T'){
+        path.moveTo(p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,screen_Size.height/2- box_model.box_origin.z_coordinate - p1.z_coordinate * drawing_scale);
+        path.lineTo(p2.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,screen_Size.height/2- box_model.box_origin.z_coordinate - p2.z_coordinate * drawing_scale);
+        path.lineTo(p6.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,screen_Size.height/2- box_model.box_origin.z_coordinate - p6.z_coordinate * drawing_scale);
+        path.lineTo(p5.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,screen_Size.height/2- box_model.box_origin.z_coordinate - p5.z_coordinate * drawing_scale);
+        path.lineTo(p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate,screen_Size.height/2- box_model.box_origin.z_coordinate - p1.z_coordinate * drawing_scale);
+      }
 
 
 
@@ -103,7 +133,15 @@ class Box_Painter extends CustomPainter {
           canvas.drawPath(path, line_painter);
 
         }
-      } else {
+      }
+      if (i == selected_id) {
+        if (piece_model.piece_name != 'inner' && piece_model.piece_name != 'Door') {
+
+          canvas.drawPath(path, selected_pieces_filler);
+          canvas.drawPath(path, line_painter);
+        }
+      }
+      else {
         if (piece_model.piece_name == 'Door') {
           canvas.drawPath(path, Doors_filler_2);
           canvas.drawPath(path, line_painter);
@@ -112,31 +150,6 @@ class Box_Painter extends CustomPainter {
           canvas.drawPath(path, line_painter);
 
       }
-
-      bool inner=(piece_model.piece_name=='inner');
-
-      Point_model piece_center=Point_model(
-          ( piece_model.piece_faces.front_face.corners[0].x_coordinate+
-              piece_model.piece_faces.front_face.corners[2].x_coordinate
-          )/2,
-          ( piece_model.piece_faces.front_face.corners[0].y_coordinate+
-              piece_model.piece_faces.front_face.corners[2].y_coordinate
-          )/2, 0);
-
-      draw_text(canvas, 'i:${i}-id:${piece_model.piece_id}-${piece_model.piece_name}',
-          Offset(
-              piece_center.x_coordinate * drawing_scale +
-                  box_model.box_origin.x_coordinate -
-                  4 * drawing_scale,inner?(
-              box_model.box_origin.y_coordinate -
-                 piece_center.y_coordinate * drawing_scale -
-                  11 * drawing_scale):(
-              box_model.box_origin.y_coordinate -
-                  piece_center.y_coordinate * drawing_scale -
-                  11 * drawing_scale))
-          ,16 * drawing_scale,
-          (i == hover_id)?15:7
-      );
 
 
     }

@@ -36,7 +36,8 @@ class Box_model {
       this.bac_panel_distence,
       this.top_base_piece_width,
       this.is_back_panel,
-      this.box_origin){
+      this.box_origin
+      ){
     if(box_type=="wall_cabinet")
       { wall_cabinet();}
     else if(box_type=="base_cabinet")
@@ -570,79 +571,40 @@ class Box_model {
   add_door(Door_Model door_model) {
     if (door_model.door_num == 1) {
       add_single_door_pattern(door_model);
-    } else {
+    }
+    else {
       add_double_door_pattern(door_model);
     }
   }
 
   add_single_door_pattern(Door_Model door_model) {
+
     Piece_model door_inner = box_pieces[door_model.inner_id];
 
-    double right_thickness = init_material_thickness *
-        door_model.right_over_lap;
-
-    double left_thickness = init_material_thickness*
-        door_model.left_over_lap;
-
-    double top_thickness = init_material_thickness *
-        door_model.up_over_lap;
-
-    double base_thickness = init_material_thickness *
-        door_model.down_over_lap;
+    double right_thickness =(door_model.inner_door)? (-door_model.right_gap):(init_material_thickness - door_model.right_gap);
+    double left_thickness  =(door_model.inner_door)? (-door_model.left_gap):(init_material_thickness - door_model.left_gap);
+    double top_thickness   =(door_model.inner_door)? (-door_model.up_gap):(init_material_thickness - door_model.up_gap);
+    double base_thickness  =(door_model.inner_door)? (-door_model.down_gap):(init_material_thickness - door_model.down_gap);
 
     double door_width = door_inner.piece_width +
         right_thickness +
-        left_thickness -
-        2 * door_model.round_gap;
+        left_thickness ;
+
     double door_hight = door_inner.piece_height +
         top_thickness +
-        base_thickness -
-        2 * door_model.round_gap;
-
-    late int hinges_quantity;
-    if(door_hight<=900)
-      hinges_quantity=2;
-    else if(door_hight>=900 && door_hight<=1600)
-      hinges_quantity=3;
-    else if(door_hight>=1600 && door_hight<=2000)
-      hinges_quantity=4;
-    else if(door_hight>2000)
-      hinges_quantity=5;
-
-    late  double x_cord ;
-    late  double x_cord_1 ;
-
-    if(door_model.direction=="L"){
-      x_cord=22.5;
-      x_cord_1=22.5+6;
-
-    }else if(door_model.direction=="R"){
-      x_cord=door_width-22.5;
-      x_cord_1=door_width-22.5-6;
-    }
-
-    late double intiat_distence;
-    if(((door_hight)/(hinges_quantity+1))<100){
-      intiat_distence=70;
-    }else{
-      intiat_distence=100;
-    }
-
-    double y_cord=intiat_distence ;
-    List<Join_model> hinges=[];
-    double dis_between_hinges=(door_hight-2*intiat_distence)/(hinges_quantity-1);
-
+        base_thickness ;
 
 
 
     Point_model door_origin = Point_model(
         door_inner.piece_origin.x_coordinate -
-            left_thickness +
-            door_model.round_gap,
+            left_thickness ,
         door_inner.piece_origin.y_coordinate -
-            base_thickness +
-            door_model.round_gap,
-        door_inner.piece_origin.z_coordinate-door_model.material_thickness - 2);
+            base_thickness ,
+        (!door_model.inner_door)?
+        (door_inner.piece_origin.z_coordinate-door_model.material_thickness ):
+        (door_inner.piece_origin.z_coordinate)
+    );
 
     Piece_model door_piece = Piece_model(
         box_pieces.length,
@@ -659,49 +621,44 @@ class Box_model {
   }
 
   add_double_door_pattern(Door_Model door_model) {
+
     Piece_model door_inner = box_pieces[door_model.inner_id];
 
-    double right_thickness = init_material_thickness* door_model.right_over_lap;
-
-    double left_thickness =init_material_thickness *
-        door_model.left_over_lap;
-
-    double top_thickness = init_material_thickness*
-        door_model.up_over_lap;
-
-    double base_thickness = init_material_thickness*
-        door_model.down_over_lap;
+    double right_thickness =(door_model.inner_door)? (-door_model.right_gap):(init_material_thickness - door_model.right_gap);
+    double left_thickness  =(door_model.inner_door)? (-door_model.left_gap):(init_material_thickness - door_model.left_gap);
+    double top_thickness   =(door_model.inner_door)? (-door_model.up_gap):(init_material_thickness - door_model.up_gap);
+    double base_thickness  =(door_model.inner_door)? (-door_model.down_gap):(init_material_thickness - door_model.down_gap);
 
     double door_width = double.parse(((door_inner.piece_width +
         right_thickness +
-        left_thickness -
-        2 * door_model.round_gap) /
-        2 -
-        door_model.round_gap / 2).toStringAsFixed(1));
+        left_thickness-door_model.center_gap) /
+        2 ).toStringAsFixed(1));
 
     double door_hight = double.parse((door_inner.piece_height +
         top_thickness +
-        base_thickness -
-        2 * door_model.round_gap).toStringAsFixed(1));
+        base_thickness - door_model.center_gap).toStringAsFixed(1));
 
     Point_model door_origin_1 = Point_model(
         door_inner.piece_origin.x_coordinate -
-            left_thickness +
-            door_model.round_gap,
+            left_thickness ,
         door_inner.piece_origin.y_coordinate -
-            base_thickness +
-            door_model.round_gap,
-        door_inner.piece_origin.z_coordinate -door_model.material_thickness- 2);
+            base_thickness ,
+        (!door_model.inner_door)?
+        (door_inner.piece_origin.z_coordinate-door_model.material_thickness ):
+        (door_inner.piece_origin.z_coordinate)
+    );
+
     Point_model door_origin_2 = Point_model(
         door_inner.piece_origin.x_coordinate -
             left_thickness +
-            door_model.round_gap +
             door_width +
-            door_model.round_gap,
+            door_model.center_gap,
         door_inner.piece_origin.y_coordinate -
-            base_thickness +
-            door_model.round_gap,
-        door_inner.piece_origin.z_coordinate -door_model.material_thickness- 2);
+            base_thickness ,
+        (!door_model.inner_door)?
+        (door_inner.piece_origin.z_coordinate-door_model.material_thickness - 1):
+        (door_inner.piece_origin.z_coordinate)
+    );
 
 
     ///  ///////////////////////////////////////

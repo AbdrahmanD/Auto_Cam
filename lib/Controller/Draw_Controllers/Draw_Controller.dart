@@ -7,6 +7,7 @@ import 'package:auto_cam/Controller/View_3_D/transform_controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
@@ -20,11 +21,27 @@ class Draw_Controller extends GetxController {
   Rx<Offset> mouse_position = Offset(0, 0).obs;
 
   Box_Repository box_repository = Get.find();
-  int hover_id = 90;
+  int hover_id = 100;
+  RxInt selected_id=100.obs;
 
   String box_type="wall_box";
 
   RxBool draw_3_D = false.obs;
+
+  RxString view_port='F'.obs;
+
+  select_piece(Offset offset){
+    if(hover_id!=100){
+      if(box_repository.box_model.value.box_pieces[hover_id].piece_name=='inner')
+           selected_id.value=100;
+      else
+        selected_id.value=hover_id;
+
+    }else{
+      selected_id.value=100;
+
+    }
+  }
 
   Box_model get_box() {
     return box_repository.box_model.value;
@@ -33,19 +50,21 @@ class Draw_Controller extends GetxController {
   Box_Painter draw_Box() {
 
     Box_model box_model = get_box() ;
+
+
     double w = screen_size.value.width;
     hover_id_find(box_model);
     Box_Painter boxPainter = Box_Painter(box_model, drawing_scale.value,
-        Size(w, screen_size.value.height), hover_id);
+        Size(w, screen_size.value.height), hover_id,selected_id.value,view_port.value);
     return boxPainter;
   }
 
-  three_D_Painter draw_3_D_box(){
-    transform_controller transform=transform_controller(screen_size.value);
-
-    three_D_Painter my_painter=transform.camera_cordinate_draw(screen_size.value);
-    return my_painter;
-  }
+  // three_D_Painter draw_3_D_box(){
+  //   transform_controller transform=transform_controller(screen_size.value);
+  //
+  //   three_D_Painter my_painter=transform.camera_cordinate_draw(screen_size.value);
+  //   return my_painter;
+  // }
 
   add_Box(Box_model box_model) {
     box_repository.box_model.value = box_model;
@@ -118,10 +137,12 @@ class Draw_Controller extends GetxController {
     if (!(hover_id == 100)) {
       if (box_repository.box_model.value.box_pieces[hover_id].piece_name == 'inner') {
         dialogs_titles = 'Edit Box';
-      } else {
+      }
+      else {
         dialogs_titles = 'Edit Piece';
       }
-    } else {
+    }
+    else {
       dialogs_titles = 'properties';
     }
     return dialogs_titles;
@@ -138,12 +159,14 @@ class Draw_Controller extends GetxController {
       if (box_repository.box_model.value.box_pieces[hover_id].piece_name ==
           'inner') {
         my_widget = Main_Edit_Dialog();
-      } else {
+      }
+      else {
         my_widget = Container(
           child: Text('pieces menu'),
         );
       }
-    } else {
+    }
+    else {
       my_widget = Container(
         child: Text('general menu'),
       );
@@ -162,6 +185,13 @@ class Draw_Controller extends GetxController {
    , box_repository.box_model.value.bac_panel_distence + box_repository.box_model.value.back_panel_thickness);
     // print_pieces_coordinate();
 
+    Box_model b=box_repository.box_model.value;
+    Box_model nb=Box_model(b.box_name, box_type, b.box_width, b.box_height, b.box_depth,
+        b.init_material_thickness, b.init_material_name, b.back_panel_thickness,
+        b.grove_value, b.bac_panel_distence, b.top_base_piece_width, b.is_back_panel,
+        b.box_origin);
+    nb.box_pieces=b.box_pieces;
+    add_Box(nb);
   }
 
 
@@ -172,15 +202,107 @@ class Draw_Controller extends GetxController {
     box_repository.box_model.value.
     add_Partition(hover_id, top_Distence, frontage_Gap, material_thickness,quantity,back_distance);
     // print_pieces_coordinate();
+    Box_model b=box_repository.box_model.value;
+    Box_model nb=Box_model(b.box_name, box_type, b.box_width, b.box_height, b.box_depth,
+        b.init_material_thickness, b.init_material_name, b.back_panel_thickness,
+        b.grove_value, b.bac_panel_distence, b.top_base_piece_width, b.is_back_panel,
+        b.box_origin);
+    nb.box_pieces=b.box_pieces;
+    add_Box(nb);
 
   }
 
 
+  add_filler(Filler_model filler_model){
+
+   double x=0;
+   double y=0;
+   double z=0;
+
+   // print(box_repository.box_model.value.box_pieces[hover_id].piece_name);
+
+   late double filler_w;
+   late double filler_h;
+   late double filler_th;
+
+   if(filler_model.filler_vertical){
+     filler_w=box_repository.box_model.value.box_pieces[hover_id].piece_width;
+     filler_h=filler_model.height;
+     filler_th=filler_model.thickness;
+
+   }else{
+     filler_w=box_repository.box_model.value.box_pieces[hover_id].piece_width;
+     filler_h=filler_model.thickness;
+     filler_th=filler_model.height;
+
+
+   }
+
+
+   if(filler_model.corner==1){
+
+     x=box_repository.box_model.value.box_pieces[hover_id].piece_origin.x_coordinate;
+     y=box_repository.box_model.value.box_pieces[hover_id].piece_origin.y_coordinate+filler_model.y_move;
+     z=box_repository.box_model.value.box_pieces[hover_id].piece_origin.z_coordinate+filler_model.x_move;
+   }
+   else if(filler_model.corner==2){
+     x=box_repository.box_model.value.box_pieces[hover_id].piece_origin.x_coordinate;
+     y=box_repository.box_model.value.box_pieces[hover_id].piece_origin.y_coordinate+filler_model.y_move;
+     z=box_repository.box_model.value.box_pieces[hover_id].piece_origin.z_coordinate+
+         box_repository.box_model.value.box_depth-filler_th-
+         filler_model.x_move;
+   }
+   else if(filler_model.corner==3){
+     x=box_repository.box_model.value.box_pieces[hover_id].piece_origin.x_coordinate;
+     y=box_repository.box_model.value.box_pieces[hover_id].piece_origin.y_coordinate+
+         box_repository.box_model.value.box_pieces[hover_id].piece_height
+         -filler_h
+         -filler_model.y_move;
+     z=box_repository.box_model.value.box_pieces[hover_id].piece_origin.z_coordinate+
+         box_repository.box_model.value.box_depth-filler_th-
+         filler_model.x_move;
+   }
+   else if(filler_model.corner==4){
+     x=box_repository.box_model.value.box_pieces[hover_id].piece_origin.x_coordinate;
+
+
+     y=box_repository.box_model.value.box_pieces[hover_id].piece_origin.y_coordinate+
+         box_repository.box_model.value.box_pieces[hover_id].piece_height
+         -filler_h
+         -filler_model.y_move;
+
+     z=box_repository.box_model.value.box_pieces[hover_id].piece_origin.z_coordinate+
+         filler_model.x_move;
+   }
+   Point_model filler_origin=Point_model(x, y, z);
+
+    Piece_model filler=Piece_model(box_repository.box_model.value.box_pieces.length, 'filler',
+       'F',
+        'mdf',
+        filler_w,
+        filler_h,
+        filler_th,
+        filler_origin);
+
+    box_repository.box_model.value.box_pieces.add(filler);
+  }
 
 /// add door method
   add_door(Door_Model door_model){
     door_model.inner_id=hover_id;
     box_repository.box_model.value.add_door(door_model);
+
+  }
+
+
+  /// delete piece
+  delete_piece(){
+
+    Box_model b=box_repository.box_model.value;
+    box_repository.box_model.value.box_pieces.removeAt(selected_id.value);
+
+    box_repository.add_box_to_repo(b);
+    draw_Box();
   }
 
 

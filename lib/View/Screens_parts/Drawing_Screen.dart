@@ -6,23 +6,16 @@ import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 
 
 class Drawing_Screen extends StatelessWidget {
+late double w;
 
-  late double w;
-
-  Drawing_Screen(this.w){
-  }
-
-  late double h;
-
-  late Box_model box_model;
+Drawing_Screen(this.w);
 
   Draw_Controller draw_controller=Get.find();
-
 
   @override
   Widget build(BuildContext context) {
 
-    h=MediaQuery.of(context).size.height;
+    double h=MediaQuery.of(context).size.height;
     draw_controller.screen_size.value = Size(w,h);
     double f=1;
     return Container(
@@ -38,6 +31,10 @@ class Drawing_Screen extends StatelessWidget {
             }
           }
         },
+        onPointerDown: (v){
+          draw_controller.select_piece(v.localPosition);
+
+        },
         child: GestureDetector(
 
           onLongPress: () {
@@ -52,6 +49,7 @@ class Drawing_Screen extends StatelessWidget {
             onHover: (d) {
               draw_controller.mouse_position.value = d.localPosition;
             },
+
 
             child:
             Obx(
