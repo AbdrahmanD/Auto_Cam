@@ -21,7 +21,6 @@ class _View_PageState extends State<View_Page> {
 
   late Size screen_size;
 
-
   late transform_controller transfomer = transform_controller(screen_size);
 
 

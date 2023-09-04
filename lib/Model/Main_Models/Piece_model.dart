@@ -84,14 +84,16 @@ class Piece_model{
 
     }
 
-    Single_Face top_face=Single_Face([p_4,p_3,p_7,p_8], [], [], []);
-    Single_Face right_face=Single_Face([p_2,p_6,p_7,p_3], [], [], []);
-    Single_Face base_face=Single_Face([p_1,p_2,p_6,p_5], [], [], []);
-    Single_Face left_face=Single_Face([p_1,p_5,p_8,p_4], [], [], []);
-    Single_Face front_face=Single_Face([p_1,p_2,p_3,p_4], [], [], []);
-    Single_Face back_face=Single_Face([p_5,p_6,p_7,p_8], [], [], []);
+    List<Single_Face> faces= [
+      Single_Face(1,[p_4,p_3,p_7,p_8], []),
+      Single_Face(2,[p_2,p_6,p_7,p_3], []),
+      Single_Face(3,[p_1,p_2,p_6,p_5], []),
+      Single_Face(4,[p_1,p_5,p_8,p_4], []),
+      Single_Face(5,[p_1,p_2,p_3,p_4], []),
+      Single_Face(6,[p_5,p_6,p_7,p_8], []),
+    ] ;
 
-    piece_faces=Faces_model(top_face, right_face, base_face, left_face, front_face, back_face);
+    piece_faces=Faces_model(faces);
 
 
   }

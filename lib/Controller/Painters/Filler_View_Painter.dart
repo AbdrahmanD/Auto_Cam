@@ -75,16 +75,23 @@ draw_piece(canvas,scale);
     }
 
       if(filler_model.corner==1){
-        filler_origin=Offset(origin.dx+filler_model.x_move* my_scale, origin.dy-filler_model.y_move* my_scale);
+        filler_origin=Offset(
+            origin.dx+filler_model.x_move* my_scale,
+            origin.dy-filler_model.y_move* my_scale);
       }
       else if(filler_model.corner==2){
-        filler_origin=Offset(origin.dx+piece_w-filler_w-filler_model.x_move* my_scale, origin.dy-filler_model.y_move* my_scale);
+        filler_origin=Offset(
+            origin.dx+piece_w-filler_w+filler_model.x_move* my_scale,
+            origin.dy-filler_model.y_move* my_scale);
       }
       else if(filler_model.corner==3 ){
-        filler_origin=Offset(origin.dx+piece_w-filler_w-filler_model.x_move* my_scale,origin.dy-piece_h+filler_h+filler_model.y_move* my_scale);
+        filler_origin=Offset(
+            origin.dx+piece_w-filler_w+filler_model.x_move* my_scale,
+            origin.dy-piece_h+filler_h-filler_model.y_move* my_scale);
       }
       else if(filler_model.corner==4){
-        filler_origin=Offset(origin.dx+filler_model.x_move* my_scale,origin.dy-piece_h+filler_h+filler_model.y_move* my_scale);
+        filler_origin=Offset(origin.dx+filler_model.x_move* my_scale,
+            origin.dy-piece_h+filler_h-filler_model.y_move* my_scale);
       }
 
 

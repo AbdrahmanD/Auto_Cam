@@ -1,4 +1,5 @@
 
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -25,7 +26,7 @@ print(scal);
 
     draw_piece(canvas,scal);
   }
-  
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
@@ -60,7 +61,7 @@ print(scal);
     Path p_back=Path();
 
 
-    
+
     /// vertical pieces
     if (piece_model.piece_direction == 'V') {
 
@@ -77,118 +78,6 @@ print(scal);
       Offset right_origin=Offset(100, 650);
 
 
-      if (piece_model.piece_faces.left_face.groove_list.length>0) {
-
-        for(int i=0;i<piece_model.piece_faces.left_face.groove_list.length;i++){
-
-          var x_1=left_origin.dx+piece_model.piece_faces.left_face.groove_list[i].start_point.x_coordinate*my_scale;
-          var y_1=left_origin.dy-piece_model.piece_faces.left_face.groove_list[i].start_point.y_coordinate*my_scale;
-
-          var x_2=left_origin.dx+piece_model.piece_faces.left_face.groove_list[i].end_point.x_coordinate*my_scale;
-          var y_2=left_origin.dy-piece_model.piece_faces.left_face.groove_list[i].end_point.y_coordinate*my_scale;
-
-
-          canvas.drawLine(
-              Offset(x_1,y_1),
-              Offset(x_2,y_2),
-              grove_painter..strokeWidth=piece_model.piece_faces.left_face.groove_list[i].groove_width*my_scale);
-        }
-
-      }
-
-      if (piece_model.piece_faces.right_face.groove_list.length>0) {
-
-        for(int i=0;i<piece_model.piece_faces.right_face.groove_list.length;i++){
-
-          var x_1=right_origin.dx+piece_model.piece_faces.right_face.groove_list[i].start_point.x_coordinate*my_scale;
-          var y_1=right_origin.dy-piece_model.piece_faces.right_face.groove_list[i].start_point.y_coordinate*my_scale;
-          var x_2=right_origin.dx+piece_model.piece_faces.right_face.groove_list[i].end_point.x_coordinate*my_scale;
-          var y_2=right_origin.dy-piece_model.piece_faces.right_face.groove_list[i].end_point.y_coordinate*my_scale;
-
-
-          canvas.drawLine(
-              Offset(x_1,y_1),
-              Offset(x_2,y_2),
-              grove_painter..strokeWidth=piece_model.piece_faces.right_face.groove_list[i].groove_width*my_scale);
-        }
-
-      }
-
-
-
-      if(piece_model.piece_faces.left_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.left_face.join_list.length;i++){
-          Offset join_point=Offset(
-              left_origin.dx+piece_model.piece_faces.left_face.join_list[i].hole_point.x_coordinate*my_scale,
-              left_origin.dy-piece_model.piece_faces.left_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.left_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.right_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.right_face.join_list.length;i++){
-          Offset join_point=Offset(
-             right_origin.dx+ piece_model.piece_faces.right_face.join_list[i].hole_point.x_coordinate*my_scale,
-              right_origin.dy- piece_model.piece_faces.right_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.right_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.top_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.top_face.join_list.length;i++){
-          Offset join_point=Offset(
-              top_origin.dx+ piece_model.piece_faces.top_face.join_list[i].hole_point.x_coordinate*my_scale,
-              top_origin.dy- piece_model.piece_faces.top_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.top_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.base_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.base_face.join_list.length;i++){
-          Offset join_point=Offset(
-              down_origin.dx+ piece_model.piece_faces.base_face.join_list[i].hole_point.x_coordinate*my_scale,
-              down_origin.dy- piece_model.piece_faces.base_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.base_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.front_face.join_list.length>0){
-        for(int i=0;i<piece_model.piece_faces.front_face.join_list.length;i++){
-          Offset join_point=Offset(
-              front_origin.dx +piece_model.piece_faces.front_face.join_list[i].hole_point.x_coordinate*my_scale,
-              front_origin.dy-piece_model.piece_faces.front_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.front_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter,boring_painter);
-        }
-
-      }
 
 
       p_top.moveTo(top_origin.dx,top_origin.dy);
@@ -196,6 +85,8 @@ print(scal);
       p_top.lineTo(top_origin.dx+w,top_origin.dy-th);
       p_top.lineTo(top_origin.dx,top_origin.dy-th);
       p_top.lineTo(top_origin.dx,top_origin.dy);
+
+
 
 
       p_inside.moveTo(left_origin.dx,  left_origin.dy);
@@ -231,6 +122,14 @@ print(scal);
       p_back.lineTo(back_origin.dx,back_origin.dy-h);
       p_back.lineTo(back_origin.dx,back_origin.dy);
 
+for(int i=0;i<5;i++){
+  for(int j=0;j<piece_model.piece_faces.faces[i].joines.length;j++){
+    Point_model sp=piece_model.piece_faces.faces[i].joines[j].start_point;
+    Point_model ep=piece_model.piece_faces.faces[i].joines[j].end_point;
+
+    canvas.drawCircle(Offset(sp.x_coordinate*my_scale, 300+sp.y_coordinate*my_scale), 6, Paint());
+  }
+}
 
 
     }
@@ -249,101 +148,6 @@ print(scal);
       Offset right_origin=Offset(100+w+th, 650-h-3*th);
       Offset back_origin =Offset(100, 650-h-th);
       Offset top_origin  =Offset(100, 650);
-
-
-
-      if (piece_model.piece_faces.top_face.groove_list.length>0) {
-
-        for(int i=0;i<piece_model.piece_faces.top_face.groove_list.length;i++){
-
-          var x_1=top_origin.dx+(piece_model.piece_faces.top_face.groove_list[i].start_point.x_coordinate)*my_scale;
-          var y_1=top_origin.dy-(piece_model.piece_faces.top_face.groove_list[i].start_point.y_coordinate)*my_scale;
-          var x_2=top_origin.dx+(piece_model.piece_faces.top_face.groove_list[i].end_point.x_coordinate  )*my_scale;
-          var y_2=top_origin.dy-(piece_model.piece_faces.top_face.groove_list[i].end_point.y_coordinate)*my_scale;
-
-
-          canvas.drawLine(
-              Offset(x_1,y_1),
-              Offset(x_2,y_2),
-              grove_painter..strokeWidth=piece_model.piece_faces.top_face.groove_list[i].groove_width*my_scale);
-        }
-
-      }
-      if (piece_model.piece_faces.base_face.groove_list.length>0) {
-
-        for(int i=0;i<piece_model.piece_faces.base_face.groove_list.length;i++){
-
-          var x_1=down_origin.dx+(piece_model.piece_faces.base_face.groove_list[i].start_point.x_coordinate)*my_scale;
-          var y_1=down_origin.dy-(piece_model.piece_faces.base_face.groove_list[i].start_point.y_coordinate)*my_scale;
-          var x_2=down_origin.dx+(piece_model.piece_faces.base_face.groove_list[i].end_point.x_coordinate  )*my_scale;
-          var y_2=down_origin.dy-(piece_model.piece_faces.base_face.groove_list[i].end_point.y_coordinate)*my_scale;
-
-
-          canvas.drawLine(
-              Offset(x_1,y_1),
-              Offset(x_2,y_2),
-              grove_painter..strokeWidth=piece_model.piece_faces.base_face.groove_list[i].groove_width*my_scale);
-        }
-
-      }
-
-      if(piece_model.piece_faces.right_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.right_face.join_list.length;i++){
-          Offset join_point=Offset(
-             right_origin.dx+ piece_model.piece_faces.right_face.join_list[i].hole_point.x_coordinate*my_scale,
-              right_origin.dy -piece_model.piece_faces.right_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.right_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-      if(piece_model.piece_faces.left_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.left_face.join_list.length;i++){
-          Offset join_point=Offset(
-             left_origin.dx+piece_model.piece_faces.left_face.join_list[i].hole_point.x_coordinate*my_scale,
-              left_origin.dy-piece_model.piece_faces.left_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.left_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.base_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.base_face.join_list.length;i++){
-          Offset join_point=Offset(
-              down_origin.dx+piece_model.piece_faces.base_face.join_list[i].hole_point.x_coordinate*my_scale,
-              down_origin.dy-piece_model.piece_faces.base_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.base_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter,boring_painter);
-        }
-
-      }
-      if(piece_model.piece_faces.top_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.top_face.join_list.length;i++){
-          Offset join_point=Offset(
-              top_origin.dx +piece_model.piece_faces.top_face.join_list[i].hole_point.x_coordinate*my_scale,
-              top_origin.dy-piece_model.piece_faces.top_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.top_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter,boring_painter);
-        }
-
-      }
 
 
       p_top.moveTo(front_origin.dx,   front_origin.dy);
@@ -399,138 +203,12 @@ print(scal);
       h = piece_model. piece_height * my_scale;
       th = piece_model.piece_thickness * my_scale;
 
-      Offset top_origin=  Offset(100+2*th, 650-2*h-4*th);
+      Offset top_origin  =  Offset(100+2*th, 650-2*h-4*th);
       Offset front_origin=Offset(100+2*th , 650-h-3*th);
-      Offset down_origin= Offset(100+2*th , 650-h-th);
-      Offset back_origin= Offset(100+2*th , 650);
-      Offset left_origin= Offset(100     , 650-h-3*th);
+      Offset down_origin = Offset(100+2*th , 650-h-th);
+      Offset back_origin = Offset(100+2*th , 650);
+      Offset left_origin = Offset(100     , 650-h-3*th);
       Offset right_origin=Offset(100 +w+3*th    , 650-h-3*th);
-
-      if (piece_model.piece_faces.front_face.groove_list.length>0) {
-
-        for(int i=0;i<piece_model.piece_faces.front_face.groove_list.length;i++){
-
-          var x_1=front_origin.dx+(piece_model.piece_faces.front_face.groove_list[i].start_point.x_coordinate)*my_scale;
-          var y_1=front_origin.dy-(piece_model.piece_faces.front_face.groove_list[i].start_point.y_coordinate)*my_scale;
-          var x_2=front_origin.dx+(piece_model.piece_faces.front_face.groove_list[i].end_point.x_coordinate  )*my_scale;
-          var y_2=front_origin.dy-(piece_model.piece_faces.front_face.groove_list[i].end_point.y_coordinate)*my_scale;
-
-
-          canvas.drawLine(
-              Offset(x_1,y_1),
-              Offset(x_2,y_2),
-              grove_painter..strokeWidth=piece_model.piece_faces.front_face.groove_list[i].groove_width*my_scale);
-        }
-
-      }
-      if (piece_model.piece_faces.back_face.groove_list.length>0) {
-
-        for(int i=0;i<piece_model.piece_faces.back_face.groove_list.length;i++){
-
-          var x_1=back_origin.dx+(piece_model.piece_faces.back_face.groove_list[i].start_point.x_coordinate)*my_scale;
-          var y_1=back_origin.dy-(piece_model.piece_faces.back_face.groove_list[i].start_point.y_coordinate)*my_scale;
-          var x_2=back_origin.dx+(piece_model.piece_faces.back_face.groove_list[i].end_point.x_coordinate  )*my_scale;
-          var y_2=back_origin.dy-(piece_model.piece_faces.back_face.groove_list[i].end_point.y_coordinate)*my_scale;
-
-
-          canvas.drawLine(
-              Offset(x_1,y_1),
-              Offset(x_2,y_2),
-              grove_painter..strokeWidth=piece_model.piece_faces.back_face.groove_list[i].groove_width*my_scale);
-        }
-
-      }
-
-
-
-      if(piece_model.piece_faces.left_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.left_face.join_list.length;i++){
-          Offset join_point=Offset(
-              left_origin.dx+piece_model.piece_faces.left_face.join_list[i].hole_point.x_coordinate*my_scale,
-              left_origin.dy-piece_model.piece_faces.left_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.left_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.right_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.right_face.join_list.length;i++){
-          Offset join_point=Offset(
-              right_origin.dx+ piece_model.piece_faces.right_face.join_list[i].hole_point.x_coordinate*my_scale,
-              right_origin.dy- piece_model.piece_faces.right_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.right_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.top_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.top_face.join_list.length;i++){
-          Offset join_point=Offset(
-              top_origin.dx+ piece_model.piece_faces.top_face.join_list[i].hole_point.x_coordinate*my_scale,
-              top_origin.dy- piece_model.piece_faces.top_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.top_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.base_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.base_face.join_list.length;i++){
-          Offset join_point=Offset(
-              down_origin.dx+ piece_model.piece_faces.base_face.join_list[i].hole_point.x_coordinate*my_scale,
-              down_origin.dy- piece_model.piece_faces.base_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.base_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter, boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.front_face.join_list.length>0){
-        for(int i=0;i<piece_model.piece_faces.front_face.join_list.length;i++){
-          Offset join_point=Offset(
-              front_origin.dx +piece_model.piece_faces.front_face.join_list[i].hole_point.x_coordinate*my_scale,
-              front_origin.dy-piece_model.piece_faces.front_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.front_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter,boring_painter);
-        }
-
-      }
-
-      if(piece_model.piece_faces.back_face.join_list.length>0){
-
-        for(int i=0;i<piece_model.piece_faces.back_face.join_list.length;i++){
-          Offset join_point=Offset(
-              back_origin.dx +piece_model.piece_faces.back_face.join_list[i].hole_point.x_coordinate*my_scale,
-              back_origin.dy-piece_model.piece_faces.back_face.join_list[i].hole_point.y_coordinate*my_scale
-          );
-
-          double join_diameter=piece_model.piece_faces.back_face.join_list[i].hole_diameter*my_scale/2;
-
-          canvas.drawCircle(join_point, join_diameter,boring_painter);
-        }
-
-      }
 
 
       /// top
@@ -586,6 +264,8 @@ print(scal);
 
 
 
+
+
     if(piece_model.piece_name.contains("back_panel")){
       canvas.drawPath(p_back, line_painter);
       canvas.drawPath(p_front, line_painter);
@@ -613,6 +293,55 @@ print(scal);
     draw_text(canvas, 'height :${piece_model.   piece_height}',         Offset(300, 70),  6.5, 2);
     draw_text(canvas, 'thickness :${piece_model.piece_thickness}',   Offset(300, 90),  6.5, 2);
     draw_text(canvas, 'material name :    ${piece_model.material_name}', Offset(300, 130), 6.5, 2);
+
+
+  }
+
+  draw_join_lines(Canvas canvas , Offset origin,double my_scal){
+
+    /// draw join lines
+    for(int i=0;i<piece_model.piece_faces.faces.length;i++){
+
+      Single_Face single_face = piece_model.piece_faces.faces[i];
+
+      for(int j=0;j<single_face.joines.length;j++){
+
+        Point_model sp=piece_model.piece_faces.faces[i].joines[j].start_point;
+        Point_model ep=piece_model.piece_faces.faces[i].joines[j].end_point;
+
+        double sx=sp.x_coordinate*my_scal;
+        double sy=sp.y_coordinate*my_scal;
+        double sz=sp.z_coordinate*my_scal;
+
+        double ex=ep.x_coordinate*my_scal;
+        double ey=ep.y_coordinate*my_scal;
+        double ez=ep.z_coordinate*my_scal;
+
+        if(single_face.name==1){
+        }
+        else if(single_face.name==2){}
+        else if(single_face.name==3){}
+        else if(single_face.name==4){
+
+          Offset start_offset=Offset(origin.dx+sx,origin.dy+ sy);
+          Offset end_offset  =Offset(origin.dx+ex,origin.dy+ ey);
+
+          canvas.drawLine(
+              start_offset,
+              end_offset  ,
+              Paint());
+
+
+
+        }
+        else if(single_face.name==5){}
+        else if(single_face.name==6){}
+
+
+
+
+      }
+    }
 
 
   }

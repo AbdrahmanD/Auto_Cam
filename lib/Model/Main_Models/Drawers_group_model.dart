@@ -1,6 +1,5 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
-import 'package:auto_cam/Model/Main_Models/Join_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:get/get.dart';
 
@@ -25,8 +24,7 @@ late bool inner_drawer;
   late double drawer_box_height;
   late double drawer_box_depth;
 
-  List<Join_model> right_rail_joins=[];
-  List<Join_model> left_rail_joins=[];
+
 
 
   Drawers_group_model(
@@ -126,14 +124,13 @@ late bool inner_drawer;
         y_space = 24;
       }
 
-      int piece_id=draw_controller.box_repository.box_model.value.box_pieces.length;
 
       draw_controller.box_repository.box_model.value.box_pieces.add(
-          add_drawer_face(piece_id + 1, drawer_id + 1,i+1, drawer_face_origin,
+          add_drawer_face(draw_controller.box_repository.box_model.value.get_id(), drawer_id + 1,i+1, drawer_face_origin,
               face_height, face_width,dx,dy,y_space,box_height,drawer_box_width));
 
 
-      var drawer_pieces = add_drawer_box(piece_id + 2, drawer_id +1, i + 1,
+      var drawer_pieces = add_drawer_box( drawer_id +1, i + 1,
           drawer_box_origin, drawer_box_width, box_height,dx,dy,y_space ,draw_controller.box_repository.pack_panel_grove_depth);
 
 
@@ -171,20 +168,21 @@ late bool inner_drawer;
 
 
   /// add drawer box pieces
-  List<Piece_model> add_drawer_box(int piece_id, int drawer_id,int num,
+  List<Piece_model> add_drawer_box( int drawer_id,int num,
       Point_model box_origin, double box_width, double box_height,
       double dx,double dy,double y_space ,double grove_depth
       )
   {
 
     List<Piece_model> drawer_box = [];
+    Draw_Controller draw_controller = Get.find();
 
 
 
     /// left side
 
     Piece_model drawer_box_left = Piece_model(
-        piece_id,
+      draw_controller.box_repository.box_model.value.get_id(),
         'drawer ${drawer_id} left ',
         'V',
         "${drawer_box_material_thickness} mm",
@@ -197,7 +195,7 @@ late bool inner_drawer;
 
     /// right side
     Piece_model drawer_box_right = Piece_model(
-        piece_id + 1,
+      draw_controller.box_repository.box_model.value.get_id(),
         'drawer ${drawer_id} right ',
         'V',
         "${drawer_box_material_thickness} mm",
@@ -216,7 +214,7 @@ late bool inner_drawer;
 
 
     Piece_model drawer_box_front = Piece_model(
-        piece_id + 2,
+      draw_controller.box_repository.box_model.value.get_id(),
         'drawer ${drawer_id} front ',
         'F',
         "${drawer_box_material_thickness} mm",
@@ -231,7 +229,7 @@ late bool inner_drawer;
     /// back side
 
     Piece_model drawer_box_back = Piece_model(
-        piece_id + 3,
+      draw_controller.box_repository.box_model.value.get_id(),
         'drawer ${drawer_id} back ',
         'F',
         "${drawer_box_material_thickness} mm",
@@ -243,7 +241,7 @@ late bool inner_drawer;
         );
 
     Piece_model drawer_box_base_panel = Piece_model(
-        piece_id + 4,
+      draw_controller.box_repository.box_model.value.get_id(),
         'drawer ${drawer_id} base_panel',
         'H',
         "${drawer_base_material_thickness} mm",

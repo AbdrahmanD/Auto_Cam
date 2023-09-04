@@ -30,11 +30,12 @@ class _Add_Filler_DialogState extends State<Add_Filler_Dialog> {
   TextEditingController y_move=TextEditingController();
 
   Draw_Controller draw_controller=Get.find();
+
   @override
   Widget build(BuildContext context) {
 
-    // Piece_model p = Piece_model(1, '1', "V", 'mdf', 400, 600, 18, Point_model(0,0,0));
-    Piece_model p = draw_controller.box_repository.box_model.value.box_pieces[2];
+    Piece_model p = draw_controller.box_repository.box_model.value.box_pieces.where((element) => element.piece_name=="right").first;
+
     Filler_model f = Filler_model(vertical_filler,100, 100, 18, corner, x_move_value, y_move_value);
 
 

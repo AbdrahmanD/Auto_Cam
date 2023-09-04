@@ -120,14 +120,14 @@ late  Box_model box_model;
 
 
     ///
-    Point_model p1 = piece_model.piece_faces.front_face.corners[0];
-    Point_model p2 = piece_model.piece_faces.front_face.corners[1];
-    Point_model p3 = piece_model.piece_faces.front_face.corners[2];
-    Point_model p4 = piece_model.piece_faces.front_face.corners[3];
-    Point_model p5 = piece_model.piece_faces.back_face.corners[0];
-    Point_model p6 = piece_model.piece_faces.back_face.corners[1];
-    Point_model p7 = piece_model.piece_faces.back_face.corners[2];
-    Point_model p8 = piece_model.piece_faces.back_face.corners[3];
+    Point_model p1 = piece_model.piece_faces.faces[4].corners[0];
+    Point_model p2 = piece_model.piece_faces.faces[4].corners[1];
+    Point_model p3 = piece_model.piece_faces.faces[4].corners[2];
+    Point_model p4 = piece_model.piece_faces.faces[4].corners[3];
+    Point_model p5 = piece_model.piece_faces.faces[5].corners[0];
+    Point_model p6 = piece_model.piece_faces.faces[5].corners[1];
+    Point_model p7 = piece_model.piece_faces.faces[5].corners[2];
+    Point_model p8 = piece_model.piece_faces.faces[5].corners[3];
 
     Path front_path = Path();
     Path back_path  = Path();
@@ -211,8 +211,10 @@ late  Box_model box_model;
       Paint all_paint = Paint();
 
       all_paint.style = PaintingStyle.fill;
-      all_paint.color=Colors.grey[400]!;
-      all_paint.blendMode=BlendMode.darken;
+      all_paint.color=Colors.grey;
+      all_paint.blendMode=BlendMode.colorBurn;
+      // all_paint.blendMode=BlendMode.values[];
+
 
       canvas.drawPath(front_path,all_paint);
       canvas.drawPath(back_path ,all_paint);

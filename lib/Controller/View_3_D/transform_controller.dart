@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
 import 'package:auto_cam/Controller/View_3_D/CameraTransformer.dart';
-import 'package:auto_cam/Controller/View_3_D/three_D_Painter.dart';
+import 'package:auto_cam/Controller/Painters/three_D_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
@@ -53,9 +53,14 @@ class transform_controller {
     Box_model box_model=Box_model(b.box_name, b.box_type, b.box_width, b.box_height, b.box_depth,
         b.init_material_thickness, b.init_material_name, b.back_panel_thickness,
         b.grove_value, b.bac_panel_distence, b.top_base_piece_width, b.is_back_panel, Point_model(0,0,0));
+
     box_model.box_pieces=[];
+
     for(int i=0;i<b.box_pieces.length;i++){
-  Piece_model p = Piece_model(b.box_pieces[i].piece_id, b.box_pieces[i].piece_name, b.box_pieces[i].piece_direction, b.box_pieces[i].material_name, b.box_pieces[i].piece_width, b.box_pieces[i].piece_height, b.box_pieces[i].piece_thickness, b.box_pieces[i].piece_origin);
+  Piece_model p = Piece_model(b.box_pieces[i].piece_id, b.box_pieces[i].piece_name,
+      b.box_pieces[i].piece_direction, b.box_pieces[i].material_name,
+      b.box_pieces[i].piece_width, b.box_pieces[i].piece_height,
+      b.box_pieces[i].piece_thickness, b.box_pieces[i].piece_origin);
   box_model.box_pieces.add(p);
 }
 
@@ -63,15 +68,14 @@ class transform_controller {
 
       Piece_model p =box_model.box_pieces[i];
 
-       p.piece_faces.front_face.corners[0]=cameraTransformer.transform(p.piece_faces.front_face.corners[0]);
-       p.piece_faces.front_face.corners[1]=cameraTransformer.transform(p.piece_faces.front_face.corners[1]);
-       p.piece_faces.front_face.corners[2]=cameraTransformer.transform(p.piece_faces.front_face.corners[2]);
-       p.piece_faces.front_face.corners[3]=cameraTransformer.transform(p.piece_faces.front_face.corners[3]);
-
-       p.piece_faces.back_face.corners[0]=cameraTransformer.transform(p.piece_faces.back_face.corners[0]);
-       p.piece_faces.back_face.corners[1]=cameraTransformer.transform(p.piece_faces.back_face.corners[1]);
-       p.piece_faces.back_face.corners[2]=cameraTransformer.transform(p.piece_faces.back_face.corners[2]);
-       p.piece_faces.back_face.corners[3]=cameraTransformer.transform(p.piece_faces.back_face.corners[3]);
+       p.piece_faces.faces[4].corners[0]=cameraTransformer.transform(p.piece_faces.faces[4].corners[0]);
+       p.piece_faces.faces[4].corners[1]=cameraTransformer.transform(p.piece_faces.faces[4].corners[1]);
+       p.piece_faces.faces[4].corners[2]=cameraTransformer.transform(p.piece_faces.faces[4].corners[2]);
+       p.piece_faces.faces[4].corners[3]=cameraTransformer.transform(p.piece_faces.faces[4].corners[3]);
+       p.piece_faces.faces[5].corners[0]=cameraTransformer.transform(p.piece_faces.faces[5].corners[0]);
+       p.piece_faces.faces[5].corners[1]=cameraTransformer.transform(p.piece_faces.faces[5].corners[1]);
+       p.piece_faces.faces[5].corners[2]=cameraTransformer.transform(p.piece_faces.faces[5].corners[2]);
+       p.piece_faces.faces[5].corners[3]=cameraTransformer.transform(p.piece_faces.faces[5].corners[3]);
 
 
 

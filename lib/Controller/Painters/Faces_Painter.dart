@@ -1,0 +1,530 @@
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
+
+class Faces_Painter extends CustomPainter {
+  late Piece_model piece_model;
+
+  Faces_Painter(this.piece_model);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double pw = piece_model.piece_width;
+    double ph = piece_model.piece_height;
+
+    var scal;
+    var value = math.sqrt(math.pow(pw, 2) + math.pow(ph, 2));
+    if (value < 400) {
+      scal = 0.6;
+    } else {
+      scal = 0.6 * (450 / value);
+    }
+
+    draw_piece(canvas, scal);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+
+  draw_piece(Canvas canvas, double my_scale) {
+
+    // Paint line_painter = Paint()
+    //   ..strokeWidth = 1
+    //   ..style = PaintingStyle.stroke
+    //   ..color = Colors.black;
+    //
+    // Offset view_1 = Offset(65, 150);
+    // Offset view_2 = Offset(45, 200);
+    // Offset view_3 = Offset(65, 200);
+    // Offset view_4 = Offset(290, 200);
+    // Offset view_5 = Offset(65, 420);
+    // Offset view_6 = Offset(65, 450);
+
+    late double w;
+    late double h;
+    late double th;
+
+
+    if (piece_model.piece_direction == "H")
+    {
+
+      h = piece_model .piece_width * my_scale;
+      w = piece_model .piece_height * my_scale;
+      th = piece_model.piece_thickness * my_scale;
+
+
+      Offset view_1=Offset(100,650-2*h-4*th);
+      Offset view_2=Offset(100-2*th, 650-h-3*th);
+      Offset view_3=Offset(100, 650-h-3*th);
+      Offset view_4=Offset(100+w+th, 650-h-3*th);
+      Offset view_5=Offset(100, 650-h-th);
+      Offset view_6=Offset(100, 650);
+
+
+
+
+      /// view 1
+      Point_model p_1_0 = piece_model.piece_faces.faces[5].corners[0];
+      Point_model p_1_2 = piece_model.piece_faces.faces[5].corners[2];
+
+      double p_1_w = (p_1_2.x_coordinate - p_1_0.x_coordinate)*my_scale;
+      double p_1_h = (p_1_2.y_coordinate - p_1_0.y_coordinate)*my_scale;
+
+      List<tow_D_Line> lines_1=[];
+      for(int i=0;i<piece_model.piece_faces.faces[5].joines.length;i++){
+
+
+        Point_model jsp=piece_model.piece_faces.faces[5].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[5].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_1_0.x_coordinate)*my_scale+view_1.dx,view_1.dy- (jsp.y_coordinate-p_1_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_1_0.x_coordinate)*my_scale+view_1.dx,view_1.dy- (jep.y_coordinate-p_1_0.y_coordinate)*my_scale);
+
+        lines_1.add(tow_D_Line(sof,eof));
+
+      }
+      draw_face(canvas, p_1_w, p_1_h, view_1,lines_1);
+
+
+      /// view 2
+      Point_model p_2_0 = piece_model.piece_faces.faces[3].corners[0];
+      Point_model p_2_2 = piece_model.piece_faces.faces[3].corners[2];
+
+      double p_2_w = (p_2_2.y_coordinate - p_2_0.y_coordinate)*my_scale;
+      double p_2_h = (p_2_2.z_coordinate - p_2_0.z_coordinate)*my_scale;
+
+      List<tow_D_Line> lines_2=[];
+      for(int i=0;i<piece_model.piece_faces.faces[3].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[3].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[3].joines[i].end_point;
+
+        Offset sof=Offset((jsp.y_coordinate-p_2_0.y_coordinate)*my_scale+view_2.dx,view_2.dy- (jsp.z_coordinate-p_2_0.z_coordinate)*my_scale);
+        Offset eof=Offset((jep.y_coordinate-p_2_0.y_coordinate)*my_scale+view_2.dx,view_2.dy- (jep.z_coordinate-p_2_0.z_coordinate)*my_scale);
+
+        lines_2.add(tow_D_Line(sof,eof));
+
+      }
+      draw_face(canvas, p_2_w, p_2_h, view_2,lines_2);
+
+
+      /// view 3
+
+      Point_model p_3_0 = piece_model.piece_faces.faces[0].corners[0];
+      Point_model p_3_2 = piece_model.piece_faces.faces[0].corners[2];
+
+      double p_3_w = (p_3_2.x_coordinate - p_3_0.x_coordinate)*my_scale;
+      double p_3_h = (p_3_2.z_coordinate - p_3_0.z_coordinate)*my_scale;
+
+      List<tow_D_Line> lines_3=[];
+
+      for(int i=0;i<piece_model.piece_faces.faces[0].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[0].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[0].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_3_0.x_coordinate)*my_scale+view_3.dx,view_3.dy-( jsp.z_coordinate-p_3_0.z_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_3_0.x_coordinate)*my_scale+view_3.dx,view_3.dy-( jep.z_coordinate-p_3_0.z_coordinate)*my_scale);
+
+        lines_3.add(tow_D_Line(sof,eof));
+
+      }
+
+      draw_face(canvas, p_3_w, p_3_h, view_3,lines_3);
+
+      /// view 4
+      Point_model p_4_0 = piece_model.piece_faces.faces[1].corners[0];
+      Point_model p_4_2 = piece_model.piece_faces.faces[1].corners[2];
+      double p_4_w = (p_4_2.y_coordinate - p_4_0.y_coordinate)*my_scale;
+      double p_4_h = (p_4_2.z_coordinate - p_4_0.z_coordinate)*my_scale;
+      List<tow_D_Line> lines_4=[];
+      for(int i=0;i<piece_model.piece_faces.faces[1].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[1].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[1].joines[i].end_point;
+
+        Offset sof=Offset((jsp.y_coordinate-p_4_0.y_coordinate)*my_scale+view_4.dx,view_4.dy- (jsp.z_coordinate-p_4_0.z_coordinate)*my_scale);
+        Offset eof=Offset((jep.y_coordinate-p_4_0.y_coordinate)*my_scale+view_4.dx,view_4.dy- (jep.z_coordinate-p_4_0.z_coordinate)*my_scale);
+
+        lines_4.add(tow_D_Line(sof,eof));
+      }
+      draw_face(canvas, p_4_w, p_4_h, view_4,lines_4);
+
+      /// view 5
+      Point_model p_5_0 = piece_model.piece_faces.faces[4].corners[0];
+      Point_model p_5_2 = piece_model.piece_faces.faces[4].corners[2];
+      double p_5_w = (p_5_2.x_coordinate - p_5_0.x_coordinate)*my_scale;
+      double p_5_h = (p_5_2.y_coordinate - p_5_0.y_coordinate)*my_scale;
+      List<tow_D_Line> lines_5=[];
+      for(int i=0;i<piece_model.piece_faces.faces[4].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[4].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[4].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_5_0.x_coordinate)*my_scale+view_5.dx,view_5.dy- (jsp.y_coordinate-p_5_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_5_0.x_coordinate)*my_scale+view_5.dx,view_5.dy- (jep.y_coordinate-p_5_0.y_coordinate)*my_scale);
+
+        lines_5.add(tow_D_Line(sof,eof));
+
+      }
+      draw_face(canvas, p_5_w, p_5_h, view_5,lines_5);
+
+
+      /// view 6
+      Point_model p_6_0 = piece_model.piece_faces.faces[2].corners[0];
+      Point_model p_6_2 = piece_model.piece_faces.faces[2].corners[2];
+      double p_6_w = (p_6_2.x_coordinate - p_6_0.x_coordinate)*my_scale;
+      double p_6_h = (p_6_2.z_coordinate - p_6_0.z_coordinate)*my_scale;
+      List<tow_D_Line> lines_6=[];
+      for(int i=0;i<piece_model.piece_faces.faces[2].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[2].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[2].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_6_0.x_coordinate)*my_scale+view_6.dx,view_6.dy- (jsp.z_coordinate-p_6_0.z_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_6_0.x_coordinate)*my_scale+view_6.dx,view_6.dy- (jep.z_coordinate-p_6_0.z_coordinate)*my_scale);
+
+        lines_6.add(tow_D_Line(sof,eof));
+
+      }
+      draw_face(canvas, p_6_w, p_6_h, view_6,lines_6);
+
+
+
+    }
+    else if (piece_model.piece_direction == "V")
+    {
+
+      w = piece_model .piece_width * my_scale;
+      h = piece_model .piece_height * my_scale;
+      th = piece_model.piece_thickness * my_scale;
+
+
+      Offset view_1 =Offset(100,650-2*h-4*th);
+      Offset view_2 =Offset(100-2*th, 650-h-3*th);
+      Offset view_6 =Offset(100, 650-h-3*th);
+      Offset view_4  =Offset(100+w+th, 650-h-3*th);
+      Offset view_5 =Offset(100, 650-h-th);
+      Offset view_3 =Offset(100, 650);
+
+
+      /// view 1
+      Point_model p_1_0 = piece_model.piece_faces.faces[0].corners[0];
+      Point_model p_1_2 = piece_model.piece_faces.faces[0].corners[2];
+      double p_1_w = (p_1_2.z_coordinate - p_1_0.z_coordinate)*my_scale;
+      double p_1_h = (p_1_2.x_coordinate - p_1_0.x_coordinate)*my_scale;
+      List<tow_D_Line> lines_1=[];
+      for(int i=0;i<piece_model.piece_faces.faces[0].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[0].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[0].joines[i].end_point;
+
+        Offset sof=Offset((jsp.z_coordinate-p_1_0.z_coordinate)*my_scale+view_1.dx,view_1.dy-( jsp.x_coordinate-p_1_0.x_coordinate)*my_scale);
+        Offset eof=Offset((jep.z_coordinate-p_1_0.z_coordinate)*my_scale+view_1.dx,view_1.dy-( jep.x_coordinate-p_1_0.x_coordinate)*my_scale);
+
+        lines_1.add(tow_D_Line(sof,eof));
+
+      }
+      draw_face(canvas, p_1_w, p_1_h, view_1,lines_1);
+
+
+      /// view 2
+      Point_model p_2_0 = piece_model.piece_faces.faces[5].corners[0];
+      Point_model p_2_2 = piece_model.piece_faces.faces[5].corners[2];
+      double p_2_w = (p_2_2.x_coordinate - p_2_0.x_coordinate)*my_scale;
+      double p_2_h = (p_2_2.y_coordinate - p_2_0.y_coordinate)*my_scale;
+      List<tow_D_Line> lines_2=[];
+      for(int i=0;i<piece_model.piece_faces.faces[5].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[5].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[5].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_2_0.x_coordinate)*my_scale+view_2.dx,view_2.dy-( jsp.y_coordinate-p_2_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_2_0.x_coordinate)*my_scale+view_2.dx,view_2.dy-( jep.y_coordinate-p_2_0.y_coordinate)*my_scale);
+
+        lines_2.add(tow_D_Line(sof,eof));
+
+      }
+      draw_face(canvas, p_2_w, p_2_h, view_2,lines_2);
+
+
+      /// view 3
+
+      Point_model p_3_0 = piece_model.piece_faces.faces[3].corners[0];
+      Point_model p_3_2 = piece_model.piece_faces.faces[3].corners[2];
+      double p_3_w = (p_3_2.z_coordinate - p_3_0.z_coordinate)*my_scale;
+      double p_3_h = (p_3_2.y_coordinate - p_3_0.y_coordinate)*my_scale;
+      List<tow_D_Line> lines_3=[];
+      for(int i=0;i<piece_model.piece_faces.faces[3].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[3].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[3].joines[i].end_point;
+
+        Offset sof=Offset((jsp.z_coordinate-p_3_0.z_coordinate)*my_scale+view_3.dx,view_3.dy-( jsp.y_coordinate-p_3_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.z_coordinate-p_3_0.z_coordinate)*my_scale+view_3.dx,view_3.dy-( jep.y_coordinate-p_3_0.y_coordinate)*my_scale);
+
+        lines_3.add(tow_D_Line(sof,eof));
+
+      }
+      draw_face(canvas, p_3_w, p_3_h, view_3,lines_3);
+
+      /// view 4
+      Point_model p_4_0 = piece_model.piece_faces.faces[4].corners[0];
+      Point_model p_4_2 = piece_model.piece_faces.faces[4].corners[2];
+      double p_4_w = (p_4_2.x_coordinate - p_4_0.x_coordinate)*my_scale;
+      double p_4_h = (p_4_2.y_coordinate - p_4_0.y_coordinate)*my_scale;
+      List<tow_D_Line> lines_4=[];
+      for(int i=0;i<piece_model.piece_faces.faces[4].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[4].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[4].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_4_0.x_coordinate)*my_scale+view_4.dx,view_4.dy-( jsp.y_coordinate-p_4_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_4_0.x_coordinate)*my_scale+view_4.dx,view_4.dy-( jep.y_coordinate-p_4_0.y_coordinate)*my_scale);
+
+        lines_4.add(tow_D_Line(sof,eof));
+
+
+      }
+      draw_face(canvas, p_4_w, p_4_h, view_4,lines_4);
+
+      /// view 5
+      Point_model p_5_0 = piece_model.piece_faces.faces[2].corners[0];
+      Point_model p_5_2 = piece_model.piece_faces.faces[2].corners[2];
+      double p_5_w = (p_5_2.z_coordinate - p_5_0.z_coordinate)*my_scale;
+      double p_5_h = (p_5_2.x_coordinate - p_5_0.x_coordinate)*my_scale;
+      List<tow_D_Line> lines_5=[];
+      for(int i=0;i<piece_model.piece_faces.faces[2].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[2].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[2].joines[i].end_point;
+
+        Offset sof=Offset((jsp.z_coordinate-p_5_0.z_coordinate)*my_scale+view_5.dx,view_5.dy-( jsp.x_coordinate-p_5_0.x_coordinate)*my_scale);
+        Offset eof=Offset((jep.z_coordinate-p_5_0.z_coordinate)*my_scale+view_5.dx,view_5.dy-( jep.x_coordinate-p_5_0.x_coordinate)*my_scale);
+
+        lines_5.add(tow_D_Line(sof,eof));
+
+
+      }
+      draw_face(canvas, p_5_w, p_5_h, view_5,lines_5);
+
+
+      /// view 6
+      Point_model p_6_0 = piece_model.piece_faces.faces[1].corners[0];
+      Point_model p_6_2 = piece_model.piece_faces.faces[1].corners[2];
+      double p_6_w = (p_6_2.z_coordinate - p_6_0.z_coordinate)*my_scale;
+      double p_6_h = (p_6_2.y_coordinate - p_6_0.y_coordinate)*my_scale;
+      List<tow_D_Line> lines_6=[];
+      for(int i=0;i<piece_model.piece_faces.faces[1].joines.length;i++){
+        Point_model jsp=piece_model.piece_faces.faces[1].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[1].joines[i].end_point;
+
+        Offset sof=Offset((jsp.z_coordinate-p_6_0.z_coordinate)*my_scale+view_6.dx,view_6.dy- (jsp.y_coordinate-p_6_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.z_coordinate-p_6_0.z_coordinate)*my_scale+view_6.dx,view_6.dy- (jep.y_coordinate-p_6_0.y_coordinate)*my_scale);
+
+        lines_6.add(tow_D_Line(sof,eof));
+      }
+      draw_face(canvas, p_6_w, p_6_h, view_6,lines_6);
+
+
+    }
+    else if (piece_model.piece_direction == "F")
+    {
+
+      w = piece_model. piece_width * my_scale;
+      h = piece_model. piece_height * my_scale;
+      th = piece_model.piece_thickness * my_scale;
+
+      Offset view_1 = Offset(100+2*th, 650-2*h-4*th);
+      Offset view_2 = Offset(100 , 650-h-3*th);
+      Offset view_3 = Offset(100+2*th ,650-h-3*th);
+      Offset view_4 = Offset(100+3*th+w , 650-h-3*th);
+      Offset view_5 = Offset(100 +2*th    , 650-h-th);
+      Offset view_6 = Offset(100 +2*th    , 650);
+
+
+      /// view 1
+      Point_model p_1_0 = piece_model.piece_faces.faces[0].corners[0];
+      Point_model p_1_2 = piece_model.piece_faces.faces[0].corners[2];
+      double p_1_w = (p_1_2.x_coordinate - p_1_0.x_coordinate)*my_scale;
+      double p_1_h = (p_1_2.z_coordinate - p_1_0.z_coordinate)*my_scale;
+      List<tow_D_Line> lines_1=[];
+      for(int i=0;i<piece_model.piece_faces.faces[0].joines.length;i++){
+        Point_model jsp=piece_model.piece_faces.faces[0].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[0].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_1_0.x_coordinate)*my_scale+view_1.dx,view_1.dy-( jsp.z_coordinate-p_1_0.z_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_1_0.x_coordinate)*my_scale+view_1.dx,view_1.dy-( jep.z_coordinate-p_1_0.z_coordinate)*my_scale);
+
+        lines_1.add(tow_D_Line(sof,eof));
+      }
+      draw_face(canvas, p_1_w, p_1_h, view_1,lines_1);
+
+
+      /// view 2
+      Point_model p_2_0 = piece_model.piece_faces.faces[3].corners[0];
+      Point_model p_2_2 = piece_model.piece_faces.faces[3].corners[2];
+      double p_2_w = (p_2_2.z_coordinate - p_2_0.z_coordinate)*my_scale;
+      double p_2_h = (p_2_2.y_coordinate - p_2_0.y_coordinate)*my_scale;
+      List<tow_D_Line> lines_2=[];
+      for(int i=0;i<piece_model.piece_faces.faces[3].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[3].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[3].joines[i].end_point;
+
+        Offset sof=Offset((jsp.z_coordinate-p_2_0.z_coordinate)*my_scale+view_2.dx,view_2.dy-( jsp.y_coordinate-p_2_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.z_coordinate-p_2_0.z_coordinate)*my_scale+view_2.dx,view_2.dy-( jep.y_coordinate-p_2_0.y_coordinate)*my_scale);
+
+        lines_2.add(tow_D_Line(sof,eof));
+
+      }
+      draw_face(canvas, p_2_w, p_2_h, view_2,lines_2);
+
+
+      /// view 3
+
+      Point_model p_3_0 = piece_model.piece_faces.faces[4].corners[0];
+      Point_model p_3_2 = piece_model.piece_faces.faces[4].corners[2];
+      double p_3_w = (p_3_2.x_coordinate - p_3_0.x_coordinate)*my_scale;
+      double p_3_h = (p_3_2.y_coordinate - p_3_0.y_coordinate)*my_scale;
+      List<tow_D_Line> lines_3=[];
+      for(int i=0;i<piece_model.piece_faces.faces[4].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[4].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[4].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_3_0.x_coordinate)*my_scale+view_3.dx,view_3.dy-( jsp.y_coordinate-p_3_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_3_0.x_coordinate)*my_scale+view_3.dx,view_3.dy-( jep.y_coordinate-p_3_0.y_coordinate)*my_scale);
+
+        lines_3.add(tow_D_Line(sof,eof));
+
+      }
+      draw_face(canvas, p_3_w, p_3_h, view_3,lines_3);
+
+      /// view 4
+      Point_model p_4_0 = piece_model.piece_faces.faces[1].corners[0];
+      Point_model p_4_2 = piece_model.piece_faces.faces[1].corners[2];
+      double p_4_w = (p_4_2.z_coordinate - p_4_0.z_coordinate)*my_scale;
+      double p_4_h = (p_4_2.y_coordinate - p_4_0.y_coordinate)*my_scale;
+      List<tow_D_Line> lines_4=[];
+      for(int i=0;i<piece_model.piece_faces.faces[1].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[1].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[1].joines[i].end_point;
+
+        Offset sof=Offset((jsp.z_coordinate-p_4_0.z_coordinate)*my_scale+view_4.dx,view_4.dy-( jsp.y_coordinate-p_4_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.z_coordinate-p_4_0.z_coordinate)*my_scale+view_4.dx,view_4.dy-( jep.y_coordinate-p_4_0.y_coordinate)*my_scale);
+
+        lines_4.add(tow_D_Line(sof,eof));
+
+
+      }
+      draw_face(canvas, p_4_w, p_4_h, view_4,lines_4);
+
+      /// view 5
+      Point_model p_5_0 = piece_model.piece_faces.faces[2].corners[0];
+      Point_model p_5_2 = piece_model.piece_faces.faces[2].corners[2];
+      double p_5_w = (p_5_2.x_coordinate - p_5_0.x_coordinate)*my_scale;
+      double p_5_h = (p_5_2.z_coordinate - p_5_0.z_coordinate)*my_scale;
+      List<tow_D_Line> lines_5=[];
+      for(int i=0;i<piece_model.piece_faces.faces[2].joines.length;i++){
+        Point_model jsp=piece_model.piece_faces.faces[2].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[2].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_5_0.x_coordinate)*my_scale+view_5.dx,view_5.dy-( jsp.z_coordinate-p_5_0.z_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_5_0.x_coordinate)*my_scale+view_5.dx,view_5.dy-( jep.z_coordinate-p_5_0.z_coordinate)*my_scale);
+
+        lines_5.add(tow_D_Line(sof,eof));
+      }
+      draw_face(canvas, p_5_w, p_5_h, view_5,lines_5);
+
+
+      /// view 6
+      Point_model p_6_0 = piece_model.piece_faces.faces[5].corners[0];
+      Point_model p_6_2 = piece_model.piece_faces.faces[5].corners[2];
+      double p_6_w = (p_6_2.x_coordinate - p_6_0.x_coordinate)*my_scale;
+      double p_6_h = (p_6_2.y_coordinate - p_6_0.y_coordinate)*my_scale;
+      List<tow_D_Line> lines_6=[];
+      for(int i=0;i<piece_model.piece_faces.faces[5].joines.length;i++){
+
+        Point_model jsp=piece_model.piece_faces.faces[5].joines[i].start_point;
+        Point_model jep=piece_model.piece_faces.faces[5].joines[i].end_point;
+
+        Offset sof=Offset((jsp.x_coordinate-p_6_0.x_coordinate)*my_scale+view_6.dx,view_6.dy-( jsp.y_coordinate-p_6_0.y_coordinate)*my_scale);
+        Offset eof=Offset((jep.x_coordinate-p_6_0.x_coordinate)*my_scale+view_6.dx,view_6.dy-( jep.y_coordinate-p_6_0.y_coordinate)*my_scale);
+
+        lines_6.add(tow_D_Line(sof,eof));
+
+
+      }
+      draw_face(canvas, p_6_w, p_6_h, view_6,lines_6);
+
+
+    }
+
+
+
+
+    /// piece details
+    draw_text(canvas, 'id:${piece_model.piece_id}', Offset(300, 10), 6.5, 2);
+    draw_text(
+        canvas, 'name :${piece_model.piece_name}', Offset(300, 30), 6.5, 2);
+    draw_text(
+        canvas, 'width :${piece_model.piece_width}', Offset(300, 50), 6.5, 2);
+    draw_text(
+        canvas, 'height :${piece_model.piece_height}', Offset(300, 70), 6.5, 2);
+    draw_text(canvas, 'thickness :${piece_model.piece_thickness}',
+        Offset(300, 90), 6.5, 2);
+    draw_text(canvas, 'material name :    ${piece_model.material_name}',
+        Offset(300, 130), 6.5, 2);
+  }
+
+  draw_face(Canvas canvas , double w , double h , Offset origin ,List<tow_D_Line> lines){
+
+    Paint piece_painter = Paint()
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke
+      ..color = Colors.black;
+
+    Paint line_painter = Paint()
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke
+      ..color = Colors.red;
+
+
+
+    Path p = Path();
+
+    p.moveTo(origin.dx        ,origin.dy        );
+    p.lineTo(origin.dx + w,    origin.dy        );
+    p.lineTo(origin.dx + w,    origin.dy - h);
+    p.lineTo(origin.dx        ,origin.dy - h);
+    p.lineTo(origin.dx        ,origin.dy        );
+
+    canvas.drawPath(p, piece_painter);
+    for(int i=0;i<lines.length;i++){
+      canvas.drawLine(
+          Offset(lines[i].start_point.dx, lines[i].start_point.dy),
+          Offset(lines[i].end_point.dx,   lines[i].end_point.dy),
+          line_painter);
+    }
+
+
+
+
+  }
+
+  draw_text(
+      Canvas c, String text, Offset offset, double t_size, int my_text_size) {
+    TextSpan ts = TextSpan(
+        text: text,
+        style: TextStyle(fontSize: t_size * my_text_size, color: Colors.black));
+    TextPainter tp = TextPainter(text: ts, textDirection: TextDirection.ltr);
+    tp.layout();
+
+    tp.paint(c, offset);
+  }
+}

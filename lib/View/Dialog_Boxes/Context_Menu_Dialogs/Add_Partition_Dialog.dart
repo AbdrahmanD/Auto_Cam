@@ -1,3 +1,4 @@
+import 'package:auto_cam/Controller/DecimalTextInputFormatter.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
 
   TextEditingController Right_Distance = TextEditingController();
 
-  GlobalKey<FormState> my_key = GlobalKey();
+  GlobalKey<FormState> add_partition_dialog_key = GlobalKey();
 
   Draw_Controller drawerController = Get.find();
 
@@ -42,7 +43,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
         Right_Distance.text =
         '${drawerController.box_repository.box_model.value.
         box_pieces[drawerController.hover_id].piece_width
-            - double_left_distance}';
+            - double_left_distance-18}';
       }
     } else if (proportional) {
       if (Left_Distance.text.toString() != '') {
@@ -58,7 +59,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
     double double_right_distance;
     if (distance) {
       if (Right_Distance.text.toString() != '') {
-        double_right_distance = double.parse(Right_Distance.text.toString());
+        double_right_distance = double.parse(Right_Distance.text.toString())+18;
         Left_Distance.text = ''
             '${drawerController.box_repository.box_model.value.box_pieces[drawerController.hover_id].piece_width
             - double_right_distance}';
@@ -78,7 +79,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
     back_distance=drawerController.box_repository.pack_panel_distence;
 
 
-    if (my_key.currentState!.validate()) {
+    if (add_partition_dialog_key.currentState!.validate()) {
       if (!partition_center) {
         if (distance) {
           double left_Distence =
@@ -118,6 +119,8 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
             double.parse(Quantity.text.toString()).toInt(),back_distance);
 
       }
+    }else{
+      print('popopopo');
     }
     setState(() {
 
@@ -156,7 +159,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
     distance = false;
     proportional = false;
     edit_enable = false;
-    Left_Distance.text = '0';
+    Left_Distance.text = '${drawerController.box_repository.box_model.value.box_pieces[drawerController.hover_id].piece_width-18}';
     Right_Distance.text = '0';
 
 
@@ -223,7 +226,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
         /// all details fields
         Container(
           child: Form(
-            key: my_key,
+            key: add_partition_dialog_key,
             child: Column(
               children: [
                 Row(
@@ -286,9 +289,8 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                       width: 120,
                       height: 40,
                       child: TextFormField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Front_Gap,
                         validator: (v) {
                           if (!v!.isEmpty) {
@@ -327,9 +329,8 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                       width: 120,
                       height: 40,
                       child: TextFormField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Material,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -447,9 +448,8 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                           left_changed();
                         },
                         enabled: (quantity && edit_enable),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Left_Distance,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -485,9 +485,8 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                           right_changed();
                         },
                         enabled: (quantity && edit_enable),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Right_Distance,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(

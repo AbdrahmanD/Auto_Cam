@@ -40,7 +40,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
         double_top_distance = double.parse(Top_Distance.text.toString());
         Bottom_Distance.text =
             '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_height -
-                double_top_distance}';
+                double_top_distance-18}';
       }
     } else if (proportional) {
       if (Top_Distance.text.toString() != '') {
@@ -58,7 +58,8 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
       if (Bottom_Distance.text.toString() != '') {
         double_bottom_distance = double.parse(Bottom_Distance.text.toString());
         Top_Distance.text = ''
-            '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_height - double_bottom_distance}';
+            '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_height
+            - double_bottom_distance-18}';
       }
     } else if (proportional) {
       if (Bottom_Distance.text.toString() != '') {
@@ -181,7 +182,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
     proportional = false;
     edit_enable = false;
     Top_Distance.text = '0';
-    Bottom_Distance.text = '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_height}';
+    Bottom_Distance.text = '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_height-18}';
   }
 
 

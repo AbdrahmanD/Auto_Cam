@@ -1,6 +1,7 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
 import 'package:auto_cam/Controller/Painters/Piece_Painter.dart';
+import 'package:auto_cam/Controller/Painters/Faces_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -196,7 +197,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                               color: Colors.white,
                               height: 700,
                               child: CustomPaint(
-                                painter: Piece_Painter(draw_controller
+                                painter: Faces_Painter(draw_controller
                                     .box_repository
                                     .box_model
                                     .value

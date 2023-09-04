@@ -69,7 +69,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
         children: [
           SizedBox(
             height: 18,
-          ),       //back button and lable
+          ),
+          ///back button and lable
           Row(
             children: [
               //Back button
@@ -113,6 +114,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 12,
           ),
 
+          ///box name
           Row(
             children: [
               SizedBox(
@@ -123,9 +125,9 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 width: 12,
               ),
               Container(
-                width: 100,
+                width: 140,
                 height: 26,
-                child: TextFormField(
+                child: TextFormField(  style: TextStyle(fontSize: 14),
                   controller: box_name_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -140,10 +142,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
                 ),
               ),
-              Text(
-                "  mm",
-                style: TextStyle(fontSize: 14),
-              ),
+
             ],
           ),
           SizedBox(
@@ -151,7 +150,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
 
-          //width
+          ///width
           Row(
             children: [
               SizedBox(
@@ -164,7 +163,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField(
+                child: TextFormField( style: TextStyle(fontSize: 14),
                   controller: width_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -190,7 +189,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 12,
           ),
 
-          //height
+          ///height
           Row(
             children: [
               SizedBox(
@@ -206,7 +205,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField(
+                child: TextFormField( style: TextStyle(fontSize: 14),
                   controller: hight_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -232,7 +231,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 12,
           ),
 
-          //depth
+          ///depth
           Row(
             children: [
               SizedBox(
@@ -248,7 +247,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                   width: 100,
                   height: 26,
-                  child: TextFormField(
+                  child: TextFormField( style: TextStyle(fontSize: 14),
                     controller: depth_controller,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -287,6 +286,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             width: 18,
           ),
 
+          /// material title
           Center(
             child: Text(
               "Materials ",
@@ -298,7 +298,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 14,
           ),
 
-          //material thickness form field
+          ///material thickness form field
           Row(
             children: [
               SizedBox(
@@ -314,7 +314,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField(
+                child: TextFormField( style: TextStyle(fontSize: 14),
                   controller: material_thickness_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -341,7 +341,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 6,
           ),
 
-          //material name form field
+          ///material name form field
           Row(
             children: [
               SizedBox(
@@ -357,7 +357,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField(
+                child: TextFormField( style: TextStyle(fontSize: 14),
                   controller: material_name_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -386,7 +386,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 6,
           ),
 
-          //back Panel thickness form field
+          ///back Panel thickness form field
           Row(
             children: [
               SizedBox(
@@ -402,7 +402,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField(
+                child: TextFormField( style: TextStyle(fontSize: 14),
                   controller: back_panel_thickness_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -445,7 +445,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField(
+                child: TextFormField( style: TextStyle(fontSize: 14),
                   controller: pack_panel_grove_depth_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -488,7 +488,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField(
+                child: TextFormField( style: TextStyle(fontSize: 14),
                   controller: pack_panel_distence_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -531,7 +531,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField(
+                child: TextFormField( style: TextStyle(fontSize: 14),
                   controller: top_base_piece_width_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -575,7 +575,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           SizedBox(
             height: 6,
           ),
-          //chose or Edit fitting type
+          ///chose or Edit fitting type
           Container(
             child: Row(
               children: [
@@ -603,7 +603,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 6,
           ),
 
-          //divider
+          ///divider
           Container(
             height: 1,
             color: Colors.grey,
@@ -613,7 +613,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           SizedBox(
             height: 6,
           ),
-          //chose is there back panel or not
+          ///chose is there back panel or not
           Container(
             child: Row(
               children: [

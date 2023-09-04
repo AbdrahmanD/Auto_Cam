@@ -1,7 +1,5 @@
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
-import 'package:auto_cam/Model/Main_Models/Drawers_group_model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
-import 'package:auto_cam/Model/Main_Models/Join_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,6 +19,7 @@ class Box_model {
  late bool   is_back_panel;
  late Point_model box_origin;
    List<Piece_model> box_pieces=[];
+   int piece_id=0;
 
 
   Box_model(
@@ -37,7 +36,9 @@ class Box_model {
       this.top_base_piece_width,
       this.is_back_panel,
       this.box_origin
-      ){
+      )
+
+  {
     if(box_type=="wall_cabinet")
       { wall_cabinet();}
     else if(box_type=="base_cabinet")
@@ -47,10 +48,16 @@ class Box_model {
 
   }
 
+ int  get_id(){
+    piece_id++;
+    // print(piece_id);
+    return piece_id;
+  }
+
   wall_cabinet()
   {
     Piece_model  top_piece = Piece_model(
-        box_pieces.length,
+        get_id(),
         'top',
         'H',
         init_material_name,
@@ -63,7 +70,7 @@ class Box_model {
     box_pieces.add(top_piece);
 
     Piece_model  base_piece = Piece_model(
-        box_pieces.length,
+        get_id(),
         'base',
         'H',
         init_material_name,
@@ -76,7 +83,7 @@ class Box_model {
     box_pieces.add(base_piece);
 
     Piece_model  right_piece = Piece_model(
-        box_pieces.length,
+        get_id(),
         'right',
         'V',
         init_material_name,
@@ -89,7 +96,7 @@ class Box_model {
     box_pieces.add(right_piece);
 
     Piece_model  left_piece = Piece_model(
-        box_pieces.length,
+        get_id(),
         'left',
         'V',
         init_material_name,
@@ -103,7 +110,7 @@ class Box_model {
 
     if(is_back_panel){
       Piece_model  back_panel = Piece_model(
-          box_pieces.length,
+          get_id(),
           'back_panel',
           'F',
           init_material_name,
@@ -117,13 +124,13 @@ class Box_model {
       box_pieces.add(back_panel);
     }
     Piece_model  inner = Piece_model(
-        box_pieces.length,
+        get_id(),
         'inner',
         'F',
         'inner',
         box_width-2*init_material_thickness,
         box_height-2*init_material_thickness,
-        0,
+        (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
         Point_model(box_origin.x_coordinate+init_material_thickness,
             box_origin.y_coordinate+init_material_thickness ,
             box_origin.z_coordinate)
@@ -135,7 +142,7 @@ class Box_model {
   base_cabinet()
   {
     Piece_model  top_piece_1 = Piece_model(
-        box_pieces.length,
+        get_id(),
         'top',
         'H',
         init_material_name,
@@ -146,7 +153,7 @@ class Box_model {
             box_origin.y_coordinate + box_height - init_material_thickness,box_origin.z_coordinate)
     );
     Piece_model  top_piece_2 = Piece_model(
-        box_pieces.length,
+        get_id(),
         'top',
         'H',
         init_material_name,
@@ -161,7 +168,7 @@ class Box_model {
     box_pieces.add(top_piece_2);
 
     Piece_model  base_piece = Piece_model(
-        box_pieces.length,
+        get_id(),
         'base',
         'H',
         init_material_name,
@@ -174,7 +181,7 @@ class Box_model {
     box_pieces.add(base_piece);
 
     Piece_model  right_piece = Piece_model(
-        box_pieces.length,
+        get_id(),
         'right',
         'V',
         init_material_name,
@@ -187,7 +194,7 @@ class Box_model {
     box_pieces.add(right_piece);
 
     Piece_model  left_piece = Piece_model(
-        box_pieces.length,
+        get_id(),
         'left',
         'V',
         init_material_name,
@@ -201,7 +208,7 @@ class Box_model {
 
     if(is_back_panel){
       Piece_model  back_panel = Piece_model(
-          box_pieces.length,
+          get_id(),
           'back_panel',
           'F',
           init_material_name,
@@ -214,13 +221,14 @@ class Box_model {
       box_pieces.add(back_panel);
     }
     Piece_model  inner = Piece_model(
-        box_pieces.length,
+        get_id(),
         'inner',
         'F',
         'inner',
         box_width-2*init_material_thickness,
         box_height-2*init_material_thickness,
-        0,
+        (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
+
         Point_model(box_origin.x_coordinate+init_material_thickness,
             box_origin.y_coordinate+init_material_thickness ,
             box_origin.z_coordinate)
@@ -233,7 +241,7 @@ class Box_model {
   inner_cabinet()
   {
     Piece_model  top_piece_1 = Piece_model(
-        box_pieces.length,
+        get_id(),
         'top',
         'H',
         init_material_name,
@@ -244,7 +252,7 @@ class Box_model {
             box_origin.y_coordinate + box_height - init_material_thickness,box_origin.z_coordinate)
     );
     Piece_model  top_piece_2 = Piece_model(
-        box_pieces.length,
+        get_id(),
         'top',
         'H',
         init_material_name,
@@ -260,7 +268,7 @@ class Box_model {
     box_pieces.add(top_piece_2);
 
     Piece_model  base_piece_1 = Piece_model(
-        box_pieces.length,
+        get_id(),
         'base',
         'H',
         init_material_name,
@@ -271,7 +279,7 @@ class Box_model {
             box_origin.y_coordinate ,box_origin.z_coordinate+box_depth-top_base_piece_width)
     );
     Piece_model  base_piece_2 = Piece_model(
-        box_pieces.length,
+        get_id(),
         'base',
         'H',
         init_material_name,
@@ -286,7 +294,7 @@ class Box_model {
     box_pieces.add(base_piece_2);
 
     Piece_model  right_piece = Piece_model(
-        box_pieces.length,
+        get_id(),
         'right',
         'V',
         init_material_name,
@@ -299,7 +307,7 @@ class Box_model {
     box_pieces.add(right_piece);
 
     Piece_model  left_piece = Piece_model(
-        box_pieces.length,
+        get_id(),
         'left',
         'V',
         init_material_name,
@@ -313,7 +321,7 @@ class Box_model {
 
     if(is_back_panel){
       Piece_model  back_panel = Piece_model(
-          box_pieces.length,
+          get_id(),
           'back_panel',
           'F',
           init_material_name,
@@ -326,7 +334,7 @@ class Box_model {
       box_pieces.add(back_panel);
     }
     Piece_model  inner = Piece_model(
-        box_pieces.length,
+        get_id(),
         'inner',
         'F',
         'inner',
@@ -348,16 +356,17 @@ class Box_model {
         top_Distence -
         shelf_material_thickness;
 
-    double depth_of_shelf = box_depth - bac_panel_distence-back_panel_thickness - frontage_Gap;
+    double depth_of_shelf = (is_back_panel)?(box_depth - bac_panel_distence-back_panel_thickness - frontage_Gap):
+    (box_depth -frontage_Gap);
 
     Piece_model old_inner = Piece_model(
-        box_pieces.length,
+        get_id(),
         'inner',
         'F',
         'inner',
         box_pieces[inner].piece_width,
         top_Distence,
-        0,
+        (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate,
             box_pieces[inner].piece_origin.y_coordinate +
@@ -367,13 +376,13 @@ class Box_model {
     );
 
     Piece_model new_inner = Piece_model(
-        box_pieces.length,
+      get_id(),
         'inner',
         'F',
         'inner',
         box_pieces[inner].piece_width,
         down_Distence,
-        0,
+      (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate,
             box_pieces[inner].piece_origin.y_coordinate,
@@ -381,7 +390,7 @@ class Box_model {
         );
 
     Piece_model new_piece = Piece_model(
-        box_pieces.length,
+      get_id(),
         '$shelf_type',
        'H',
         init_material_name,
@@ -407,7 +416,7 @@ class Box_model {
   add_Shelf(int inner, double top_Distence, double frontage_Gap,
       double shelf_material_thickness, int Quantity, String shelf_type,double back_distance) {
     if (Quantity == 1) {
-      if (box_pieces[inner].piece_height > top_Distence && top_Distence > 0) {
+      if (box_pieces[inner].piece_height > top_Distence && top_Distence >= 0) {
         add_Shelf_pattern(inner, top_Distence, frontage_Gap,
             shelf_material_thickness, shelf_type,false,Quantity, back_distance);
         Navigator.of(Get.overlayContext!).pop();
@@ -442,7 +451,7 @@ class Box_model {
     }
   }
 
-  ///start Partition
+  /// start Partition
 
   add_Partition_pattern(int inner, double left_Distence, double frontage_Gap,
       double partition_material_thickness,bool is_copy,int Partition_quantity,double back_distance)
@@ -453,31 +462,33 @@ class Box_model {
         left_Distence -
         partition_material_thickness;
 
-    double depth_of_partition = box_depth - back_distance-back_panel_thickness - frontage_Gap;
+    double depth_of_partition =(is_back_panel)? (box_depth - back_distance-back_panel_thickness - frontage_Gap):
+    (box_depth - frontage_Gap);
 
     Piece_model old_inner = Piece_model(
-        box_pieces.length,
+      get_id(),
         'inner',
         'F',
         'inner',
         left_Distence,
         box_pieces[inner].piece_height,
-        0,
+      (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate,
             box_pieces[inner].piece_origin.y_coordinate,
-            box_pieces[inner].piece_origin.z_coordinate),
+            box_pieces[inner].piece_origin.z_coordinate
+        ),
         );
 
 
     Piece_model new_inner = Piece_model(
-        box_pieces.length,
+      get_id(),
         'inner',
         'F',
         'inner',
         right_Distence,
         box_pieces[inner].piece_height,
-        0,
+      (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate +
                 left_Distence +
@@ -491,7 +502,7 @@ class Box_model {
 
 
     Piece_model new_piece = Piece_model(
-        box_pieces.length,
+      get_id(),
         'partition',
         'V',
         init_material_name,
@@ -526,7 +537,7 @@ class Box_model {
       double partition_material_thickness, int Quantity,double back_distance)
   {
     if (Quantity == 1) {
-      if (box_pieces[inner].piece_width > left_Distence && left_Distence > 0) {
+      if (box_pieces[inner].piece_width-18 >= left_Distence && left_Distence >= 0) {
         add_Partition_pattern(
             inner, left_Distence, frontage_Gap, partition_material_thickness,false,Quantity,back_distance);
         Navigator.of(Get.overlayContext!).pop();
@@ -546,7 +557,7 @@ class Box_model {
       {
         double distance = double.parse(((box_pieces[inner].piece_width - Quantity * partition_material_thickness) / (Quantity + 1)).toStringAsFixed(1));
 
-          add_Partition_pattern(inner                , distance, frontage_Gap, partition_material_thickness,false,Quantity,back_distance);
+          add_Partition_pattern(inner, distance, frontage_Gap, partition_material_thickness,false,Quantity,back_distance);
 
         for (int i = 1; i < Quantity; i++) {
           add_Partition_pattern(box_pieces.length - 1, distance, frontage_Gap, partition_material_thickness,true ,Quantity,back_distance);
@@ -607,7 +618,7 @@ class Box_model {
     );
 
     Piece_model door_piece = Piece_model(
-        box_pieces.length,
+      get_id(),
         'Door',
         'F',
         door_model.material_name,
@@ -656,7 +667,7 @@ class Box_model {
         door_inner.piece_origin.y_coordinate -
             base_thickness ,
         (!door_model.inner_door)?
-        (door_inner.piece_origin.z_coordinate-door_model.material_thickness - 1):
+        (door_inner.piece_origin.z_coordinate-door_model.material_thickness ):
         (door_inner.piece_origin.z_coordinate)
     );
 
@@ -666,7 +677,7 @@ class Box_model {
 
 
     Piece_model door_piece_1 = Piece_model(
-        box_pieces.length,
+      get_id(),
         'Right Door',
         'F',
         door_model.material_name,
@@ -676,7 +687,7 @@ class Box_model {
         door_origin_1,
          );
     Piece_model door_piece_2 = Piece_model(
-        box_pieces.length,
+      get_id(),
         'Left Door',
         'F',
         door_model.material_name,

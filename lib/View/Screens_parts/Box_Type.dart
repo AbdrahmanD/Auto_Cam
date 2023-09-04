@@ -109,7 +109,7 @@ class _Box_TypeState extends State<Box_Type> {
                         ),
                         InkWell(
                           onTap: () {
-                            draw_controller.box_type="base_box";
+                            draw_controller.box_type="base_cabinet";
 
                             Get.to(Cabinet_Editor());
                           },
