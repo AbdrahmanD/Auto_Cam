@@ -269,9 +269,9 @@ class View_option extends StatelessWidget {
                         itemCount: draw_controller
                             .box_repository.box_model.value.box_pieces.length,
                         itemBuilder: (context, i) {
-                          if (draw_controller.box_repository.box_model.value
-                                  .box_pieces[i].piece_name !=
-                              'inner') {
+                          if (true
+                          // draw_controller.box_repository.box_model.value.box_pieces[i].piece_name != 'inner'
+                          ) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
@@ -426,6 +426,25 @@ class View_option extends StatelessWidget {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
                                         children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'ID :',
+                                                style: TextStyle(
+                                                    fontSize: text_size),
+                                              ),
+                                              Text(
+                                                '${p.piece_id}',
+                                                style: TextStyle(
+                                                    fontSize: text_size),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            height: 0.5,
+                                            width: 100,
+                                            color: Colors.grey,
+                                          ),
                                           Row(
                                             children: [
                                               Text(
@@ -706,12 +725,7 @@ class View_option extends StatelessWidget {
                                   height: 24,
                                   child: TextFormField(
                                     style: TextStyle(fontSize: 12),
-                                    onChanged: (_) {
-                                      if (x_move.text.toString() != '') {
-                                        x_move_value = double.parse(
-                                            x_move.text.toString());
-                                      }
-                                    },
+
                                     enabled: true,
                                     inputFormatters: [
                                       DecimalTextInputFormatter(2)
@@ -744,12 +758,7 @@ class View_option extends StatelessWidget {
                                   height: 24,
                                   child: TextFormField(
                                     style: TextStyle(fontSize: 12),
-                                    onChanged: (_) {
-                                      if (y_move.text.toString() != '') {
-                                        y_move_value = double.parse(
-                                            y_move.text.toString());
-                                      }
-                                    },
+
                                     enabled: true,
                                     inputFormatters: [
                                       DecimalTextInputFormatter(2)
@@ -778,6 +787,8 @@ class View_option extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
+                                x_move_value=double.parse(x_move.text.toString());
+                                y_move_value=double.parse(y_move.text.toString());
                                 draw_controller.move_piece(
                                     x_move_value, y_move_value);
                                 x_move_value = 0;
@@ -796,22 +807,22 @@ class View_option extends StatelessWidget {
                             ),
 
                             /// flip
-                            // SizedBox(
-                            //   height: 8,
-                            // ),
-                            // InkWell(
-                            //   onTap: (){
-                            //
-                            //     draw_controller.flip_piece();
-                            //
-                            //
-                            //   },
-                            //   child: Container(
-                            //     width: 100,height: 32,decoration: BoxDecoration(
-                            //       color: Colors.teal[300],borderRadius: BorderRadius.circular(4)
-                            //   ),child: Center(child: Text('Flip piece')),
-                            //   ),
-                            // ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            InkWell(
+                              onTap: (){
+
+                                draw_controller.flip_piece();
+
+
+                              },
+                              child: Container(
+                                width: 100,height: 32,decoration: BoxDecoration(
+                                  color: Colors.teal[300],borderRadius: BorderRadius.circular(4)
+                              ),child: Center(child: Text('Flip piece')),
+                              ),
+                            ),
 
                             SizedBox(
                               height: 16,

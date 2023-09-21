@@ -735,7 +735,9 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 ),
                 InkWell(
                     onTap: () {
-Get.to(Piece_List_view());
+                      draw_Controller.analyze();
+                      Future.delayed(Duration(milliseconds: 1000)).then((value) => Get.to(Piece_List_view()));
+
 
                     },
                     child: Icon(

@@ -250,18 +250,18 @@ class Draw_Controller extends GetxController {
       my_widget = Container(
         child: Column(
           children: [
-            Text('general menu'),
-            SizedBox(height: 24,),
-            InkWell(
-              onTap: (){
-                AnalyzeJoins  analayzejoins=AnalyzeJoins(box_repository.box_model.value);
-                Navigator.of(Get.overlayContext!).pop();
-
-              },
-                child: Container(color: Colors.blueGrey,
-                  width: 100,height: 50,child: Center(child: Text('analyze box')),
-                ),
-            ),
+            // Text('general menu'),
+            // SizedBox(height: 24,),
+            // InkWell(
+            //   onTap: (){
+            //     AnalyzeJoins  analayzejoins=AnalyzeJoins(box_repository.box_model.value);
+            //     Navigator.of(Get.overlayContext!).pop();
+            //
+            //   },
+            //     child: Container(color: Colors.blueGrey,
+            //       width: 100,height: 50,child: Center(child: Text('analyze box')),
+            //     ),
+            // ),
           ],
         ),
       );
@@ -330,66 +330,10 @@ class Draw_Controller extends GetxController {
     add_Box(nb);
   }
 
-  add_filler(Filler_model filler_model) {
+  add_filler(Filler_model filler_model ) {
+    box_repository.box_model.value.add_filler(filler_model,hover_id);
+    draw_Box();
 
-    double x = 0;
-    double y = 0;
-    double z = 0;
-
-    // print(box_repository.box_model.value.box_pieces[hover_id].piece_name);
-
-    late double filler_w;
-    late double filler_h;
-    late double filler_th;
-
-    if (filler_model.filler_vertical) {
-      filler_w = box_repository.box_model.value.box_pieces[hover_id].piece_width;
-      filler_h = filler_model.height;
-      filler_th = filler_model.thickness;
-    }
-    else {
-      filler_h = box_repository.box_model.value.box_pieces[hover_id].piece_width;
-      filler_w = filler_model.height;
-      filler_th = filler_model.thickness;
-    }
-
-    if (filler_model.corner == 1) {
-      x = box_repository.box_model.value.box_pieces[hover_id].piece_origin.x_coordinate;
-      y = box_repository.box_model.value.box_pieces[hover_id].piece_origin.y_coordinate + filler_model.y_move;
-      z = box_repository.box_model.value.box_pieces[hover_id].piece_origin.z_coordinate + filler_model.x_move;
-    }
-    else if (filler_model.corner == 2) {
-      x = box_repository.box_model.value.box_pieces[hover_id].piece_origin.x_coordinate;
-      y = box_repository.box_model.value.box_pieces[hover_id].piece_origin.y_coordinate + filler_model.y_move;
-      z = box_repository.box_model.value.box_pieces[hover_id].piece_origin.z_coordinate + box_repository.box_model.value.box_depth + filler_model.x_move - filler_th ;
-    }
-    else if (filler_model.corner == 3) {
-      x = box_repository.box_model.value.box_pieces[hover_id].piece_origin.x_coordinate;
-      y = box_repository.box_model.value.box_pieces[hover_id].piece_origin.y_coordinate + box_repository.box_model.value.box_pieces[hover_id].piece_height+ filler_model.y_move - filler_h ;
-      z = box_repository.box_model.value.box_pieces[hover_id].piece_origin.z_coordinate + box_repository.box_model.value.box_depth + filler_model.x_move - filler_th;
-    }
-    else if (filler_model.corner == 4){
-      x = box_repository.box_model.value.box_pieces[hover_id].piece_origin.x_coordinate;
-      y = box_repository.box_model.value.box_pieces[hover_id].piece_origin.y_coordinate + box_repository.box_model.value.box_pieces[hover_id].piece_height - filler_h + filler_model.y_move;
-      z = box_repository.box_model.value.box_pieces[hover_id].piece_origin.z_coordinate + filler_model.x_move;
-    }
-
-
-    Point_model filler_origin = Point_model(x, y, z);
-
-    Piece_model filler = Piece_model(
-        box_repository.box_model.value.box_pieces.length,
-        'filler',
-       filler_model.filler_vertical?("F"):"H",
-        box_repository.box_model.value.init_material_name,
-        filler_w,
-        filler_h,
-        filler_th,
-        filler_origin);
-
-
-
-    box_repository.box_model.value.box_pieces.add(filler);
   }
 
   /// add door method
@@ -473,11 +417,21 @@ class Draw_Controller extends GetxController {
 
       }
       else if (view_port == 'R') {
-        rotate_around_X(p);
+        if (p.piece_direction == 'H') {
+          p.piece_direction="F";
+        }else if (p.piece_direction == 'F'){
+          p.piece_direction="H";
+        }
       }
       else if (view_port == 'T') {
 
        }
+
+      Piece_model np=Piece_model(p.piece_id, p.piece_name, p.piece_direction, p.material_name,
+          p.piece_height, p.piece_width, p.piece_thickness, p.piece_origin);
+
+      b.box_pieces.remove(p);
+      b.box_pieces.add(np);
 
 
     }
@@ -509,7 +463,10 @@ class Draw_Controller extends GetxController {
   }
 
 
-
+/// analyze box
+  analyze(){
+    AnalyzeJoins  analayzejoins=AnalyzeJoins(box_repository.box_model.value);
+  }
 
 
   move_box(Offset offset) {
@@ -593,6 +550,10 @@ class Draw_Controller extends GetxController {
       }
     }
   }
+
+
+
+
 
   /// this only debug mode method to get information off the box pieces
   print_pieces_coordinate() {

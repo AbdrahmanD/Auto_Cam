@@ -5,10 +5,15 @@ import 'package:get/get.dart';
 class Box_Repository extends GetxController{
 
 
-  double absolute_fix_distence_standerd=32;
-  double absolute_fix_distence_small=25;
-  double absolute_fix_distence_midume=30;
-  double absolute_fix_distence_big=50;
+  double standerd_distence=32;
+
+  double start_distence_small=25;
+  double start_distence_big=50;
+
+  double small_length_limit=100;
+  double medium_length_limit=300;
+  double big_length_limit=500;
+
 
 
 
@@ -16,8 +21,8 @@ class Box_Repository extends GetxController{
   double wood_pen_horizontal_depth=30;
   double wood_pen_vertical_depth=10;
 
-  double nut_pen_diameter=10;
-  double nut_pen_depth=11;
+  double scew_nut_diameter=10;
+  double scew_nut_depth=11;
 
   double minifix_diameter=15;
   double minifix_depth=14;

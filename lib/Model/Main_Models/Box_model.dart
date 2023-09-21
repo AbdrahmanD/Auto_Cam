@@ -1,5 +1,6 @@
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,7 +51,7 @@ class Box_model {
 
  int  get_id(){
     piece_id++;
-    // print(piece_id);
+    // print("piece_id : $piece_id");
     return piece_id;
   }
 
@@ -404,12 +405,12 @@ class Box_model {
          );
 
 
-    box_pieces.remove(box_pieces[inner]);
 
     box_pieces.add(old_inner);
     box_pieces.add(new_piece);
     box_pieces.add(new_inner);
 
+    box_pieces.remove(box_pieces[inner]);
 
   }
 
@@ -524,12 +525,13 @@ class Box_model {
     ///
     ///
 
-    box_pieces.remove(box_pieces[inner]);
 
     box_pieces.add(old_inner);
-    box_pieces.add(new_piece);
     box_pieces.add(new_inner);
+    box_pieces.add(new_piece);
 
+
+    box_pieces.remove(box_pieces[inner]);
 
   }
 
@@ -586,6 +588,121 @@ class Box_model {
     else {
       add_double_door_pattern(door_model);
     }
+  }
+
+  add_filler(Filler_model filler_model , int hover_id){
+
+    double x = 0;
+    double y = 0;
+    double z = 0;
+
+
+    late double filler_w;
+    late double filler_h;
+    late double filler_th;
+
+    /// vertical filler
+    if(filler_model.filler_vertical){
+
+        filler_w =box_pieces[hover_id].piece_width;
+        filler_h = filler_model.height;
+        filler_th = filler_model.thickness;
+
+
+      double origin_x=box_pieces[hover_id].piece_origin.x_coordinate;
+      double origin_y=box_pieces[hover_id].piece_origin.y_coordinate;
+      double origin_z=box_pieces[hover_id].piece_origin.z_coordinate;
+
+      if (filler_model.corner == 1) {
+        x = origin_x;
+        y = origin_y + filler_model.y_move;
+        z = origin_z + filler_model.x_move;
+      }
+      else if (filler_model.corner == 2) {
+        x = origin_x;
+        y = origin_y + filler_model.y_move;
+        z = origin_z + filler_model.x_move +   box_depth - ((filler_model.filler_vertical)?filler_th:filler_w );
+      }
+      else if (filler_model.corner == 3) {
+        x = origin_x;
+        y = origin_y + filler_model.y_move +   box_pieces[hover_id].piece_height -
+            ((filler_model.filler_vertical)?filler_h:filler_th ) ;
+        z = origin_z + filler_model.x_move + box_depth  -  ((filler_model.filler_vertical)?filler_th:filler_w );
+      }
+      else if (filler_model.corner == 4){
+        x = origin_x;
+        y = origin_y + filler_model.y_move+  box_pieces[hover_id].piece_height -
+            ((filler_model.filler_vertical)?filler_h:filler_th ) ;
+        z = origin_z + filler_model.x_move;
+      }
+
+
+      Point_model filler_origin = Point_model(x, y, z);
+
+      Piece_model filler = Piece_model(
+          get_id(),
+          'filler',
+          "F",
+          init_material_name,
+          filler_w,
+          filler_h,
+          filler_th,
+          filler_origin);
+
+      box_pieces.add(filler);
+
+    }
+    /// horizontal filler
+    else{
+
+        filler_h = box_pieces[hover_id].piece_width;
+        filler_w = filler_model.height;
+        filler_th = filler_model.thickness;
+
+
+      double origin_x=box_pieces[hover_id].piece_origin.x_coordinate;
+      double origin_y=box_pieces[hover_id].piece_origin.y_coordinate;
+      double origin_z=box_pieces[hover_id].piece_origin.z_coordinate;
+
+      if (filler_model.corner == 1) {
+        x = origin_x;
+        y = origin_y + filler_model.y_move;
+        z = origin_z + filler_model.x_move;
+      }
+      else if (filler_model.corner == 2) {
+        x = origin_x;
+        y = origin_y + filler_model.y_move;
+        z = origin_z + filler_model.x_move +   box_depth - ((filler_model.filler_vertical)?filler_th:filler_w );
+      }
+      else if (filler_model.corner == 3) {
+        x = origin_x;
+        y = origin_y + filler_model.y_move +   box_pieces[hover_id].piece_height -
+            ((filler_model.filler_vertical)?filler_h:filler_th ) ;
+        z = origin_z + filler_model.x_move + box_depth  -  ((filler_model.filler_vertical)?filler_th:filler_w );
+      }
+      else if (filler_model.corner == 4){
+        x = origin_x;
+        y = origin_y + filler_model.y_move+  box_pieces[hover_id].piece_height -
+            ((filler_model.filler_vertical)?filler_h:filler_th ) ;
+        z = origin_z + filler_model.x_move;
+      }
+
+
+      Point_model filler_origin = Point_model(x, y, z);
+
+      Piece_model filler = Piece_model(
+          get_id(),
+          'filler',
+          "H",
+          init_material_name,
+          filler_w,
+          filler_h,
+          filler_th,
+          filler_origin);
+
+      box_pieces.add(filler);
+    }
+
   }
 
   add_single_door_pattern(Door_Model door_model) {

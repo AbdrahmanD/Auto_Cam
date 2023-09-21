@@ -23,11 +23,11 @@ class Single_Face {
 
   late int name;
   late List<Point_model> corners;
-  // late List<Single_Face> face_item;
+  late List<Bore_model> bores;
   late List<Join_Line> joines;
 
 
-  Single_Face(this.name, this.corners,this.joines);
+  Single_Face(this.name, this.corners,this.joines,this.bores);
 }
 
 class Point_model{
@@ -67,6 +67,7 @@ class tow_D_Line{
 
 
 }
+
 class Join_Line{
 
   late Point_model start_point;
@@ -74,4 +75,12 @@ class Join_Line{
   late String join_type;
 
   Join_Line(this.start_point, this.end_point, this.join_type);
+}
+
+class Bore_model{
+ late  Point_model origin;
+ late double diameter;
+ late double depth;
+
+ Bore_model(this.origin, this.diameter, this.depth);
 }
