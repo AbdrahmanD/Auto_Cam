@@ -1,7 +1,5 @@
 
-import 'package:auto_cam/View/Cabinet_Editor.dart';
 import 'package:auto_cam/View/Screens_parts/Box_Type.dart';
-import 'package:auto_cam/View/Single_Piece_Editor.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -125,45 +123,6 @@ class Main_Screen extends StatelessWidget {
                     ),
                   ),
 
-                  // single piece
-                  Flexible(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Single Piece",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 32,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            // Get.to(Single_Piece_Editor());
-                            Get.defaultDialog(title:'ERROR',content: Text('sorry , this choice not ready yet'));
-                          },
-                          child: Container(
-                              height: 150,
-                              // color: Colors.red,
-                              child: Padding(
-                                padding: const EdgeInsets.all(18.0),
-                                child: Image.asset(
-                                  "lib/assets/images/sp.png",
-                                ),
-                              )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Text(
-                            "set fitting for single piece  ",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
 
                 ],
               ),

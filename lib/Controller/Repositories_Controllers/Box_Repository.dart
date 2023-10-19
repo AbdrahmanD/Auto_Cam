@@ -1,5 +1,6 @@
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:get/get.dart';
 
 class Box_Repository extends GetxController{
@@ -11,8 +12,9 @@ class Box_Repository extends GetxController{
   double start_distence_big=50;
 
   double small_length_limit=100;
-  double medium_length_limit=300;
-  double big_length_limit=500;
+  double medium_length_limit=150;
+  double larg_length_limit=300;
+  double X_larg_length_limit=500;
 
 
 
@@ -26,13 +28,15 @@ class Box_Repository extends GetxController{
 
   double minifix_diameter=15;
   double minifix_depth=14;
-  double minifix_distence=32;
+  double minifix_distence=33;
 
 
   double top_base_piece_width=100;
 
   double pack_panel_grove_depth=9;
   double pack_panel_distence=18;
+
+  List<JoinHolePattern> join_patterns=[];
 
 
   Rx<Box_model> box_model=Box_model(

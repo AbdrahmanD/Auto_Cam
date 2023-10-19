@@ -1,5 +1,6 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/View/Cabinet_Editor.dart';
+import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/CreateJoinholepatternDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -166,6 +167,7 @@ class _Box_TypeState extends State<Box_Type> {
                 ],
               ),
 
+              /// saved boxes
               SizedBox(
                 height: 64,
               ),
@@ -182,6 +184,27 @@ class _Box_TypeState extends State<Box_Type> {
                         ,child: Icon(Icons.file_open,size: 42,color: Colors.red[500],)),
                     SizedBox(width: 32,),
                     Text("open box from repository",style: TextStyle(fontSize: 22),)
+                  ],
+                ),
+              ),
+
+              /// setting
+              SizedBox(
+                height: 24,
+              ),
+
+              Container(width: w,
+                child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+                    InkWell(onTap: (){
+                      Get.defaultDialog(
+                          title: "Create KD Join pattern",
+                          content: CreateJoinholepatternDialog());
+                    }
+                        ,child: Icon(Icons.settings,size: 42,color: Colors.red[500],)),
+                    SizedBox(width: 32,),
+                    Text("setting",style: TextStyle(fontSize: 22),)
                   ],
                 ),
               ),

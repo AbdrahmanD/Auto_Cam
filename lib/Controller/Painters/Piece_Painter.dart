@@ -1,5 +1,6 @@
 
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -22,7 +23,6 @@ if(value<400){
 }else{
   scal=0.6*(450/value);
 }
-print(scal);
 
     draw_piece(canvas,scal);
   }

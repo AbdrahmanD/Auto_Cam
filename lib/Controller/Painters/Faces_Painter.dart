@@ -1,4 +1,5 @@
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -33,7 +34,7 @@ class Faces_Painter extends CustomPainter {
 
     Paint bore_painter = Paint()
       ..style = PaintingStyle.fill
-      ..color = Colors.teal;
+      ..color = Colors.black;
     //
     // Offset view_1 = Offset(65, 150);
     // Offset view_2 = Offset(45, 200);
@@ -94,7 +95,6 @@ class Faces_Painter extends CustomPainter {
       int f=5;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        // print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -131,9 +131,16 @@ class Faces_Painter extends CustomPainter {
        f=3;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        // print(piece_model.piece_faces.faces[f].bores.length);
+
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
+
+          // print('face : $f'
+          //     ' x : ${piece_model.piece_faces.faces[f].bores[i].origin.x_coordinate} ,'
+          //     ' y : ${piece_model.piece_faces.faces[f].bores[i].origin.y_coordinate} ,'
+          //     ' z : ${piece_model.piece_faces.faces[f].bores[i].origin.z_coordinate} ,'
+          // );
+          // print('==========');
 
           double x= (piece_model.piece_faces.faces[f].bores[i].origin.x_coordinate-piece_model.piece_origin.x_coordinate)*my_scale+view_2.dy;
           double y= (piece_model.piece_faces.faces[f].bores[i].origin.y_coordinate-piece_model.piece_origin.y_coordinate)*my_scale+view_2.dx;
@@ -171,7 +178,6 @@ class Faces_Painter extends CustomPainter {
        f=0;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        // print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -205,12 +211,19 @@ class Faces_Painter extends CustomPainter {
       f=1;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        // print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
-          double x= (piece_model.piece_faces.faces[f].bores[i].origin.x_coordinate-piece_model.piece_origin.x_coordinate)*my_scale+view_4.dy;
-          double y= (piece_model.piece_faces.faces[f].bores[i].origin.y_coordinate-piece_model.piece_origin.y_coordinate)*my_scale+view_4.dx;
+          //  print('face : $f'
+          //     ' x : ${piece_model.piece_faces.faces[f].bores[i].origin.x_coordinate} ,'
+          //     ' y : ${piece_model.piece_faces.faces[f].bores[i].origin.y_coordinate} ,'
+          //     ' z : ${piece_model.piece_faces.faces[f].bores[i].origin.z_coordinate} ,'
+          // );
+          // print('==========');
+
+
+          double x=  (piece_model.piece_faces.faces[f].bores[i].origin.x_coordinate-piece_model.piece_origin.x_coordinate)*my_scale+view_4.dx;
+          double y=  (piece_model.piece_faces.faces[f].bores[i].origin.y_coordinate-piece_model.piece_origin.y_coordinate)*my_scale+view_4.dx;
           double z= -(piece_model.piece_faces.faces[f].bores[i].origin.z_coordinate-piece_model.piece_origin.z_coordinate)*my_scale+view_4.dy;
 
           canvas.drawCircle(Offset(y, z), piece_model.piece_faces.faces[f].bores[i].diameter*my_scale/2, bore_painter);
@@ -241,7 +254,6 @@ class Faces_Painter extends CustomPainter {
       f=4;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        // print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -260,7 +272,8 @@ class Faces_Painter extends CustomPainter {
       double p_6_w = (p_6_2.x_coordinate - p_6_0.x_coordinate)*my_scale;
       double p_6_h = (p_6_2.z_coordinate - p_6_0.z_coordinate)*my_scale;
       List<tow_D_Line> lines_6=[];
-      for(int i=0;i<piece_model.piece_faces.faces[2].joines.length;i++){
+      for(int i=0;i<piece_model.piece_faces.faces[2].joines.length;i++)
+      {
 
         Point_model jsp=piece_model.piece_faces.faces[2].joines[i].start_point;
         Point_model jep=piece_model.piece_faces.faces[2].joines[i].end_point;
@@ -276,7 +289,6 @@ class Faces_Painter extends CustomPainter {
       f=2;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        // print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -363,11 +375,9 @@ class Faces_Painter extends CustomPainter {
       draw_face(canvas, p_2_w, p_2_h, view_2,lines_2);
 
        f=4;
-      // print(piece_model.piece_faces.faces[f].bores.length);
 
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -402,11 +412,9 @@ class Faces_Painter extends CustomPainter {
       draw_face(canvas, p_3_w, p_3_h, view_3,lines_3);
 
       f=3;
-      // print('face 3 : (${piece_model.piece_faces.faces[f].bores.length})');
 
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -439,11 +447,9 @@ class Faces_Painter extends CustomPainter {
       draw_face(canvas, p_4_w, p_4_h, view_4,lines_4);
 
       f=5;
-      print('face 5 : (${piece_model.piece_faces.faces[f].bores.length})');
 
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -510,7 +516,6 @@ class Faces_Painter extends CustomPainter {
       f=1;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -563,7 +568,6 @@ class Faces_Painter extends CustomPainter {
       int f=0;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -599,7 +603,6 @@ class Faces_Painter extends CustomPainter {
       f=3;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -635,7 +638,6 @@ class Faces_Painter extends CustomPainter {
       f=4;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -672,7 +674,6 @@ class Faces_Painter extends CustomPainter {
       f=1;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -705,7 +706,6 @@ class Faces_Painter extends CustomPainter {
       f=2;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -741,7 +741,6 @@ class Faces_Painter extends CustomPainter {
       f=5;
       if(piece_model.piece_faces.faces[f].bores.length>0){
 
-        print(piece_model.piece_faces.faces[f].bores.length);
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -774,6 +773,8 @@ class Faces_Painter extends CustomPainter {
         Offset(300, 90), 6.5, 2);
     draw_text(canvas, 'material name :    ${piece_model.material_name}',
         Offset(300, 130), 6.5, 2);
+    draw_text(canvas, 'Piece Direction :    ${piece_model.piece_direction}',
+        Offset(300, 160), 6.5, 2);
   }
 
   draw_face(Canvas canvas , double w , double h , Offset origin ,List<tow_D_Line> lines){
@@ -786,7 +787,7 @@ class Faces_Painter extends CustomPainter {
     Paint line_painter = Paint()
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke
-      ..color = Colors.red;
+      ..color = Colors.teal[200]!;
 
 
 
@@ -794,17 +795,18 @@ class Faces_Painter extends CustomPainter {
 
     p.moveTo(origin.dx        ,origin.dy        );
     p.lineTo(origin.dx + w,    origin.dy        );
-    p.lineTo(origin.dx + w,    origin.dy - h);
-    p.lineTo(origin.dx        ,origin.dy - h);
+    p.lineTo(origin.dx + w,    origin.dy - h    );
+    p.lineTo(origin.dx        ,origin.dy - h    );
     p.lineTo(origin.dx        ,origin.dy        );
 
     canvas.drawPath(p, piece_painter);
-    // for(int i=0;i<lines.length;i++){
-    //   canvas.drawLine(
-    //       Offset(lines[i].start_point.dx, lines[i].start_point.dy),
-    //       Offset(lines[i].end_point.dx,   lines[i].end_point.dy),
-    //       line_painter);
-    // }
+
+    for(int i=0;i<lines.length;i++){
+      canvas.drawLine(
+          Offset(lines[i].start_point.dx, lines[i].start_point.dy),
+          Offset(lines[i].end_point.dx,   lines[i].end_point.dy),
+          line_painter);
+    }
 
 
 

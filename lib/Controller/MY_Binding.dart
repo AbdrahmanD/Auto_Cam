@@ -12,6 +12,9 @@ class MY_Binding extends Bindings{
    Get.lazyPut(()=> Excel_Controller());
    Get.lazyPut(()=> Draw_Controller());
 
+
+
+
   }
 
 }

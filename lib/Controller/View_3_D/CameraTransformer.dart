@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:vector_math/vector_math.dart';
 
 class CameraTransformer {

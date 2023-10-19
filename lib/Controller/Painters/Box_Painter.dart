@@ -1,5 +1,6 @@
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -89,6 +90,11 @@ late Offset start_select_window;
       ..style = PaintingStyle.fill
       ..color = Colors.teal[100]!;
 
+    Paint helper_filler = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.grey[400]!
+    ..blendMode=BlendMode.darken;
+
     for (int i = 0; i < box_model.box_pieces.length; i++) {
       Piece_model piece_model = box_model.box_pieces[i];
 
@@ -163,7 +169,12 @@ late Offset start_select_window;
         }
       }
 
-          canvas.drawPath(path, line_painter);
+      if(piece_model.piece_name=="HELPER"){
+        canvas.drawPath(path, helper_filler);
+      }
+        else {
+        canvas.drawPath(path, line_painter);
+      }
 
 
 

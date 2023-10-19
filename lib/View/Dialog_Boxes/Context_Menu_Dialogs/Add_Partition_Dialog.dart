@@ -296,7 +296,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                           if (!v!.isEmpty) {
                             double dv = double.parse(v.toString());
                             if (dv <= (drawerController.box_repository.box_model.value.box_depth-100-24)) {
-                              print('ok');
+
                             } else {
                               return 'the Gap big';
                             }

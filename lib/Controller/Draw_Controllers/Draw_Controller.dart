@@ -1,21 +1,26 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:auto_cam/Controller/Draw_Controllers/AnalyzeJoins.dart';
 import 'package:auto_cam/Controller/Painters/Box_Painter.dart';
+import 'package:auto_cam/Controller/Painters/Pattern_Painter.dart';
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
-import 'package:auto_cam/Controller/Painters/three_D_Painter.dart';
-import 'package:auto_cam/Controller/View_3_D/transform_controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Draw_Controller extends GetxController {
+
+
   RxDouble drawing_scale = (0.8).obs;
   Rx<Size> screen_size = Size(800, 600).obs;
   Rx<Offset> mouse_position = Offset(0, 0).obs;
@@ -36,6 +41,11 @@ class Draw_Controller extends GetxController {
   RxString view_port = 'F'.obs;
 
   Rx<Offset> box_move_offset = Offset(0, 0).obs;
+
+
+  Draw_Controller(){
+    read_pattern_files();
+  }
 
   ///
   select_window_method(Offset offset, bool select) {
@@ -66,20 +76,44 @@ class Draw_Controller extends GetxController {
       Piece_model p = box_repository.box_model.value.box_pieces[i];
 
       if (view_port == 'F') {
-        left_down_point_x = (my_origin.x_coordinate + p.piece_faces.faces[4].corners[0].x_coordinate * drawing_scale.value);
-        left_down_point_y = (my_origin.y_coordinate - p.piece_faces.faces[4].corners[0].y_coordinate * drawing_scale.value);
-        right_up_point_x = (my_origin.x_coordinate +  p.piece_faces.faces[4].corners[2].x_coordinate * drawing_scale.value);
-        right_up_point_y = (my_origin.y_coordinate -  p.piece_faces.faces[4].corners[2].y_coordinate * drawing_scale.value);
+        left_down_point_x = (my_origin.x_coordinate +
+            p.piece_faces.faces[4].corners[0].x_coordinate *
+                drawing_scale.value);
+        left_down_point_y = (my_origin.y_coordinate -
+            p.piece_faces.faces[4].corners[0].y_coordinate *
+                drawing_scale.value);
+        right_up_point_x = (my_origin.x_coordinate +
+            p.piece_faces.faces[4].corners[2].x_coordinate *
+                drawing_scale.value);
+        right_up_point_y = (my_origin.y_coordinate -
+            p.piece_faces.faces[4].corners[2].y_coordinate *
+                drawing_scale.value);
       } else if (view_port == 'R') {
-        left_down_point_x = (my_origin.x_coordinate + p.piece_faces.faces[1].corners[0].z_coordinate * drawing_scale.value);
-        left_down_point_y = (my_origin.y_coordinate - p.piece_faces.faces[1].corners[0].y_coordinate * drawing_scale.value);
-        right_up_point_x = (my_origin.x_coordinate +  p.piece_faces.faces[1].corners[2].z_coordinate * drawing_scale.value);
-        right_up_point_y = (my_origin.y_coordinate -  p.piece_faces.faces[1].corners[2].y_coordinate * drawing_scale.value);
+        left_down_point_x = (my_origin.x_coordinate +
+            p.piece_faces.faces[1].corners[0].z_coordinate *
+                drawing_scale.value);
+        left_down_point_y = (my_origin.y_coordinate -
+            p.piece_faces.faces[1].corners[0].y_coordinate *
+                drawing_scale.value);
+        right_up_point_x = (my_origin.x_coordinate +
+            p.piece_faces.faces[1].corners[2].z_coordinate *
+                drawing_scale.value);
+        right_up_point_y = (my_origin.y_coordinate -
+            p.piece_faces.faces[1].corners[2].y_coordinate *
+                drawing_scale.value);
       } else if (view_port == 'T') {
-        left_down_point_x = (my_origin.x_coordinate + p.piece_faces.faces[0].corners[0].x_coordinate * drawing_scale.value);
-        left_down_point_y = (my_origin.y_coordinate - p.piece_faces.faces[0].corners[0].z_coordinate * drawing_scale.value);
-        right_up_point_x = (my_origin.x_coordinate +  p.piece_faces.faces[0].corners[2].x_coordinate * drawing_scale.value);
-        right_up_point_y = (my_origin.y_coordinate -  p.piece_faces.faces[0].corners[2].z_coordinate * drawing_scale.value);
+        left_down_point_x = (my_origin.x_coordinate +
+            p.piece_faces.faces[0].corners[0].x_coordinate *
+                drawing_scale.value);
+        left_down_point_y = (my_origin.y_coordinate -
+            p.piece_faces.faces[0].corners[0].z_coordinate *
+                drawing_scale.value);
+        right_up_point_x = (my_origin.x_coordinate +
+            p.piece_faces.faces[0].corners[2].x_coordinate *
+                drawing_scale.value);
+        right_up_point_y = (my_origin.y_coordinate -
+            p.piece_faces.faces[0].corners[2].z_coordinate *
+                drawing_scale.value);
       }
 
       bool x_compare = right_up_point_x < ssx && left_down_point_x > esx;
@@ -110,7 +144,6 @@ class Draw_Controller extends GetxController {
     } else {
       selected_id.value = [];
     }
-    // print(selected_id);
   }
 
   Box_model get_box() {
@@ -171,22 +204,32 @@ class Draw_Controller extends GetxController {
     late double right_up_point_y;
 
     if (view_port == 'F') {
-      left_down_point_x = (my_origin.x_coordinate + p.piece_faces.faces[4].corners[0].x_coordinate * drawing_scale.value);
-      left_down_point_y = (my_origin.y_coordinate - p.piece_faces.faces[4].corners[0].y_coordinate * drawing_scale.value);
-      right_up_point_x = (my_origin.x_coordinate +  p.piece_faces.faces[4].corners[2].x_coordinate * drawing_scale.value);
-      right_up_point_y = (my_origin.y_coordinate -  p.piece_faces.faces[4].corners[2].y_coordinate * drawing_scale.value);
-    }
-    else if (view_port == 'R') {
-      left_down_point_x = (my_origin.x_coordinate + p.piece_faces.faces[1].corners[0].z_coordinate * drawing_scale.value);
-      left_down_point_y = (my_origin.y_coordinate - p.piece_faces.faces[1].corners[0].y_coordinate * drawing_scale.value);
-      right_up_point_x = (my_origin.x_coordinate +  p.piece_faces.faces[1].corners[2].z_coordinate * drawing_scale.value);
-      right_up_point_y = (my_origin.y_coordinate -  p.piece_faces.faces[1].corners[2].y_coordinate * drawing_scale.value);
-    }
-    else if (view_port == 'T') {
-      left_down_point_x = (my_origin.x_coordinate + p.piece_faces.faces[0].corners[0].x_coordinate * drawing_scale.value);
-      left_down_point_y = (my_origin.y_coordinate - p.piece_faces.faces[0].corners[0].z_coordinate * drawing_scale.value);
-      right_up_point_x = (my_origin.x_coordinate +  p.piece_faces.faces[0].corners[2].x_coordinate * drawing_scale.value);
-      right_up_point_y = (my_origin.y_coordinate -  p.piece_faces.faces[0].corners[2].z_coordinate * drawing_scale.value);
+      left_down_point_x = (my_origin.x_coordinate +
+          p.piece_faces.faces[4].corners[0].x_coordinate * drawing_scale.value);
+      left_down_point_y = (my_origin.y_coordinate -
+          p.piece_faces.faces[4].corners[0].y_coordinate * drawing_scale.value);
+      right_up_point_x = (my_origin.x_coordinate +
+          p.piece_faces.faces[4].corners[2].x_coordinate * drawing_scale.value);
+      right_up_point_y = (my_origin.y_coordinate -
+          p.piece_faces.faces[4].corners[2].y_coordinate * drawing_scale.value);
+    } else if (view_port == 'R') {
+      left_down_point_x = (my_origin.x_coordinate +
+          p.piece_faces.faces[1].corners[0].z_coordinate * drawing_scale.value);
+      left_down_point_y = (my_origin.y_coordinate -
+          p.piece_faces.faces[1].corners[0].y_coordinate * drawing_scale.value);
+      right_up_point_x = (my_origin.x_coordinate +
+          p.piece_faces.faces[1].corners[2].z_coordinate * drawing_scale.value);
+      right_up_point_y = (my_origin.y_coordinate -
+          p.piece_faces.faces[1].corners[2].y_coordinate * drawing_scale.value);
+    } else if (view_port == 'T') {
+      left_down_point_x = (my_origin.x_coordinate +
+          p.piece_faces.faces[0].corners[0].x_coordinate * drawing_scale.value);
+      left_down_point_y = (my_origin.y_coordinate -
+          p.piece_faces.faces[0].corners[0].z_coordinate * drawing_scale.value);
+      right_up_point_x = (my_origin.x_coordinate +
+          p.piece_faces.faces[0].corners[2].x_coordinate * drawing_scale.value);
+      right_up_point_y = (my_origin.y_coordinate -
+          p.piece_faces.faces[0].corners[2].z_coordinate * drawing_scale.value);
     }
 
     double mouse_position_x = mouse_position.value.dx;
@@ -202,11 +245,6 @@ class Draw_Controller extends GetxController {
       is_hover = true;
     }
 
-//     print('name : ${p.piece_name} , X0=${p.piece_faces.right_face.corners[0].z_coordinate} ,Y0=${p.piece_faces.right_face.corners[0].y_coordinate}');
-//     print('name : ${p.piece_name} , X0=${p.piece_faces.right_face.corners[2].z_coordinate} ,Y0=${p.piece_faces.right_face.corners[2].y_coordinate}');
-//     print('mouse X:${mouse_position_x} , Y${mouse_position_y}');
-// print('######');
-
     return is_hover;
   }
 
@@ -218,12 +256,10 @@ class Draw_Controller extends GetxController {
       if (box_repository.box_model.value.box_pieces[hover_id].piece_name ==
           'inner') {
         dialogs_titles = 'Edit Box';
-      }
-      else {
+      } else {
         dialogs_titles = 'Edit Piece';
       }
-    }
-    else {
+    } else {
       dialogs_titles = 'properties';
     }
     return dialogs_titles;
@@ -239,14 +275,12 @@ class Draw_Controller extends GetxController {
       if (box_repository.box_model.value.box_pieces[hover_id].piece_name ==
           'inner') {
         my_widget = Main_Edit_Dialog();
-      }
-      else {
+      } else {
         my_widget = Container(
           child: Text('pieces menu'),
         );
       }
-    }
-    else {
+    } else {
       my_widget = Container(
         child: Column(
           children: [
@@ -299,7 +333,7 @@ class Draw_Controller extends GetxController {
         b.top_base_piece_width,
         b.is_back_panel,
         b.box_origin);
-    nb.piece_id=b.piece_id;
+    nb.piece_id = b.piece_id;
     nb.box_pieces = b.box_pieces;
     add_Box(nb);
   }
@@ -325,15 +359,14 @@ class Draw_Controller extends GetxController {
         b.top_base_piece_width,
         b.is_back_panel,
         b.box_origin);
-    nb.piece_id=b.piece_id;
+    nb.piece_id = b.piece_id;
     nb.box_pieces = b.box_pieces;
     add_Box(nb);
   }
 
-  add_filler(Filler_model filler_model ) {
-    box_repository.box_model.value.add_filler(filler_model,hover_id);
+  add_filler(Filler_model filler_model) {
+    box_repository.box_model.value.add_filler(filler_model, hover_id);
     draw_Box();
-
   }
 
   /// add door method
@@ -414,26 +447,26 @@ class Draw_Controller extends GetxController {
       Piece_model p = b.box_pieces[selected_id[i]];
 
       if (view_port == 'F') {
-
-      }
-      else if (view_port == 'R') {
+      } else if (view_port == 'R') {
         if (p.piece_direction == 'H') {
-          p.piece_direction="F";
-        }else if (p.piece_direction == 'F'){
-          p.piece_direction="H";
+          p.piece_direction = "F";
+        } else if (p.piece_direction == 'F') {
+          p.piece_direction = "H";
         }
-      }
-      else if (view_port == 'T') {
+      } else if (view_port == 'T') {}
 
-       }
-
-      Piece_model np=Piece_model(p.piece_id, p.piece_name, p.piece_direction, p.material_name,
-          p.piece_height, p.piece_width, p.piece_thickness, p.piece_origin);
+      Piece_model np = Piece_model(
+          p.piece_id,
+          p.piece_name,
+          p.piece_direction,
+          p.material_name,
+          p.piece_height,
+          p.piece_width,
+          p.piece_thickness,
+          p.piece_origin);
 
       b.box_pieces.remove(p);
       b.box_pieces.add(np);
-
-
     }
 
     box_repository.add_box_to_repo(b);
@@ -441,33 +474,25 @@ class Draw_Controller extends GetxController {
     draw_Box();
   }
 
+  rotate_around_X(Piece_model p) {
+    double h = p.piece_width;
+    double th = p.piece_thickness;
 
-  rotate_around_X(Piece_model p){
-
-
-      double h =p.piece_width;
-      double th=p.piece_thickness;
-
-      ///
-      p.piece_faces.faces[4].corners[2].y_coordinate+=h-th;
-      p.piece_faces.faces[4].corners[3].y_coordinate+=h-th;
-      p.piece_faces.faces[5].corners[0].z_coordinate+=h-th;
-      p.piece_faces.faces[5].corners[1].z_coordinate-=h-th;
-      p.piece_faces.faces[5].corners[2].y_coordinate+=h-th;
-      p.piece_faces.faces[5].corners[2].z_coordinate-=h-th;
-      p.piece_faces.faces[5].corners[3].y_coordinate+=h-th;
-      p.piece_faces.faces[5].corners[3].z_coordinate-=h-th;
-
-
-
+    ///
+    p.piece_faces.faces[4].corners[2].y_coordinate += h - th;
+    p.piece_faces.faces[4].corners[3].y_coordinate += h - th;
+    p.piece_faces.faces[5].corners[0].z_coordinate += h - th;
+    p.piece_faces.faces[5].corners[1].z_coordinate -= h - th;
+    p.piece_faces.faces[5].corners[2].y_coordinate += h - th;
+    p.piece_faces.faces[5].corners[2].z_coordinate -= h - th;
+    p.piece_faces.faces[5].corners[3].y_coordinate += h - th;
+    p.piece_faces.faces[5].corners[3].z_coordinate -= h - th;
   }
 
-
-/// analyze box
-  analyze(){
-    AnalyzeJoins  analayzejoins=AnalyzeJoins(box_repository.box_model.value);
+  /// analyze box
+  analyze() {
+    AnalyzeJoins analayzejoins = AnalyzeJoins(box_repository.box_model.value);
   }
-
 
   move_box(Offset offset) {
     // Offset offset = box_move_offset.value;
@@ -526,12 +551,11 @@ class Draw_Controller extends GetxController {
 
   /// extract executable files with xml extension  to use in this case with kdt drilling machine
   extract_xml_files() {
-    DateTime dateTime = DateTime.now();
-    String date = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
+    // DateTime dateTime = DateTime.now();
+    // String date = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
 
-    String box_name =
-        '(${box_repository.box_model.value.box_width}X${box_repository.box_model.value.box_height}X'
-        '${box_repository.box_model.value.box_depth})-${date}';
+    // String box_name = '(${box_repository.box_model.value.box_width}X${box_repository.box_model.value.box_height}X'
+    //     '${box_repository.box_model.value.box_depth})-${date}';
 
     for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
       if (box_repository.box_model.value.box_pieces[i].piece_name == "inner" ||
@@ -551,8 +575,118 @@ class Draw_Controller extends GetxController {
     }
   }
 
+  save_joinHolePattern(JoinHolePattern joinHolePattern) async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    oldDirectory.createSync();
+
+    final Directory newDirectory = Directory('${oldDirectory.path}/Setting');
+    newDirectory.createSync();
+
+    final Directory finalDirectory =
+        Directory('${newDirectory.path}/Join_Patterns');
+    finalDirectory.createSync();
+
+    final path = await finalDirectory.path;
+    String file_path = '$path/${joinHolePattern.name}-pattern';
+      // writeJsonToFile(joinHolePattern.toJson(),file_path);
+    File file = File(file_path);
+
+    try {
+      // Convert the data to a JSON string
+      String jsonData = jsonEncode(joinHolePattern.toJson());
+
+      // Write the JSON data to the file
+      file.writeAsStringSync(jsonData);
+
+      print('JSON data has been written to $file_path');
+    } catch (e) {
+      print('Error writing JSON data to the file: $e');
+    }
+  }
+
+  read_pattern_files() async {
+
+     box_repository.join_patterns.clear();
+    final rootdirectory = await getApplicationDocumentsDirectory();
+
+    final Directory directory =
+        Directory('${rootdirectory.path}/Auto_Cam/Setting/Join_Patterns');
+
+    if (directory.existsSync()) {
+
+      List<FileSystemEntity> files = directory.listSync();
+
+      // Filter the list to include only files
+      List<File> fileList = [];
+      for (var fileEntity in files) {
+        if (fileEntity is File) {
+          fileList.add(fileEntity as File);
+        }
+      }
+
+      // Now, fileList contains a list of File objects from the directory.
+      for (var file in fileList) {
+        if (file.existsSync()) {
+
+          File f = File(file.path);
+
+          if (f.path.contains('pattern')) {
+            String content = await f.readAsString();
+
+            JoinHolePattern joinHolePattern=JoinHolePattern.fromJson(json.decode(content));
+box_repository.join_patterns.add(joinHolePattern);
 
 
+          }
+
+
+        } else {
+          print('Directory does not exist: $directory');
+        }
+
+      }
+      print("pattern_length : ${box_repository.join_patterns.length}");
+
+    }
+
+
+  }
+  //
+  // Pattern_Painter Paint_Pattern_draw(JoinHolePattern  pattern){
+  //
+  //   Pattern_Painter pattern_painter = Pattern_Painter(pattern);
+  //
+  //   return pattern_painter;
+  // }
+
+
+ // Pattern_Painter apply_pattern_to_piece(double length){
+ //
+ //    List<Bore_unit> bores=[];
+ //
+ //    for(JoinHolePattern pattern in box_repository.join_patterns){
+ //      double min=pattern.min_length;
+ //      double max=pattern.max_length;
+ //
+ //      if(min<length && length<=max){
+ //        bores=pattern.apply_pattern(length);
+ //      }
+ //    }
+ //    Pattern_Painter pattern_painter=Pattern_Painter(bores, length);
+ //
+ //    return pattern_painter;
+ //
+ //  }
+
+  Pattern_Painter draw_Pattern(List<Bore_unit> Paint_bore_units,double length,double scal){
+
+    Pattern_Painter pattern_painter=Pattern_Painter(Paint_bore_units, length,scal);
+
+    return pattern_painter;
+
+  }
 
 
   /// this only debug mode method to get information off the box pieces

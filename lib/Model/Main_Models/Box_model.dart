@@ -1,6 +1,7 @@
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -144,7 +145,7 @@ class Box_model {
   {
     Piece_model  top_piece_1 = Piece_model(
         get_id(),
-        'top',
+        'top_1',
         'H',
         init_material_name,
         top_base_piece_width,
@@ -155,7 +156,7 @@ class Box_model {
     );
     Piece_model  top_piece_2 = Piece_model(
         get_id(),
-        'top',
+        'top_2',
         'H',
         init_material_name,
         top_base_piece_width,
@@ -243,7 +244,7 @@ class Box_model {
   {
     Piece_model  top_piece_1 = Piece_model(
         get_id(),
-        'top',
+        'top_1',
         'H',
         init_material_name,
         top_base_piece_width,
@@ -254,7 +255,7 @@ class Box_model {
     );
     Piece_model  top_piece_2 = Piece_model(
         get_id(),
-        'top',
+        'top_2',
         'H',
         init_material_name,
         top_base_piece_width,
@@ -270,7 +271,7 @@ class Box_model {
 
     Piece_model  base_piece_1 = Piece_model(
         get_id(),
-        'base',
+        'base_1',
         'H',
         init_material_name,
         top_base_piece_width,
@@ -281,7 +282,7 @@ class Box_model {
     );
     Piece_model  base_piece_2 = Piece_model(
         get_id(),
-        'base',
+        'base_2',
         'H',
         init_material_name,
         top_base_piece_width,
@@ -392,7 +393,7 @@ class Box_model {
 
     Piece_model new_piece = Piece_model(
       get_id(),
-        '$shelf_type',
+        '$shelf_type-${piece_id}',
        'H',
         init_material_name,
         depth_of_shelf,
@@ -430,9 +431,9 @@ class Box_model {
       if (((Quantity - 1) * top_Distence +
               Quantity * shelf_material_thickness) <
           box_pieces[inner].piece_height) {
-        double distance = double.parse(((box_pieces[inner].piece_height -
-            Quantity * shelf_material_thickness) /
-            (Quantity + 1)).toStringAsFixed(1));
+        double distance = double.parse(
+            ((box_pieces[inner].piece_height - Quantity * shelf_material_thickness) / (Quantity + 1)).toStringAsFixed(1)
+        );
 
         add_Shelf_pattern(inner, distance, frontage_Gap,
             shelf_material_thickness, shelf_type,false,Quantity, back_distance);
@@ -459,9 +460,7 @@ class Box_model {
   {
 
 
-    double right_Distence = box_pieces[inner].piece_width -
-        left_Distence -
-        partition_material_thickness;
+    double right_Distence = box_pieces[inner].piece_width - left_Distence - partition_material_thickness;
 
     double depth_of_partition =(is_back_panel)? (box_depth - back_distance-back_panel_thickness - frontage_Gap):
     (box_depth - frontage_Gap);
@@ -504,7 +503,7 @@ class Box_model {
 
     Piece_model new_piece = Piece_model(
       get_id(),
-        'partition',
+        'partition-${piece_id}',
         'V',
         init_material_name,
         depth_of_partition,
@@ -527,8 +526,8 @@ class Box_model {
 
 
     box_pieces.add(old_inner);
-    box_pieces.add(new_inner);
     box_pieces.add(new_piece);
+    box_pieces.add(new_inner);
 
 
     box_pieces.remove(box_pieces[inner]);
@@ -557,9 +556,11 @@ class Box_model {
       ( (Quantity - 1) * left_Distence + Quantity * partition_material_thickness) < box_pieces[inner].piece_width
          )
       {
-        double distance = double.parse(((box_pieces[inner].piece_width - Quantity * partition_material_thickness) / (Quantity + 1)).toStringAsFixed(1));
+        double distance = double.parse((
+                (box_pieces[inner].piece_width - Quantity * partition_material_thickness) / (Quantity + 1)
+            ).toStringAsFixed(1));
 
-          add_Partition_pattern(inner, distance, frontage_Gap, partition_material_thickness,false,Quantity,back_distance);
+          add_Partition_pattern(inner                , distance, frontage_Gap, partition_material_thickness,false,Quantity,back_distance);
 
         for (int i = 1; i < Quantity; i++) {
           add_Partition_pattern(box_pieces.length - 1, distance, frontage_Gap, partition_material_thickness,true ,Quantity,back_distance);
@@ -638,10 +639,10 @@ class Box_model {
 
 
       Point_model filler_origin = Point_model(x, y, z);
-
+int id=get_id();
       Piece_model filler = Piece_model(
-          get_id(),
-          'filler',
+          id ,
+          'filler_$id',
           "F",
           init_material_name,
           filler_w,
@@ -689,10 +690,11 @@ class Box_model {
 
 
       Point_model filler_origin = Point_model(x, y, z);
+        int id=get_id();
 
       Piece_model filler = Piece_model(
-          get_id(),
-          'filler',
+          id ,
+          'filler_$id',
           "H",
           init_material_name,
           filler_w,
@@ -733,10 +735,11 @@ class Box_model {
         (door_inner.piece_origin.z_coordinate-door_model.material_thickness ):
         (door_inner.piece_origin.z_coordinate)
     );
+    int id=get_id();
 
     Piece_model door_piece = Piece_model(
-      get_id(),
-        'Door',
+      id,
+        'Door_$id',
         'F',
         door_model.material_name,
         door_width,
@@ -792,10 +795,10 @@ class Box_model {
     ///  ///////////////////////////////////////
 
 
-
+int id = get_id();
     Piece_model door_piece_1 = Piece_model(
-      get_id(),
-        'Right Door',
+     id,
+        'Door_$id Right',
         'F',
         door_model.material_name,
         door_width,
@@ -804,8 +807,8 @@ class Box_model {
         door_origin_1,
          );
     Piece_model door_piece_2 = Piece_model(
-      get_id(),
-        'Left Door',
+      id,
+      'Door_$id left',
         'F',
         door_model.material_name,
         door_width,

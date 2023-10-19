@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 
 
 class LineWithType{

@@ -3,6 +3,7 @@ import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/View/Main_Screen.dart';
 import 'package:auto_cam/View/Piece_List_view.dart';
 import 'package:flutter/material.dart';
@@ -654,6 +655,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               onTap: () {
                 if(form_key.currentState!.validate()){
 
+                  String  box_name=box_name_controller.text.toString();
                   double  width_value=double.parse(width_controller.text.toString());
                   double  hight_value=double.parse(hight_controller.text.toString());
                   double  depth_value=double.parse(depth_controller.text.toString());
@@ -673,7 +675,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
 
                   Box_model b=Box_model(
-                      draw_Controller.box_repository.box_model.value.box_name,
+                      box_name,
                       draw_Controller.box_type,
                       width_value,
                       hight_value,
@@ -775,7 +777,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
                       Excel_Controller my_excel=Excel_Controller();
                       my_excel.create_excel(draw_Controller.box_repository.box_model.value);
-// my_excel.create_excel();
+
 
                     },
                     child: Icon(

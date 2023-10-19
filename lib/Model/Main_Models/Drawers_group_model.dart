@@ -1,5 +1,6 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +24,8 @@ late bool inner_drawer;
   late double drawer_base_material_thickness;
   late double drawer_box_height;
   late double drawer_box_depth;
-
+  late double side_gap;
+  late  double drawer_slide_height;
 
 
 
@@ -43,7 +45,8 @@ late bool inner_drawer;
       this.drawer_box_material_thickness,
       this.drawer_base_material_thickness,
       this.drawer_box_height,
-      this.drawer_box_depth
+      this.drawer_box_depth,
+      this.side_gap
       );
 
   add_drawer()
@@ -51,15 +54,11 @@ late bool inner_drawer;
 
     Draw_Controller draw_controller = Get.find();
 
-    double side_gap=10;
-    if(drawer_type=='normal_side'){
-      side_gap=26;
-    }
-    else if(drawer_type=='concealed_hafle_1'){
-      side_gap=10;
-    }
+    
 
-    double deferent_between_face_Y_and_box_y=20;
+    double deferent_between_face_Y_and_box_y=25;
+     drawer_slide_height=44;
+
     var inner =
     draw_controller.box_repository.box_model.value.box_pieces[inner_id];
 
@@ -109,10 +108,10 @@ late bool inner_drawer;
       Point_model drawer_face_origin = Point_model(
           inner.piece_origin.x_coordinate - left_thickness + left_gape,
           y_distence,
-          inner_drawer?(inner.piece_origin.z_coordinate):(inner.piece_origin.z_coordinate-drawer_face_material_thickness));
+          inner_drawer?(inner.piece_origin.z_coordinate):(inner.piece_origin.z_coordinate-drawer_face_material_thickness-1));
       Point_model drawer_box_origin =
       Point_model(inner.piece_origin.x_coordinate + side_gap/2, y_distence + deferent_between_face_Y_and_box_y,
-          inner_drawer?inner.piece_origin.z_coordinate+drawer_face_material_thickness:inner.piece_origin.z_coordinate);
+          inner_drawer?inner.piece_origin.z_coordinate+drawer_face_material_thickness:(inner.piece_origin.z_coordinate-1));
 
       double dx =  drawer_box_origin.x_coordinate-drawer_face_origin.x_coordinate ;
       double dy = deferent_between_face_Y_and_box_y;
@@ -153,7 +152,7 @@ late bool inner_drawer;
 
     Piece_model piece_model = Piece_model(
         id,
-        'drawer ${drawer_id} Face ',
+        'DF drawer ${drawer_id} Face ',
         'F',
         '${drawer_face_material_thickness} mm ${drawer_face_material_name}',
         face_width,
@@ -183,7 +182,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_left = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-        'drawer ${drawer_id} left ',
+        'DBL drawer ${drawer_id} left ',
         'V',
         "${drawer_box_material_thickness} mm",
         drawer_box_depth,
@@ -196,7 +195,7 @@ late bool inner_drawer;
     /// right side
     Piece_model drawer_box_right = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-        'drawer ${drawer_id} right ',
+        'DBR drawer ${drawer_id} right ',
         'V',
         "${drawer_box_material_thickness} mm",
         drawer_box_depth,
@@ -215,7 +214,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_front = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-        'drawer ${drawer_id} front ',
+        'DBF drawer ${drawer_id} front ',
         'F',
         "${drawer_box_material_thickness} mm",
         box_width - drawer_box_material_thickness * 2,
@@ -230,7 +229,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_back = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-        'drawer ${drawer_id} back ',
+        'DBB drawer ${drawer_id} back ',
         'F',
         "${drawer_box_material_thickness} mm",
         box_width - drawer_box_material_thickness * 2,
@@ -253,6 +252,36 @@ late bool inner_drawer;
             box_origin.z_coordinate+drawer_box_material_thickness-grove_depth),
         );
 
+    /// left side slider
+
+    Piece_model drawer_left_slider = Piece_model(
+      draw_controller.box_repository.box_model.value.get_id(),
+      'HELPER',
+      'V',
+      "HELPER",
+      drawer_box_depth,
+      drawer_slide_height,
+      side_gap/2,
+      Point_model(box_origin.x_coordinate-side_gap/2, box_origin.y_coordinate, box_origin.z_coordinate),
+    );
+
+
+    /// right side slider
+    Piece_model drawer_right_slider = Piece_model(
+      draw_controller.box_repository.box_model.value.get_id(),
+      'HELPER',
+      'V',
+      "HELPER",
+      drawer_box_depth,
+      drawer_slide_height,
+      side_gap/2,
+      Point_model(
+          box_origin.x_coordinate + box_width ,
+          box_origin.y_coordinate,
+          box_origin.z_coordinate),
+    );
+
+
 
 
     drawer_box.add(drawer_box_left);
@@ -260,6 +289,8 @@ late bool inner_drawer;
     drawer_box.add(drawer_box_front);
     drawer_box.add(drawer_box_back);
     drawer_box.add(drawer_box_base_panel);
+    drawer_box.add(drawer_left_slider);
+    drawer_box.add(drawer_right_slider);
 
     return drawer_box;
   }

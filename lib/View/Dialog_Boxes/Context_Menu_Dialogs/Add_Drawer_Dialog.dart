@@ -21,6 +21,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
   TextEditingController drawer_box_depth = TextEditingController();
 
   TextEditingController drawer_quantity = TextEditingController();
+  TextEditingController side_gap_controller= TextEditingController();
 
   Draw_Controller draw_controller = Get.find();
 
@@ -338,6 +339,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                     each_top_gape_controller.text='${double.parse(round_gape_controller.text.toString())}';
                     left_gape_controller    .text='${draw_controller.box_repository.box_model.value.init_material_thickness+double.parse(round_gape_controller.text.toString())}';
                     right_gape_controller   .text='${draw_controller.box_repository.box_model.value.init_material_thickness+double.parse(round_gape_controller.text.toString())}';
+                    right_gape_controller   .text='${draw_controller.box_repository.box_model.value.init_material_thickness+double.parse(round_gape_controller.text.toString())}';
 
                   }
 
@@ -367,6 +369,9 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                   int double_drawer_quantity =
                   double.parse(drawer_quantity.text.toString()).toInt();
 
+                  double double_slide_side_gap =
+                  double.parse(side_gap_controller.text.toString())*2;
+
                   Drawers_group_model my_drawer = Drawers_group_model(
                       1,
                       draw_controller.hover_id,
@@ -383,7 +388,8 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                       double_drawer_box_material_thickness,
                       double_drawer_base_material_thickness,
                       double_drawer_box_height,
-                      double_drawer_box_depth);
+                      double_drawer_box_depth,
+                      double_slide_side_gap);
 
                   my_drawer.add_drawer();
                   Navigator.of(context).pop();
@@ -644,6 +650,43 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                 SizedBox(
                   height: 6,
                 ),
+
+                /// drawer side gap
+                Row(
+                  children: [
+                    Text('Side Gap each side   '),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 80,
+                      height: 30,
+                      child: TextFormField(
+                        onChanged: (_) {
+                          // bottom_changed();
+                        },
+                        enabled: true,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        controller: side_gap_controller,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 6,
+                ),
                 Row(
                   children: [
                     Text('Drawers quantity       '),
@@ -676,7 +719,6 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                     ),
                   ],
                 ),
-
               ],
             ),
           ),

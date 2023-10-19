@@ -5,6 +5,7 @@ import 'package:auto_cam/Controller/View_3_D/CameraTransformer.dart';
 import 'package:auto_cam/Controller/Painters/three_D_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

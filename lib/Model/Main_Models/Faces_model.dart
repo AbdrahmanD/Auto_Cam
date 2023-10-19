@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
+
 
 class Faces_model{
 
@@ -30,15 +32,7 @@ class Single_Face {
   Single_Face(this.name, this.corners,this.joines,this.bores);
 }
 
-class Point_model{
 
-  late double x_coordinate;
-  late double y_coordinate;
-  late double z_coordinate;
-
-  Point_model(this.x_coordinate,this.y_coordinate,this.z_coordinate);
-
-}
 
 class LineWithType{
   late List<Line> lines;
@@ -77,10 +71,10 @@ class Join_Line{
   Join_Line(this.start_point, this.end_point, this.join_type);
 }
 
-class Bore_model{
- late  Point_model origin;
- late double diameter;
- late double depth;
 
- Bore_model(this.origin, this.diameter, this.depth);
+class TowFaceBoring{
+  late List<Bore_model> H_bores;
+  late List<Bore_model> V_bores;
+
+  TowFaceBoring(this.H_bores, this.V_bores);
 }

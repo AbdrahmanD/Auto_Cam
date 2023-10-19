@@ -78,7 +78,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
       if(fixed_shelf){
         shelf_type='fixed_shelf';
       }else if (help_shelf){
-        shelf_type='help_shelf';
+        shelf_type='HELPER';
       }else{
         shelf_type='shelf';
       }
@@ -119,7 +119,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
   shelf_center_change() {
     Quantity.text='1';
     Material.text='${draw_Controller.box_repository.box_model.value.init_material_thickness}';
-    Front_Gap.text='24';
+    Front_Gap.text='0';
     if (!shelf_center) {
       help_shelf=false;
       shelf_center = true;
@@ -176,7 +176,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
     super.initState();
     Quantity.text='1';
     Material.text='${draw_Controller.box_repository.box_model.value.init_material_thickness}';
-    Front_Gap.text='24';
+    Front_Gap.text='0';
     shelf_center = true;
     distance = false;
     proportional = false;
@@ -324,7 +324,6 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                           if (!v!.isEmpty) {
                             double dv = double.parse(v.toString());
                             if (dv <= (draw_Controller.box_repository.box_model.value.box_depth-100-24)) {
-                              print('ok');
                             } else {
                               return 'the Gap big';
                             }
