@@ -35,12 +35,14 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
 
   top_changed() {
     double double_top_distance;
+    double material_thickness=double.parse(Material.text.toString());
+
     if (distance) {
       if (Top_Distance.text.toString() != '') {
-        double_top_distance = double.parse(Top_Distance.text.toString());
-        Bottom_Distance.text =
-            '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_height -
-                double_top_distance-18}';
+        double_top_distance = double.parse(double.parse(Top_Distance.text.toString()).toStringAsFixed(2));
+        double Bottom_Distance_0=draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_height -
+                double_top_distance-material_thickness;
+        Bottom_Distance.text=Bottom_Distance_0.toStringAsFixed(2);
       }
     } else if (proportional) {
       if (Top_Distance.text.toString() != '') {
@@ -54,12 +56,14 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
 
   bottom_changed() {
     double double_bottom_distance;
+    double material_thickness=double.parse(Material.text.toString());
+
     if (distance) {
       if (Bottom_Distance.text.toString() != '') {
-        double_bottom_distance = double.parse(Bottom_Distance.text.toString());
-        Top_Distance.text = ''
-            '${draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_height
-            - double_bottom_distance-18}';
+        double_bottom_distance = double.parse((double.parse(Bottom_Distance.text.toString())).toStringAsFixed(2));
+      double  Top_Distance_0 =draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_height
+            - double_bottom_distance-material_thickness;
+      Top_Distance.text=Top_Distance_0.toStringAsFixed(2);
       }
     } else if (proportional) {
       if (Bottom_Distance.text.toString() != '') {
@@ -74,6 +78,9 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
   add_shelf() {
 
     if (my_key.currentState!.validate()) {
+      double frontage_Gap = double.parse(Front_Gap.text.toString());
+      double material = double.parse(Material.text.toString());
+
       String shelf_type;
       if(fixed_shelf){
         shelf_type='fixed_shelf';
@@ -82,35 +89,38 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
       }else{
         shelf_type='shelf';
       }
-      if (!shelf_center) {
+      if (quantity) {
+        if (!shelf_center) {
 
-        if (distance) {
-          double top_Distence = quantity ? double.parse(Top_Distance.text.toString()) : 0;
-          double frontage_Gap = double.parse(Front_Gap.text.toString());
-          double material = double.parse(Material.text.toString());
-          draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
-              double.parse(Quantity.text.toString()).toInt(),shelf_type);
+          if (distance) {
+            double top_Distence = quantity ? double.parse(Top_Distance.text.toString()) : 0;
+
+            draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
+                double.parse(Quantity.text.toString()).toInt(),shelf_type);
+          }
+          else if (proportional) {
+            double top_Distence =
+                (double.parse(Top_Distance.text.toString()) / 100) *
+                        (draw_Controller.box_repository.box_model.value
+                            .box_pieces[draw_Controller.hover_id].piece_height) -
+                    double.parse(Material.text.toString()) / 2;
+
+            draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
+                double.parse(Quantity.text.toString()).toInt(),shelf_type);
+          }
         }
-        else if (proportional) {
-          double top_Distence =
-              (double.parse(Top_Distance.text.toString()) / 100) *
-                      (draw_Controller.box_repository.box_model.value
-                          .box_pieces[draw_Controller.hover_id].piece_height) -
-                  double.parse(Material.text.toString()) / 2;
-          double frontage_Gap = double.parse(Front_Gap.text.toString());
-          double material = double.parse(Material.text.toString());
+        else {
+          double top_Distence = draw_Controller.box_repository.box_model.value
+                      .box_pieces[draw_Controller.hover_id].piece_height /
+                  2 -
+              double.parse(Material.text.toString()) / 2;
+
           draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
               double.parse(Quantity.text.toString()).toInt(),shelf_type);
         }
       }
-      else {
-        double top_Distence = draw_Controller.box_repository.box_model.value
-                    .box_pieces[draw_Controller.hover_id].piece_height /
-                2 -
-            double.parse(Material.text.toString()) / 2;
-        double frontage_Gap = double.parse(Front_Gap.text.toString());
-        double material = double.parse(Material.text.toString());
-        draw_Controller.add_shelf(top_Distence, frontage_Gap, material,
+      else{
+        draw_Controller.add_shelf(0, frontage_Gap, material,
             double.parse(Quantity.text.toString()).toInt(),shelf_type);
       }
     }
@@ -274,6 +284,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                             if (double.parse(Quantity.text.toString()).toInt() >
                                 1) {
                               quantity = false;
+                              shelf_center=false;
                               Top_Distance.text = '0';
                               Bottom_Distance.text = '0';
                               setState(() {});
@@ -317,7 +328,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                       width: 120,
                       height: 40,
                       child: TextFormField(
-                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        inputFormatters: [DecimalTextInputFormatter(1)],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Front_Gap,
                         validator: (v) {
@@ -359,7 +370,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                       width: 120,
                       height: 40,
                       child: TextFormField(
-                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        inputFormatters: [DecimalTextInputFormatter(1)],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Material,
                         decoration: InputDecoration(
@@ -529,7 +540,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                         },
                         enabled: (quantity
                             && edit_enable),
-                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        inputFormatters: [DecimalTextInputFormatter(1)],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Top_Distance,
                         decoration: InputDecoration(
@@ -569,7 +580,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                           bottom_changed();
                         },
                         enabled: (quantity && edit_enable),
-                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        inputFormatters: [DecimalTextInputFormatter(1)],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Bottom_Distance,
                         decoration: InputDecoration(

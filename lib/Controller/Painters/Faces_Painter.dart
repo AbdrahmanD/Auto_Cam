@@ -775,6 +775,8 @@ class Faces_Painter extends CustomPainter {
         Offset(300, 130), 6.5, 2);
     draw_text(canvas, 'Piece Direction :    ${piece_model.piece_direction}',
         Offset(300, 160), 6.5, 2);
+    // draw_text(canvas, 'Piece X :    ${piece_model.piece_origin.x_coordinate}',
+    //     Offset(300, 200), 6.5, 2);
   }
 
   draw_face(Canvas canvas , double w , double h , Offset origin ,List<tow_D_Line> lines){

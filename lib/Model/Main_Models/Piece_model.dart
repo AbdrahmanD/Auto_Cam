@@ -2,6 +2,7 @@
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 
+
 class Piece_model{
 
 
@@ -45,43 +46,41 @@ class Piece_model{
     double y0=piece_origin.y_coordinate;
     double z0=piece_origin.z_coordinate;
 
+
     if(piece_direction=='V'){
 
-      p_1=Point_model(x0, y0, z0);
-      p_2=Point_model(x0+piece_thickness, y0, z0);
-      p_3=Point_model(x0+piece_thickness, y0+piece_height, z0);
-      p_4=Point_model(x0, y0+piece_height, z0);
-
-      p_5=Point_model(x0, y0, z0+piece_width);
-      p_6=Point_model(x0+piece_thickness, y0, z0+piece_width);
-      p_7=Point_model(x0+piece_thickness, y0+piece_height, z0+piece_width);
-      p_8=Point_model(x0, y0+piece_height, z0+piece_width);
+      p_1=Point_model(x0, y0, z0).correct_cordinate();
+      p_2=Point_model(x0+piece_thickness, y0, z0).correct_cordinate();
+      p_3=Point_model(x0+piece_thickness, y0+piece_height, z0).correct_cordinate();
+      p_4=Point_model(x0, y0+piece_height, z0).correct_cordinate();
+      p_5=Point_model(x0, y0, z0+piece_width).correct_cordinate();
+      p_6=Point_model(x0+piece_thickness, y0, z0+piece_width).correct_cordinate();
+      p_7=Point_model(x0+piece_thickness, y0+piece_height, z0+piece_width).correct_cordinate();
+      p_8=Point_model(x0, y0+piece_height, z0+piece_width).correct_cordinate();
 
     }
     else if(piece_direction=='H'){
 
-      p_1=Point_model(x0, y0, z0);
-      p_2=Point_model(x0+piece_height, y0, z0);
-      p_3=Point_model(x0+piece_height, y0+piece_thickness, z0);
-      p_4=Point_model(x0, y0+piece_thickness, z0);
-
-      p_5=Point_model(x0, y0, z0+piece_width);
-      p_6=Point_model(x0+piece_height, y0, z0+piece_width);
-      p_7=Point_model(x0+piece_height, y0+piece_thickness, z0+piece_width);
-      p_8=Point_model(x0, y0+piece_thickness, z0+piece_width);
+      p_1=Point_model(x0, y0, z0).correct_cordinate();
+      p_2=Point_model(x0+piece_height, y0, z0).correct_cordinate();
+      p_3=Point_model(x0+piece_height, y0+piece_thickness, z0).correct_cordinate();
+      p_4=Point_model(x0, y0+piece_thickness, z0).correct_cordinate();
+      p_5=Point_model(x0, y0, z0+piece_width).correct_cordinate();
+      p_6=Point_model(x0+piece_height, y0, z0+piece_width).correct_cordinate();
+      p_7=Point_model(x0+piece_height, y0+piece_thickness, z0+piece_width).correct_cordinate();
+      p_8=Point_model(x0, y0+piece_thickness, z0+piece_width).correct_cordinate();
 
     }
     else if(piece_direction=='F'){
 
-      p_1=Point_model(x0, y0, z0);
-      p_2=Point_model(x0+piece_width, y0, z0);
-      p_3=Point_model(x0+piece_width, y0+piece_height, z0);
-      p_4=Point_model(x0, y0+piece_height, z0);
-
-      p_5=Point_model(x0, y0, z0+piece_thickness);
-      p_6=Point_model(x0+piece_width, y0, z0+piece_thickness);
-      p_7=Point_model(x0+piece_width, y0+piece_height, z0+piece_thickness);
-      p_8=Point_model(x0, y0+piece_height, z0+piece_thickness);
+      p_1=                   Point_model(x0, y0, z0).correct_cordinate();
+      p_2=          Point_model(x0+piece_width, y0, z0).correct_cordinate();
+      p_3=Point_model(x0+piece_width, y0+piece_height, z0).correct_cordinate();
+      p_4=            Point_model(x0, y0+piece_height, z0).correct_cordinate();
+      p_5=          Point_model(x0, y0, z0+piece_thickness).correct_cordinate();
+      p_6=Point_model(x0+piece_width, y0, z0+piece_thickness).correct_cordinate();
+      p_7=Point_model(x0+piece_width, y0+piece_height, z0+piece_thickness).correct_cordinate();
+      p_8=             Point_model(x0, y0+piece_height, z0+piece_thickness).correct_cordinate();
 
     }
 
@@ -97,6 +96,41 @@ class Piece_model{
     piece_faces=Faces_model(faces);
 
 
+  }
+
+
+  Piece_model.fromJson(Map<String, dynamic> json) {
+    piece_id = json['piece_id'];
+    piece_name = json['piece_name'];
+    piece_direction = json['piece_direction'];
+    material_name = json['material_name'];
+    piece_width = json['piece_width'];
+    piece_height = json['piece_height'];
+    piece_thickness = json['piece_thickness'];
+    piece_origin = Point_model.fromJson(json['piece_origin']) ;
+    piece_faces =Faces_model.fromJson(json['piece_faces']);
+    is_changed = json['is_changed'];
+    piece_inable = json['piece_inable'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['piece_id'] = this.piece_id;
+    data['piece_name'] = this.piece_name;
+    data['piece_direction'] = this.piece_direction;
+    data['material_name'] = this.material_name;
+    data['piece_width'] = this.piece_width;
+    data['piece_height'] = this.piece_height;
+    data['piece_thickness'] = this.piece_thickness;
+    if (this.piece_origin != null) {
+      data['piece_origin'] = this.piece_origin!.toJson();
+    }
+    if (this.piece_faces != null) {
+      data['piece_faces'] = this.piece_faces!.toJson();
+    }
+    data['is_changed'] = this.is_changed;
+    data['piece_inable'] = this.piece_inable;
+    return data;
   }
 
 }

@@ -23,7 +23,9 @@ class _CreateJoinholepatternDialogState
 
   TextEditingController pre_distence_controller = TextEditingController();
   TextEditingController diameter_controller = TextEditingController();
+  TextEditingController face_diameter_controller = TextEditingController();
   TextEditingController depth_controller = TextEditingController();
+  TextEditingController face_depth_controller = TextEditingController();
   TextEditingController nut_distence_controller = TextEditingController();
   TextEditingController nut_diameter_controller = TextEditingController();
   TextEditingController nut_depth_controller = TextEditingController();
@@ -45,7 +47,9 @@ class _CreateJoinholepatternDialogState
 
     double pre_distance = double.parse(pre_distence_controller.text.toString());
     double diameter     = double.parse(diameter_controller.text.toString());
+    double face_diameter     = double.parse(face_diameter_controller.text.toString());
     double depth        = double.parse(depth_controller.text.toString());
+    double face_depth        = double.parse(face_depth_controller.text.toString());
 
     double nut_destance = have_nut ? double.parse(nut_distence_controller.text.toString()) : 0;
     double nut_diameter = have_nut ? double.parse(nut_diameter_controller.text.toString()) : 0;
@@ -57,12 +61,15 @@ class _CreateJoinholepatternDialogState
 
 
     late Bore_model side_bore;
+    late Bore_model face_bore;
     late Bore_model nut_bore;
-Point_model init_origin=Point_model(0, 0, 0);
+
+    Point_model init_origin=Point_model(0, 0, 0);
     side_bore = Bore_model(init_origin,diameter, depth       );
+    face_bore = Bore_model(init_origin,face_diameter, face_depth       );
     nut_bore =  Bore_model(init_origin,nut_diameter, nut_depth );
 
-     Bore_unit bore_unit = Bore_unit(pre_distance, side_bore, have_nut, nut_destance, nut_bore,  center,have_mirror);
+     Bore_unit bore_unit = Bore_unit(pre_distance, side_bore, have_nut, nut_destance, nut_bore , face_bore,  center,have_mirror);
      bore_units.add(bore_unit);
 
     refresh();
@@ -144,7 +151,9 @@ Point_model init_origin=Point_model(0, 0, 0);
     max_distence_controller.text='0';
     pre_distence_controller.text='0';
     diameter_controller.text='0';
+    face_diameter_controller.text='0';
     depth_controller.text='0';
+    face_depth_controller.text='0';
     nut_distence_controller.text='0';
     nut_diameter_controller.text='0';
     nut_depth_controller.text='0';
@@ -373,8 +382,51 @@ Point_model init_origin=Point_model(0, 0, 0);
                               ),
                             ),
                           ),
+
+
                         ],
                       ),
+
+                      /// Face Diameter
+                      Row(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 35,
+                            child: Center(
+                              child: Text(
+                                'Face Diameter',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Container(
+                            width: 75,
+                            height: 25,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [DecimalTextInputFormatter(2)],
+                              controller: face_diameter_controller,
+                              onChanged: (_) {},
+                              validator: (d) {
+                                if (d!.isEmpty) {
+                                  return 'add value please';
+                                }
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+
 
                       /// Depth
                       Row(
@@ -414,6 +466,46 @@ Point_model init_origin=Point_model(0, 0, 0);
                           ),
                         ],
                       ),
+
+                      ///face Depth
+                      Row(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 35,
+                            child: Center(
+                              child: Text(
+                                'Face Depth',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Container(
+                            width: 75,
+                            height: 25,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [DecimalTextInputFormatter(2)],
+                              controller: face_depth_controller,
+                              onChanged: (_) {},
+                              validator: (d) {
+                                if (d!.isEmpty) {
+                                  return 'add value please';
+                                }
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
 
                       /// have mirror
                       Row(

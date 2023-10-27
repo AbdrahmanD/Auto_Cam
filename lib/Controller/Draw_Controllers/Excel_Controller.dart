@@ -50,7 +50,7 @@ class Excel_Controller extends GetxController {
 int n=2;
     for(int i=0;i<my_box.box_pieces.length;i++){
 
-      if(my_box.box_pieces[i].piece_name=='inner' || my_box.box_pieces[i].is_changed || !my_box.box_pieces[i].piece_inable){
+      if(my_box.box_pieces[i].piece_name=='inner' ||my_box.box_pieces[i].piece_name.contains("HELPER")|| my_box.box_pieces[i].is_changed || !my_box.box_pieces[i].piece_inable){
         continue;
       }else {
 

@@ -4,6 +4,7 @@ import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:dart_eval/dart_eval.dart';
 
 class View_option extends StatelessWidget {
   Draw_Controller draw_controller = Get.find();
@@ -22,26 +23,22 @@ class View_option extends StatelessWidget {
   TextEditingController x_move = TextEditingController();
   TextEditingController y_move = TextEditingController();
 
-  TextEditingController new_name          =TextEditingController();
-  TextEditingController new_width         =TextEditingController();
-  TextEditingController new_height        =TextEditingController();
-  TextEditingController new_thicknes      =TextEditingController();
-  TextEditingController new_material_name =TextEditingController();
-
+  TextEditingController new_name = TextEditingController();
+  TextEditingController new_width = TextEditingController();
+  TextEditingController new_height = TextEditingController();
+  TextEditingController new_thicknes = TextEditingController();
+  TextEditingController new_material_name = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     x_move.text = '0';
     y_move.text = '0';
 
-    new_name.text='0';
-    new_width.text='0';
-    new_height.text='0';
-    new_thicknes.text='0';
-    new_material_name.text='0';
-
-
-
+    new_name.text = '0';
+    new_width.text = '0';
+    new_height.text = '0';
+    new_thicknes.text = '0';
+    new_material_name.text = '0';
 
     return Scaffold(
       body: Container(
@@ -270,8 +267,8 @@ class View_option extends StatelessWidget {
                             .box_repository.box_model.value.box_pieces.length,
                         itemBuilder: (context, i) {
                           if (true
-                          // draw_controller.box_repository.box_model.value.box_pieces[i].piece_name != 'inner'
-                          ) {
+                              // draw_controller.box_repository.box_model.value.box_pieces[i].piece_name != 'inner'
+                              ) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
@@ -408,7 +405,6 @@ class View_option extends StatelessWidget {
                               child: ListView.builder(
                                   itemCount: draw_controller.selected_id.length,
                                   itemBuilder: (context, i) {
-
                                     Piece_model p = draw_controller
                                             .box_repository
                                             .box_model
@@ -416,11 +412,11 @@ class View_option extends StatelessWidget {
                                             .box_pieces[
                                         draw_controller.selected_id[i]];
 
-                                    new_name.text=p.piece_name;
-                                    new_width.text=   ' ${p.piece_width}';
-                                    new_height.text=  ' ${p.piece_height}';
-                                    new_thicknes.text=' ${p.piece_thickness}';
-                                    new_material_name.text=p.material_name;
+                                    new_name.text = p.piece_name;
+                                    new_width.text = ' ${p.piece_width}';
+                                    new_height.text = ' ${p.piece_height}';
+                                    new_thicknes.text = ' ${p.piece_thickness}';
+                                    new_material_name.text = p.material_name;
 
                                     return Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -452,34 +448,42 @@ class View_option extends StatelessWidget {
                                                 style: TextStyle(
                                                     fontSize: text_size),
                                               ),
-                                              (draw_controller.selected_id.value.length<2)?
-                                              Container(
-                                                width: 100,
-                                                height: 24,
-                                                child: TextFormField(
-                                                  style: TextStyle(fontSize: 12),
-                                                  enabled: true,
-                                                  keyboardType:
-                                                  TextInputType.numberWithOptions(
-                                                      decimal: true),
-                                                  controller: new_name,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(4),
+                                              (draw_controller.selected_id.value
+                                                          .length <
+                                                      2)
+                                                  ? Container(
+                                                      width: 100,
+                                                      height: 24,
+                                                      child: TextFormField(
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                        enabled: true,
+                                                        keyboardType: TextInputType
+                                                            .numberWithOptions(
+                                                                decimal: true),
+                                                        controller: new_name,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4),
+                                                          ),
+                                                        ),
+                                                        validator: (d) {
+                                                          if (d!.isEmpty) {
+                                                            return 'add value please';
+                                                          }
+                                                        },
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      '${p.piece_name}',
+                                                      style: TextStyle(
+                                                          fontSize: text_size),
                                                     ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              ):
-                                              Text(
-                                                '${p.piece_name}',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
                                             ],
                                           ),
                                           Container(
@@ -494,39 +498,46 @@ class View_option extends StatelessWidget {
                                                 style: TextStyle(
                                                     fontSize: text_size),
                                               ),
-                                              (draw_controller.selected_id.value.length<2)?
-
-                                              Container(
-                                                width: 100,
-                                                height: 24,
-                                                child: TextFormField(
-                                                  style: TextStyle(fontSize: 12),
-                                                  enabled: true,
-                                                  inputFormatters: [
-                                                    DecimalTextInputFormatter(2)
-                                                  ],
-                                                  keyboardType:
-                                                  TextInputType.numberWithOptions(
-                                                      decimal: true),
-                                                  controller: new_width,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(4),
+                                              (draw_controller.selected_id.value
+                                                          .length <
+                                                      2)
+                                                  ? Container(
+                                                      width: 100,
+                                                      height: 24,
+                                                      child: TextFormField(
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                        enabled: true,
+                                                        inputFormatters: [
+                                                          DecimalTextInputFormatter(
+                                                              2)
+                                                        ],
+                                                        keyboardType: TextInputType
+                                                            .numberWithOptions(
+                                                                decimal: true),
+                                                        controller: new_width,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4),
+                                                          ),
+                                                        ),
+                                                        validator: (d) {
+                                                          if (d!.isEmpty) {
+                                                            return 'add value please';
+                                                          }
+                                                        },
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      '${p.piece_width}',
+                                                      style: TextStyle(
+                                                          fontSize: text_size),
                                                     ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              ):
-                                    Text(
-                                    '${p.piece_width}',
-                                    style: TextStyle(
-                                    fontSize: text_size),
-                                    )
-                                              ,
                                             ],
                                           ),
                                           Container(
@@ -541,38 +552,46 @@ class View_option extends StatelessWidget {
                                                 style: TextStyle(
                                                     fontSize: text_size),
                                               ),
-                                              (draw_controller.selected_id.value.length<2)?
-
-                                              Container(
-                                                width: 100,
-                                                height: 24,
-                                                child: TextFormField(
-                                                  style: TextStyle(fontSize: 12),
-                                                  enabled: true,
-                                                  inputFormatters: [
-                                                    DecimalTextInputFormatter(2)
-                                                  ],
-                                                  keyboardType:
-                                                  TextInputType.numberWithOptions(
-                                                      decimal: true),
-                                                  controller: new_height,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(4),
+                                              (draw_controller.selected_id.value
+                                                          .length <
+                                                      2)
+                                                  ? Container(
+                                                      width: 100,
+                                                      height: 24,
+                                                      child: TextFormField(
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                        enabled: true,
+                                                        inputFormatters: [
+                                                          DecimalTextInputFormatter(
+                                                              2)
+                                                        ],
+                                                        keyboardType: TextInputType
+                                                            .numberWithOptions(
+                                                                decimal: true),
+                                                        controller: new_height,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4),
+                                                          ),
+                                                        ),
+                                                        validator: (d) {
+                                                          if (d!.isEmpty) {
+                                                            return 'add value please';
+                                                          }
+                                                        },
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      '${p.piece_height}',
+                                                      style: TextStyle(
+                                                          fontSize: text_size),
                                                     ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              ):
-                                              Text(
-                                                '${p.piece_height}',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
                                             ],
                                           ),
                                           Container(
@@ -587,39 +606,47 @@ class View_option extends StatelessWidget {
                                                 style: TextStyle(
                                                     fontSize: text_size),
                                               ),
-                                              (draw_controller.selected_id.value.length<2)?
-
-                                              Container(
-                                                width: 100,
-                                                height: 24,
-                                                child: TextFormField(
-                                                  style: TextStyle(fontSize: 12),
-                                                  enabled: true,
-                                                  inputFormatters: [
-                                                    DecimalTextInputFormatter(2)
-                                                  ],
-                                                  keyboardType:
-                                                  TextInputType.numberWithOptions(
-                                                      decimal: true),
-                                                  controller: new_thicknes,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(4),
+                                              (draw_controller.selected_id.value
+                                                          .length <
+                                                      2)
+                                                  ? Container(
+                                                      width: 100,
+                                                      height: 24,
+                                                      child: TextFormField(
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                        enabled: true,
+                                                        inputFormatters: [
+                                                          DecimalTextInputFormatter(
+                                                              2)
+                                                        ],
+                                                        keyboardType: TextInputType
+                                                            .numberWithOptions(
+                                                                decimal: true),
+                                                        controller:
+                                                            new_thicknes,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4),
+                                                          ),
+                                                        ),
+                                                        validator: (d) {
+                                                          if (d!.isEmpty) {
+                                                            return 'add value please';
+                                                          }
+                                                        },
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      '${p.piece_thickness}',
+                                                      style: TextStyle(
+                                                          fontSize: text_size),
                                                     ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              )
-                                              :Text(
-                                                '${p.piece_thickness}',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              )
-                                              ,
                                             ],
                                           ),
                                           Container(
@@ -634,35 +661,66 @@ class View_option extends StatelessWidget {
                                                 style: TextStyle(
                                                     fontSize: text_size),
                                               ),
-                                              (draw_controller.selected_id.value.length<2)?
-
-                                              Container(
-                                                width: 100,
-                                                height: 24,
-                                                child: TextFormField(
-                                                  style: TextStyle(fontSize: 12),
-                                                  enabled: true,
-                                                  inputFormatters: [
-                                                    DecimalTextInputFormatter(2)
-                                                  ],
-                                                  keyboardType:
-                                                  TextInputType.numberWithOptions(
-                                                      decimal: true),
-                                                  controller: new_material_name,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(4),
+                                              (draw_controller.selected_id.value
+                                                          .length <
+                                                      2)
+                                                  ? Container(
+                                                      width: 100,
+                                                      height: 24,
+                                                      child: TextFormField(
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                        enabled: true,
+                                                        inputFormatters: [
+                                                          DecimalTextInputFormatter(
+                                                              2)
+                                                        ],
+                                                        keyboardType: TextInputType
+                                                            .numberWithOptions(
+                                                                decimal: true),
+                                                        controller:
+                                                            new_material_name,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4),
+                                                          ),
+                                                        ),
+                                                        validator: (d) {
+                                                          if (d!.isEmpty) {
+                                                            return 'add value please';
+                                                          }
+                                                        },
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      '${p.material_name}',
+                                                      style: TextStyle(
+                                                          fontSize: text_size),
                                                     ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              ):
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 6,
+                                          ),
+
+                                          /// origin for test only
+                                          Row(
+                                            children: [
                                               Text(
-                                                '${p.material_name}',
+                                                'origin :',
+                                                style: TextStyle(
+                                                    fontSize: text_size),
+                                              ),
+                                              Text(
+                                                'Y 2 :${p.piece_faces.faces[2].corners[0].y_coordinate} \n '
+                                                'Y 0 :${p.piece_faces.faces[0].corners[0].y_coordinate} \n'
+                                                'Y origin:${p.piece_origin.y_coordinate} \n'
+                                                ,
                                                 style: TextStyle(
                                                     fontSize: text_size),
                                               ),
@@ -721,15 +779,11 @@ class View_option extends StatelessWidget {
                                   width: 6,
                                 ),
                                 Container(
-                                  width: 56,
+                                  width: 65,
                                   height: 24,
                                   child: TextFormField(
                                     style: TextStyle(fontSize: 12),
-
                                     enabled: true,
-                                    inputFormatters: [
-                                      DecimalTextInputFormatter(2)
-                                    ],
                                     keyboardType:
                                         TextInputType.numberWithOptions(
                                             decimal: true),
@@ -754,15 +808,11 @@ class View_option extends StatelessWidget {
                                   width: 6,
                                 ),
                                 Container(
-                                  width: 56,
+                                  width: 65,
                                   height: 24,
                                   child: TextFormField(
                                     style: TextStyle(fontSize: 12),
-
                                     enabled: true,
-                                    inputFormatters: [
-                                      DecimalTextInputFormatter(2)
-                                    ],
                                     keyboardType:
                                         TextInputType.numberWithOptions(
                                             decimal: true),
@@ -787,8 +837,11 @@ class View_option extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                x_move_value=double.parse(x_move.text.toString());
-                                y_move_value=double.parse(y_move.text.toString());
+                                x_move_value = double.parse(
+                                    '${eval(x_move.text.toString())}');
+                                y_move_value = double.parse(
+                                    '${eval(y_move.text.toString())}');
+
                                 draw_controller.move_piece(
                                     x_move_value, y_move_value);
                                 x_move_value = 0;
@@ -811,16 +864,16 @@ class View_option extends StatelessWidget {
                               height: 8,
                             ),
                             InkWell(
-                              onTap: (){
-
+                              onTap: () {
                                 draw_controller.flip_piece();
-
-
                               },
                               child: Container(
-                                width: 100,height: 32,decoration: BoxDecoration(
-                                  color: Colors.teal[300],borderRadius: BorderRadius.circular(4)
-                              ),child: Center(child: Text('Flip piece')),
+                                width: 100,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                    color: Colors.teal[300],
+                                    borderRadius: BorderRadius.circular(4)),
+                                child: Center(child: Text('Flip piece')),
                               ),
                             ),
 
@@ -859,25 +912,44 @@ class View_option extends StatelessWidget {
                                 ),
                                 InkWell(
                                   onTap: () {
+                                    for (int i = 0;
+                                        i < draw_controller.selected_id.length;
+                                        i++) {
+                                      Piece_model p = draw_controller
+                                              .box_repository
+                                              .box_model
+                                              .value
+                                              .box_pieces[
+                                          draw_controller.selected_id[i]];
+                                      p.material_name =
+                                          new_material_name.text.toString();
+                                      p.piece_name = new_name.text.toString();
+                                      p.piece_width = double.parse(
+                                          '${eval(new_width.text.toString())}');
+                                      p.piece_height = double.parse(
+                                          '${eval(new_height.text.toString())}');
+                                      p.piece_thickness = double.parse(
+                                          '${eval(new_thicknes.text.toString())}');
 
-                                    for(int i=0;i<draw_controller.selected_id.length;i++){
-                                      Piece_model p = draw_controller.box_repository.box_model.value.box_pieces[draw_controller.selected_id[i]];
-                                      p.material_name=new_material_name.text.toString();
-                                      p.piece_name=new_name.text.toString();
-                                      p.piece_width=double.parse(new_width.text.toString());
-                                      p.piece_height=double.parse(new_height.text.toString());
-                                      p.piece_thickness=double.parse(new_thicknes.text.toString());
+                                      Piece_model np = Piece_model(
+                                          p.piece_id,
+                                          p.piece_name,
+                                          p.piece_direction,
+                                          p.material_name,
+                                          p.piece_width,
+                                          p.piece_height,
+                                          p.piece_thickness,
+                                          p.piece_origin);
 
-                                      Piece_model np=Piece_model(p.piece_id, p.piece_name, p.piece_direction, p.material_name,
-                                          p.piece_width, p.piece_height, p.piece_thickness, p.piece_origin);
-
-                                      draw_controller.box_repository.box_model.value.box_pieces.remove(p);
-                                      draw_controller.box_repository.box_model.value.box_pieces.add(np);
-
+                                      draw_controller.box_repository.box_model
+                                          .value.box_pieces
+                                          .remove(p);
+                                      draw_controller.box_repository.box_model
+                                          .value.box_pieces
+                                          .add(np);
                                     }
 
-                                    draw_controller.selected_id.value=[];
-
+                                    draw_controller.selected_id.value = [];
                                   },
                                   child: Container(
                                     width: 70,

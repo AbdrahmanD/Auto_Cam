@@ -1,5 +1,4 @@
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
-import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:get/get.dart';
 
@@ -43,8 +42,6 @@ class Box_Repository extends GetxController{
       'box_name',"wall_cabinet", 400, 600, 500, 18, 'MDF',5,
       9,18,
       100,  true, Point_model(0,0,0)).obs;
-
-  Map<String,double> drawers_types_values={'normal_side':26,"concealed_hafle_1":10};
 
   Box_Repository();
 

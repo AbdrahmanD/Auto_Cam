@@ -57,8 +57,8 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                       .box_pieces[i].piece_name ==
                                   'inner' ||
                               draw_controller.box_repository.box_model.value
-                                      .box_pieces[i].piece_name ==
-                                  'HELPER'
+                                      .box_pieces[i].piece_name.contains('HELPER')
+
                               ||(draw_controller.box_repository.box_model.value
                                           .box_pieces[i].is_changed && draw_controller.box_repository.box_model.value
                                           .box_pieces[i].piece_name.contains('drawer'))
@@ -189,8 +189,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                             .box_pieces[i].piece_name.contains('drawer'))
                         ||
                         draw_controller.box_repository.box_model.value
-                            .box_pieces[i].piece_name ==
-                            'HELPER') {
+                            .box_pieces[i].piece_name.contains("HELPER")) {
                       return SizedBox();
                     } else if (draw_controller.box_repository.box_model.value
                         .box_pieces[i].piece_inable) {
@@ -327,7 +326,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                             Piece_model p = draw_controller.box_repository
                                 .box_model.value.box_pieces[index];
 
-                            if (p.piece_name == "inner" ||p.piece_name == "HELPER" || p.piece_name == "help_shelf" || p.is_changed || !p.piece_inable) {
+                            if (p.piece_name == "inner" ||p.piece_name.contains("HELPER") || p.piece_name == "help_shelf" || p.is_changed || !p.piece_inable) {
                               return SizedBox();
                             } else {
                               return Column(

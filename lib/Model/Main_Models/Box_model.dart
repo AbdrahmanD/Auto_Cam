@@ -2,6 +2,7 @@ import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,6 +51,51 @@ class Box_model {
 
   }
 
+  Box_model.fromJson(Map<String, dynamic> json) {
+    box_name = json['box_name'];
+    box_type = json['box_type'];
+    box_width = json['box_width'];
+    box_height = json['box_height'];
+    box_depth = json['box_depth'];
+    init_material_thickness = json['init_material_thickness'];
+    init_material_name = json['init_material_name'];
+    back_panel_thickness = json['back_panel_thickness'];
+    grove_value = json['grove_value'];
+    bac_panel_distence = json['bac_panel_distence'];
+    top_base_piece_width = json['top_base_piece_width'];
+    is_back_panel = json['is_back_panel'];
+    box_origin =Point_model.fromJson(json['box_origin']) ;
+  if (json['box_pieces'] != null) {
+    box_pieces = <Piece_model>[];
+  json['box_pieces'].forEach((v) { box_pieces!.add(new Piece_model.fromJson(v)); });
+  }
+    piece_id = json['piece_id'];
+}
+
+Map<String, dynamic> toJson() {
+  final Map<String, dynamic> data = new Map<String, dynamic>();
+  data['box_name'] = this.box_name;
+  data['box_type'] = this.box_type;
+  data['box_width'] = this.box_width;
+  data['box_height'] = this.box_height;
+  data['box_depth'] = this.box_depth;
+  data['init_material_thickness'] = this.init_material_thickness;
+  data['init_material_name'] = this.init_material_name;
+  data['back_panel_thickness'] = this.back_panel_thickness;
+  data['grove_value'] = this.grove_value;
+  data['bac_panel_distence'] = this.bac_panel_distence;
+  data['top_base_piece_width'] = this.top_base_piece_width;
+  data['is_back_panel'] = this.is_back_panel;
+  if (this.box_origin != null) {
+    data['box_origin'] = this.box_origin!.toJson();
+  }
+  if (this.box_pieces != null) {
+    data['box_pieces'] = this.box_pieces!.map((v) => v.toJson()).toList();
+  }
+  data['piece_id'] = this.piece_id;
+  return data;
+}
+
  int  get_id(){
     piece_id++;
     // print("piece_id : $piece_id");
@@ -63,11 +109,14 @@ class Box_model {
         'top',
         'H',
         init_material_name,
-        box_depth,
-        box_width - 2 * init_material_thickness,
-        init_material_thickness,
-        Point_model(box_origin.x_coordinate + init_material_thickness,
-            box_origin.y_coordinate + box_height - init_material_thickness,box_origin.z_coordinate)
+        correct_value(box_depth),
+       correct_value( box_width - 2 * init_material_thickness),
+       correct_value( init_material_thickness),
+        Point_model(
+            correct_value(box_origin.x_coordinate + init_material_thickness),
+            correct_value(box_origin.y_coordinate + box_height - init_material_thickness),
+            correct_value(box_origin.z_coordinate)
+        )
     );
     box_pieces.add(top_piece);
 
@@ -76,11 +125,14 @@ class Box_model {
         'base',
         'H',
         init_material_name,
-        box_depth,
-        box_width - 2 * init_material_thickness,
-        init_material_thickness,
-        Point_model(box_origin.x_coordinate + init_material_thickness,
-            box_origin.y_coordinate ,box_origin.z_coordinate)
+        correct_value(box_depth),
+            correct_value( box_width - 2 * init_material_thickness),
+                correct_value(init_material_thickness),
+        Point_model(
+           correct_value( box_origin.x_coordinate + init_material_thickness),
+           correct_value( box_origin.y_coordinate ),
+           correct_value( box_origin.z_coordinate)
+        )
     );
     box_pieces.add(base_piece);
 
@@ -89,11 +141,14 @@ class Box_model {
         'right',
         'V',
         init_material_name,
-        box_depth,
-        box_height,
-        init_material_thickness,
-        Point_model(box_origin.x_coordinate+box_width - init_material_thickness,
-            box_origin.y_coordinate ,box_origin.z_coordinate)
+       correct_value( box_depth),
+       correct_value( box_height),
+       correct_value( init_material_thickness),
+        Point_model(
+           correct_value(box_origin.x_coordinate+box_width - init_material_thickness),
+           correct_value(box_origin.y_coordinate) ,
+           correct_value(box_origin.z_coordinate)
+        )
     );
     box_pieces.add(right_piece);
 
@@ -102,11 +157,14 @@ class Box_model {
         'left',
         'V',
         init_material_name,
-        box_depth,
-        box_height,
-        init_material_thickness,
-        Point_model(box_origin.x_coordinate,
-            box_origin.y_coordinate ,box_origin.z_coordinate)
+       correct_value( box_depth),
+       correct_value( box_height),
+       correct_value( init_material_thickness),
+        Point_model(
+          correct_value( box_origin.x_coordinate),
+          correct_value( box_origin.y_coordinate ),
+          correct_value( box_origin.z_coordinate)
+        )
     );
     box_pieces.add(left_piece);
 
@@ -116,12 +174,14 @@ class Box_model {
           'back_panel',
           'F',
           init_material_name,
-          box_width-2*init_material_thickness+2*grove_value-2,
-          box_height-2*init_material_thickness+2*grove_value-2,
-          back_panel_thickness,
-          Point_model(box_origin.x_coordinate+init_material_thickness-grove_value+1,
-              box_origin.y_coordinate+init_material_thickness-grove_value+1 ,
-              box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+         correct_value(box_width-2*init_material_thickness+2*grove_value-2),
+         correct_value(box_height-2*init_material_thickness+2*grove_value-2),
+         correct_value(back_panel_thickness),
+          Point_model(
+             correct_value( box_origin.x_coordinate+init_material_thickness-grove_value+1),
+             correct_value( box_origin.y_coordinate+init_material_thickness-grove_value+1 ),
+             correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+          )
       );
       box_pieces.add(back_panel);
     }
@@ -130,12 +190,14 @@ class Box_model {
         'inner',
         'F',
         'inner',
-        box_width-2*init_material_thickness,
-        box_height-2*init_material_thickness,
-        (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
-        Point_model(box_origin.x_coordinate+init_material_thickness,
-            box_origin.y_coordinate+init_material_thickness ,
-            box_origin.z_coordinate)
+       correct_value( box_width-2*init_material_thickness),
+       correct_value( box_height-2*init_material_thickness),
+       correct_value( (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
+        Point_model(
+           correct_value(box_origin.x_coordinate+init_material_thickness),
+           correct_value(box_origin.y_coordinate+init_material_thickness) ,
+           correct_value(box_origin.z_coordinate)
+        )
     );
     box_pieces.add(inner);
 
@@ -218,7 +280,8 @@ class Box_model {
           box_height-2*init_material_thickness+2*grove_value-2,
           back_panel_thickness,
           Point_model(box_origin.x_coordinate+init_material_thickness-grove_value+1,
-              box_origin.y_coordinate+init_material_thickness-grove_value+1 ,box_origin.z_coordinate+box_depth-bac_panel_distence)
+              box_origin.y_coordinate+init_material_thickness-grove_value+1
+              ,box_origin.z_coordinate+box_depth-bac_panel_distence)
       );
       box_pieces.add(back_panel);
     }
@@ -331,7 +394,8 @@ class Box_model {
           box_height-2*init_material_thickness+2*grove_value-2,
           back_panel_thickness,
           Point_model(box_origin.x_coordinate+init_material_thickness-grove_value+1,
-              box_origin.y_coordinate+init_material_thickness-grove_value+1 ,box_origin.z_coordinate+box_depth-bac_panel_distence)
+              box_origin.y_coordinate+init_material_thickness-grove_value+1 ,
+              box_origin.z_coordinate+box_depth-bac_panel_distence)
       );
       box_pieces.add(back_panel);
     }
@@ -353,13 +417,15 @@ class Box_model {
 
 
   add_Shelf_pattern(int inner, double top_Distence, double frontage_Gap,
-      double shelf_material_thickness, String shelf_type,bool is_copy,int shelf_quantity,double back_distance) {
-    double down_Distence = box_pieces[inner].piece_height -
-        top_Distence -
-        shelf_material_thickness;
+      double shelf_material_thickness, String shelf_type,bool is_copy,int shelf_quantity,double back_distance)
+  {
 
-    double depth_of_shelf = (is_back_panel)?(box_depth - bac_panel_distence-back_panel_thickness - frontage_Gap):
-    (box_depth -frontage_Gap);
+    double down_Distence = correct_value(box_pieces[inner].piece_height -
+        top_Distence -
+        shelf_material_thickness);
+
+    double depth_of_shelf = correct_value((is_back_panel)?(box_depth - bac_panel_distence-back_panel_thickness - frontage_Gap):
+    (box_depth -frontage_Gap));
 
     Piece_model old_inner = Piece_model(
         get_id(),
@@ -374,7 +440,7 @@ class Box_model {
             box_pieces[inner].piece_origin.y_coordinate +
                 down_Distence +
                 shelf_material_thickness,
-            box_pieces[inner].piece_origin.z_coordinate)
+            box_pieces[inner].piece_origin.z_coordinate).correct_cordinate()
     );
 
     Piece_model new_inner = Piece_model(
@@ -388,7 +454,7 @@ class Box_model {
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate,
             box_pieces[inner].piece_origin.y_coordinate,
-            box_pieces[inner].piece_origin.z_coordinate),
+            box_pieces[inner].piece_origin.z_coordinate).correct_cordinate(),
         );
 
     Piece_model new_piece = Piece_model(
@@ -402,7 +468,7 @@ class Box_model {
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate,
             box_pieces[inner].piece_origin.y_coordinate + down_Distence,
-            box_pieces[inner].piece_origin.z_coordinate+frontage_Gap),
+            box_pieces[inner].piece_origin.z_coordinate+frontage_Gap).correct_cordinate(),
          );
 
 
@@ -456,27 +522,27 @@ class Box_model {
   /// start Partition
 
   add_Partition_pattern(int inner, double left_Distence, double frontage_Gap,
-      double partition_material_thickness,bool is_copy,int Partition_quantity,double back_distance)
+      double partition_material_thickness,bool is_copy,int Partition_quantity,double back_distance,bool helper)
   {
 
 
-    double right_Distence = box_pieces[inner].piece_width - left_Distence - partition_material_thickness;
+    double right_Distence =correct_value(box_pieces[inner].piece_width - left_Distence - partition_material_thickness);
 
-    double depth_of_partition =(is_back_panel)? (box_depth - back_distance-back_panel_thickness - frontage_Gap):
-    (box_depth - frontage_Gap);
+    double depth_of_partition =correct_value((is_back_panel)? (box_depth - back_distance-back_panel_thickness - frontage_Gap):
+    (box_depth - frontage_Gap));
 
     Piece_model old_inner = Piece_model(
       get_id(),
         'inner',
         'F',
         'inner',
-        left_Distence,
-        box_pieces[inner].piece_height,
-      (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
+        correct_value(left_Distence),
+        correct_value(box_pieces[inner].piece_height),
+      correct_value((is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
         Point_model(
-            box_pieces[inner].piece_origin.x_coordinate,
-            box_pieces[inner].piece_origin.y_coordinate,
-            box_pieces[inner].piece_origin.z_coordinate
+           correct_value(box_pieces[inner].piece_origin.x_coordinate) ,
+           correct_value(box_pieces[inner].piece_origin.y_coordinate) ,
+           correct_value(box_pieces[inner].piece_origin.z_coordinate)
         ),
         );
 
@@ -486,40 +552,35 @@ class Box_model {
         'inner',
         'F',
         'inner',
-        right_Distence,
-        box_pieces[inner].piece_height,
-      (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
+      correct_value( right_Distence),
+      correct_value(  box_pieces[inner].piece_height),
+      correct_value((is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
         Point_model(
-            box_pieces[inner].piece_origin.x_coordinate +
-                left_Distence +
-                partition_material_thickness,
-            box_pieces[inner].piece_origin.y_coordinate,
-            box_pieces[inner].piece_origin.z_coordinate),
+            correct_value(box_pieces[inner].piece_origin.x_coordinate + left_Distence + partition_material_thickness),
+            correct_value(box_pieces[inner].piece_origin.y_coordinate),
+            correct_value(box_pieces[inner].piece_origin.z_coordinate)),
          );
 
 
     /// new piece partition
 
 
+
+
     Piece_model new_piece = Piece_model(
       get_id(),
-        'partition-${piece_id}',
+      helper?"HELPER": 'partition-${piece_id}',
         'V',
-        init_material_name,
-        depth_of_partition,
-        box_pieces[inner].piece_height,
-        partition_material_thickness,
+       init_material_name,
+       correct_value( depth_of_partition),
+       correct_value( box_pieces[inner].piece_height),
+       correct_value( partition_material_thickness),
         Point_model(
-            box_pieces[inner].piece_origin.x_coordinate + left_Distence,
-            box_pieces[inner].piece_origin.y_coordinate,
-            box_pieces[inner].piece_origin.z_coordinate+frontage_Gap),
+            correct_value( box_pieces[inner].piece_origin.x_coordinate + left_Distence)  ,
+            correct_value( box_pieces[inner].piece_origin.y_coordinate  )  ,
+            correct_value( box_pieces[inner].piece_origin.z_coordinate+frontage_Gap )  ,
+        ),
          );
-
-
-
-
-
-
 
     ///
     ///
@@ -535,12 +596,12 @@ class Box_model {
   }
 
   add_Partition(int inner, double left_Distence, double frontage_Gap,
-      double partition_material_thickness, int Quantity,double back_distance)
+      double partition_material_thickness, int Quantity,double back_distance,bool helper)
   {
     if (Quantity == 1) {
-      if (box_pieces[inner].piece_width-18 >= left_Distence && left_Distence >= 0) {
+      if (box_pieces[inner].piece_width-partition_material_thickness >= left_Distence && left_Distence >= 0) {
         add_Partition_pattern(
-            inner, left_Distence, frontage_Gap, partition_material_thickness,false,Quantity,back_distance);
+            inner, left_Distence, frontage_Gap, partition_material_thickness,false,Quantity,back_distance,helper );
         Navigator.of(Get.overlayContext!).pop();
       } else {
         Get.defaultDialog(
@@ -556,14 +617,16 @@ class Box_model {
       ( (Quantity - 1) * left_Distence + Quantity * partition_material_thickness) < box_pieces[inner].piece_width
          )
       {
-        double distance = double.parse((
-                (box_pieces[inner].piece_width - Quantity * partition_material_thickness) / (Quantity + 1)
-            ).toStringAsFixed(1));
+        double distance = double.parse(((box_pieces[inner].piece_width - Quantity * partition_material_thickness)
+            / (Quantity + 1))
+            .toStringAsFixed(1));
 
-          add_Partition_pattern(inner                , distance, frontage_Gap, partition_material_thickness,false,Quantity,back_distance);
+          add_Partition_pattern(inner, distance, frontage_Gap, partition_material_thickness,
+              false,Quantity,back_distance,helper);
 
         for (int i = 1; i < Quantity; i++) {
-          add_Partition_pattern(box_pieces.length - 1, distance, frontage_Gap, partition_material_thickness,true ,Quantity,back_distance);
+          add_Partition_pattern(box_pieces.length - 1, distance, frontage_Gap, partition_material_thickness,true
+              ,Quantity,back_distance,helper);
         }
 
 
@@ -821,6 +884,11 @@ int id = get_id();
     box_pieces.add(door_piece_2);
   }
 
+
+  double  correct_value(double v){
+    double resault= double.parse(v.toStringAsFixed(2));
+    return resault;
+  }
 
 
 

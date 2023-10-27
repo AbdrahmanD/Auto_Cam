@@ -46,7 +46,10 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
   TextEditingController  top_base_piece_width_controller    =TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
 
     box_model=draw_Controller.get_box();
 
@@ -61,6 +64,11 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
     pack_panel_grove_depth_controller.text='${draw_Controller.box_repository.pack_panel_grove_depth}';
     pack_panel_distence_controller.text   ='${draw_Controller.box_repository.pack_panel_distence}';
     top_base_piece_width_controller.text  ='${draw_Controller.box_repository.top_base_piece_width}';
+
+
+  }
+  @override
+  Widget build(BuildContext context) {
 
 
     return Form(
@@ -176,8 +184,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       return 'please add value';
                     }
                   },
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
                 ),
               ),
               Text(
@@ -218,8 +226,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       return 'please add value';
                     }
                   },
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
                 ),
               ),
               Text(
@@ -260,8 +268,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                         return 'please add value';
                       }
                     },
-                    inputFormatters: [DecimalTextInputFormatter(2)],
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    keyboardType: TextInputType.number,
                   )),
               Text(
                 "  mm",
@@ -327,7 +335,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       return 'please add value';
                     }
                   },
-                  inputFormatters: [DecimalTextInputFormatter(2)],
+                  inputFormatters: [DecimalTextInputFormatter(1)],
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
@@ -671,6 +679,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                   draw_Controller.box_repository.pack_panel_distence=pack_panel_distence;
                   draw_Controller.box_repository.pack_panel_grove_depth=pack_panel_grove_depth;
                   draw_Controller.box_repository.top_base_piece_width=top_base_piece_width;
+                  draw_Controller.box_repository.box_model.value.init_material_thickness=material_thickness_value;
 
 
 
@@ -857,7 +866,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 12,
           ),
 
-          //Export every piece \n  as G_code file
+          ///Export every piece \n  as G_code file
           Container(
             child: Row(
               children: [
@@ -885,6 +894,39 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               ],
             ),
           ),
+          SizedBox(
+            height: 12,
+          ),
+
+          ///save the box
+          Container(
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 18,
+                ),
+                Container(
+                    width: 180,
+                    child: Text('Save cabinet',
+                        style: TextStyle(
+                          fontSize: 14,
+                        ))),
+                SizedBox(
+                  width: 18,
+                ),
+                InkWell(
+                    onTap: () {
+                      draw_Controller.save_Box();
+                    },
+                    child: Icon(
+                      Icons.save,
+                      size: 36,
+                      color: Colors.teal,
+                    )),
+              ],
+            ),
+          ),
+
         ],
       ),
     );

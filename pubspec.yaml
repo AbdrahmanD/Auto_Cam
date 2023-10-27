@@ -40,7 +40,7 @@ dependencies:
   get:
   excel: 2.1.0
   path_provider:
-
+  dart_eval:
   ##
 
 dev_dependencies:

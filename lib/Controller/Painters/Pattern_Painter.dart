@@ -41,10 +41,17 @@ class Pattern_Painter extends CustomPainter {
 
     Path side=Path();
     Path face=Path();
+    Path second=Path();
 
 
-    Offset side_origin = Offset(50,50);
+    Offset side_origin = Offset(50,65);
+    Offset second_origin = Offset(50,35);
     Offset face_origin = Offset(50,65);
+
+    second.moveTo(second_origin.dx,       second_origin.dy-2*h*scal);
+    second.lineTo(second_origin.dx,       second_origin.dy);
+    second.lineTo(second_origin.dx+w*scal,second_origin.dy);
+    second.lineTo(second_origin.dx+w*scal,second_origin.dy-2*h*scal);
 
     side.moveTo(side_origin.dx,  side_origin.dy);
     side.lineTo(side_origin.dx+w*scal,side_origin.dy);
@@ -58,6 +65,7 @@ class Pattern_Painter extends CustomPainter {
     face.lineTo(face_origin.dx+w*scal,face_origin.dy+5*h*scal);
 
 
+    canvas.drawPath(second, piece_painter);
     canvas.drawPath(side, piece_painter);
     canvas.drawPath(face, piece_painter);
 
@@ -68,13 +76,17 @@ class Pattern_Painter extends CustomPainter {
 
       double pre_distence=unit.pre_distence;
       Bore_model side_bore=unit.side_bore;
-      bool have_face_bore=unit.have_face_bore;
-      double face_bore_distence=unit.face_bore_distence;
+      bool have_nut_bore=unit.have_nut_bore;
+      double nut_bore_distence=unit.nut_bore_distence;
+      Bore_model nut_bore=unit.nut_bore;
       Bore_model face_bore=unit.face_bore;
 
 canvas.drawCircle(Offset(side_origin.dx+pre_distence*scal,side_origin.dy-9*scal), side_bore.diameter*scal/2, bore_painter);
-canvas.drawCircle(Offset(face_origin.dx+pre_distence*scal,face_origin.dy+face_bore_distence*scal), face_bore.diameter*scal/2, bore_painter);
+canvas.drawCircle(Offset(second_origin.dx+pre_distence*scal,second_origin.dy-9*scal), face_bore.diameter*scal/2, bore_painter);
+if(have_nut_bore){
+  canvas.drawCircle(Offset(face_origin.dx+pre_distence*scal,face_origin.dy+nut_bore_distence*scal), nut_bore.diameter*scal/2, bore_painter);
 
+}
 
 
     }

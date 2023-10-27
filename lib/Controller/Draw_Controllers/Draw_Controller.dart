@@ -8,7 +8,6 @@ import 'package:auto_cam/Controller/Painters/Pattern_Painter.dart';
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
-import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
@@ -45,6 +44,8 @@ class Draw_Controller extends GetxController {
 
   Draw_Controller(){
     read_pattern_files();
+
+
   }
 
   ///
@@ -168,7 +169,9 @@ class Draw_Controller extends GetxController {
   }
 
   add_Box(Box_model box_model) {
-    box_repository.box_model.value = box_model;
+    // box_repository.box_model.value = box_model;
+
+    box_repository.add_box_to_repo(box_model);
     draw_Box();
   }
 
@@ -318,50 +321,56 @@ class Draw_Controller extends GetxController {
             box_repository.box_model.value.back_panel_thickness);
     // print_pieces_coordinate();
 
-    Box_model b = box_repository.box_model.value;
-    Box_model nb = Box_model(
-        b.box_name,
-        box_type,
-        b.box_width,
-        b.box_height,
-        b.box_depth,
-        b.init_material_thickness,
-        b.init_material_name,
-        b.back_panel_thickness,
-        b.grove_value,
-        b.bac_panel_distence,
-        b.top_base_piece_width,
-        b.is_back_panel,
-        b.box_origin);
-    nb.piece_id = b.piece_id;
-    nb.box_pieces = b.box_pieces;
-    add_Box(nb);
+    // Box_model b = box_repository.box_model.value;
+    // Box_model nb = Box_model(
+    //     b.box_name,
+    //     box_type,
+    //     b.box_width,
+    //     b.box_height,
+    //     b.box_depth,
+    //     b.init_material_thickness,
+    //     b.init_material_name,
+    //     b.back_panel_thickness,
+    //     b.grove_value,
+    //     b.bac_panel_distence,
+    //     b.top_base_piece_width,
+    //     b.is_back_panel,
+    //     b.box_origin);
+    // nb.piece_id = b.piece_id;
+    // nb.box_pieces = b.box_pieces;
+    // add_Box(nb);
+
+    draw_Box();
+
   }
 
   /// add partition method
   add_partition(double left_Distence, double frontage_Gap,
-      double material_thickness, int quantity, double back_distance) {
+      double material_thickness, int quantity, double back_distance,bool helper) {
+
     box_repository.box_model.value.add_Partition(hover_id, left_Distence,
-        frontage_Gap, material_thickness, quantity, back_distance);
-    // print_pieces_coordinate();
-    Box_model b = box_repository.box_model.value;
-    Box_model nb = Box_model(
-        b.box_name,
-        box_type,
-        b.box_width,
-        b.box_height,
-        b.box_depth,
-        b.init_material_thickness,
-        b.init_material_name,
-        b.back_panel_thickness,
-        b.grove_value,
-        b.bac_panel_distence,
-        b.top_base_piece_width,
-        b.is_back_panel,
-        b.box_origin);
-    nb.piece_id = b.piece_id;
-    nb.box_pieces = b.box_pieces;
-    add_Box(nb);
+        frontage_Gap, material_thickness, quantity, back_distance,helper);
+    //
+    // Box_model b = box_repository.box_model.value;
+    // Box_model nb = Box_model(
+    //     b.box_name,
+    //     box_type,
+    //     b.box_width,
+    //     b.box_height,
+    //     b.box_depth,
+    //     b.init_material_thickness,
+    //     b.init_material_name,
+    //     b.back_panel_thickness,
+    //     b.grove_value,
+    //     b.bac_panel_distence,
+    //     b.top_base_piece_width,
+    //     b.is_back_panel,
+    //     b.box_origin);
+    // nb.piece_id = b.piece_id;
+    // nb.box_pieces = b.box_pieces;
+    // add_Box(nb);
+    draw_Box();
+
   }
 
   add_filler(Filler_model filler_model) {
@@ -383,6 +392,7 @@ class Draw_Controller extends GetxController {
       box_repository.box_model.value.box_pieces.removeAt(selected_id[i]);
     }
     box_repository.add_box_to_repo(b);
+    selected_id.value=[];
     draw_Box();
   }
 
@@ -601,6 +611,38 @@ class Draw_Controller extends GetxController {
       file.writeAsStringSync(jsonData);
 
       print('JSON data has been written to $file_path');
+    } catch (e) {
+      print('Error writing JSON data to the file: $e');
+    }
+  }
+
+
+  save_Box( ) async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    oldDirectory.createSync();
+
+    final Directory newDirectory = Directory('${oldDirectory.path}/Boxes');
+    newDirectory.createSync();
+
+    final Directory finalDirectory =
+        Directory('${newDirectory.path}/${box_repository.box_model.value.box_name}');
+    finalDirectory.createSync();
+
+    final path = await finalDirectory.path;
+    String file_path = '$path/${box_repository.box_model.value.box_name}';
+
+    File file = File(file_path);
+
+    try {
+      // Convert the data to a JSON string
+      String jsonData = jsonEncode(box_repository.box_model.value.toJson());
+
+      // Write the JSON data to the file
+      file.writeAsStringSync(jsonData);
+
+      // print('JSON data has been written to $file_path');
     } catch (e) {
       print('Error writing JSON data to the file: $e');
     }

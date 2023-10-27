@@ -23,51 +23,77 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
 
   GlobalKey<FormState> add_partition_dialog_key = GlobalKey();
 
-  Draw_Controller drawerController = Get.find();
+  Draw_Controller draw_Controller = Get.find();
 
   bool quantity = true;
   bool partition_center = true;
-  bool distance = false
-  ;
+  bool distance = false;
+
+  bool help_partition = false;
+
   bool proportional = false;
   bool edit_enable = true;
 
  late  double back_distance;
+ late  double partation_material_thickness;
 
+ late  double final_left_distance;
+ late  double final_right_distance;
+
+
+  help_partition_change(){
+
+    if (!help_partition) {
+      help_partition=true;
+      partation_material_thickness=0;
+    }else{
+      help_partition=false;
+    }
+
+    setState(() {
+
+    });
+  }
 
   left_changed() {
-    double double_left_distance;
     if (distance) {
       if (Left_Distance.text.toString() != '') {
-        double_left_distance = double.parse(Left_Distance.text.toString());
-        Right_Distance.text =
-        '${drawerController.box_repository.box_model.value.
-        box_pieces[drawerController.hover_id].piece_width
-            - double_left_distance-18}';
+        double  double_left_distance_0 = double.parse(Left_Distance.text.toString());
+        final_left_distance=double.parse(double_left_distance_0.toStringAsFixed(2));
+
+        double right_distance=draw_Controller.box_repository.box_model.value.
+        box_pieces[draw_Controller.hover_id].piece_width
+            - final_left_distance-partation_material_thickness;
+
+        Right_Distance.text ='${double.parse(right_distance.toStringAsFixed(2))}';
+        // '${}';
       }
     } else if (proportional) {
       if (Left_Distance.text.toString() != '') {
-        double_left_distance = double.parse(Left_Distance.text.toString());
-        Right_Distance.text = '${(100 - double_left_distance).toInt()}';
+        final_left_distance = double.parse(Left_Distance.text.toString());
+        Right_Distance.text = '${(100 - final_left_distance).toInt()}';
       }
     }
+
 
     setState(() {});
   }
 
   right_changed() {
-    double double_right_distance;
-    if (distance) {
+
+     if (distance) {
       if (Right_Distance.text.toString() != '') {
-        double_right_distance = double.parse(Right_Distance.text.toString())+18;
-        Left_Distance.text = ''
-            '${drawerController.box_repository.box_model.value.box_pieces[drawerController.hover_id].piece_width
-            - double_right_distance}';
+      double  double_right_distance_0 = double.parse(Right_Distance.text.toString())+partation_material_thickness;
+      final_right_distance=double.parse(double_right_distance_0.toStringAsFixed(2));
+       double d_Left_Distance_0 =draw_Controller.box_repository.box_model.value.box_pieces[draw_Controller.hover_id].piece_width
+            - final_right_distance;
+       double d_Left_Distance=double.parse(d_Left_Distance_0.toStringAsFixed(2));
+       Left_Distance.text='${double.parse(d_Left_Distance.toStringAsFixed(2))}';
       }
     } else if (proportional) {
       if (Right_Distance.text.toString() != '') {
-        double_right_distance = double.parse(Right_Distance.text.toString());
-        Left_Distance.text = '${(100 - double_right_distance).toInt()}';
+        final_right_distance = double.parse(Right_Distance.text.toString());
+        Left_Distance.text = '${(100 - final_right_distance).toInt()}';
       }
     }
 
@@ -76,51 +102,50 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
 
   add_partition() {
 
-    back_distance=drawerController.box_repository.pack_panel_distence;
+    back_distance=draw_Controller.box_repository.pack_panel_distence;
 
+    double frontage_Gap = double.parse(Front_Gap.text.toString());
+    double material = !help_partition?(double.parse((double.parse(Material.text.toString())).toStringAsFixed(2))):0;
 
     if (add_partition_dialog_key.currentState!.validate()) {
-      if (!partition_center) {
-        if (distance) {
-          double left_Distence =
-          quantity ? double.parse(Left_Distance.text.toString()) : 0;
-          double frontage_Gap = double.parse(Front_Gap.text.toString());
-          double material = double.parse(Material.text.toString());
 
-          drawerController.add_partition(left_Distence, frontage_Gap, material,
-              double.parse(Quantity.text.toString()).toInt(),back_distance);
+      if (quantity) {
 
-        } else if (proportional) {
-          double left_Distence =
-              (double.parse(Left_Distance.text.toString()) / 100) *
-                  (drawerController.box_repository.box_model.value
-                      .box_pieces[drawerController.hover_id].piece_width) -
-                  double.parse(Material.text.toString()) / 2;
+        if (!partition_center) {
 
-          double frontage_Gap = double.parse(Front_Gap.text.toString());
-          double material = double.parse(Material.text.toString());
+          double  double_left_distance_0 = double.parse(Left_Distance.text.toString());
+          final_left_distance=double.parse(double_left_distance_0.toStringAsFixed(2));
 
-          drawerController.add_partition(left_Distence, frontage_Gap, material,
-              double.parse(Quantity.text.toString()).toInt(),back_distance);
+          if (distance) {
+
+             draw_Controller.add_partition(final_left_distance, frontage_Gap, material,1,back_distance,help_partition);
+
+          } else if (proportional) {
+            double left_Distence =
+                (final_left_distance / 100) *
+                    (draw_Controller.box_repository.box_model.value
+                        .box_pieces[draw_Controller.hover_id].piece_width) -
+                    material / 2;
+
+            draw_Controller.add_partition(left_Distence, frontage_Gap, material,1,back_distance,help_partition);
+
+          }
+        }
+        ///if partation center
+        else {
+          double left_Distence = draw_Controller.box_repository.box_model.value
+              .box_pieces[draw_Controller.hover_id].piece_width /
+              2 - material/ 2;
+
+          draw_Controller.add_partition(left_Distence, frontage_Gap, material,1,back_distance,help_partition);
 
         }
       }
-      ///if partation center
-      else {
-        double left_Distence = drawerController.box_repository.box_model.value
-            .box_pieces[drawerController.hover_id].piece_width /
-            2 -
-            double.parse(Material.text.toString()) / 2;
-
-        double frontage_Gap = double.parse(Front_Gap.text.toString());
-        double material = double.parse(Material.text.toString());
-
-        drawerController.add_partition(left_Distence, frontage_Gap, material,
-            double.parse(Quantity.text.toString()).toInt(),back_distance);
+      else{
+        draw_Controller.add_partition(0, frontage_Gap, material,
+            double.parse(Quantity.text.toString()).toInt(),back_distance,help_partition);
 
       }
-    }else{
-      print('popopopo');
     }
     setState(() {
 
@@ -134,9 +159,11 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
       distance = false;
       proportional = false;
       edit_enable = false;
+      Quantity.text='1';
       Left_Distance.text = '0';
       Right_Distance.text = '0';
-    } else if (partition_center) {
+    }
+    else if (partition_center) {
       partition_center = false;
       distance = true;
       proportional = false;
@@ -150,16 +177,21 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
     // TODO: implement initState
     super.initState();
 
+    partation_material_thickness=draw_Controller.box_repository.box_model.value.init_material_thickness;
+
+
     Quantity.text='1';
-    Material.text='${drawerController.box_repository.box_model.
-    value.init_material_thickness}';
+    Material.text='$partation_material_thickness';
     Front_Gap.text='0';
 
     partition_center = true;
     distance = false;
     proportional = false;
     edit_enable = false;
-    Left_Distance.text = '${drawerController.box_repository.box_model.value.box_pieces[drawerController.hover_id].piece_width-18}';
+    double d_Left_Distance = draw_Controller.box_repository.box_model.value.
+    box_pieces[draw_Controller.hover_id].piece_width-partation_material_thickness;
+
+    Left_Distance.text='${double.parse(d_Left_Distance.toStringAsFixed(2))}';
     Right_Distance.text = '0';
 
 
@@ -250,6 +282,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                             if (double.parse(Quantity.text.toString()).toInt() >
                                 1) {
                               quantity = false;
+                              partition_center=false;
                               Left_Distance.text = '0';
                               Right_Distance.text = '0';
                               setState(() {});
@@ -289,13 +322,13 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                       width: 120,
                       height: 40,
                       child: TextFormField(
-                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        inputFormatters: [DecimalTextInputFormatter(1)],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Front_Gap,
                         validator: (v) {
                           if (!v!.isEmpty) {
                             double dv = double.parse(v.toString());
-                            if (dv <= (drawerController.box_repository.box_model.value.box_depth-100-24)) {
+                            if (dv <= (draw_Controller.box_repository.box_model.value.box_depth-100-24)) {
 
                             } else {
                               return 'the Gap big';
@@ -329,7 +362,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                       width: 120,
                       height: 40,
                       child: TextFormField(
-                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        inputFormatters: [DecimalTextInputFormatter(1)],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Material,
                         decoration: InputDecoration(
@@ -370,9 +403,25 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                           },
                         )),
                     Container(
-                        width: 180,
+                        width: 90,
                         child: Text(
                           'Center',
+                        )),
+                    SizedBox(width: 12,),
+                    Container(
+                        width: 40,
+                        child: Checkbox(
+                          value: help_partition,
+                          onChanged: (bool? value) {
+
+                            help_partition_change();
+
+                          },
+                        )),
+                    Container(
+                        width: 120,
+                        child: Text(
+                          'Help partition',
                         )),
                   ],
                 ),
@@ -448,7 +497,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                           left_changed();
                         },
                         enabled: (quantity && edit_enable),
-                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        inputFormatters: [DecimalTextInputFormatter(1)],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Left_Distance,
                         decoration: InputDecoration(
@@ -485,7 +534,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                           right_changed();
                         },
                         enabled: (quantity && edit_enable),
-                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        inputFormatters: [DecimalTextInputFormatter(1)],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         controller: Right_Distance,
                         decoration: InputDecoration(
