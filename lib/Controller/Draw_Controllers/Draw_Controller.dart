@@ -1,6 +1,6 @@
+
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:auto_cam/Controller/Draw_Controllers/AnalyzeJoins.dart';
 import 'package:auto_cam/Controller/Painters/Box_Painter.dart';
@@ -12,8 +12,10 @@ import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
+import 'package:auto_cam/View/Cabinet_Editor.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
-import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -44,7 +46,7 @@ class Draw_Controller extends GetxController {
 
   Draw_Controller(){
     read_pattern_files();
-
+    // read_Box_from_rebository();
 
   }
 
@@ -617,36 +619,145 @@ class Draw_Controller extends GetxController {
   }
 
 
-  save_Box( ) async {
-    final directory = await getApplicationDocumentsDirectory();
+  save_Box() async {
 
-    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
-    oldDirectory.createSync();
+    // final directory = await getApplicationDocumentsDirectory();
+    //
+    // final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    // oldDirectory.createSync();
+    //
+    // final Directory newDirectory = Directory('${oldDirectory.path}/Repository');
+    // newDirectory.createSync();
+    //
+    // final Directory finalDirectory =
+    //     Directory('$path0');
+    // finalDirectory.createSync();
+    //
+    // final path = await finalDirectory.path;
+    // String file_path = '$path/${box_repository.box_model.value.box_name}';
+    //
+    // File file = File(file_path);
+    //
+    // try {
+    //   // Convert the data to a JSON string
+    //   String jsonData = jsonEncode(box_repository.box_model.value.toJson());
+    //
+    //   // Write the JSON data to the file
+    //   file.writeAsStringSync(jsonData);
+    //
+    //   // print('JSON data has been written to $file_path');
+    // } catch (e) {
+    //   print('Error writing JSON data to the file: $e');
+    // }
+    // // read_Box_from_rebository();
+    //
 
-    final Directory newDirectory = Directory('${oldDirectory.path}/Boxes');
-    newDirectory.createSync();
 
-    final Directory finalDirectory =
-        Directory('${newDirectory.path}/${box_repository.box_model.value.box_name}');
-    finalDirectory.createSync();
+    String? outputFile = await FilePicker.platform.saveFile(
+      dialogTitle: 'Please select an output file:',
+      fileName: 'output-file',
+    );
 
-    final path = await finalDirectory.path;
-    String file_path = '$path/${box_repository.box_model.value.box_name}';
+    if (outputFile == null) {}
 
-    File file = File(file_path);
-
-    try {
-      // Convert the data to a JSON string
+try {
       String jsonData = jsonEncode(box_repository.box_model.value.toJson());
-
-      // Write the JSON data to the file
+      File file = File(outputFile!);
       file.writeAsStringSync(jsonData);
-
-      // print('JSON data has been written to $file_path');
     } catch (e) {
       print('Error writing JSON data to the file: $e');
     }
+
+
+
   }
+
+
+ open_File () async {
+
+   FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+   if (result != null) {
+     List<File> files = result.paths.map((path) => File(path!)).toList();
+     print(files.first.path);
+     read_Box_from_rebository(files.first.path);
+
+
+   } else {
+     // User canceled the picker
+   }
+
+    // read_Box_from_rebository(file!.path);
+
+    Get.to(Cabinet_Editor() );
+
+ }
+
+
+  read_Box_from_rebository(String path)async {
+
+//     box_repository.repo_boxes=[];
+//     final rootdirectory = await getApplicationDocumentsDirectory();
+// final Directory directory =
+//     Directory('${rootdirectory.path}/Auto_Cam/Repository/');
+//
+//     if (directory.existsSync()) {
+//
+//       List<FileSystemEntity> files = directory.listSync();
+//
+//       // Filter the list to include only files
+//       List<File> fileList = [];
+//       for (var fileEntity in files) {
+//         if (fileEntity is File) {
+//           fileList.add(fileEntity as File);
+//         }
+//       }
+//
+//       // Now, fileList contains a list of File objects from the directory.
+//       for (var file in fileList) {
+//         if (file.existsSync()) {
+//           File f = File(file.path);
+//
+//           if (f.path.contains('Box')) {
+//
+//
+//              String content = await f.readAsString();
+//
+//              Box_model bfr=Box_model.fromJson(json.decode(content));
+//
+//              box_repository.repo_boxes.add(bfr);
+//              // print(content);
+//
+//           }
+        // } else {
+        //   print('Directory does not exist: $directory');
+        // }
+
+              File f = File("$path");
+              String content = await f.readAsString();
+
+             Box_model bfr=Box_model.fromJson(json.decode(content));
+
+             box_repository.box_model.value=bfr;
+
+
+  }
+
+
+
+
+    // final Directory directory =
+    // Directory('${rootdirectory.path}/Auto_Cam/Boxes/$repo_box_name/$repo_box_name');
+    //
+    // File file = File(directory.path);
+    // String content = await file.readAsString();
+    //
+    // Box_model box_from_repo=Box_model.fromJson(jsonDecode(content));
+    //
+    // box_repository.box_model.value=box_from_repo;
+    // draw_Box();
+
+
 
   read_pattern_files() async {
 
@@ -695,32 +806,7 @@ box_repository.join_patterns.add(joinHolePattern);
 
 
   }
-  //
-  // Pattern_Painter Paint_Pattern_draw(JoinHolePattern  pattern){
-  //
-  //   Pattern_Painter pattern_painter = Pattern_Painter(pattern);
-  //
-  //   return pattern_painter;
-  // }
 
-
- // Pattern_Painter apply_pattern_to_piece(double length){
- //
- //    List<Bore_unit> bores=[];
- //
- //    for(JoinHolePattern pattern in box_repository.join_patterns){
- //      double min=pattern.min_length;
- //      double max=pattern.max_length;
- //
- //      if(min<length && length<=max){
- //        bores=pattern.apply_pattern(length);
- //      }
- //    }
- //    Pattern_Painter pattern_painter=Pattern_Painter(bores, length);
- //
- //    return pattern_painter;
- //
- //  }
 
   Pattern_Painter draw_Pattern(List<Bore_unit> Paint_bore_units,double length,double scal){
 
@@ -755,4 +841,8 @@ box_repository.join_patterns.add(joinHolePattern);
       print('---------');
     }
   }
+
+
+
+
 }

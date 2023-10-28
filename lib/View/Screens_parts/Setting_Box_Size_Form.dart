@@ -851,7 +851,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 ),
                 InkWell(
                     onTap: () {
-                      draw_Controller.print_pieces_coordinate();
+                      // draw_Controller.read_Box_from_rebository();
+                      print(draw_Controller.box_repository.repo_boxes.length);
                     },
                     child: Icon(
                       Icons.margin_outlined,
@@ -917,7 +918,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 InkWell(
                     onTap: () {
                       draw_Controller.save_Box();
-                    },
+                      },
                     child: Icon(
                       Icons.save,
                       size: 36,

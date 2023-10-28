@@ -1,6 +1,6 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/View/Cabinet_Editor.dart';
-import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/CreateJoinholepatternDialog.dart';
+ import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/CreateJoinholepatternDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -86,10 +86,10 @@ class _Box_TypeState extends State<Box_Type> {
                                 "lib/assets/images/normal.png",
                               )),
                         ),
-                        Text(
-                          "normal cabinet",
-                          style: TextStyle(fontSize: 14),
-                        ),
+                        // Text(
+                        //   "normal cabinet",
+                        //   style: TextStyle(fontSize: 14),
+                        // ),
                       ],
                     ),
                   ),
@@ -121,10 +121,10 @@ class _Box_TypeState extends State<Box_Type> {
                                 "lib/assets/images/10u.png",
                               )),
                         ),
-                        Text(
-                          "box with 10 cm top and normal base",
-                          style: TextStyle(fontSize: 14),
-                        ),
+                        // Text(
+                        //   "box with 10 cm top and normal base",
+                        //   style: TextStyle(fontSize: 14),
+                        // ),
                       ],
                     ),
                   ),
@@ -156,10 +156,10 @@ class _Box_TypeState extends State<Box_Type> {
                                 "lib/assets/images/10ud.png",
                               )),
                         ),
-                        Text(
-                          "box with 10 cm  top and base",
-                          style: TextStyle(fontSize: 14),
-                        ),
+                        // Text(
+                        //   "box with 10 cm  top and base",
+                        //   style: TextStyle(fontSize: 14),
+                        // ),
                       ],
                     ),
                   ),
@@ -176,10 +176,10 @@ class _Box_TypeState extends State<Box_Type> {
                 child: Row(mainAxisAlignment: MainAxisAlignment.center,
                   children: [
 
-                    InkWell(onTap: (){
-                      Get.defaultDialog(
-                          title: "Archives",
-                          content: Text('no saved boxes in your repository !!'));
+                    InkWell(onTap: () async{
+
+                      draw_controller.open_File();
+
                     }
                         ,child: Icon(Icons.file_open,size: 42,color: Colors.red[500],)),
                     SizedBox(width: 32,),

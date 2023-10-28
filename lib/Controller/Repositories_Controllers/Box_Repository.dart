@@ -37,8 +37,9 @@ class Box_Repository extends GetxController{
 
   List<JoinHolePattern> join_patterns=[];
 
+List<Box_model> repo_boxes=[];
 
-  Rx<Box_model> box_model=Box_model(
+Rx<Box_model> box_model=Box_model(
       'box_name',"wall_cabinet", 400, 600, 500, 18, 'MDF',5,
       9,18,
       100,  true, Point_model(0,0,0)).obs;
