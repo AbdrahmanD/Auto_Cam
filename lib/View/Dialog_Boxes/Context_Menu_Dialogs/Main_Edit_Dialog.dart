@@ -1,6 +1,7 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Door_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Drawer_Dialog.dart';
+import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Fix_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Partition_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Shelf_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Filler_Dialog.dart';
@@ -114,7 +115,7 @@ class Main_Edit_Dialog extends StatelessWidget {
             Navigator.of(Get.overlayContext!).pop();
             Get.defaultDialog(
                 title: 'add Filler',
-                content: Add_Filler_Dialog()
+                content: Add_Filler_Dialog(true)
             );
             // draw_controller.add_door(1.5);
           },
@@ -123,6 +124,33 @@ class Main_Edit_Dialog extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
         ),
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Divider(
+            height: 1,
+            color: Colors.blueGrey,
+          ),
+        ),
+
+
+        ///add fix panel
+        InkWell(
+          onTap: () {
+            Navigator.of(Get.overlayContext!).pop();
+            Get.defaultDialog(
+                title: 'add Fix panel',
+                content: Add_Fix_Dialog()
+            );
+            // draw_controller.add_door(1.5);
+          },
+          child: Text(
+            'Add Fix Panel',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+
+
 
 
       ],

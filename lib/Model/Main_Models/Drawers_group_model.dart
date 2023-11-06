@@ -256,9 +256,9 @@ late bool inner_drawer;
 
     Piece_model drawer_left_slider = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-      'HELPER',
+      'Helper',
       'V',
-      "HELPER",
+      "Helper",
       drawer_box_depth,
       drawer_slide_height,
       side_gap/2,
@@ -269,9 +269,9 @@ late bool inner_drawer;
     /// right side slider
     Piece_model drawer_right_slider = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-      'HELPER',
+      'Helper',
       'V',
-      "HELPER",
+      "Helper",
       drawer_box_depth,
       drawer_slide_height,
       side_gap/2,

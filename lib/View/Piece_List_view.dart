@@ -2,6 +2,7 @@ import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
 import 'package:auto_cam/Controller/Painters/Piece_Painter.dart';
 import 'package:auto_cam/Controller/Painters/Faces_Painter.dart';
+import 'package:auto_cam/Model/Main_Models/Cut_List_Item.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,7 +49,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                           child: Text(
                               'to delete any piece from the cut list : un check it'))),
                   Container(
-                    height: h-300,
+                    height: h-400,
                     child: ListView.builder(
                         itemCount: draw_controller
                             .box_repository.box_model.value.box_pieces.length,
@@ -57,7 +58,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                       .box_pieces[i].piece_name ==
                                   'inner' ||
                               draw_controller.box_repository.box_model.value
-                                      .box_pieces[i].piece_name.contains('HELPER')
+                                      .box_pieces[i].piece_name.contains('Helper')
 
                               ||(draw_controller.box_repository.box_model.value
                                           .box_pieces[i].is_changed && draw_controller.box_repository.box_model.value
@@ -121,7 +122,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                             onTap: () {
 
                               Excel_Controller my_excel=Excel_Controller();
-                              my_excel.create_excel(draw_controller.box_repository.box_model.value);
+                              my_excel.create_excel(draw_controller.box_repository.box_model.value.box_name);
 // my_excel.create_excel();
 
                             },
@@ -133,6 +134,44 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                       ],
                     ),
                   ),
+
+
+
+                  SizedBox(
+                    height: 12,
+                  ),
+
+                  ///Export Details sheets as PDF
+                  Container(
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 18,
+                        ),
+                        Container(
+                            width: 180,
+                            child: Text('Details sheets as   PDF ',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ))),
+                        SizedBox(
+                          width: 18,
+                        ),
+                        InkWell(
+                            onTap: () {},
+                            child: Icon(
+                              Icons.picture_as_pdf,
+                              size: 36,
+                              color: Colors.teal,
+                            )),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 12,
+                  ),
+
 
                   SizedBox(
                     height: 12,
@@ -189,7 +228,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                             .box_pieces[i].piece_name.contains('drawer'))
                         ||
                         draw_controller.box_repository.box_model.value
-                            .box_pieces[i].piece_name.contains("HELPER")) {
+                            .box_pieces[i].piece_name.contains("Helper")) {
                       return SizedBox();
                     } else if (draw_controller.box_repository.box_model.value
                         .box_pieces[i].piece_inable) {
@@ -321,88 +360,61 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                       height: h - 300,
                       child: ListView.builder(
                           itemCount: draw_controller
-                              .box_repository.box_model.value.box_pieces.length,
+                              .box_repository.cut_list_items.length,
                           itemBuilder: (BuildContext context, int index) {
-                            Piece_model p = draw_controller.box_repository
-                                .box_model.value.box_pieces[index];
+                           Cut_List_Item p = draw_controller.box_repository.cut_list_items[index];
 
-                            if (p.piece_name == "inner" ||p.piece_name.contains("HELPER") || p.piece_name == "help_shelf" || p.is_changed || !p.piece_inable) {
-                              return SizedBox();
-                            } else {
-                              return Column(
+                            return Column(
                                 children: [
                                   Container(
                                     width: 486,
-                                    height: 36,
+                                    // height: 36,
                                     color: Colors.white,
                                     child: Row(
                                       children: [
-                                        Container(
-                                            width: 2,
-                                            height: 36,
-                                            color: Colors.black),
+
                                         Container(
                                             width: 30,
                                             child: Center(
-                                                child: Text("${p.piece_id}"))),
-                                        Container(
-                                            width: 2,
-                                            height: 36,
-                                            color: Colors.black),
+                                                child: Text("${index + 1}"))),
+
                                         Container(
                                             width: 140,
                                             child: Center(
                                                 child:
-                                                    Text("${p.piece_name}"))),
-                                        Container(
-                                            width: 2,
-                                            height: 100,
-                                            color: Colors.black),
+                                                    Text("${p.pieces_names}"))),
+
                                         Container(
                                             width: 60,
                                             child: Center(
                                                 child: Text(
                                                     "${p.material_name}"))),
-                                        Container(
-                                            width: 2,
-                                            height: 36,
-                                            color: Colors.black),
+
                                         Container(
                                             width: 60,
                                             child: Center(
                                                 child: Text(
-                                                    "${p.piece_thickness}"))),
-                                        Container(
-                                            width: 2,
-                                            height: 36,
-                                            color: Colors.black),
+                                                    "${p.material_thickness}"))),
+
                                         Container(
                                             width: 60,
                                             child: Center(
                                                 child:
-                                                    Text("${p.piece_height}"))),
-                                        Container(
-                                            width: 2,
-                                            height: 36,
-                                            color: Colors.black),
+                                                    Text("${p.hight}"))),
+
                                         Container(
                                             width: 60,
                                             child: Center(
                                                 child:
-                                                    Text("${p.piece_width}"))),
-                                        Container(
-                                            width: 2,
-                                            height: 36,
-                                            color: Colors.black),
+                                                    Text("${p.width}"))),
+
+
                                         Container(
                                             width: 60,
                                             child: Center(
                                                 child:
-                                                Text("1"))),
-                                        Container(
-                                            width: 2,
-                                            height: 36,
-                                            color: Colors.black),
+                                                Text("${p.quantity}"))),
+
                                       ],
                                     ),
                                   ),
@@ -412,8 +424,8 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                       color: Colors.black),
                                 ],
                               );
-                            }
-                            return SizedBox();
+
+
                           }),
                     ),
                   ],

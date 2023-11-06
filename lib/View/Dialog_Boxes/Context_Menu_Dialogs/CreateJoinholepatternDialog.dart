@@ -169,7 +169,7 @@ class _CreateJoinholepatternDialogState
 
     return Container(
       width: 800,
-      height: 600,
+      height: 700,
       color: Colors.grey[100],
       child:
       Column(
@@ -293,7 +293,7 @@ class _CreateJoinholepatternDialogState
             children: [
               /// parameter editor
               Container(
-                  width: 200 ,height: 500,
+                  width: 200 ,height: 550,
                   child: ListView(
                     children: [
 

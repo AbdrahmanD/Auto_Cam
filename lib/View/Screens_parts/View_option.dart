@@ -452,7 +452,7 @@ class View_option extends StatelessWidget {
                                                           .length <
                                                       2)
                                                   ? Container(
-                                                      width: 100,
+                                                      width: 80,
                                                       height: 24,
                                                       child: TextFormField(
                                                         style: TextStyle(
@@ -502,16 +502,13 @@ class View_option extends StatelessWidget {
                                                           .length <
                                                       2)
                                                   ? Container(
-                                                      width: 100,
+                                                      width: 120,
                                                       height: 24,
                                                       child: TextFormField(
                                                         style: TextStyle(
                                                             fontSize: 12),
                                                         enabled: true,
-                                                        inputFormatters: [
-                                                          DecimalTextInputFormatter(
-                                                              2)
-                                                        ],
+
                                                         keyboardType: TextInputType
                                                             .numberWithOptions(
                                                                 decimal: true),
@@ -556,16 +553,13 @@ class View_option extends StatelessWidget {
                                                           .length <
                                                       2)
                                                   ? Container(
-                                                      width: 100,
+                                                      width: 120,
                                                       height: 24,
                                                       child: TextFormField(
                                                         style: TextStyle(
                                                             fontSize: 12),
                                                         enabled: true,
-                                                        inputFormatters: [
-                                                          DecimalTextInputFormatter(
-                                                              2)
-                                                        ],
+
                                                         keyboardType: TextInputType
                                                             .numberWithOptions(
                                                                 decimal: true),
@@ -616,10 +610,7 @@ class View_option extends StatelessWidget {
                                                         style: TextStyle(
                                                             fontSize: 12),
                                                         enabled: true,
-                                                        inputFormatters: [
-                                                          DecimalTextInputFormatter(
-                                                              2)
-                                                        ],
+
                                                         keyboardType: TextInputType
                                                             .numberWithOptions(
                                                                 decimal: true),
@@ -671,10 +662,7 @@ class View_option extends StatelessWidget {
                                                         style: TextStyle(
                                                             fontSize: 12),
                                                         enabled: true,
-                                                        inputFormatters: [
-                                                          DecimalTextInputFormatter(
-                                                              2)
-                                                        ],
+
                                                         keyboardType: TextInputType
                                                             .numberWithOptions(
                                                                 decimal: true),
@@ -709,26 +697,26 @@ class View_option extends StatelessWidget {
                                           ),
 
                                           /// origin for test only
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'origin :',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                              Text(
-                                                'Y 2 :${p.piece_faces.faces[2].corners[0].y_coordinate} \n '
-                                                'Y 0 :${p.piece_faces.faces[0].corners[0].y_coordinate} \n'
-                                                'Y origin:${p.piece_origin.y_coordinate} \n'
-                                                ,
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 6,
-                                          ),
+                                          // Row(
+                                          //   children: [
+                                          //     Text(
+                                          //       'origin :',
+                                          //       style: TextStyle(
+                                          //           fontSize: text_size),
+                                          //     ),
+                                          //     Text(
+                                          //       'Y 2 :${p.piece_faces.faces[2].corners[0].y_coordinate} \n '
+                                          //       'Y 0 :${p.piece_faces.faces[0].corners[0].y_coordinate} \n'
+                                          //       'Y origin:${p.piece_origin.y_coordinate} \n'
+                                          //       ,
+                                          //       style: TextStyle(
+                                          //           fontSize: text_size),
+                                          //     ),
+                                          //   ],
+                                          // ),
+                                          // SizedBox(
+                                          //   height: 6,
+                                          // ),
 
                                           /// unselect checkbox
                                           Row(
@@ -921,6 +909,7 @@ class View_option extends StatelessWidget {
                                               .value
                                               .box_pieces[
                                           draw_controller.selected_id[i]];
+
                                       p.material_name =
                                           new_material_name.text.toString();
                                       p.piece_name = new_name.text.toString();

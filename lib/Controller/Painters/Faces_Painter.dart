@@ -135,12 +135,6 @@ class Faces_Painter extends CustomPainter {
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
-          // print('face : $f'
-          //     ' x : ${piece_model.piece_faces.faces[f].bores[i].origin.x_coordinate} ,'
-          //     ' y : ${piece_model.piece_faces.faces[f].bores[i].origin.y_coordinate} ,'
-          //     ' z : ${piece_model.piece_faces.faces[f].bores[i].origin.z_coordinate} ,'
-          // );
-          // print('==========');
 
           double x= (piece_model.piece_faces.faces[f].bores[i].origin.x_coordinate-piece_model.piece_origin.x_coordinate)*my_scale+view_2.dy;
           double y= (piece_model.piece_faces.faces[f].bores[i].origin.y_coordinate-piece_model.piece_origin.y_coordinate)*my_scale+view_2.dx;

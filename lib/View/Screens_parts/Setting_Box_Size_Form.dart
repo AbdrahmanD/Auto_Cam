@@ -765,75 +765,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
 
-          //Export cut list as excel
-          Container(
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 18,
-                ),
-                Container(
-                    width: 180,
-                    child: Text('Export cut list as excel ',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ))),
-                SizedBox(
-                  width: 18,
-                ),
-                InkWell(
-                    onTap: () {
 
-                      Excel_Controller my_excel=Excel_Controller();
-                      my_excel.create_excel(draw_Controller.box_repository.box_model.value);
-
-
-                    },
-                    child: Icon(
-                      Icons.file_open_rounded,
-                      size: 36,
-                      color: Colors.teal,
-                    )),
-              ],
-            ),
-          ),
-
-          SizedBox(
-            height: 12,
-          ),
-
-          //Export Details sheets as PDF
-          Container(
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 18,
-                ),
-                Container(
-                    width: 180,
-                    child: Text('Details sheets as   PDF ',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ))),
-                SizedBox(
-                  width: 18,
-                ),
-                InkWell(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.picture_as_pdf,
-                      size: 36,
-                      color: Colors.teal,
-                    )),
-              ],
-            ),
-          ),
-
-          SizedBox(
-            height: 12,
-          ),
-
-          //preview Nesting sheets
+          ///preview Nesting sheets
           Container(
             child: Row(
               children: [

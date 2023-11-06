@@ -73,6 +73,12 @@ late Offset start_select_window;
 
   draw_box(Canvas canvas) {
 
+    Paint thin_line_painter = Paint()
+      ..strokeWidth = 0.6
+      ..style = PaintingStyle.stroke
+      ..color = Colors.black;
+
+
     Paint line_painter = Paint()
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke
@@ -94,6 +100,13 @@ late Offset start_select_window;
       ..style = PaintingStyle.fill
       ..color = Colors.grey[400]!
     ..blendMode=BlendMode.darken;
+
+    Paint doors_filler = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.blue[100]!
+      ..blendMode=BlendMode.darken;
+
+
 
     for (int i = 0; i < box_model.box_pieces.length; i++) {
       Piece_model piece_model = box_model.box_pieces[i];
@@ -159,6 +172,7 @@ late Offset start_select_window;
 
         }
       }
+
       for(int s=0;s<selected_id.length;s++){
         if (i == selected_id[s]) {
           if (piece_model.piece_name != 'inner' && piece_model.piece_name != 'Door') {
@@ -169,8 +183,12 @@ late Offset start_select_window;
         }
       }
 
-      if(piece_model.piece_name=="HELPER"){
+      if(piece_model.piece_name=="Helper"){
         canvas.drawPath(path, helper_filler);
+      }
+      else if(piece_model.piece_name.contains('Door')){
+        canvas.drawPath(path, doors_filler);
+        canvas.drawPath(path, thin_line_painter);
       }
         else {
         canvas.drawPath(path, line_painter);

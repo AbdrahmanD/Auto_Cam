@@ -19,6 +19,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../View/Dialog_Boxes/Context_Menu_Dialogs/Out_Box_Menu.dart';
+
 class Draw_Controller extends GetxController {
 
 
@@ -191,7 +193,7 @@ class Draw_Controller extends GetxController {
     hover_id = 100;
     for (int i = 0; i < box_pieces.length; i++) {
       Piece_model p = box_pieces[i];
-      if (p.piece_name.contains('back_panel')) {
+      if (p.piece_name.contains('back_panel') ||p.piece_name.contains('Door')) {
         continue;
       } else if (check_position(p, my_origin)) {
         hover_id = i;
@@ -287,22 +289,8 @@ class Draw_Controller extends GetxController {
       }
     } else {
       my_widget = Container(
-        child: Column(
-          children: [
-            // Text('general menu'),
-            // SizedBox(height: 24,),
-            // InkWell(
-            //   onTap: (){
-            //     AnalyzeJoins  analayzejoins=AnalyzeJoins(box_repository.box_model.value);
-            //     Navigator.of(Get.overlayContext!).pop();
-            //
-            //   },
-            //     child: Container(color: Colors.blueGrey,
-            //       width: 100,height: 50,child: Center(child: Text('analyze box')),
-            //     ),
-            // ),
-          ],
-        ),
+        child: Out_Box_Menu(),
+
       );
     }
 
@@ -385,6 +373,81 @@ class Draw_Controller extends GetxController {
     door_model.inner_id = hover_id;
     box_repository.box_model.value.add_door(door_model);
   }
+
+
+  /// add panel
+  add_fix_panel(double piece_thickness ,String material_name ,int corner){
+
+    int piece_id=box_repository.box_model.value.get_id();
+    String piece_name="Fix_panel_$piece_id";
+    double piece_width = box_repository.box_model.value.box_depth;
+    late double  piece_height;
+    if(corner==1||corner==3){
+        piece_height=box_repository.box_model.value.box_width;
+    }else if(corner==2||corner==4){
+         piece_height=box_repository.box_model.value.box_height;
+
+    }
+
+    Piece_model p =  box_repository.box_model.value.box_pieces.where((element) => element.piece_name=="left").first;
+    Point_model ref_origin=p.piece_origin;
+
+    double w=box_repository.box_model.value.box_width;
+    double h=box_repository.box_model.value.box_height;
+
+    late String piece_direction;
+    late Point_model fix_origin;
+
+    if( corner==1){
+     fix_origin=Point_model(
+         ref_origin.x_coordinate,
+         ref_origin.y_coordinate+h ,
+         ref_origin.z_coordinate
+     );
+     piece_direction="H";
+    }
+    else if( corner==2){
+      fix_origin=Point_model(
+          ref_origin.x_coordinate+w,
+          ref_origin.y_coordinate ,
+          ref_origin.z_coordinate
+      );
+      piece_direction="V";
+
+    }
+    else if( corner==3 ){
+      fix_origin=Point_model(
+          ref_origin.x_coordinate,
+          ref_origin.y_coordinate -piece_thickness,
+          ref_origin.z_coordinate
+      );
+      piece_direction="H";
+
+    }
+    else if( corner==4){
+      fix_origin=Point_model(
+          ref_origin.x_coordinate-piece_thickness,
+          ref_origin.y_coordinate ,
+          ref_origin.z_coordinate
+      );
+      piece_direction="V";
+
+    }
+
+
+
+
+    Piece_model piece_model = Piece_model(
+        piece_id, piece_name, piece_direction, material_name,
+        piece_width, piece_height, piece_thickness,
+        fix_origin
+    );
+
+    box_repository.box_model.value.box_pieces.add(piece_model);
+    draw_Box();
+
+  }
+
 
   /// delete piece
   delete_piece() {
@@ -563,11 +626,6 @@ class Draw_Controller extends GetxController {
 
   /// extract executable files with xml extension  to use in this case with kdt drilling machine
   extract_xml_files() {
-    // DateTime dateTime = DateTime.now();
-    // String date = "${dateTime.day}-${dateTime.month}-${dateTime.year}";
-
-    // String box_name = '(${box_repository.box_model.value.box_width}X${box_repository.box_model.value.box_height}X'
-    //     '${box_repository.box_model.value.box_depth})-${date}';
 
     for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
       if (box_repository.box_model.value.box_pieces[i].piece_name == "inner" ||
@@ -575,10 +633,8 @@ class Draw_Controller extends GetxController {
               .contains("back_panel") ||
           box_repository.box_model.value.box_pieces[i].piece_name
               .contains("base_panel") ||
-          box_repository.box_model.value.box_pieces[i].piece_name ==
-              "help_shelf" ||
-          box_repository.box_model.value.box_pieces[i].piece_inable == false ||
-          box_repository.box_model.value.box_pieces[i].is_changed == true) {
+          box_repository.box_model.value.box_pieces[i].piece_name.contains("Help") ||
+          box_repository.box_model.value.box_pieces[i].piece_inable == false  ) {
         continue;
       } else {
         kdt_file kdt = kdt_file(box_repository.box_model.value.box_pieces[i],
@@ -618,62 +674,37 @@ class Draw_Controller extends GetxController {
     }
   }
 
-
   save_Box() async {
+if(box_repository.box_have_been_saved){
 
-    // final directory = await getApplicationDocumentsDirectory();
-    //
-    // final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
-    // oldDirectory.createSync();
-    //
-    // final Directory newDirectory = Directory('${oldDirectory.path}/Repository');
-    // newDirectory.createSync();
-    //
-    // final Directory finalDirectory =
-    //     Directory('$path0');
-    // finalDirectory.createSync();
-    //
-    // final path = await finalDirectory.path;
-    // String file_path = '$path/${box_repository.box_model.value.box_name}';
-    //
-    // File file = File(file_path);
-    //
-    // try {
-    //   // Convert the data to a JSON string
-    //   String jsonData = jsonEncode(box_repository.box_model.value.toJson());
-    //
-    //   // Write the JSON data to the file
-    //   file.writeAsStringSync(jsonData);
-    //
-    //   // print('JSON data has been written to $file_path');
-    // } catch (e) {
-    //   print('Error writing JSON data to the file: $e');
-    // }
-    // // read_Box_from_rebository();
-    //
+    String jsonData = jsonEncode(box_repository.box_model.value.toJson());
+    File file = File(box_repository.box_file_path!);
+    file.writeAsStringSync(jsonData);
 
+}
+else {
+  String? outputFile = await FilePicker.platform.saveFile(
+    dialogTitle: 'Please select an output file:',
+    fileName: 'box name',
+  );
 
-    String? outputFile = await FilePicker.platform.saveFile(
-      dialogTitle: 'Please select an output file:',
-      fileName: 'output-file',
-    );
+  if (outputFile == null) {}
 
-    if (outputFile == null) {}
-
-try {
-      String jsonData = jsonEncode(box_repository.box_model.value.toJson());
-      File file = File(outputFile!);
-      file.writeAsStringSync(jsonData);
-    } catch (e) {
-      print('Error writing JSON data to the file: $e');
-    }
-
+  try {
+    String jsonData = jsonEncode(box_repository.box_model.value.toJson());
+    File file = File(outputFile!);
+    file.writeAsStringSync(jsonData);
+    box_repository.box_file_path=outputFile;
+    box_repository.box_have_been_saved=true;
+  } catch (e) {
+    print('Error writing JSON data to the file: $e');
+  }
+}
 
 
   }
 
-
- open_File () async {
+  open_File () async {
 
    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
 
@@ -693,45 +724,8 @@ try {
 
  }
 
-
   read_Box_from_rebository(String path)async {
 
-//     box_repository.repo_boxes=[];
-//     final rootdirectory = await getApplicationDocumentsDirectory();
-// final Directory directory =
-//     Directory('${rootdirectory.path}/Auto_Cam/Repository/');
-//
-//     if (directory.existsSync()) {
-//
-//       List<FileSystemEntity> files = directory.listSync();
-//
-//       // Filter the list to include only files
-//       List<File> fileList = [];
-//       for (var fileEntity in files) {
-//         if (fileEntity is File) {
-//           fileList.add(fileEntity as File);
-//         }
-//       }
-//
-//       // Now, fileList contains a list of File objects from the directory.
-//       for (var file in fileList) {
-//         if (file.existsSync()) {
-//           File f = File(file.path);
-//
-//           if (f.path.contains('Box')) {
-//
-//
-//              String content = await f.readAsString();
-//
-//              Box_model bfr=Box_model.fromJson(json.decode(content));
-//
-//              box_repository.repo_boxes.add(bfr);
-//              // print(content);
-//
-//           }
-        // } else {
-        //   print('Directory does not exist: $directory');
-        // }
 
               File f = File("$path");
               String content = await f.readAsString();
@@ -742,22 +736,6 @@ try {
 
 
   }
-
-
-
-
-    // final Directory directory =
-    // Directory('${rootdirectory.path}/Auto_Cam/Boxes/$repo_box_name/$repo_box_name');
-    //
-    // File file = File(directory.path);
-    // String content = await file.readAsString();
-    //
-    // Box_model box_from_repo=Box_model.fromJson(jsonDecode(content));
-    //
-    // box_repository.box_model.value=box_from_repo;
-    // draw_Box();
-
-
 
   read_pattern_files() async {
 
@@ -807,7 +785,6 @@ box_repository.join_patterns.add(joinHolePattern);
 
   }
 
-
   Pattern_Painter draw_Pattern(List<Bore_unit> Paint_bore_units,double length,double scal){
 
     Pattern_Painter pattern_painter=Pattern_Painter(Paint_bore_units, length,scal);
@@ -815,7 +792,6 @@ box_repository.join_patterns.add(joinHolePattern);
     return pattern_painter;
 
   }
-
 
   /// this only debug mode method to get information off the box pieces
   print_pieces_coordinate() {

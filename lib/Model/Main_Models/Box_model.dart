@@ -49,6 +49,9 @@ class Box_model {
     else if(box_type=="inner_cabinet")
     { inner_cabinet();}
 
+
+
+
   }
 
   Box_model.fromJson(Map<String, dynamic> json) {
@@ -200,6 +203,9 @@ Map<String, dynamic> toJson() {
         )
     );
     box_pieces.add(inner);
+
+
+
 
   }
 
@@ -654,122 +660,6 @@ Map<String, dynamic> toJson() {
     }
   }
 
-  add_filler(Filler_model filler_model , int hover_id){
-
-    double x = 0;
-    double y = 0;
-    double z = 0;
-
-
-    late double filler_w;
-    late double filler_h;
-    late double filler_th;
-
-    /// vertical filler
-    if(filler_model.filler_vertical){
-
-        filler_w =box_pieces[hover_id].piece_width;
-        filler_h = filler_model.height;
-        filler_th = filler_model.thickness;
-
-
-      double origin_x=box_pieces[hover_id].piece_origin.x_coordinate;
-      double origin_y=box_pieces[hover_id].piece_origin.y_coordinate;
-      double origin_z=box_pieces[hover_id].piece_origin.z_coordinate;
-
-      if (filler_model.corner == 1) {
-        x = origin_x;
-        y = origin_y + filler_model.y_move;
-        z = origin_z + filler_model.x_move;
-      }
-      else if (filler_model.corner == 2) {
-        x = origin_x;
-        y = origin_y + filler_model.y_move;
-        z = origin_z + filler_model.x_move +   box_depth - ((filler_model.filler_vertical)?filler_th:filler_w );
-      }
-      else if (filler_model.corner == 3) {
-        x = origin_x;
-        y = origin_y + filler_model.y_move +   box_pieces[hover_id].piece_height -
-            ((filler_model.filler_vertical)?filler_h:filler_th ) ;
-        z = origin_z + filler_model.x_move + box_depth  -  ((filler_model.filler_vertical)?filler_th:filler_w );
-      }
-      else if (filler_model.corner == 4){
-        x = origin_x;
-        y = origin_y + filler_model.y_move+  box_pieces[hover_id].piece_height -
-            ((filler_model.filler_vertical)?filler_h:filler_th ) ;
-        z = origin_z + filler_model.x_move;
-      }
-
-
-      Point_model filler_origin = Point_model(x, y, z);
-int id=get_id();
-      Piece_model filler = Piece_model(
-          id ,
-          'filler_$id',
-          "F",
-          init_material_name,
-          filler_w,
-          filler_h,
-          filler_th,
-          filler_origin);
-
-      box_pieces.add(filler);
-
-    }
-    /// horizontal filler
-    else{
-
-        filler_h = box_pieces[hover_id].piece_width;
-        filler_w = filler_model.height;
-        filler_th = filler_model.thickness;
-
-
-      double origin_x=box_pieces[hover_id].piece_origin.x_coordinate;
-      double origin_y=box_pieces[hover_id].piece_origin.y_coordinate;
-      double origin_z=box_pieces[hover_id].piece_origin.z_coordinate;
-
-      if (filler_model.corner == 1) {
-        x = origin_x;
-        y = origin_y + filler_model.y_move;
-        z = origin_z + filler_model.x_move;
-      }
-      else if (filler_model.corner == 2) {
-        x = origin_x;
-        y = origin_y + filler_model.y_move;
-        z = origin_z + filler_model.x_move +   box_depth - ((filler_model.filler_vertical)?filler_th:filler_w );
-      }
-      else if (filler_model.corner == 3) {
-        x = origin_x;
-        y = origin_y + filler_model.y_move +   box_pieces[hover_id].piece_height -
-            ((filler_model.filler_vertical)?filler_h:filler_th ) ;
-        z = origin_z + filler_model.x_move + box_depth  -  ((filler_model.filler_vertical)?filler_th:filler_w );
-      }
-      else if (filler_model.corner == 4){
-        x = origin_x;
-        y = origin_y + filler_model.y_move+  box_pieces[hover_id].piece_height -
-            ((filler_model.filler_vertical)?filler_h:filler_th ) ;
-        z = origin_z + filler_model.x_move;
-      }
-
-
-      Point_model filler_origin = Point_model(x, y, z);
-        int id=get_id();
-
-      Piece_model filler = Piece_model(
-          id ,
-          'filler_$id',
-          "H",
-          init_material_name,
-          filler_w,
-          filler_h,
-          filler_th,
-          filler_origin);
-
-      box_pieces.add(filler);
-    }
-
-  }
-
   add_single_door_pattern(Door_Model door_model) {
 
     Piece_model door_inner = box_pieces[door_model.inner_id];
@@ -795,7 +685,7 @@ int id=get_id();
         door_inner.piece_origin.y_coordinate -
             base_thickness ,
         (!door_model.inner_door)?
-        (door_inner.piece_origin.z_coordinate-door_model.material_thickness ):
+        (door_inner.piece_origin.z_coordinate-door_model.material_thickness-2 ):
         (door_inner.piece_origin.z_coordinate)
     );
     int id=get_id();
@@ -838,7 +728,7 @@ int id=get_id();
         door_inner.piece_origin.y_coordinate -
             base_thickness ,
         (!door_model.inner_door)?
-        (door_inner.piece_origin.z_coordinate-door_model.material_thickness ):
+        (door_inner.piece_origin.z_coordinate-door_model.material_thickness -2):
         (door_inner.piece_origin.z_coordinate)
     );
 
@@ -850,7 +740,7 @@ int id=get_id();
         door_inner.piece_origin.y_coordinate -
             base_thickness ,
         (!door_model.inner_door)?
-        (door_inner.piece_origin.z_coordinate-door_model.material_thickness ):
+        (door_inner.piece_origin.z_coordinate-door_model.material_thickness -2):
         (door_inner.piece_origin.z_coordinate)
     );
 
@@ -869,8 +759,9 @@ int id = get_id();
         door_model.material_thickness,
         door_origin_1,
          );
+    int id2 = get_id();
     Piece_model door_piece_2 = Piece_model(
-      id,
+      id2,
       'Door_$id left',
         'F',
         door_model.material_name,
@@ -884,6 +775,185 @@ int id = get_id();
     box_pieces.add(door_piece_2);
   }
 
+  add_filler(Filler_model filler_model , int hover_id){
+
+    double x = 0;
+    double y = 0;
+    double z = 0;
+
+
+    late double filler_w;
+    late double filler_h;
+    late double filler_th;
+
+    /// filler inside
+    if (filler_model.filler_inside) {
+      if(filler_model.filler_vertical){
+
+        filler_w =box_pieces[hover_id].piece_width;
+        filler_h = filler_model.height;
+        filler_th = filler_model.thickness;
+
+
+        double origin_x=box_pieces[hover_id].piece_origin.x_coordinate;
+        double origin_y=box_pieces[hover_id].piece_origin.y_coordinate;
+        double origin_z=box_pieces[hover_id].piece_origin.z_coordinate;
+
+        if (filler_model.corner == 1) {
+          x = origin_x;
+          y = origin_y + filler_model.y_move;
+          z = origin_z + filler_model.x_move;
+        }
+        else if (filler_model.corner == 2) {
+          x = origin_x;
+          y = origin_y + filler_model.y_move;
+          z = origin_z + filler_model.x_move +   box_depth - ((filler_model.filler_vertical)?filler_th:filler_w );
+        }
+        else if (filler_model.corner == 3) {
+          x = origin_x;
+          y = origin_y + filler_model.y_move +   box_pieces[hover_id].piece_height -
+              ((filler_model.filler_vertical)?filler_h:filler_th ) ;
+          z = origin_z + filler_model.x_move + box_depth  -  ((filler_model.filler_vertical)?filler_th:filler_w );
+        }
+        else if (filler_model.corner == 4){
+          x = origin_x;
+          y = origin_y + filler_model.y_move+  box_pieces[hover_id].piece_height -
+              ((filler_model.filler_vertical)?filler_h:filler_th ) ;
+          z = origin_z + filler_model.x_move;
+        }
+
+
+        Point_model filler_origin = Point_model(x, y, z);
+        int id=get_id();
+        Piece_model filler = Piece_model(
+            id ,
+            'filler_$id',
+            "F",
+            init_material_name,
+            filler_w,
+            filler_h,
+            filler_th,
+            filler_origin);
+
+        box_pieces.add(filler);
+
+      }
+      /// horizontal filler
+      else{
+
+        filler_h = box_pieces[hover_id].piece_width;
+        filler_w = filler_model.height;
+        filler_th = filler_model.thickness;
+
+
+        double origin_x=box_pieces[hover_id].piece_origin.x_coordinate;
+        double origin_y=box_pieces[hover_id].piece_origin.y_coordinate;
+        double origin_z=box_pieces[hover_id].piece_origin.z_coordinate;
+
+        if (filler_model.corner == 1) {
+          x = origin_x;
+          y = origin_y + filler_model.y_move;
+          z = origin_z + filler_model.x_move;
+        }
+        else if (filler_model.corner == 2) {
+          x = origin_x;
+          y = origin_y + filler_model.y_move;
+          z = origin_z + filler_model.x_move +   box_depth - ((filler_model.filler_vertical)?filler_th:filler_w );
+        }
+        else if (filler_model.corner == 3) {
+          x = origin_x;
+          y = origin_y + filler_model.y_move +   box_pieces[hover_id].piece_height -
+              ((filler_model.filler_vertical)?filler_h:filler_th ) ;
+          z = origin_z + filler_model.x_move + box_depth  -  ((filler_model.filler_vertical)?filler_th:filler_w );
+        }
+        else if (filler_model.corner == 4){
+          x = origin_x;
+          y = origin_y + filler_model.y_move+  box_pieces[hover_id].piece_height -
+              ((filler_model.filler_vertical)?filler_h:filler_th ) ;
+          z = origin_z + filler_model.x_move;
+        }
+
+
+        Point_model filler_origin = Point_model(x, y, z);
+        int id=get_id();
+
+        Piece_model filler = Piece_model(
+            id ,
+            'filler_$id',
+            "H",
+            init_material_name,
+            filler_w,
+            filler_h,
+            filler_th,
+            filler_origin);
+
+        box_pieces.add(filler);
+      }
+    }
+
+    /// filler outside
+    else{
+
+
+      if(filler_model.corner==1||filler_model.corner==2){
+        filler_w=filler_model.width;
+        filler_h=box_height;
+        filler_th=filler_model.thickness;
+      }else{
+        filler_w= box_width;
+        filler_h=filler_model.width ;
+        filler_th=filler_model.thickness;
+
+      }
+      Piece_model p =  box_pieces.where((element) => element.piece_name=="left").first;
+
+      double origin_x=p.piece_origin.x_coordinate;
+      double origin_y=p.piece_origin.y_coordinate;
+      double origin_z=p.piece_origin.z_coordinate;
+
+
+
+
+      if (filler_model.corner == 1) {
+        x = origin_x-filler_model.width;
+        y = origin_y ;
+        z = origin_z ;
+      }
+      else if (filler_model.corner == 2) {
+        x = origin_x+box_width;
+        y = origin_y ;
+        z = origin_z ;
+      }
+      else if (filler_model.corner == 3) {
+        x = origin_x;
+        y = origin_y +box_height  ;
+        z = origin_z  ;
+      }
+      else if (filler_model.corner == 4){
+        x = origin_x;
+        y = origin_y -filler_h ;
+        z = origin_z  ;
+      }
+
+
+
+      Point_model filler_origin = Point_model(x, y, z);
+      int id=get_id();
+
+      Piece_model filler = Piece_model(
+          id ,
+          'filler_$id',
+          "F",
+          init_material_name,
+          filler_w,
+          filler_h,
+          filler_th,
+          filler_origin);
+
+      box_pieces.add(filler);
+    }
+
+  }
 
   double  correct_value(double v){
     double resault= double.parse(v.toStringAsFixed(2));

@@ -85,7 +85,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
       if(fixed_shelf){
         shelf_type='fixed_shelf';
       }else if (help_shelf){
-        shelf_type='HELPER';
+        shelf_type='Helper';
       }else{
         shelf_type='shelf';
       }

@@ -44,9 +44,9 @@ class Pattern_Painter extends CustomPainter {
     Path second=Path();
 
 
-    Offset side_origin = Offset(50,65);
-    Offset second_origin = Offset(50,35);
-    Offset face_origin = Offset(50,65);
+    Offset side_origin = Offset(50,75);
+    Offset second_origin = Offset(50,25);
+    Offset face_origin = Offset(50,75);
 
     second.moveTo(second_origin.dx,       second_origin.dy-2*h*scal);
     second.lineTo(second_origin.dx,       second_origin.dy);
@@ -55,8 +55,8 @@ class Pattern_Painter extends CustomPainter {
 
     side.moveTo(side_origin.dx,  side_origin.dy);
     side.lineTo(side_origin.dx+w*scal,side_origin.dy);
-    side.lineTo(side_origin.dx+w*scal,side_origin.dy-th*scal);
-    side.lineTo(side_origin.dx,  side_origin.dy-th*scal);
+    side.lineTo(side_origin.dx+w*scal,side_origin.dy-th);
+    side.lineTo(side_origin.dx,  side_origin.dy-th);
     side.lineTo(side_origin.dx,  side_origin.dy);
 
     face.moveTo(face_origin.dx,  face_origin.dy+5*h*scal);
