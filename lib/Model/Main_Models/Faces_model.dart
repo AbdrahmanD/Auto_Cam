@@ -33,17 +33,16 @@ class Faces_model{
 /// back   = 6
 
 
-
-
 class Single_Face {
 
   late int name;
   late List<Point_model> corners;
   late List<Bore_model> bores;
+  late List<Groove_model> groves;
   late List<Join_Line> joines;
 
 
-  Single_Face(this.name, this.corners,this.joines,this.bores);
+  Single_Face(this.name, this.corners,this.joines,this.groves,this.bores);
 
 
   Single_Face.fromJson(Map<String, dynamic> json) {
@@ -55,6 +54,10 @@ class Single_Face {
     if (json['Bores_model'] != null) {
       bores = <Bore_model>[];
       json['Bores_model'].forEach((v) { bores!.add(new Bore_model.fromJson(v)); });
+    }
+    if (json['groves'] != null) {
+      groves = <Groove_model>[];
+      json['groves'].forEach((v) { groves!.add(new Groove_model.fromJson(v)); });
     }
     if (json['Joines_model'] != null) {
       joines = <Join_Line>[];
@@ -71,6 +74,9 @@ class Single_Face {
     if (this.bores != null) {
       data['Bores_model'] = this.bores!.map((v) => v.toJson()).toList();
     }
+    if (this.groves != null) {
+      data['groves'] = this.groves!.map((v) => v.toJson()).toList();
+    }
     if (this.joines != null) {
       data['Joines_model'] = this.joines!.map((v) => v.toJson()).toList();
     }
@@ -82,68 +88,34 @@ class Single_Face {
 
 
 
-class LineWithType{
-  late List<Line> lines;
-  late String type;
-  late Color color;
-
-  LineWithType(this.lines, this.type,this.color);
-}
-
-class Line{
+class Groove_model{
 
   late Point_model start_point;
   late Point_model end_point;
+  late double groove_width;
+  late double groove_depth;
 
-  Line(this.start_point, this.end_point);
+  Groove_model( this.start_point, this.end_point, this.groove_width,this.groove_depth);
 
+  Groove_model.fromJson(Map<String,dynamic> map){
+    this.start_point=Point_model.fromJson(map["start_point"]);
+    this.end_point=Point_model.fromJson(map["end_point"]);
+    this.groove_width=map["groove_width"];
+    this.groove_depth=map["groove_depth"];
 
-}
-
-class tow_D_Line{
-
-  late Offset start_point;
-  late Offset end_point;
-
-  tow_D_Line(this.start_point, this.end_point);
-
-
-}
-
-class Join_Line{
-
-  late Point_model start_point;
-  late Point_model end_point;
-  late String join_type;
-
-  Join_Line(this.start_point, this.end_point, this.join_type);
-
-
-  Join_Line.fromJson(Map<String, dynamic> json) {
-    start_point =  Point_model.fromJson(json['start_point']) ;
-    end_point = Point_model.fromJson(json['origend_pointin']) ;
-    join_type = json['join_type'];
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String,dynamic> toJson(){
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.start_point != null) {
-      data['start_point'] = this.start_point!.toJson();
-    }
-    if (this.end_point != null) {
-      data['origend_pointin'] = this.end_point!.toJson();
-    }
-    data['join_type'] = this.join_type;
+
+    data["start_point"]=this.start_point.toJson();
+    data["end_point"]=this.end_point.toJson();
+    data["groove_width"]=this.groove_width;
+    data["groove_depth"]=this.groove_depth;
+
     return data;
   }
 
-
 }
 
 
-class TowFaceBoring{
-  late List<Bore_model> H_bores;
-  late List<Bore_model> V_bores;
-
-  TowFaceBoring(this.H_bores, this.V_bores);
-}

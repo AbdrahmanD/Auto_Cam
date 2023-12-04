@@ -55,7 +55,7 @@ int n=2;
 
 
         var title1 = sheet.cell(CellIndex.indexByString('A$n'));
-        title1.value = '${n}';
+        title1.value = '${n-1}';
         var title2 = sheet.cell(CellIndex.indexByString('B$n'));
         title2.value = '${p[i].pieces_names}';
         var title3 = sheet.cell(CellIndex.indexByString('C$n'));

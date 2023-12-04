@@ -452,7 +452,7 @@ class View_option extends StatelessWidget {
                                                           .length <
                                                       2)
                                                   ? Container(
-                                                      width: 80,
+                                                      width: 125,
                                                       height: 24,
                                                       child: TextFormField(
                                                         style: TextStyle(

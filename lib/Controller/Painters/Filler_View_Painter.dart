@@ -42,7 +42,7 @@ else{
       ..style = PaintingStyle.stroke
       ..color = Colors.blue;
 
-    Offset front_origin=Offset(20, 250);
+    Offset front_origin=Offset(60, 250);
 
 
     late double piece_w;
@@ -78,7 +78,7 @@ else{
 
     if(filler_model.filler_vertical){
       filler_w=piece_w;
-      filler_h=filler_model.width* my_scale;
+      filler_h=filler_model.height* my_scale;
     }else{
       filler_w=piece_w;
       filler_h=filler_model.thickness* my_scale;
@@ -130,7 +130,7 @@ draw_text(canvas, 'front', Offset(front_origin.dx+piece_w/2-40, front_origin.dy-
       ..style = PaintingStyle.stroke
       ..color = Colors.blue;
 
-    Offset side_origin=Offset(250, 250);
+    Offset side_origin=Offset(60, 500);
 
     late double piece_w;
     late double piece_h;
@@ -165,9 +165,9 @@ draw_text(canvas, 'front', Offset(front_origin.dx+piece_w/2-40, front_origin.dy-
 
     if(filler_model.filler_vertical){
       filler_w=filler_model.thickness* my_scale;
-      filler_h=filler_model.width* my_scale;
+      filler_h=filler_model.height* my_scale;
     }else{
-      filler_w=filler_model.width* my_scale;
+      filler_w=filler_model.height* my_scale;
       filler_h=filler_model.thickness* my_scale;
     }
 
@@ -201,6 +201,8 @@ draw_text(canvas, 'front', Offset(front_origin.dx+piece_w/2-40, front_origin.dy-
 
     canvas.drawPath(filler_p, filler_painter);
     draw_text(canvas, 'side', Offset(side_origin.dx+piece_w/2-40, side_origin.dy-piece_h/2), 12, 2);
+    draw_text(canvas, 'box\nfront', Offset(side_origin.dx-40, side_origin.dy-piece_h/2), 8, 2);
+    draw_text(canvas, 'box\nback', Offset(side_origin.dx+piece_w+10, side_origin.dy-piece_h/2), 8, 2);
 
 
 

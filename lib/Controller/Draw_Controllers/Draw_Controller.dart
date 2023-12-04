@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -8,22 +7,22 @@ import 'package:auto_cam/Controller/Painters/Pattern_Painter.dart';
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
-import 'package:auto_cam/View/Cabinet_Editor.dart';
-import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
+ import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
+  import 'package:auto_cam/project/Project_Painter.dart';
+import 'package:auto_cam/project/Project_model.dart';
 import 'package:file_picker/file_picker.dart';
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../View/Dialog_Boxes/Context_Menu_Dialogs/Out_Box_Menu.dart';
 
 class Draw_Controller extends GetxController {
-
-
   RxDouble drawing_scale = (0.8).obs;
   Rx<Size> screen_size = Size(800, 600).obs;
   Rx<Offset> mouse_position = Offset(0, 0).obs;
@@ -45,11 +44,9 @@ class Draw_Controller extends GetxController {
 
   Rx<Offset> box_move_offset = Offset(0, 0).obs;
 
-
-  Draw_Controller(){
+  Draw_Controller() {
     read_pattern_files();
     // read_Box_from_rebository();
-
   }
 
   ///
@@ -193,7 +190,8 @@ class Draw_Controller extends GetxController {
     hover_id = 100;
     for (int i = 0; i < box_pieces.length; i++) {
       Piece_model p = box_pieces[i];
-      if (p.piece_name.contains('back_panel') ||p.piece_name.contains('Door')) {
+      if (p.piece_name.contains('back_panel') ||
+          p.piece_name.contains('Door')) {
         continue;
       } else if (check_position(p, my_origin)) {
         hover_id = i;
@@ -290,7 +288,6 @@ class Draw_Controller extends GetxController {
     } else {
       my_widget = Container(
         child: Out_Box_Menu(),
-
       );
     }
 
@@ -331,15 +328,18 @@ class Draw_Controller extends GetxController {
     // add_Box(nb);
 
     draw_Box();
-
   }
 
   /// add partition method
-  add_partition(double left_Distence, double frontage_Gap,
-      double material_thickness, int quantity, double back_distance,bool helper) {
-
+  add_partition(
+      double left_Distence,
+      double frontage_Gap,
+      double material_thickness,
+      int quantity,
+      double back_distance,
+      bool helper) {
     box_repository.box_model.value.add_Partition(hover_id, left_Distence,
-        frontage_Gap, material_thickness, quantity, back_distance,helper);
+        frontage_Gap, material_thickness, quantity, back_distance, helper);
     //
     // Box_model b = box_repository.box_model.value;
     // Box_model nb = Box_model(
@@ -360,7 +360,6 @@ class Draw_Controller extends GetxController {
     // nb.box_pieces = b.box_pieces;
     // add_Box(nb);
     draw_Box();
-
   }
 
   add_filler(Filler_model filler_model) {
@@ -374,90 +373,66 @@ class Draw_Controller extends GetxController {
     box_repository.box_model.value.add_door(door_model);
   }
 
-
   /// add panel
-  add_fix_panel(double piece_thickness ,String material_name ,int corner){
+  add_fix_panel(double piece_thickness, String material_name, int corner) {
 
-    int piece_id=box_repository.box_model.value.get_id();
-    String piece_name="Fix_panel_$piece_id";
+    String piece_id = box_repository.box_model.value.get_id();
+    String piece_name = "Fix_panel_$piece_id";
     double piece_width = box_repository.box_model.value.box_depth;
-    late double  piece_height;
-    if(corner==1||corner==3){
-        piece_height=box_repository.box_model.value.box_width;
-    }else if(corner==2||corner==4){
-         piece_height=box_repository.box_model.value.box_height;
-
+    late double piece_height;
+    if (corner == 1 || corner == 3) {
+      piece_height = box_repository.box_model.value.box_width;
+    } else if (corner == 2 || corner == 4) {
+      piece_height = box_repository.box_model.value.box_height;
     }
 
-    Piece_model p =  box_repository.box_model.value.box_pieces.where((element) => element.piece_name=="left").first;
-    Point_model ref_origin=p.piece_origin;
+    Piece_model p = box_repository.box_model.value.box_pieces
+        .where((element) => element.piece_name == "left")
+        .first;
+    Point_model ref_origin = p.piece_origin;
 
-    double w=box_repository.box_model.value.box_width;
-    double h=box_repository.box_model.value.box_height;
+    double w = box_repository.box_model.value.box_width;
+    double h = box_repository.box_model.value.box_height;
 
     late String piece_direction;
     late Point_model fix_origin;
 
-    if( corner==1){
-     fix_origin=Point_model(
-         ref_origin.x_coordinate,
-         ref_origin.y_coordinate+h ,
-         ref_origin.z_coordinate
-     );
-     piece_direction="H";
-    }
-    else if( corner==2){
-      fix_origin=Point_model(
-          ref_origin.x_coordinate+w,
-          ref_origin.y_coordinate ,
-          ref_origin.z_coordinate
-      );
-      piece_direction="V";
-
-    }
-    else if( corner==3 ){
-      fix_origin=Point_model(
-          ref_origin.x_coordinate,
-          ref_origin.y_coordinate -piece_thickness,
-          ref_origin.z_coordinate
-      );
-      piece_direction="H";
-
-    }
-    else if( corner==4){
-      fix_origin=Point_model(
-          ref_origin.x_coordinate-piece_thickness,
-          ref_origin.y_coordinate ,
-          ref_origin.z_coordinate
-      );
-      piece_direction="V";
-
+    if (corner == 1) {
+      fix_origin = Point_model(ref_origin.x_coordinate,
+          ref_origin.y_coordinate + h, ref_origin.z_coordinate);
+      piece_direction = "H";
+    } else if (corner == 2) {
+      fix_origin = Point_model(ref_origin.x_coordinate + w,
+          ref_origin.y_coordinate, ref_origin.z_coordinate);
+      piece_direction = "V";
+    } else if (corner == 3) {
+      fix_origin = Point_model(ref_origin.x_coordinate,
+          ref_origin.y_coordinate - piece_thickness, ref_origin.z_coordinate);
+      piece_direction = "H";
+    } else if (corner == 4) {
+      fix_origin = Point_model(ref_origin.x_coordinate - piece_thickness,
+          ref_origin.y_coordinate, ref_origin.z_coordinate);
+      piece_direction = "V";
     }
 
-
-
-
-    Piece_model piece_model = Piece_model(
-        piece_id, piece_name, piece_direction, material_name,
-        piece_width, piece_height, piece_thickness,
-        fix_origin
-    );
+    Piece_model piece_model = Piece_model(piece_id, piece_name, piece_direction,
+        material_name, piece_width, piece_height, piece_thickness, fix_origin);
 
     box_repository.box_model.value.box_pieces.add(piece_model);
     draw_Box();
-
   }
-
 
   /// delete piece
   delete_piece() {
     Box_model b = box_repository.box_model.value;
 
-    for (int i = 0; i < selected_id.length; i++) {
-      box_repository.box_model.value.box_pieces.removeAt(selected_id[i]);
-    }
+if(selected_id.length==1){      box_repository.box_model.value.box_pieces.removeAt(selected_id[0]);
+
+  }
+
+
     box_repository.add_box_to_repo(b);
-    selected_id.value=[];
+    selected_id.value = [];
     draw_Box();
   }
 
@@ -566,7 +541,7 @@ class Draw_Controller extends GetxController {
 
   /// analyze box
   analyze() {
-    AnalyzeJoins analayzejoins = AnalyzeJoins(box_repository.box_model.value);
+    AnalyzeJoins analayzejoins = AnalyzeJoins(false);
   }
 
   move_box(Offset offset) {
@@ -625,25 +600,105 @@ class Draw_Controller extends GetxController {
   }
 
   /// extract executable files with xml extension  to use in this case with kdt drilling machine
-  extract_xml_files() {
+  extract_xml_files_pattern(Box_model box_model ,String folder_name,String directory) {
 
-    for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
-      if (box_repository.box_model.value.box_pieces[i].piece_name == "inner" ||
-          box_repository.box_model.value.box_pieces[i].piece_name
+    for (int i = 0; i < box_model.box_pieces.length; i++) {
+      if (box_model.box_pieces[i].piece_name == "inner" ||
+          box_model.box_pieces[i].piece_name
               .contains("back_panel") ||
-          box_repository.box_model.value.box_pieces[i].piece_name
+          box_model.box_pieces[i].piece_name
               .contains("base_panel") ||
-          box_repository.box_model.value.box_pieces[i].piece_name.contains("Help") ||
-          box_repository.box_model.value.box_pieces[i].piece_inable == false  ) {
+          box_model.box_pieces[i].piece_name
+              .contains("Help") ||
+          box_model.box_pieces[i].piece_inable == false) {
         continue;
       } else {
-        kdt_file kdt = kdt_file(box_repository.box_model.value.box_pieces[i],
-            box_repository.box_model.value.box_name);
+        kdt_file kdt = kdt_file(directory,box_model.box_pieces[i]);
       }
     }
   }
 
-  save_joinHolePattern(JoinHolePattern joinHolePattern) async {
+  extract_xml_files(bool project) async{
+
+     String? directory = await FilePicker.platform.saveFile(
+    dialogTitle: 'Please select an output file:',
+    fileName: 'box name',
+    );
+
+    if(project){
+
+      for(int i=0;i<box_repository.project_model.boxes.length;i++){
+        Box_model box_model = box_repository.project_model.boxes[i];
+        extract_xml_files_pattern(box_model,box_repository.project_model.project_name,directory!);
+      }
+    }else{
+      extract_xml_files_pattern(box_repository.box_model.value,box_repository.box_model.value.box_name,directory!);
+    }
+  }
+
+  save_Box() async {
+    if (box_repository.box_have_been_saved) {
+      String jsonData = jsonEncode(box_repository.box_model.value.toJson());
+      File file = File(box_repository.box_file_path!);
+      file.writeAsStringSync(jsonData);
+    } else {
+      String? outputFile = await FilePicker.platform.saveFile(
+        dialogTitle: 'Please select an output file:',
+        fileName: 'box name',
+      );
+
+      if (outputFile == null) {}
+
+      try {
+        String jsonData = jsonEncode(box_repository.box_model.value.toJson());
+        File file = File(outputFile!);
+        file.writeAsStringSync(jsonData);
+        box_repository.box_file_path = outputFile;
+        box_repository.box_have_been_saved = true;
+
+        print('box directory = ${outputFile}');
+
+
+      } catch (e) {
+        print('Error writing JSON data to the file: $e');
+      }
+    }
+
+  }
+
+  Future<String> open_File() async {
+    String repo_path ;
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: true);
+
+    if (result != null) {
+      List<File> files = result.paths.map((path) => File(path!)).toList();
+      repo_path=files.first.path;
+    } else {
+      // User canceled the picker
+      repo_path='';
+    }
+
+    // read_Box_from_rebository(file!.path);
+
+    // Get.to(Cabinet_Editor());
+
+    return repo_path;
+
+  }
+
+  Future<Box_model> read_Box_from_rebository() async {
+    String path = await open_File();
+    File f = File("$path");
+    String content = await f.readAsString();
+
+    Box_model bfr = Box_model.fromJson(json.decode(content));
+
+    box_repository.box_model.value = bfr;
+    return bfr;
+  }
+
+  save_joinHolePattern(JoinHolePattern joinHolePattern,String category) async {
     final directory = await getApplicationDocumentsDirectory();
 
     final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
@@ -652,13 +707,17 @@ class Draw_Controller extends GetxController {
     final Directory newDirectory = Directory('${oldDirectory.path}/Setting');
     newDirectory.createSync();
 
-    final Directory finalDirectory =
+    final Directory finalDirectory0 =
         Directory('${newDirectory.path}/Join_Patterns');
+    finalDirectory0.createSync();
+
+    final Directory finalDirectory =
+        Directory('${finalDirectory0.path}/${category}');
     finalDirectory.createSync();
 
     final path = await finalDirectory.path;
     String file_path = '$path/${joinHolePattern.name}-pattern';
-      // writeJsonToFile(joinHolePattern.toJson(),file_path);
+    // writeJsonToFile(joinHolePattern.toJson(),file_path);
     File file = File(file_path);
 
     try {
@@ -674,136 +733,120 @@ class Draw_Controller extends GetxController {
     }
   }
 
-  save_Box() async {
-if(box_repository.box_have_been_saved){
 
-    String jsonData = jsonEncode(box_repository.box_model.value.toJson());
-    File file = File(box_repository.box_file_path!);
-    file.writeAsStringSync(jsonData);
+  delete_joinHolePattern(JoinHolePattern joinHolePattern,String category) async {
 
-}
-else {
-  String? outputFile = await FilePicker.platform.saveFile(
-    dialogTitle: 'Please select an output file:',
-    fileName: 'box name',
-  );
+    final directory = await getApplicationDocumentsDirectory();
 
-  if (outputFile == null) {}
+    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    oldDirectory.createSync();
 
-  try {
-    String jsonData = jsonEncode(box_repository.box_model.value.toJson());
-    File file = File(outputFile!);
-    file.writeAsStringSync(jsonData);
-    box_repository.box_file_path=outputFile;
-    box_repository.box_have_been_saved=true;
-  } catch (e) {
-    print('Error writing JSON data to the file: $e');
-  }
-}
+    final Directory newDirectory = Directory('${oldDirectory.path}/Setting');
+    newDirectory.createSync();
 
+    final Directory finalDirectory0 =
+        Directory('${newDirectory.path}/Join_Patterns');
+    finalDirectory0.createSync();
 
-  }
+    final Directory finalDirectory =
+        Directory('${finalDirectory0.path}/${category}');
+    finalDirectory.createSync();
 
-  open_File () async {
+    final path = await finalDirectory.path;
+    String file_path = '$path/${joinHolePattern.name}-pattern';
 
-   FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    final dir = Directory(file_path);
+    dir.deleteSync(recursive: true);
 
-   if (result != null) {
-     List<File> files = result.paths.map((path) => File(path!)).toList();
-     print(files.first.path);
-     read_Box_from_rebository(files.first.path);
-
-
-   } else {
-     // User canceled the picker
-   }
-
-    // read_Box_from_rebository(file!.path);
-
-    Get.to(Cabinet_Editor() );
-
- }
-
-  read_Box_from_rebository(String path)async {
-
-
-              File f = File("$path");
-              String content = await f.readAsString();
-
-             Box_model bfr=Box_model.fromJson(json.decode(content));
-
-             box_repository.box_model.value=bfr;
+    box_repository.join_patterns[category]!.removeWhere((key, value) => value==joinHolePattern);
+    await read_pattern_files();
 
 
   }
 
   read_pattern_files() async {
 
-     box_repository.join_patterns.clear();
+    // box_repository.join_patterns.clear();
     final rootdirectory = await getApplicationDocumentsDirectory();
 
-    final Directory directory =
+    final Directory directory0 =
         Directory('${rootdirectory.path}/Auto_Cam/Setting/Join_Patterns');
+    directory0.createSync();
 
-    if (directory.existsSync()) {
+    for (int i = 0; i < box_repository.join_patterns.length; i++) {
+      String category_name = box_repository.join_patterns.keys.toList()[i];
 
-      List<FileSystemEntity> files = directory.listSync();
+      final Directory directory =
+          Directory('${directory0.path}/${category_name}');
+      directory.createSync();
 
-      // Filter the list to include only files
-      List<File> fileList = [];
-      for (var fileEntity in files) {
-        if (fileEntity is File) {
-          fileList.add(fileEntity as File);
-        }
-      }
+      if (directory.existsSync()) {
+        List<FileSystemEntity> files = directory.listSync();
 
-      // Now, fileList contains a list of File objects from the directory.
-      for (var file in fileList) {
-        if (file.existsSync()) {
-
-          File f = File(file.path);
-
-          if (f.path.contains('pattern')) {
-            String content = await f.readAsString();
-
-            JoinHolePattern joinHolePattern=JoinHolePattern.fromJson(json.decode(content));
-box_repository.join_patterns.add(joinHolePattern);
-
-
+        // Filter the list to include only files
+        List<File> fileList = [];
+        for (var fileEntity in files) {
+          if (fileEntity is File) {
+            fileList.add(fileEntity as File);
           }
-
-
-        } else {
-          print('Directory does not exist: $directory');
         }
 
+        // Now, fileList contains a list of File objects from the directory.
+        for (var file in fileList) {
+          if (file.existsSync()) {
+            File f = File(file.path);
+
+            if (f.path.contains('pattern')) {
+              String content = await f.readAsString();
+
+              JoinHolePattern joinHolePattern =
+                  JoinHolePattern.fromJson(json.decode(content));
+
+              box_repository.join_patterns[category_name]![joinHolePattern.name]=joinHolePattern;
+
+            }
+          } else {
+            print('Directory does not exist: $directory');
+          }
+        }
       }
-      print("pattern_length : ${box_repository.join_patterns.length}");
-
     }
-
-
   }
 
-  Pattern_Painter draw_Pattern(List<Bore_unit> Paint_bore_units,double length,double scal){
-
-    Pattern_Painter pattern_painter=Pattern_Painter(Paint_bore_units, length,scal);
+  Pattern_Painter draw_Pattern(List<Bore_unit> Paint_bore_units, double width,
+      double screen_width, double max_width) {
+    Pattern_Painter pattern_painter = Pattern_Painter(
+        Paint_bore_units,
+        box_repository.box_model.value.init_material_thickness,
+        width,
+        screen_width,
+        max_width);
 
     return pattern_painter;
-
   }
 
   /// this only debug mode method to get information off the box pieces
   print_pieces_coordinate() {
     for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
       print(
-          'index : $i;; piece id :${box_repository.box_model.value.box_pieces[i].piece_id} ;; name  :${box_repository.box_model.value.box_pieces[i].piece_name}');
-      print(
-          'height :  ${box_repository.box_model.value.box_pieces[i].piece_height} ;;'
-          ' width :  ${box_repository.box_model.value.box_pieces[i].piece_width}');
-      print(
-          'thickness :  ${box_repository.box_model.value.box_pieces[i].piece_thickness}');
-      print('quantity :  1');
+          'index : $i;; name  :${box_repository.box_model.value.box_pieces[i].piece_name}');
+      Piece_model p = box_repository.box_model.value.box_pieces[i];
+      for (int i = 0; i < p.piece_faces.faces.length; i++) {
+        Single_Face sf = p.piece_faces.faces[i];
+        print('index : $i;; face name  :${sf.name}');
+        print('bores  :${sf.bores.length}');
+
+        print("==   ==   ==   ==");
+      }
+
+      // print(
+      //     'index : $i;; piece id :${box_repository.box_model.value.box_pieces[i].piece_id} ;; name  :${box_repository.box_model.value.box_pieces[i].piece_name}');
+      // print(
+      //     'height :  ${box_repository.box_model.value.box_pieces[i].piece_height} ;;'
+      //     ' width :  ${box_repository.box_model.value.box_pieces[i].piece_width}');
+      // print(
+      //     'thickness :  ${box_repository.box_model.value.box_pieces[i].piece_thickness}');
+      // print('quantity :  1');
       //
       // box_repository.box_model.value.box_pieces[i].piece_faces.top_face.face_item.forEach((element) {print('top   : $element');});
       // print('---------');
@@ -814,9 +857,16 @@ box_repository.join_patterns.add(joinHolePattern);
       // box_repository.box_model.value.box_pieces[i].piece_faces.left_face .face_item.forEach((element) {print('left  : $element');});
       // print('---------');
       // print('(# Y #) = ${box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate}');
-      print('---------');
+      print('-----------------------------------');
+      print('-----------------------------------');
     }
   }
+
+
+
+
+
+  /// /// / / / PROJECT /////////////
 
 
 

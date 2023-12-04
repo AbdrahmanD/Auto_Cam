@@ -1,10 +1,15 @@
+import 'dart:ui';
+
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+
 class JoinHolePattern {
+  // late String category;
   late String name;
   late double min_length;
   late double max_length;
   late List<Bore_unit> bores;
 
-  JoinHolePattern(this.name, this.min_length, this.max_length, this.bores);
+  JoinHolePattern( this.name, this.min_length, this.max_length, this.bores);
 
   List<Bore_unit> apply_pattern(double length) {
 
@@ -61,6 +66,7 @@ class JoinHolePattern {
   }
 
   JoinHolePattern.fromJson(Map<String, dynamic> json) {
+    // category = json['category'];
     name = json['name'];
     min_length = json['min_length'];
     max_length = json['max_length'];
@@ -74,6 +80,7 @@ class JoinHolePattern {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    // data["category"] = this.category;
     data["name"] = this.name;
     data["min_length"] = this.min_length;
     data["max_length"] = this.max_length;
@@ -202,3 +209,71 @@ class Point_model{
 
 }
 
+
+class LineWithType{
+  late List<Line> lines;
+  late String type;
+  late Color color;
+
+  LineWithType(this.lines, this.type,this.color);
+}
+
+class Line{
+
+  late Point_model start_point;
+  late Point_model end_point;
+
+  Line(this.start_point, this.end_point);
+
+
+}
+
+class tow_D_Line{
+
+  late Offset start_point;
+  late Offset end_point;
+  late String line_type;
+
+  tow_D_Line(this.start_point, this.end_point,this.line_type);
+
+
+}
+
+class Join_Line{
+
+  late Point_model start_point;
+  late Point_model end_point;
+  late String join_type;
+
+  Join_Line(this.start_point, this.end_point, this.join_type);
+
+
+  Join_Line.fromJson(Map<String, dynamic> json) {
+    start_point =  Point_model.fromJson(json['start_point']) ;
+    end_point = Point_model.fromJson(json['origend_pointin']) ;
+    join_type = json['join_type'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.start_point != null) {
+      data['start_point'] = this.start_point!.toJson();
+    }
+    if (this.end_point != null) {
+      data['origend_pointin'] = this.end_point!.toJson();
+    }
+    data['join_type'] = this.join_type;
+    return data;
+  }
+
+
+}
+
+
+class TowFaceBoring{
+  late List<Bore_model> H_bores;
+  late List<Bore_model> V_bores;
+  late List<Groove_model> Grooves;
+
+  TowFaceBoring(this.H_bores, this.V_bores,this.Grooves);
+}

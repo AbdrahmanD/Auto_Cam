@@ -14,6 +14,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
   TextEditingController drawer_face_material_thickness =
       TextEditingController();
   TextEditingController drawer_base_material_thickness = TextEditingController();
+  TextEditingController under_base_thickness = TextEditingController();
   TextEditingController drawer_face_material_name = TextEditingController();
 
   TextEditingController drawer_box_height = TextEditingController();
@@ -70,6 +71,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
     each_top_gape_controller.text = '2';
     left_gape_controller.text = '1';
     right_gape_controller.text = '1';
+    side_gap_controller.text = '12';
   }
 
   @override
@@ -353,8 +355,8 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                   double.parse(All_base_gape_controller.text.toString());
                   double double_All_Top_gape_controller =
                   double.parse(All_top_gape_controller.text.toString());
-                  double double_drawer_base_material_thickness = double.parse(
-                      drawer_base_material_thickness.text.toString());
+                  double double_drawer_base_material_thickness = double.parse(drawer_base_material_thickness.text.toString());
+                  double double_under_base_thickness = double.parse(under_base_thickness.text.toString());
                   double double_each_top_gape_controller =
                   double.parse(each_top_gape_controller.text.toString());
                   double double_left_gape_controller =
@@ -387,6 +389,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                       drawer_face_material_name.text.toString(),
                       double_drawer_box_material_thickness,
                       double_drawer_base_material_thickness,
+                      double_under_base_thickness,
                       double_drawer_box_height,
                       double_drawer_box_depth,
                       double_slide_side_gap);
@@ -439,9 +442,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                           // bottom_changed();
                         },
                         enabled: true,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+
                         controller: drawer_box_material_thickness,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -476,9 +477,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                           // bottom_changed();
                         },
                         enabled: true,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+
                         controller: drawer_face_material_thickness,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -547,9 +546,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                           // bottom_changed();
                         },
                         enabled: true,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+
                         controller: drawer_base_material_thickness,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -569,7 +566,40 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                   height: 6,
                 ),
 
+                /// under base  thickness
+                Row(
+                  children: [
+                    Text('under base thickness'),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 80,
+                      height: 30,
+                      child: TextFormField(
+                        onChanged: (_) {
+                          // bottom_changed();
+                        },
+                        enabled: true,
 
+                        controller: under_base_thickness,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 6,
+                ),
 
                 Divider(height: 4,color: Colors.black,),
                 SizedBox(
@@ -590,9 +620,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                           // bottom_changed();
                         },
                         enabled: true,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+
                         controller: drawer_box_height,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -629,9 +657,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                           // bottom_changed();
                         },
                         enabled: true,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+
                         controller: drawer_box_depth,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -666,9 +692,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                           // bottom_changed();
                         },
                         enabled: true,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
+
                         controller: side_gap_controller,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(

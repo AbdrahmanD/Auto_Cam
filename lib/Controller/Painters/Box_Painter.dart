@@ -183,7 +183,7 @@ late Offset start_select_window;
         }
       }
 
-      if(piece_model.piece_name=="Helper"){
+      if(piece_model.piece_name.contains("Helper")){
         canvas.drawPath(path, helper_filler);
       }
       else if(piece_model.piece_name.contains('Door')){

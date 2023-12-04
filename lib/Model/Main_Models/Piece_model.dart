@@ -6,7 +6,8 @@ import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 class Piece_model{
 
 
-  late int          piece_id;
+  // late String      box_name ;
+  late String          piece_id;
   late String       piece_name;
   late String       piece_direction;
   late String       material_name;
@@ -85,12 +86,12 @@ class Piece_model{
     }
 
     List<Single_Face> faces= [
-      Single_Face(1,[p_4,p_3,p_7,p_8], [], []),
-      Single_Face(2,[p_2,p_6,p_7,p_3], [], []),
-      Single_Face(3,[p_1,p_2,p_6,p_5], [], []),
-      Single_Face(4,[p_1,p_5,p_8,p_4], [], []),
-      Single_Face(5,[p_1,p_2,p_3,p_4], [], []),
-      Single_Face(6,[p_5,p_6,p_7,p_8], [], []),
+      Single_Face(1,[p_4,p_3,p_7,p_8], [], [], []),
+      Single_Face(2,[p_2,p_6,p_7,p_3], [], [], []),
+      Single_Face(3,[p_1,p_2,p_6,p_5], [], [], []),
+      Single_Face(4,[p_1,p_5,p_8,p_4], [], [], []),
+      Single_Face(5,[p_1,p_2,p_3,p_4], [], [], []),
+      Single_Face(6,[p_5,p_6,p_7,p_8], [], [], []),
     ] ;
 
     piece_faces=Faces_model(faces);

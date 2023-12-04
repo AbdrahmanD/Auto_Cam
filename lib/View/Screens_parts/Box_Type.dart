@@ -20,6 +20,7 @@ class _Box_TypeState extends State<Box_Type> {
     var w = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar: AppBar(),
       body: Container(
         height: h,
         width: w,
@@ -167,26 +168,6 @@ class _Box_TypeState extends State<Box_Type> {
                 ],
               ),
 
-              /// saved boxes
-              SizedBox(
-                height: 64,
-              ),
-
-              Container(width: w,
-                child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    InkWell(onTap: () async{
-
-                      draw_controller.open_File();
-
-                    }
-                        ,child: Icon(Icons.file_open,size: 42,color: Colors.red[500],)),
-                    SizedBox(width: 32,),
-                    Text("open box from repository",style: TextStyle(fontSize: 22),)
-                  ],
-                ),
-              ),
 
               /// setting
               SizedBox(

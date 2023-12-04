@@ -1,4 +1,3 @@
-import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
@@ -35,13 +34,7 @@ class Faces_Painter extends CustomPainter {
     Paint bore_painter = Paint()
       ..style = PaintingStyle.fill
       ..color = Colors.black;
-    //
-    // Offset view_1 = Offset(65, 150);
-    // Offset view_2 = Offset(45, 200);
-    // Offset view_3 = Offset(65, 200);
-    // Offset view_4 = Offset(290, 200);
-    // Offset view_5 = Offset(65, 420);
-    // Offset view_6 = Offset(65, 450);
+
 
     late double w;
     late double h;
@@ -83,8 +76,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_1_0.x_coordinate)*my_scale+view_1.dx,view_1.dy- (jsp.y_coordinate-p_1_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_1_0.x_coordinate)*my_scale+view_1.dx,view_1.dy- (jep.y_coordinate-p_1_0.y_coordinate)*my_scale);
 
-        lines_1.add(tow_D_Line(sof,eof));
-
+         String line_type=piece_model.piece_faces.faces[5].joines[i].join_type;
+        lines_1.add(tow_D_Line(sof,eof,line_type));
       }
       /// draw the boring holes
       ///
@@ -107,6 +100,8 @@ class Faces_Painter extends CustomPainter {
         }
       }
 
+
+
       /// view 2
       Point_model p_2_0 = piece_model.piece_faces.faces[3].corners[0];
       Point_model p_2_2 = piece_model.piece_faces.faces[3].corners[2];
@@ -123,8 +118,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.y_coordinate-p_2_0.y_coordinate)*my_scale+view_2.dx,view_2.dy- (jsp.z_coordinate-p_2_0.z_coordinate)*my_scale);
         Offset eof=Offset((jep.y_coordinate-p_2_0.y_coordinate)*my_scale+view_2.dx,view_2.dy- (jep.z_coordinate-p_2_0.z_coordinate)*my_scale);
 
-        lines_2.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[3].joines[i].join_type;
+        lines_2.add(tow_D_Line(sof,eof,line_type));
       }
       draw_face(canvas, p_2_w, p_2_h, view_2,lines_2);
 
@@ -163,8 +158,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_3_0.x_coordinate)*my_scale+view_3.dx,view_3.dy-( jsp.z_coordinate-p_3_0.z_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_3_0.x_coordinate)*my_scale+view_3.dx,view_3.dy-( jep.z_coordinate-p_3_0.z_coordinate)*my_scale);
 
-        lines_3.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[0].joines[i].join_type;
+        lines_3.add(tow_D_Line(sof,eof,line_type));
       }
 
       draw_face(canvas, p_3_w, p_3_h, view_3,lines_3);
@@ -199,7 +194,9 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.y_coordinate-p_4_0.y_coordinate)*my_scale+view_4.dx,view_4.dy- (jsp.z_coordinate-p_4_0.z_coordinate)*my_scale);
         Offset eof=Offset((jep.y_coordinate-p_4_0.y_coordinate)*my_scale+view_4.dx,view_4.dy- (jep.z_coordinate-p_4_0.z_coordinate)*my_scale);
 
-        lines_4.add(tow_D_Line(sof,eof));
+        String line_type=piece_model.piece_faces.faces[1].joines[i].join_type;
+        lines_4.add(tow_D_Line(sof,eof,line_type));
+
       }
       draw_face(canvas, p_4_w, p_4_h, view_4,lines_4);
       f=1;
@@ -240,8 +237,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_5_0.x_coordinate)*my_scale+view_5.dx,view_5.dy- (jsp.y_coordinate-p_5_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_5_0.x_coordinate)*my_scale+view_5.dx,view_5.dy- (jep.y_coordinate-p_5_0.y_coordinate)*my_scale);
 
-        lines_5.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[4].joines[i].join_type;
+        lines_5.add(tow_D_Line(sof,eof,line_type));
       }
       draw_face(canvas, p_5_w, p_5_h, view_5,lines_5);
 
@@ -275,8 +272,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_6_0.x_coordinate)*my_scale+view_6.dx,view_6.dy- (jsp.z_coordinate-p_6_0.z_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_6_0.x_coordinate)*my_scale+view_6.dx,view_6.dy- (jep.z_coordinate-p_6_0.z_coordinate)*my_scale);
 
-        lines_6.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[2].joines[i].join_type;
+        lines_6.add(tow_D_Line(sof,eof,line_type));
       }
       draw_face(canvas, p_6_w, p_6_h, view_6,lines_6);
 
@@ -328,8 +325,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.z_coordinate-p_1_0.z_coordinate)*my_scale+view_1.dx,view_1.dy-( jsp.x_coordinate-p_1_0.x_coordinate)*my_scale);
         Offset eof=Offset((jep.z_coordinate-p_1_0.z_coordinate)*my_scale+view_1.dx,view_1.dy-( jep.x_coordinate-p_1_0.x_coordinate)*my_scale);
 
-        lines_1.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[0].joines[i].join_type;
+        lines_1.add(tow_D_Line(sof,eof,line_type));
       }
 
       draw_face(canvas, p_1_w, p_1_h, view_1,lines_1);
@@ -363,8 +360,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_2_0.x_coordinate)*my_scale+view_2.dx,view_2.dy-( jsp.y_coordinate-p_2_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_2_0.x_coordinate)*my_scale+view_2.dx,view_2.dy-( jep.y_coordinate-p_2_0.y_coordinate)*my_scale);
 
-        lines_2.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[4].joines[i].join_type;
+        lines_2.add(tow_D_Line(sof,eof,line_type));
       }
       draw_face(canvas, p_2_w, p_2_h, view_2,lines_2);
 
@@ -400,8 +397,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.z_coordinate-p_3_0.z_coordinate)*my_scale+view_3.dx,view_3.dy-( jsp.y_coordinate-p_3_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.z_coordinate-p_3_0.z_coordinate)*my_scale+view_3.dx,view_3.dy-( jep.y_coordinate-p_3_0.y_coordinate)*my_scale);
 
-        lines_3.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[3].joines[i].join_type;
+        lines_3.add(tow_D_Line(sof,eof,line_type));
       }
       draw_face(canvas, p_3_w, p_3_h, view_3,lines_3);
 
@@ -420,6 +417,8 @@ class Faces_Painter extends CustomPainter {
 
         }
       }
+
+
       /// view 4
       Point_model p_4_0 = piece_model.piece_faces.faces[5].corners[0];
       Point_model p_4_2 = piece_model.piece_faces.faces[5].corners[2];
@@ -434,8 +433,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_4_0.x_coordinate)*my_scale+view_4.dx,view_4.dy-( jsp.y_coordinate-p_4_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_4_0.x_coordinate)*my_scale+view_4.dx,view_4.dy-( jep.y_coordinate-p_4_0.y_coordinate)*my_scale);
 
-        lines_4.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[5].joines[i].join_type;
+        lines_4.add(tow_D_Line(sof,eof,line_type));
 
       }
       draw_face(canvas, p_4_w, p_4_h, view_4,lines_4);
@@ -469,14 +468,14 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.z_coordinate-p_5_0.z_coordinate)*my_scale+view_5.dx,view_5.dy-( jsp.x_coordinate-p_5_0.x_coordinate)*my_scale);
         Offset eof=Offset((jep.z_coordinate-p_5_0.z_coordinate)*my_scale+view_5.dx,view_5.dy-( jep.x_coordinate-p_5_0.x_coordinate)*my_scale);
 
-        lines_5.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[2].joines[i].join_type;
+        lines_5.add(tow_D_Line(sof,eof,line_type));
 
       }
       draw_face(canvas, p_5_w, p_5_h, view_5,lines_5);
 
       f=2;
-      if(piece_model.piece_faces.faces[f].bores.length>0){
+      if(piece_model.piece_faces.faces[f].bores.length>0) {
 
         for(int i=0;i<piece_model.piece_faces.faces[f].bores.length;i++){
 
@@ -503,8 +502,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.z_coordinate-p_6_0.z_coordinate)*my_scale+view_6.dx,view_6.dy- (jsp.y_coordinate-p_6_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.z_coordinate-p_6_0.z_coordinate)*my_scale+view_6.dx,view_6.dy- (jep.y_coordinate-p_6_0.y_coordinate)*my_scale);
 
-        lines_6.add(tow_D_Line(sof,eof));
-      }
+        String line_type=piece_model.piece_faces.faces[1].joines[i].join_type;
+        lines_6.add(tow_D_Line(sof,eof,line_type));      }
       draw_face(canvas, p_6_w, p_6_h, view_6,lines_6);
 
       f=1;
@@ -554,8 +553,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_1_0.x_coordinate)*my_scale+view_1.dx,view_1.dy-( jsp.z_coordinate-p_1_0.z_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_1_0.x_coordinate)*my_scale+view_1.dx,view_1.dy-( jep.z_coordinate-p_1_0.z_coordinate)*my_scale);
 
-        lines_1.add(tow_D_Line(sof,eof));
-      }
+        String line_type=piece_model.piece_faces.faces[0].joines[i].join_type;
+        lines_1.add(tow_D_Line(sof,eof,line_type));      }
       draw_face(canvas, p_1_w, p_1_h, view_1,lines_1);
 
 
@@ -588,8 +587,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.z_coordinate-p_2_0.z_coordinate)*my_scale+view_2.dx,view_2.dy-( jsp.y_coordinate-p_2_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.z_coordinate-p_2_0.z_coordinate)*my_scale+view_2.dx,view_2.dy-( jep.y_coordinate-p_2_0.y_coordinate)*my_scale);
 
-        lines_2.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[3].joines[i].join_type;
+        lines_2.add(tow_D_Line(sof,eof,line_type));
       }
       draw_face(canvas, p_2_w, p_2_h, view_2,lines_2);
 
@@ -624,8 +623,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_3_0.x_coordinate)*my_scale+view_3.dx,view_3.dy-( jsp.y_coordinate-p_3_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_3_0.x_coordinate)*my_scale+view_3.dx,view_3.dy-( jep.y_coordinate-p_3_0.y_coordinate)*my_scale);
 
-        lines_3.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[4].joines[i].join_type;
+        lines_3.add(tow_D_Line(sof,eof,line_type));
       }
       draw_face(canvas, p_3_w, p_3_h, view_3,lines_3);
 
@@ -659,7 +658,9 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.z_coordinate-p_4_0.z_coordinate)*my_scale+view_4.dx,view_4.dy-( jsp.y_coordinate-p_4_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.z_coordinate-p_4_0.z_coordinate)*my_scale+view_4.dx,view_4.dy-( jep.y_coordinate-p_4_0.y_coordinate)*my_scale);
 
-        lines_4.add(tow_D_Line(sof,eof));
+
+        String line_type=piece_model.piece_faces.faces[1].joines[i].join_type;
+        lines_4.add(tow_D_Line(sof,eof,line_type));
 
 
       }
@@ -693,8 +694,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_5_0.x_coordinate)*my_scale+view_5.dx,view_5.dy-( jsp.z_coordinate-p_5_0.z_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_5_0.x_coordinate)*my_scale+view_5.dx,view_5.dy-( jep.z_coordinate-p_5_0.z_coordinate)*my_scale);
 
-        lines_5.add(tow_D_Line(sof,eof));
-      }
+        String line_type=piece_model.piece_faces.faces[2].joines[i].join_type;
+        lines_5.add(tow_D_Line(sof,eof,line_type));      }
       draw_face(canvas, p_5_w, p_5_h, view_5,lines_5);
 
       f=2;
@@ -726,8 +727,8 @@ class Faces_Painter extends CustomPainter {
         Offset sof=Offset((jsp.x_coordinate-p_6_0.x_coordinate)*my_scale+view_6.dx,view_6.dy-( jsp.y_coordinate-p_6_0.y_coordinate)*my_scale);
         Offset eof=Offset((jep.x_coordinate-p_6_0.x_coordinate)*my_scale+view_6.dx,view_6.dy-( jep.y_coordinate-p_6_0.y_coordinate)*my_scale);
 
-        lines_6.add(tow_D_Line(sof,eof));
-
+        String line_type=piece_model.piece_faces.faces[5].joines[i].join_type;
+        lines_6.add(tow_D_Line(sof,eof,line_type));
 
       }
       draw_face(canvas, p_6_w, p_6_h, view_6,lines_6);
@@ -781,11 +782,15 @@ class Faces_Painter extends CustomPainter {
       ..color = Colors.black;
 
     Paint line_painter = Paint()
-      ..strokeWidth = 2
+      ..strokeWidth = 1
       ..style = PaintingStyle.stroke
       ..color = Colors.teal[200]!;
 
 
+    Paint groove_painter = Paint()
+      ..strokeWidth = 4
+      ..style = PaintingStyle.stroke
+      ..color = Colors.red[500]!;
 
     Path p = Path();
 
@@ -798,10 +803,20 @@ class Faces_Painter extends CustomPainter {
     canvas.drawPath(p, piece_painter);
 
     for(int i=0;i<lines.length;i++){
+      if((lines[i].line_type=="Groove")){
+        canvas.drawLine(
+            Offset(lines[i].start_point.dx, lines[i].start_point.dy),
+            Offset(lines[i].end_point.dx,   lines[i].end_point.dy),
+            groove_painter);
+      }else{
       canvas.drawLine(
           Offset(lines[i].start_point.dx, lines[i].start_point.dy),
           Offset(lines[i].end_point.dx,   lines[i].end_point.dy),
           line_painter);
+    }
+
+    // canvas.drawCircle(Offset(lines[i].start_point.dx, lines[i].start_point.dy), 2, groove_painter);
+
     }
 
 

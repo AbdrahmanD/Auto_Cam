@@ -6,21 +6,37 @@ import 'package:auto_cam/Model/Main_Models/Cut_List_Item.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
+import 'package:auto_cam/project/Project_model.dart';
 import 'package:get/get.dart';
 
 class AnalyzeJoins {
 
-  late Box_model box_model;
+  late bool project;
+  late Project_model project_model;
   Draw_Controller draw_controller = Get.find();
 
-  AnalyzeJoins(this.box_model) {
-    clean_faces();
-    all_face_check();
+  AnalyzeJoins(bool project) {
+this.project=project;
+
+    draw_controller.box_repository.cut_list_items = [];
+project_model = draw_controller.box_repository.project_model;
+
+    if(project){
+     for (int i = 0; i<draw_controller.box_repository.project_model.boxes.length; i++) {
+       Box_model box_model = draw_controller.box_repository.project_model.boxes[i];
+        clean_faces(box_model);
+        all_face_check(box_model);
+     }
+    }else{
+      Box_model box_model = draw_controller.box_repository.box_model.value;
+      clean_faces(box_model);
+      all_face_check(box_model);
+    }
 
     collect_all_same_pieces();
-  }
+   }
 
-  clean_faces() {
+  clean_faces(Box_model box_model) {
     for (int p = 0; p < box_model.box_pieces.length; p++) {
       Piece_model piece = box_model.box_pieces[p];
       for (int f = 0; f < piece.piece_faces.faces.length; f++) {
@@ -28,29 +44,29 @@ class AnalyzeJoins {
         box_model.box_pieces[p].piece_faces.faces[f].bores = [];
       }
     }
-    draw_controller.box_repository.cut_list_items=[];
+    draw_controller.box_repository.cut_list_items = [];
   }
 
   ///  all pieces for loop
-  all_face_check() {
+  all_face_check(Box_model box_model) {
     for (int mp = 0; mp < box_model.box_pieces.length; mp++) {
       Piece_model mpiece = box_model.box_pieces[mp];
 
-      if (mpiece.piece_name == "inner" || mpiece.piece_name.contains("Door")||
-          mpiece.piece_name.contains("Helper")) {
+      if (mpiece.piece_name == "inner" ||
+          mpiece.piece_name.contains("back_panel") ||
+          mpiece.piece_name.contains("base_panel")) {
         continue;
       }
 
-      for (int mf = 0; mf < mpiece.piece_faces.faces.length; mf++) {
+      for (int mf = 0; mf < mpiece.piece_faces.faces.length; mf++)
+      {
         Single_Face mface = mpiece.piece_faces.faces[mf];
 
         for (int sp = 0; sp < box_model.box_pieces.length; sp++) {
           Piece_model spiece = box_model.box_pieces[sp];
 
           if (spiece.piece_id == mpiece.piece_id ||
-              spiece.piece_name == "inner" ||
-              spiece.piece_name.contains("Helper")||spiece.piece_name.contains("Door")
-          ) {
+              spiece.piece_name == "inner") {
             continue;
           }
           for (int sf = 0; sf < spiece.piece_faces.faces.length; sf++) {
@@ -59,35 +75,113 @@ class AnalyzeJoins {
             bool main_face_direction =
                 detect_face_direction(mpiece.piece_direction, mface) == "V" ||
                     detect_face_direction(mpiece.piece_direction, mface) == "B";
-            bool second_face_direction=
+
+            bool second_face_direction =
                 detect_face_direction(spiece.piece_direction, sface) == "V" ||
                     detect_face_direction(spiece.piece_direction, sface) == "B";
 
-            if (main_face_direction && second_face_direction) {
+            if (main_face_direction &&
+                second_face_direction &&
+                !(spiece.piece_name.contains("Helper"))) {
               continue;
             }
+
+            late Line line;
             if (check_face_in_face((mface), (sface))) {
-              /// ==================
-
-              Join_Line join_line =
-                  find_center_line(sface, spiece.piece_thickness);
-              sface.joines.add(join_line);
-              mface.joines.add(join_line);
-
-              /// ==================
+              line = find_center_line(sface, spiece.piece_thickness);
             } else {
-              Join_Line join_line = check_tow_face_intersected(mface, sface);
-              sface.joines.add(join_line);
-              mface.joines.add(join_line);
+              line = check_tow_face_intersected(box_model,mface, sface);
             }
+
+            late Join_Line join_line;
+
+            if (mpiece.piece_name.contains("Helper") || spiece.piece_name.contains("Helper"))
+            {
+
+              ///Door_Helper
+              if (
+              mpiece.piece_name.contains("Door_Helper") || spiece.piece_name.contains("Door_Helper")) {
+
+                if(mpiece.piece_name.contains("Door") && !mpiece.piece_name.contains("Helper")){
+                  join_line = Join_Line(line.start_point, line.end_point, "Door_Hinges");
+
+                }else{
+                  join_line = Join_Line(line.start_point, line.end_point, "side_Hinges");
+
+                }
+
+              }
+
+              ///Drawer_Helper
+              else if (
+              mpiece.piece_name.contains("Drawer_Helper") || spiece.piece_name.contains("Drawer_Helper"))
+              {
+                if(mpiece.piece_name.contains("drawer")||spiece.piece_name.contains("drawer")){
+                  join_line = Join_Line(line.start_point, line.end_point, "Drawer_Rail_Side");
+                }
+                else{
+                  join_line = Join_Line(line.start_point, line.end_point, "Drawer_Rail_Box");
+                }
+              }
+
+              ///back_panel
+              else if (
+              mpiece.piece_name.contains("back_panel") || spiece.piece_name.contains("back_panel")||
+              mpiece.piece_name.contains("base_panel") || spiece.piece_name.contains("base_panel")
+              ) {
+                join_line = Join_Line(line.start_point, line.end_point, "Groove");
+              }
+
+              /// drawer Helper
+              else if (mpiece.piece_name.contains("DBF") || spiece.piece_name.contains("DBF")) {
+                join_line = Join_Line(line.start_point, line.end_point, "DBF");
+              }
+            }
+
+            /// Drawer Face
+            else if (mpiece.piece_name.contains("Drawer Face") || spiece.piece_name.contains("Drawer Face"))
+            {
+              join_line = Join_Line(line.start_point, line.end_point, "Drawer_Face");
+            }
+
+
+            /// Final the normal fixing method
+            ///  Box_Fitting_DRILL
+            else
+            {
+              join_line = Join_Line(
+                  line.start_point, line.end_point, "Box_Fitting_DRILL");
+            }
+
+            if (calculate_length_of_line(line, line_axis(line)) > 0) {
+              if (join_line.join_type=="Groove") {
+
+                double width;
+                if(mpiece.piece_name.contains("Helper")){
+                  width=mpiece.piece_thickness;
+
+                }else if(spiece.piece_name.contains("Helper")){
+                  width=mpiece.piece_thickness;
+
+                }else{
+                  width=1;
+                }
+                mface.groves.add(Groove_model(line.start_point, line.end_point, width, 9));
+              }
+                sface.joines.add(join_line);
+                mface.joines.add(join_line);
+
+            }
+
+            /// ==================
           }
         }
       }
     }
-    add_drill_bores_to_faces();
+    add_drill_bores_to_faces(box_model);
   }
 
-  Join_Line find_center_line(Single_Face face, double thickness) {
+  Line find_center_line(Single_Face face, double thickness) {
     // print('thickness thickness thickness : $thickness');
 
     Point_model corner_1 = face.corners[0];
@@ -115,7 +209,8 @@ class AnalyzeJoins {
         ep.y_coordinate = face.corners[2].y_coordinate;
         ep.z_coordinate = face.corners[2].z_coordinate - thickness / 2;
       }
-    } else if (face.name == 2 || face.name == 4) {
+    }
+    else if (face.name == 2 || face.name == 4) {
       if (((corner_3.z_coordinate - corner_1.z_coordinate).abs() - thickness) <
           1) {
         sp.x_coordinate = face.corners[0].x_coordinate;
@@ -134,7 +229,8 @@ class AnalyzeJoins {
         ep.y_coordinate = face.corners[2].y_coordinate - thickness / 2;
         ep.z_coordinate = face.corners[2].z_coordinate;
       }
-    } else if (face.name == 5 || face.name == 6) {
+    }
+    else if (face.name == 5 || face.name == 6) {
       if (((corner_3.x_coordinate - corner_1.x_coordinate).abs() - thickness) <
           1) {
         sp.x_coordinate = face.corners[0].x_coordinate +
@@ -159,9 +255,9 @@ class AnalyzeJoins {
       }
     }
 
-    Join_Line join_line = Join_Line(sp, ep, "DRILL");
+    Line line = Line(sp, ep);
 
-    return join_line;
+    return line;
   }
 
   /// find center of face
@@ -552,10 +648,9 @@ class AnalyzeJoins {
     return corners;
   }
 
-  /// final method until now
-  Join_Line check_tow_face_intersected(Single_Face face1, Single_Face face2) {
-    late Join_Line join_line =
-        Join_Line(Point_model(0, 0, 0), Point_model(0, 0, 0), "null");
+  Line check_tow_face_intersected(Box_model box_model,Single_Face face1, Single_Face face2) {
+    late Line line = Line(Point_model(0, 0, 0), Point_model(0, 0, 0));
+
     List<Point_model> intersection_rect = [];
 
     if (check_if_same_plane(face1, face2)) {
@@ -609,25 +704,16 @@ class AnalyzeJoins {
         // print('other_corners :${other_corners.length}');
         // print('intersection_rect :${intersection_rect.length}');
 
-        Line line = extract_join_line(intersection_rect, face1);
-
-        join_line = Join_Line(line.end_point, line.start_point, "DRILL");
+        line = extract_join_line(box_model,intersection_rect, face1);
       }
-
-      // for(int i=0;i<intersection_rect.length;i++){
-      //   print("$i : X:${intersection_rect[i].x_coordinate} , Y:${intersection_rect[i].y_coordinate} , Z:${intersection_rect[i].z_coordinate}");
-      // }
     }
-    //
-    // print("start point  X:${nested_points.start_point.x_coordinate} , Y:${nested_points.start_point.y_coordinate} ,Z:${nested_points.start_point.z_coordinate}");
-    // print("end point    X:${nested_points.end_point.x_coordinate} , Y:${nested_points.end_point.y_coordinate} ,Z:${nested_points.end_point.z_coordinate}");
 
-    return join_line;
+    return line;
   }
 
   /// nesting the points of intersection rectangle corners
   /// and add join line for both faces
-  Line extract_join_line(List<Point_model> corners, Single_Face face_1) {
+  Line extract_join_line(Box_model box_model,List<Point_model> corners, Single_Face face_1) {
     late Line join_line;
 
     late Point_model join_line_start_point;
@@ -661,7 +747,9 @@ class AnalyzeJoins {
 
       join_line_end_point = Point_model(x_cord,
           ydir ? l2[0].y_coordinate : l1[0].y_coordinate, l2[0].z_coordinate);
-    } else if (plane == "XZ") {
+    }
+
+    else if (plane == "XZ") {
       l1.add(p1);
 
       for (int i = 1; i < corners.length; i++) {
@@ -709,11 +797,14 @@ class AnalyzeJoins {
         }
       }
 
-      join_line_start_point =
-          Point_model(x_cord_1, l1[0].y_coordinate, z_cord_1);
+      join_line_start_point = Point_model(x_cord_1, l1[0].y_coordinate, z_cord_1);
       join_line_end_point = Point_model(x_cord_2, l1[0].y_coordinate, z_cord_2);
-    } else if (plane == "YZ") {
+    }
+
+    else if (plane == "YZ") {
+
       l1.add(p1);
+
       for (int i = 1; i < corners.length; i++) {
         if (p1.z_coordinate == corners[i].z_coordinate) {
           l2.add(corners[i]);
@@ -722,18 +813,20 @@ class AnalyzeJoins {
         }
       }
       late bool join_axis_is_Z;
-      if (l1[0].z_coordinate - l2[0].z_coordinate ==
-          box_model.init_material_thickness) {
-        join_axis_is_Z = false;
-      } else {
+
+      if (((l1[0].z_coordinate - l1[1].z_coordinate)).abs() >
+          ((l1[0].y_coordinate - l2[0].y_coordinate)).abs()) {
         join_axis_is_Z = true;
+      } else {
+        join_axis_is_Z = false;
       }
       late double y_cord_1;
       late double y_cord_2;
       if (join_axis_is_Z) {
         y_cord_1 = (l1[0].y_coordinate + l2[0].y_coordinate) / 2;
         y_cord_2 = y_cord_1;
-      } else {
+      }
+      else {
         if (l1[0].y_coordinate < l2[0].y_coordinate) {
           y_cord_1 = l1[0].y_coordinate;
           y_cord_2 = l2[0].y_coordinate;
@@ -747,28 +840,49 @@ class AnalyzeJoins {
       late double z_cord_2;
 
       if (join_axis_is_Z) {
-        z_cord_1 = l1[0].z_coordinate;
-        z_cord_2 = l1[1].z_coordinate;
-      } else {
-        if (l1[0].z_coordinate < l2[0].z_coordinate) {
+
+        if (l1[0].z_coordinate < l1[1].z_coordinate) {
           z_cord_1 = l1[0].z_coordinate;
-          z_cord_2 = l2[0].z_coordinate;
+          z_cord_2 = l1[1].z_coordinate;
         } else {
-          z_cord_1 = l2[0].z_coordinate;
+          z_cord_1 = l1[1].z_coordinate;
           z_cord_2 = l1[0].z_coordinate;
         }
       }
+      else {
 
-      join_line_start_point =
-          Point_model(l1[0].x_coordinate, y_cord_1, z_cord_1);
+
+        z_cord_1 = (l1[0].z_coordinate + l1[1].z_coordinate) / 2;
+        z_cord_2 = z_cord_1;
+      }
+
+      join_line_start_point = Point_model(l1[0].x_coordinate, y_cord_1, z_cord_1);
       join_line_end_point = Point_model(l1[0].x_coordinate, y_cord_2, z_cord_2);
+
+      if(join_axis_is_Z){
+        if (join_line_start_point.z_coordinate < join_line_end_point.z_coordinate)
+        {
+          join_line = Line(join_line_start_point, join_line_end_point);
+        }
+        else
+        {
+          join_line = Line(join_line_end_point, join_line_start_point);
+        }
+      }
+      else{if (join_line_start_point.y_coordinate < join_line_end_point.y_coordinate)
+      {
+        join_line = Line(join_line_start_point, join_line_end_point);
+      }
+      else
+      {
+        join_line = Line(join_line_end_point, join_line_start_point);
+      }}
+
+
+
     }
 
-    if (join_line_start_point.z_coordinate > join_line_end_point.z_coordinate) {
-      join_line = Line(join_line_start_point, join_line_end_point);
-    } else {
-      join_line = Line(join_line_end_point, join_line_start_point);
-    }
+
 
     return join_line;
   }
@@ -778,7 +892,7 @@ class AnalyzeJoins {
   /// 2-  detect length and axis of join line to pass it to next method
   /// 3-  handling the last parameters and add list of bore_model to the face
 
-  add_drill_bores_to_faces() {
+  add_drill_bores_to_faces(Box_model box_model) {
     for (int i = 0; i < box_model.box_pieces.length; i++) {
       Piece_model p = box_model.box_pieces[i];
 
@@ -788,44 +902,46 @@ class AnalyzeJoins {
         for (int j = 0; j < face.joines.length; j++) {
           Join_Line join_line = face.joines[j];
 
-          if (join_line.join_type == "DRILL") {
-            Line line = Line(join_line.start_point, join_line.end_point);
+          Line line = Line(join_line.start_point, join_line.end_point);
 
-            int second_face_id =
-                detect_second_face(p.piece_name, p.piece_direction, face);
-            Single_Face second_face = p.piece_faces.faces[second_face_id];
+          int second_face_id =
+              detect_second_face(box_model,p.piece_name, p.piece_direction, face);
 
-            transform_line_into_bores(
-                line, p.piece_direction, face, second_face, p.piece_name);
-
-            // print('piece : ${p.piece_name} , Face : ${face.name} , second face :${second_face.name}');
-            // print('==========');
-            //
-          } else if (join_line.join_type == "Lamello") {}
+          Single_Face second_face = p.piece_faces.faces[second_face_id];
+          if (join_line.join_type == "Groove") {
+            // Groove_model groove_model = Groove_model(
+            //     join_line.start_point,
+            //     join_line.end_point,
+            //     5,
+            //     9);
+            // print(f);
+            // print(groove_model.toJson());
+          } else {
+            transform_line_into_bores(line, p.piece_direction, face,
+                second_face, p.piece_name, join_line.join_type);
+          }
         }
       }
     }
   }
 
   transform_line_into_bores(Line l, String piece_direction, Single_Face face,
-      Single_Face second_face, String piece_name) {
+      Single_Face second_face, String piece_name, String join_type) {
     String join_line_axis = line_axis(l);
     double join_line_length = calculate_length_of_line(l, join_line_axis);
     String face_direction = detect_face_direction(piece_direction, face);
 
-    TowFaceBoring towFaceBoring = TowFaceBoring([], []);
+    TowFaceBoring towFaceBoring = TowFaceBoring([], [], []);
 
     if (join_line_axis == "X") {
       towFaceBoring = add_bore_holes_X_axis(l.start_point, join_line_length,
-          face_direction, face.name, piece_direction);
-    }
-    else if (join_line_axis == "Y") {
+          face_direction, face.name, piece_direction, join_type);
+    } else if (join_line_axis == "Y") {
       towFaceBoring = add_bore_holes_Y_axis(l.start_point, join_line_length,
-          face_direction, face.name, piece_direction);
-    }
-    else if (join_line_axis == "Z") {
+          face_direction, face.name, piece_direction, join_type);
+    } else if (join_line_axis == "Z") {
       towFaceBoring = add_bore_holes_Z_axis(l.start_point, join_line_length,
-          face_direction, face.name, piece_direction);
+          face_direction, face.name, piece_direction, join_type);
     }
 
     towFaceBoring.H_bores.forEach((element) {
@@ -839,7 +955,7 @@ class AnalyzeJoins {
     }
   }
 
-  int detect_second_face(
+  int detect_second_face(Box_model box_model,
       String piece_name, String piece_direction, Single_Face face) {
     int second_face_id = 0;
 
@@ -847,17 +963,23 @@ class AnalyzeJoins {
       if (box_model.box_type == "wall_cabinet") {
         if (piece_name == "top") {
           second_face_id = 0;
+        }else{
+          second_face_id = 2;
+
         }
-      } else {
+      }
+      else {
         second_face_id = 2;
       }
-    } else if (piece_direction == "V") {
+    }
+    else if (piece_direction == "V") {
       if (piece_name == "left" || piece_name.contains("DBR")) {
         second_face_id = 1;
       } else {
         second_face_id = 3;
       }
-    } else if (piece_direction == "F") {
+    }
+    else if (piece_direction == "F") {
       second_face_id = 5;
     }
 
@@ -924,12 +1046,15 @@ class AnalyzeJoins {
       double join_line_length,
       String face_direction,
       int face_name,
-      String piece_direction) {
+      String piece_direction,
+      String join_type) {
     List<Bore_model> H_bores = [];
     List<Bore_model> V_bores = [];
+    List<Groove_model> Grooves = [];
 
-    List<JoinHolePattern> my_patterns =
-        draw_controller.box_repository.join_patterns;
+    Map<String, JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
+
+    List<JoinHolePattern> my_patterns=my_patterns0!.values.toList();
 
     for (JoinHolePattern pattern in my_patterns) {
       if (join_line_length > pattern.min_length &&
@@ -1011,7 +1136,7 @@ class AnalyzeJoins {
       }
     }
 
-    TowFaceBoring towFaceBoring = TowFaceBoring(H_bores, V_bores);
+    TowFaceBoring towFaceBoring = TowFaceBoring(H_bores, V_bores, Grooves);
     return towFaceBoring;
   }
 
@@ -1020,13 +1145,15 @@ class AnalyzeJoins {
       double join_line_length,
       String face_direction,
       int face_name,
-      String piece_direction) {
+      String piece_direction,
+      String join_type) {
     List<Bore_model> H_bores = [];
     List<Bore_model> V_bores = [];
+    List<Groove_model> Grooves = [];
 
-    List<JoinHolePattern> my_patterns =
-        draw_controller.box_repository.join_patterns;
+    Map<String, JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
 
+    List<JoinHolePattern> my_patterns=my_patterns0!.values.toList();
     for (JoinHolePattern pattern in my_patterns) {
       if (join_line_length > pattern.min_length &&
           join_line_length <= pattern.max_length) {
@@ -1106,7 +1233,7 @@ class AnalyzeJoins {
       }
     }
 
-    TowFaceBoring towFaceBoring = TowFaceBoring(H_bores, V_bores);
+    TowFaceBoring towFaceBoring = TowFaceBoring(H_bores, V_bores, Grooves);
     return towFaceBoring;
   }
 
@@ -1115,13 +1242,14 @@ class AnalyzeJoins {
       double join_line_length,
       String face_direction,
       int face_name,
-      String piece_direction) {
+      String piece_direction,
+      String join_type) {
     List<Bore_model> H_bores = [];
     List<Bore_model> V_bores = [];
+    List<Groove_model> Grooves = [];
+    Map<String, JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
 
-    List<JoinHolePattern> my_patterns =
-        draw_controller.box_repository.join_patterns;
-
+    List<JoinHolePattern> my_patterns=my_patterns0!.values.toList();
     for (JoinHolePattern pattern in my_patterns) {
       if (join_line_length > pattern.min_length &&
           join_line_length <= pattern.max_length) {
@@ -1201,102 +1329,110 @@ class AnalyzeJoins {
       }
     }
 
-    TowFaceBoring towFaceBoring = TowFaceBoring(H_bores, V_bores);
+    TowFaceBoring towFaceBoring = TowFaceBoring(H_bores, V_bores, Grooves);
     return towFaceBoring;
   }
 
-
-add_Door_hole(
-    Piece_model m_piece , Piece_model s_piece
-    ){
-
-}
-
+  add_Door_hole(Piece_model m_piece, Piece_model s_piece) {}
 
   /// collect same pieces [] ....
   collect_all_same_pieces() {
 
-    List<Piece_model> pices = box_model.box_pieces;
-    List<int> compared = [];
+    List<Piece_model> pices =[];
+
+if(project){
+  for(int b=0;b<draw_controller.box_repository.project_model.boxes.length;b++) {
+
+    Box_model box_model=draw_controller.box_repository.project_model.boxes[b];
+
+    for(int p=0;p<box_model.box_pieces.length;p++) {
+      Piece_model piece_model = box_model.box_pieces[p];
+      // piece_model.piece_id="$b-${piece_model.piece_id}";
+      pices.add(piece_model);
+
+     }
+
+  }
+}else{
+  pices=draw_controller.box_repository.box_model.value.box_pieces;
+}
+
+
+
+    List<String> compared = [];
 
     List<List<Piece_model>> same_pices = [];
 
     for (int m = 0; m < pices.length; m++) {
-
       Piece_model m_piece = pices[m];
 
-      if (
-          !compared.contains(m_piece.piece_id)   &&
-          !m_piece.piece_name.contains('Helper')
-      && !m_piece.piece_name.contains('inner')
-         )
-      {
-          List<Piece_model> same_pices_item = [];
-          same_pices_item.add(m_piece);
-          compared.add(m_piece.piece_id);
+      if (!compared.contains(m_piece.piece_id) &&
+          !m_piece.piece_name.contains('Helper') &&
+          !m_piece.piece_name.contains('inner')) {
+        List<Piece_model> same_pices_item = [];
+        same_pices_item.add(m_piece);
+        compared.add(m_piece.piece_id);
 
+        ///
 
-          ///
+        for (int s = 0; s < pices.length; s++) {
+          Piece_model s_piece = pices[s];
 
-          for (int s = 0; s < pices.length; s++) {
-            Piece_model s_piece = pices[s];
-
-            if (
-            !compared.contains(s_piece.piece_id) &&
-                !s_piece.piece_name.contains('Helper')
-                && !s_piece.piece_name.contains('inner')
-            ) {
-              if(tow_pieces_are_same(m_piece, s_piece)){
-                same_pices_item.add(s_piece);
-                compared.add(s_piece.piece_id);
-
-              }
+          if (!compared.contains(s_piece.piece_id) &&
+              !s_piece.piece_name.contains('Helper') &&
+              !s_piece.piece_name.contains('inner')) {
+            if (tow_pieces_are_same(m_piece, s_piece)) {
+              same_pices_item.add(s_piece);
+              compared.add(s_piece.piece_id);
             }
           }
-          ///
+        }
 
-          same_pices.add(same_pices_item);
+        ///
 
+        same_pices.add(same_pices_item);
       }
-
     }
 
-
     same_pices.forEach((items) {
-
-      String names='';
-      String material_name=items[0].material_name;
+      String names = '';
+      String material_name = items[0].material_name;
       items.forEach((element) {
-        names='${names+(element.piece_name)}   \n';
+        names = '$names\n '
+            '${element.piece_id} -${element.piece_name}   ';
       });
-Cut_List_Item cut_list_item=Cut_List_Item( names, material_name,
-    items[0].piece_thickness, items[0].piece_width, items[0].piece_height, items.length);
+      Cut_List_Item cut_list_item = Cut_List_Item(
+          names,
+          material_name,
+          items[0].piece_thickness,
+          items[0].piece_width,
+          items[0].piece_height,
+          items.length);
 
-draw_controller.box_repository.cut_list_items.add(cut_list_item);
-
+      draw_controller.box_repository.cut_list_items.add(cut_list_item);
     });
 
+
+
+    print(draw_controller.box_repository.cut_list_items.length);
   }
 
   bool tow_pieces_are_same(Piece_model m_piece, Piece_model s_piece) {
-    bool same =false;
+    bool same = false;
     bool width_same = (m_piece.piece_width == s_piece.piece_width);
     bool height_same = (m_piece.piece_height == s_piece.piece_height);
     bool thickness_same = (m_piece.piece_thickness == s_piece.piece_thickness);
     bool faces_same = false;
     if (width_same && height_same && thickness_same) {
-      same=true;
+      same = true;
 
-      for (int f = 0; f < m_piece.piece_faces.faces.length; f++)
-      {
+      for (int f = 0; f < m_piece.piece_faces.faces.length; f++) {
         Single_Face m_single_face = m_piece.piece_faces.faces[f];
         Single_Face s_single_face = s_piece.piece_faces.faces[f];
         if (same_faces(m_single_face, s_single_face)) {
           faces_same = true;
         }
       }
-
-
     }
 
     return same;
@@ -1315,10 +1451,6 @@ draw_controller.box_repository.cut_list_items.add(cut_list_item);
 
     return resault;
   }
-
-
-
-
 }
 
 ///2920 lines

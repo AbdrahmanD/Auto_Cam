@@ -17,6 +17,7 @@ class _CreateJoinholepatternDialogState
     extends State<CreateJoinholepatternDialog> {
   Draw_Controller draw_controller = Get.find();
 
+  TextEditingController category_controller = TextEditingController();
   TextEditingController name_controller = TextEditingController();
   TextEditingController mini_distence_controller = TextEditingController();
   TextEditingController max_distence_controller = TextEditingController();
@@ -34,168 +35,226 @@ class _CreateJoinholepatternDialogState
   bool have_mirror = true;
   bool center = false;
 
-  double min_length=0;
-  double max_length=0;
+  double min_length = 0;
+  double max_length = 0;
 
   List<Bore_unit> bore_units = [];
   List<Bore_unit> Paint_bore_units_min = [];
   List<Bore_unit> Paint_bore_units_max = [];
 
-  JoinHolePattern corrent_join_pattern=JoinHolePattern('name', 150, 300, []);
+  String corrent_category_name = "Box_Fitting_DRILL";
+  List<JoinHolePattern> corrent_category_patterns = [];
+
+  JoinHolePattern corrent_join_pattern =
+  JoinHolePattern( 'name', 150, 300, []);
 
   add_to_pattern() {
-
     double pre_distance = double.parse(pre_distence_controller.text.toString());
-    double diameter     = double.parse(diameter_controller.text.toString());
-    double face_diameter     = double.parse(face_diameter_controller.text.toString());
-    double depth        = double.parse(depth_controller.text.toString());
-    double face_depth        = double.parse(face_depth_controller.text.toString());
+    double diameter = double.parse(diameter_controller.text.toString());
+    double face_diameter =
+    double.parse(face_diameter_controller.text.toString());
+    double depth = double.parse(depth_controller.text.toString());
+    double face_depth = double.parse(face_depth_controller.text.toString());
 
-    double nut_destance = have_nut ? double.parse(nut_distence_controller.text.toString()) : 0;
-    double nut_diameter = have_nut ? double.parse(nut_diameter_controller.text.toString()) : 0;
-    double nut_depth    = have_nut ? double.parse(nut_depth_controller.text.toString()) : 0;
+    double nut_destance =
+    have_nut ? double.parse(nut_distence_controller.text.toString()) : 0;
+    double nut_diameter =
+    have_nut ? double.parse(nut_diameter_controller.text.toString()) : 0;
+    double nut_depth =
+    have_nut ? double.parse(nut_depth_controller.text.toString()) : 0;
 
     // double min_length=double.parse(mini_distence_controller.text.toString());
     // double max_length=double.parse(max_distence_controller.text.toString());
-
-
 
     late Bore_model side_bore;
     late Bore_model face_bore;
     late Bore_model nut_bore;
 
-    Point_model init_origin=Point_model(0, 0, 0);
-    side_bore = Bore_model(init_origin,diameter, depth       );
-    face_bore = Bore_model(init_origin,face_diameter, face_depth       );
-    nut_bore =  Bore_model(init_origin,nut_diameter, nut_depth );
+    Point_model init_origin = Point_model(0, 0, 0);
+    side_bore = Bore_model(init_origin, diameter, depth);
+    face_bore = Bore_model(init_origin, face_diameter, face_depth);
+    nut_bore = Bore_model(init_origin, nut_diameter, nut_depth);
 
-     Bore_unit bore_unit = Bore_unit(pre_distance, side_bore, have_nut, nut_destance, nut_bore , face_bore,  center,have_mirror);
-     bore_units.add(bore_unit);
-
-    refresh();
-
-  }
-  refresh(){
-
-    // print("center : $center");
-    // print("mirror : $have_mirror");
-
-
-    min_length=double.parse(mini_distence_controller.text.toString());
-    max_length=double.parse(max_distence_controller.text.toString());
-
-    corrent_join_pattern.bores=bore_units;
-
-    Paint_bore_units_min  = corrent_join_pattern.apply_pattern(min_length);
-    Paint_bore_units_max  = corrent_join_pattern.apply_pattern(max_length);
-
-    setState(() {
-
-    });
-  }
-
-  pattern_from_history(JoinHolePattern pattern){
-
-    bore_units=[];
-    Paint_bore_units_min=[];
-    Paint_bore_units_max=[];
-
-
-    min_length=pattern.min_length;
-    max_length=pattern.max_length;
-
-    mini_distence_controller.text='$min_length';
-    max_distence_controller.text ='$max_length';
-    name_controller.text ='${pattern.name}';
-
-    bore_units=pattern.bores;
-
-
-    Paint_bore_units_min  = corrent_join_pattern.apply_pattern(min_length);
-    Paint_bore_units_max  = corrent_join_pattern.apply_pattern(max_length);
-
+    Bore_unit bore_unit = Bore_unit(
+        pre_distance,
+        side_bore,
+        have_nut,
+        nut_destance,
+        nut_bore,
+        face_bore,
+        center,
+        have_mirror);
+    bore_units.add(bore_unit);
 
     refresh();
-
   }
-
 
   save_pattern() async {
 
-    double mini_length=double.parse(mini_distence_controller.text.toString());
-    double max_length =double.parse(max_distence_controller.text.toString());
+    double mini_length = double.parse(mini_distence_controller.text.toString());
+    double max_length = double.parse(max_distence_controller.text.toString());
 
-    JoinHolePattern joinHolePattern = JoinHolePattern(name_controller.text.toString(),mini_length,max_length,bore_units);
+    JoinHolePattern joinHolePattern = JoinHolePattern(
+        name_controller.text.toString(),
+        mini_length,
+        max_length,
+        bore_units);
 
-    await draw_controller.save_joinHolePattern(joinHolePattern);
+    await draw_controller.save_joinHolePattern(joinHolePattern,category_controller.text.toString());
     await draw_controller.read_pattern_files();
 
     refresh();
+  }
 
+  void delete_pattern()async {
+    await draw_controller.delete_joinHolePattern(corrent_join_pattern,category_controller.text.toString());
+
+    refresh();
+  }
+
+  pattern_from_history(JoinHolePattern pattern) {
+    bore_units = [];
+    Paint_bore_units_min = [];
+    Paint_bore_units_max = [];
+
+    min_length = pattern.min_length;
+    max_length = pattern.max_length;
+
+    mini_distence_controller.text = '$min_length';
+    max_distence_controller.text = '$max_length';
+    name_controller.text = '${pattern.name}';
+    // category_controller.text = '${pattern.category}';
+
+    bore_units = pattern.bores;
+
+    corrent_join_pattern=pattern;
+    Paint_bore_units_min = corrent_join_pattern.apply_pattern(min_length);
+    Paint_bore_units_max = corrent_join_pattern.apply_pattern(max_length);
+
+
+    refresh();
+  }
+
+  read_patterns() async {
+    await draw_controller.read_pattern_files();
+    refresh();
+    setState(() {});
+  }
+
+
+  refresh() async{
+    // print("center : $center");
+    // print("mirror : $have_mirror");
+    corrent_category_patterns = [];
+    min_length = double.parse(mini_distence_controller.text.toString());
+    max_length = double.parse(max_distence_controller.text.toString());
+
+    corrent_join_pattern.bores = bore_units;
+
+    Paint_bore_units_min = corrent_join_pattern.apply_pattern(min_length);
+    Paint_bore_units_max = corrent_join_pattern.apply_pattern(max_length);
+    category_controller.text = corrent_category_name;
+
+
+    corrent_category_patterns =
+    await (draw_controller.box_repository.join_patterns
+    [category_controller.text.toString()]!.values.toList());
+
+
+    setState(() {});
 
   }
 
-  read_patterns()async{
-  await  draw_controller.read_pattern_files();
-  setState(() {
 
-  });
-  }
-@override
+
+
+
+  @override
   void initState() {
-
     super.initState();
 
-    name_controller.text='0';
-    mini_distence_controller.text='0';
-    max_distence_controller.text='0';
-    pre_distence_controller.text='0';
-    diameter_controller.text='0';
-    face_diameter_controller.text='0';
-    depth_controller.text='0';
-    face_depth_controller.text='0';
-    nut_distence_controller.text='0';
-    nut_diameter_controller.text='0';
-    nut_depth_controller.text='0';
+    name_controller.text = '0';
+    category_controller.text = 'Box_Fitting_DRILL';
+    mini_distence_controller.text = '0';
+    max_distence_controller.text = '0';
+    pre_distence_controller.text = '0';
+    diameter_controller.text = '0';
+    face_diameter_controller.text = '0';
+    depth_controller.text = '0';
+    face_depth_controller.text = '0';
+    nut_distence_controller.text = '0';
+    nut_diameter_controller.text = '0';
+    nut_depth_controller.text = '0';
     read_patterns();
-
-}
+  }
 
   @override
   Widget build(BuildContext context) {
-
-
-
 
     return Container(
       width: 800,
       height: 700,
       color: Colors.grey[100],
-      child:
-      Column(
+      child: Column(
         children: [
           SizedBox(
             height: 24,
           ),
-
-
           Row(
             children: [
 
-              /// pattern name
+              /// pattern category
               Container(
-                width: 90,
+                width: 60,
                 child: Center(
                   child: Text(
-                    'pattern name',style: TextStyle(fontSize: 12),
+                    'pattern category',
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
               ),
               Container(
-                width: 190,
-                height: 35,
+                width: 150,
+                height: 50,
+                child: TextFormField(
+                  controller: category_controller,
+                  style: TextStyle(fontSize: 12),
+                  onChanged: (_) {
+                    refresh();
+                  },
+                  enabled: false,
+                  validator: (d) {
+                    if (d!.isEmpty) {
+                      return 'add value please';
+                    }
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 12,
+              ),
+
+              /// pattern name
+              Container(
+                width: 60,
+                child: Center(
+                  child: Text(
+                    'pattern name',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+              ),
+              Container(
+                width: 150,
+                height: 50,
                 child: TextFormField(
                   controller: name_controller,
+                  style: TextStyle(fontSize: 12),
                   onChanged: (_) {
                     refresh();
                   },
@@ -213,25 +272,30 @@ class _CreateJoinholepatternDialogState
               ),
 
               SizedBox(
-                width: 32,
+                width: 12,
               ),
+
               /// minimum length
               Container(
                 width: 90,
                 child: Center(
                   child: Text(
-                    'Minimum length',style: TextStyle(fontSize: 12),
+                    'Minimum length',
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
               ),
               Container(
-                width: 90,
-                height: 35,
+                width: 75,
+                height: 50,
                 child: TextFormField(
                   keyboardType: TextInputType.number,
                   inputFormatters: [DecimalTextInputFormatter(2)],
                   controller: mini_distence_controller,
-                  onChanged: (_) {    refresh();},
+                  style: TextStyle(fontSize: 12),
+                  onChanged: (_) {
+                    refresh();
+                  },
                   validator: (d) {
                     if (d!.isEmpty) {
                       return 'add value please';
@@ -244,31 +308,33 @@ class _CreateJoinholepatternDialogState
                   ),
                 ),
               ),
-              Container(width: 45, child: Text('  mm')),
 
               SizedBox(
-                width: 32,
+                width: 12,
               ),
 
               /// maximum length
-
 
               Container(
                 width: 90,
                 child: Center(
                   child: Text(
-                    'Maximum length',style: TextStyle(fontSize: 12),
+                    'Maximum length',
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
               ),
               Container(
-                width: 90,
-                height: 35,
+                width: 75,
+                height: 50,
                 child: TextFormField(
                   keyboardType: TextInputType.number,
                   inputFormatters: [DecimalTextInputFormatter(2)],
                   controller: max_distence_controller,
-                  onChanged: (_) {    refresh();},
+                  style: TextStyle(fontSize: 12),
+                  onChanged: (_) {
+                    refresh();
+                  },
                   validator: (d) {
                     if (d!.isEmpty) {
                       return 'add value please';
@@ -281,27 +347,27 @@ class _CreateJoinholepatternDialogState
                   ),
                 ),
               ),
-              Container(width: 45, child: Text('  mm'))
             ],
           ),
-
           SizedBox(
             height: 32,
           ),
-
           Row(
             children: [
+
               /// parameter editor
               Container(
-                  width: 200 ,height: 550,
+                  width: 200,
+                  height: 550,
                   child: ListView(
                     children: [
 
                       ///  undo
                       Row(
                         children: [
-                          SizedBox(width: 12,),
-
+                          SizedBox(
+                            width: 12,
+                          ),
                         ],
                       ),
 
@@ -382,8 +448,6 @@ class _CreateJoinholepatternDialogState
                               ),
                             ),
                           ),
-
-
                         ],
                       ),
 
@@ -423,10 +487,8 @@ class _CreateJoinholepatternDialogState
                               ),
                             ),
                           ),
-
                         ],
                       ),
-
 
                       /// Depth
                       Row(
@@ -506,7 +568,6 @@ class _CreateJoinholepatternDialogState
                         ],
                       ),
 
-
                       /// have mirror
                       Row(
                         children: [
@@ -550,11 +611,13 @@ class _CreateJoinholepatternDialogState
                             width: 12,
                           ),
                           Checkbox(
-                              value:center,
+                              value: center,
                               onChanged: (v) {
-                                if(!center){
-                                  have_mirror=false;
-                                  pre_distence_controller.text="${double.parse(mini_distence_controller.text.toString())/2}";
+                                if (!center) {
+                                  have_mirror = false;
+                                  pre_distence_controller.text =
+                                  "${double.parse(mini_distence_controller.text
+                                      .toString()) / 2}";
                                 }
                                 center = !center;
 
@@ -591,132 +654,138 @@ class _CreateJoinholepatternDialogState
                       /// nut Distance
                       have_nut
                           ? Row(
-                              children: [
-                                Container(
-                                  width: 100,
-                                  height: 35,
-                                  child: Center(
-                                    child: Text(
-                                      'nut Distance',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Container(
-                                  width: 75,
-                                  height: 25,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      DecimalTextInputFormatter(2)
-                                    ],
-                                    controller: nut_distence_controller,
-                                    onChanged: (_) {},
-                                    validator: (d) {
-                                      if (d!.isEmpty) {
-                                        return 'add value please';
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 35,
+                            child: Center(
+                              child: Text(
+                                'nut Distance',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Container(
+                            width: 75,
+                            height: 25,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                DecimalTextInputFormatter(2)
                               ],
-                            )
-                          : SizedBox(height: 35,),
+                              controller: nut_distence_controller,
+                              onChanged: (_) {},
+                              validator: (d) {
+                                if (d!.isEmpty) {
+                                  return 'add value please';
+                                }
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                          : SizedBox(
+                        height: 35,
+                      ),
 
                       ///
                       /// nut Diameter
                       have_nut
                           ? Row(
-                              children: [
-                                Container(
-                                  width: 100,
-                                  height: 35,
-                                  child: Center(
-                                    child: Text(
-                                      'nut Diameter',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Container(
-                                  width: 75,
-                                  height: 25,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      DecimalTextInputFormatter(2)
-                                    ],
-                                    controller: nut_diameter_controller,
-                                    onChanged: (_) {},
-                                    validator: (d) {
-                                      if (d!.isEmpty) {
-                                        return 'add value please';
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 35,
+                            child: Center(
+                              child: Text(
+                                'nut Diameter',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Container(
+                            width: 75,
+                            height: 25,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                DecimalTextInputFormatter(2)
                               ],
-                            )
-                          : SizedBox(height: 35,),
+                              controller: nut_diameter_controller,
+                              onChanged: (_) {},
+                              validator: (d) {
+                                if (d!.isEmpty) {
+                                  return 'add value please';
+                                }
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                          : SizedBox(
+                        height: 35,
+                      ),
 
                       /// nut Depth
                       have_nut
                           ? Row(
-                              children: [
-                                Container(
-                                  width: 100,
-                                  height: 35,
-                                  child: Center(
-                                    child: Text(
-                                      'nut Depth',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Container(
-                                  width: 75,
-                                  height: 25,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      DecimalTextInputFormatter(2)
-                                    ],
-                                    controller: nut_depth_controller,
-                                    onChanged: (_) {},
-                                    validator: (d) {
-                                      if (d!.isEmpty) {
-                                        return 'add value please';
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 35,
+                            child: Center(
+                              child: Text(
+                                'nut Depth',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Container(
+                            width: 75,
+                            height: 25,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                DecimalTextInputFormatter(2)
                               ],
-                            )
-                          : SizedBox(height: 35,),
+                              controller: nut_depth_controller,
+                              onChanged: (_) {},
+                              validator: (d) {
+                                if (d!.isEmpty) {
+                                  return 'add value please';
+                                }
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                          : SizedBox(
+                        height: 35,
+                      ),
 
                       SizedBox(
                         height: 12,
@@ -730,9 +799,7 @@ class _CreateJoinholepatternDialogState
                             child: InkWell(
                               onTap: () {
                                 add_to_pattern();
-                                setState(() {
-
-                                });
+                                setState(() {});
                               },
                               child: Container(
                                 width: 120,
@@ -742,19 +809,20 @@ class _CreateJoinholepatternDialogState
                                     borderRadius: BorderRadius.circular(8)),
                                 child: Center(
                                     child: Text(
-                                  'ADD TO PATTERN',
-                                  style: TextStyle(fontSize: 12),
-                                )),
+                                      'ADD TO PATTERN',
+                                      style: TextStyle(fontSize: 12),
+                                    )),
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 8.0,right: 8,bottom: 8),
+                            padding: const EdgeInsets.only(
+                                top: 8.0, right: 8, bottom: 8),
                             child: InkWell(
                               onTap: () {
-bore_units.removeAt(bore_units.length-1);
-refresh();
-},
+                                bore_units.removeAt(bore_units.length - 1);
+                                refresh();
+                              },
                               child: Container(
                                 width: 50,
                                 height: 40,
@@ -763,7 +831,8 @@ refresh();
                                     borderRadius: BorderRadius.circular(8)),
                                 child: Center(
                                     child: Icon(
-                                      Icons.undo,color: Colors.white,
+                                      Icons.undo,
+                                      color: Colors.white,
                                     )),
                               ),
                             ),
@@ -780,9 +849,7 @@ refresh();
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
                           onTap: () {
-
                             save_pattern();
-
                           },
                           child: Container(
                             width: 100,
@@ -792,95 +859,201 @@ refresh();
                                 borderRadius: BorderRadius.circular(8)),
                             child: Center(
                                 child: Text(
-                              'save pattern',
-                              style: TextStyle(fontSize: 12),
-                            )),
+                                  'save pattern',
+                                  style: TextStyle(fontSize: 12),
+                                )),
                           ),
                         ),
                       ),
 
+                      SizedBox(
+                        height: 12,
+                      ),
+
+
+                      /// delete pattern
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            delete_pattern();
+                            read_patterns();
+                          },
+                          child: Container(
+                            width: 100,
+                            height: 35,
+                            decoration: BoxDecoration(
+                                color: Colors.redAccent[200],
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Center(
+                                child: Text(
+                                  'delete pattern',
+                                  style: TextStyle(fontSize: 12),
+                                )),
+                          ),
+                        ),
+                      ),
 
                       SizedBox(
                         height: 32,
                       ),
-
-
-
                     ],
                   )),
+
               ///Devider
-              Container(height: 500,
-                width: 2,color: Colors.grey,
+              Container(
+                height: 500,
+                width: 2,
+                color: Colors.grey,
               ),
 
               Column(
                 children: [
+
                   /// MIN Painter
                   Container(
-                    height:250,
-                    width: 400
-                    ,child: CustomPaint(
-                    painter: draw_controller.draw_Pattern(Paint_bore_units_min,min_length,300/max_length),
-                  ),
+                    height: 250,
+                    width: 400,
+                    child: CustomPaint(
+                      painter: draw_controller.draw_Pattern(
+                          Paint_bore_units_min, min_length, 300, max_length),
+                    ),
                   ),
 
                   ///MAX Painter
                   Container(
-                    height:250,
-                    width: 400
-                    ,child: CustomPaint(
-                    painter: draw_controller.draw_Pattern(Paint_bore_units_max,max_length,300/max_length),
-                  ),
+                    height: 250,
+                    width: 400,
+                    child: CustomPaint(
+                      painter: draw_controller.draw_Pattern(
+                          Paint_bore_units_max, max_length, 300, max_length),
+                    ),
                   ),
                 ],
               ),
+
               ///Devider
-              Container(height: 500,
-                width: 2,color: Colors.grey,
+              Container(
+                height: 500,
+                width: 2,
+                color: Colors.grey,
               ),
 
               /// patterns listview
               Column(
                 children: [
-                  Text('patterns List'),
-                  SizedBox(height: 10,),
+                  Text('categories List'),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
-                      width: 150,height:480,
+                      width: 150,
+                      height: 250,
                       child: ListView.builder(
-
-                          itemCount:draw_controller.box_repository.join_patterns.length,
-                          itemBuilder: (context , i){
-
+                          itemCount: draw_controller.box_repository
+                              .join_patterns.keys
+                              .toList()
+                              .length,
+                          itemBuilder: (context, i) {
                             return Container(
-                              child:  Padding(
+                              child: Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: Column(
                                   children: [
-                                    InkWell(onTap: (){
-                                      pattern_from_history(draw_controller.box_repository.join_patterns[i]);
-                                      refresh();
-                                    }
-                                        ,child: Center(child: Text('${draw_controller.box_repository.join_patterns[i].name}'))),
-                                    SizedBox(height: 3,),
-                                    Container(height: 1,width: 100,color: Colors.grey,)
+                                    InkWell(
+                                      onTap: () {
+                                        // pattern_from_history(draw_controller
+                                        //     .box_repository
+                                        //     .join_patterns
+                                        //     );
+
+                                        corrent_category_name =
+                                        draw_controller.box_repository
+                                            .join_patterns.keys.toList()[i];
+                                        refresh();
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          '${draw_controller.box_repository
+                                              .join_patterns.keys.toList()[i]}'
+                                          , style: (corrent_category_name ==
+                                            draw_controller.box_repository
+                                                .join_patterns.keys.toList()[i]
+                                        ) ? TextStyle(
+
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red) : TextStyle(),),
+
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      width: 100,
+                                      color: Colors.grey,
+                                    )
                                   ],
                                 ),
                               ),
-
                             );
-                          })
-
+                          })),
+                  SizedBox(
+                    height: 24,
                   ),
+                  Text('patterns List'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      width: 150,
+                      height: 250,
+                      child: ListView.builder(
+                          itemCount: corrent_category_patterns.length,
+                          itemBuilder: (context, i) {
+                            return Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                        onTap: () {
+                                          pattern_from_history(
+                                              corrent_category_patterns[i]);
+                                        },
+                                        child: Center(
+                                            child: Text(
+                                                '${corrent_category_patterns[i]
+                                                    .name}',
+                                            style:
+                                            (corrent_category_patterns[i]
+                                                .name==corrent_join_pattern.name)?
+                                            TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red) : TextStyle(),
+
+                                            ))),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      width: 100,
+                                      color: Colors.grey,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          })),
                 ],
               ),
-
-
-
-
             ],
           )
         ],
       ),
     );
   }
+
 }

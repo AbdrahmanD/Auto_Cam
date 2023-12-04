@@ -9,12 +9,12 @@ import 'package:path_provider/path_provider.dart';
 
 class kdt_file {
 
-  late String box_name;
+  late String directory;
   String kdt_file_content = "";
   late Piece_model piece_model;
 
 
-  kdt_file(this.piece_model,this.box_name) {
+  kdt_file(this.directory,this.piece_model) {
 
 
     kdt_file_content += "<KDTPanelFormat>\n";
@@ -67,6 +67,7 @@ class kdt_file {
     if(piece_model.piece_direction=="H")
     {
       for(int f =0 ; f<piece_model.piece_faces.faces.length;f++){
+
         Single_Face single_face = piece_model.piece_faces.faces[f];
 
         if(single_face.name==1){
@@ -91,6 +92,44 @@ class kdt_file {
                   kdt_file_content += " </CAD>\n";
 
           }
+
+          for(int g=0;g<single_face.groves.length;g++){
+
+            Groove_model b=single_face.groves[g];
+
+            double sx= b.start_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double sy= b.start_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double sz= b.start_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+            double ex= b.end_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double ey= b.end_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double ez= b.end_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+
+
+            double dpth=b.groove_depth;
+            double dw= b.groove_width;
+
+            kdt_file_content += "<CAD>\n";
+            kdt_file_content += "<TypeNo>3</TypeNo>\n";
+            kdt_file_content += "<TypeName>Vertical Line</TypeName>\n";
+            kdt_file_content += "<ToolName></ToolName>\n";
+            kdt_file_content += "<BeginX>$sx</BeginX>\n";
+            kdt_file_content += "<BeginY>$sz</BeginY>\n";
+            kdt_file_content += "<EndX>$ex</EndX>\n";
+            kdt_file_content += "<EndY>$ez</EndY>\n";
+            kdt_file_content += "<Width>$dw</Width>\n";
+            kdt_file_content += "<Correction>0</Correction>\n";
+            kdt_file_content += "<Depth>$dpth</Depth>\n";
+            kdt_file_content += "<Enable>1</Enable>\n";
+            kdt_file_content += "<UseSaw>0</UseSaw>\n";
+            kdt_file_content += "<UseDZ>0</UseDZ>\n";
+            kdt_file_content += "<BeginZ>0</BeginZ>\n";
+            kdt_file_content += "<EndZ>0</EndZ>\n";
+            kdt_file_content += "</CAD>\n";
+
+          }
+
         }
         else if(single_face.name==2){
 
@@ -145,6 +184,44 @@ class kdt_file {
 
 
           }
+
+          for(int g=0;g<single_face.groves.length;g++){
+
+            Groove_model b=single_face.groves[g];
+
+            double sx= b.start_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double sy= b.start_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double sz= b.start_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+            double ex= b.end_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double ey= b.end_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double ez= b.end_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+
+
+            double dpth=b.groove_depth;
+            double dw= b.groove_width;
+
+            kdt_file_content += "<CAD>\n";
+            kdt_file_content += "<TypeNo>13</TypeNo>\n";
+            kdt_file_content += "<TypeName>Back Vertical Line</TypeName>\n";
+            kdt_file_content += "<ToolName></ToolName>\n";
+            kdt_file_content += "<BeginX>$sx</BeginX>\n";
+            kdt_file_content += "<BeginY>$sz</BeginY>\n";
+            kdt_file_content += "<EndX>$ex</EndX>\n";
+            kdt_file_content += "<EndY>$ez</EndY>\n";
+            kdt_file_content += "<Width>$dw</Width>\n";
+            kdt_file_content += "<Correction>0</Correction>\n";
+            kdt_file_content += "<Depth>$dpth</Depth>\n";
+            kdt_file_content += "<Enable>1</Enable>\n";
+            kdt_file_content += "<UseSaw>0</UseSaw>\n";
+            kdt_file_content += "<UseDZ>0</UseDZ>\n";
+            kdt_file_content += "<BeginZ>0</BeginZ>\n";
+            kdt_file_content += "<EndZ>0</EndZ>\n";
+            kdt_file_content += "</CAD>\n";
+
+          }
+
 
 
         }
@@ -260,6 +337,44 @@ class kdt_file {
             kdt_file_content += " </CAD>\n";
 
           }
+          for(int g=0;g<single_face.groves.length;g++){
+
+            Groove_model b=single_face.groves[g];
+
+            double sx= b.start_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double sy= b.start_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double sz= b.start_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+            double ex= b.end_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double ey= b.end_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double ez= b.end_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+
+
+            double dpth=b.groove_depth;
+            double dw= b.groove_width;
+
+            kdt_file_content += "<CAD>\n";
+            kdt_file_content += "<TypeNo>3</TypeNo>\n";
+            kdt_file_content += "<TypeName>Vertical Line</TypeName>\n";
+            kdt_file_content += "<ToolName></ToolName>\n";
+            kdt_file_content += "<BeginX>$sz</BeginX>\n";
+            kdt_file_content += "<BeginY>$sy</BeginY>\n";
+            kdt_file_content += "<EndX>$ez</EndX>\n";
+            kdt_file_content += "<EndY>$ey</EndY>\n";
+            kdt_file_content += "<Width>$dw</Width>\n";
+            kdt_file_content += "<Correction>0</Correction>\n";
+            kdt_file_content += "<Depth>$dpth</Depth>\n";
+            kdt_file_content += "<Enable>1</Enable>\n";
+            kdt_file_content += "<UseSaw>0</UseSaw>\n";
+            kdt_file_content += "<UseDZ>0</UseDZ>\n";
+            kdt_file_content += "<BeginZ>0</BeginZ>\n";
+            kdt_file_content += "<EndZ>0</EndZ>\n";
+            kdt_file_content += "</CAD>\n";
+
+          }
+
+
         }
         else if(single_face.name==4){
 
@@ -285,9 +400,46 @@ class kdt_file {
 
 
           }
+          for(int g=0;g<single_face.groves.length;g++){
+
+            Groove_model b=single_face.groves[g];
+
+            double sx= b.start_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double sy= b.start_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double sz= b.start_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+            double ex= b.end_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double ey= b.end_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double ez= b.end_point.z_coordinate-piece_model.piece_origin.z_coordinate;
 
 
-        }else if(single_face.name==5){
+
+            double dpth=b.groove_depth;
+            double dw= b.groove_width;
+
+            kdt_file_content += "<CAD>\n";
+            kdt_file_content += "<TypeNo>13</TypeNo>\n";
+            kdt_file_content += "<TypeName>Back Vertical Line</TypeName>\n";
+            kdt_file_content += "<ToolName></ToolName>\n";
+            kdt_file_content += "<BeginX>$sz</BeginX>\n";
+            kdt_file_content += "<BeginY>$sy</BeginY>\n";
+            kdt_file_content += "<EndX>$ez</EndX>\n";
+            kdt_file_content += "<EndY>$ey</EndY>\n";
+            kdt_file_content += "<Width>$dw</Width>\n";
+            kdt_file_content += "<Correction>0</Correction>\n";
+            kdt_file_content += "<Depth>$dpth</Depth>\n";
+            kdt_file_content += "<Enable>1</Enable>\n";
+            kdt_file_content += "<UseSaw>0</UseSaw>\n";
+            kdt_file_content += "<UseDZ>0</UseDZ>\n";
+            kdt_file_content += "<BeginZ>0</BeginZ>\n";
+            kdt_file_content += "<EndZ>0</EndZ>\n";
+            kdt_file_content += "</CAD>\n";
+
+          }
+
+
+        }
+        else if(single_face.name==5){
 
           for(int h=0;h<single_face.bores.length;h++){
 
@@ -429,6 +581,45 @@ class kdt_file {
             kdt_file_content += " </CAD>\n";
 
           }
+
+          for(int g=0;g<single_face.groves.length;g++){
+
+            Groove_model b=single_face.groves[g];
+
+            double sx= b.start_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double sy= b.start_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double sz= b.start_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+            double ex= b.end_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double ey= b.end_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double ez= b.end_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+
+
+            double dpth=b.groove_depth;
+            double dw= b.groove_width;
+
+            kdt_file_content += "<CAD>\n";
+            kdt_file_content += "<TypeNo>3</TypeNo>\n";
+            kdt_file_content += "<TypeName>Vertical Line</TypeName>\n";
+            kdt_file_content += "<ToolName></ToolName>\n";
+            kdt_file_content += "<BeginX>$sx</BeginX>\n";
+            kdt_file_content += "<BeginY>$sy</BeginY>\n";
+            kdt_file_content += "<EndX>$ex</EndX>\n";
+            kdt_file_content += "<EndY>$ey</EndY>\n";
+            kdt_file_content += "<Width>$dw</Width>\n";
+            kdt_file_content += "<Correction>0</Correction>\n";
+            kdt_file_content += "<Depth>$dpth</Depth>\n";
+            kdt_file_content += "<Enable>1</Enable>\n";
+            kdt_file_content += "<UseSaw>0</UseSaw>\n";
+            kdt_file_content += "<UseDZ>0</UseDZ>\n";
+            kdt_file_content += "<BeginZ>0</BeginZ>\n";
+            kdt_file_content += "<EndZ>0</EndZ>\n";
+            kdt_file_content += "</CAD>\n";
+
+          }
+
+
         }
         else if(single_face.name==2){
 
@@ -483,6 +674,43 @@ class kdt_file {
 
 
           }
+          for(int g=0;g<single_face.groves.length;g++){
+
+            Groove_model b=single_face.groves[g];
+
+            double sx= b.start_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double sy= b.start_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double sz= b.start_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+            double ex= b.end_point.x_coordinate-piece_model.piece_origin.x_coordinate;
+            double ey= b.end_point.y_coordinate-piece_model.piece_origin.y_coordinate;
+            double ez= b.end_point.z_coordinate-piece_model.piece_origin.z_coordinate;
+
+
+
+            double dpth=b.groove_depth;
+            double dw= b.groove_width;
+
+            kdt_file_content += "<CAD>\n";
+            kdt_file_content += "<TypeNo>13</TypeNo>\n";
+            kdt_file_content += "<TypeName>Back Vertical Line</TypeName>\n";
+            kdt_file_content += "<ToolName></ToolName>\n";
+            kdt_file_content += "<BeginX>$sx</BeginX>\n";
+            kdt_file_content += "<BeginY>$sy</BeginY>\n";
+            kdt_file_content += "<EndX>$ex</EndX>\n";
+            kdt_file_content += "<EndY>$ey</EndY>\n";
+            kdt_file_content += "<Width>$dw</Width>\n";
+            kdt_file_content += "<Correction>0</Correction>\n";
+            kdt_file_content += "<Depth>$dpth</Depth>\n";
+            kdt_file_content += "<Enable>1</Enable>\n";
+            kdt_file_content += "<UseSaw>0</UseSaw>\n";
+            kdt_file_content += "<UseDZ>0</UseDZ>\n";
+            kdt_file_content += "<BeginZ>0</BeginZ>\n";
+            kdt_file_content += "<EndZ>0</EndZ>\n";
+            kdt_file_content += "</CAD>\n";
+
+          }
+
 
 
         }
@@ -574,30 +802,30 @@ class kdt_file {
 
     kdt_file_content += "</KDTPanelFormat>";
 
-    extract_xml_file(piece_model.piece_name);
+    extract_xml_file("${piece_model.piece_id}-${piece_model.piece_name}");
 
 
   }
 
-  extract_xml_file(String file_name)async{
+  extract_xml_file( String file_name)async{
 
-
-    final directory = await getApplicationDocumentsDirectory();
-
-    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
-    oldDirectory.createSync();
-
-
-    final Directory newDirectory = Directory('${oldDirectory.path}/$box_name');
-    newDirectory.createSync();
-
-    final Directory finalDirectory = Directory('${newDirectory.path}/XML_files');
+    //
+    // final Directory oldDirectory = Directory('${directory}/Auto_Cam');
+    // oldDirectory.createSync();
+    //
+    //
+    // final Directory newDirectory = Directory('${oldDirectory.path}/$folder_name');
+    // newDirectory.createSync();
+    //
+    final Directory finalDirectory = Directory('$directory');
     finalDirectory.createSync();
 
     final path = await finalDirectory.path;
-    File file =await File('$path/$file_name.xml');
-    file.writeAsString('$kdt_file_content');
+    File file =await File("$path/$file_name.xml");
 
+    // File file =await File('$file_path.xml');
+    file.writeAsString('$kdt_file_content');
+print(directory);
 
   }
 

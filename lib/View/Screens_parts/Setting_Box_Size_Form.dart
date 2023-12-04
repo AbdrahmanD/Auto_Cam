@@ -747,7 +747,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 InkWell(
                     onTap: () {
                       draw_Controller.analyze();
-                      Future.delayed(Duration(milliseconds: 1000)).then((value) => Get.to(Piece_List_view()));
+                      Future.delayed(Duration(milliseconds: 1000)).then((value) => Get.to(Piece_List_view(false)));
 
 
                     },
@@ -784,8 +784,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 ),
                 InkWell(
                     onTap: () {
-                      // draw_Controller.read_Box_from_rebository();
-                      print(draw_Controller.box_repository.repo_boxes.length);
+                      draw_Controller.print_pieces_coordinate();
+
                     },
                     child: Icon(
                       Icons.margin_outlined,
@@ -801,36 +801,36 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
           ///Export every piece \n  as G_code file
-          Container(
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 18,
-                ),
-                Container(
-                    width: 180,
-                    child: Text('Export every piece \n  as G_code file',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ))),
-                SizedBox(
-                  width: 18,
-                ),
-                InkWell(
-                    onTap: () {
-                      draw_Controller.extract_xml_files();
-                    },
-                    child: Icon(
-                      Icons.code,
-                      size: 36,
-                      color: Colors.teal,
-                    )),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 12,
-          ),
+          // Container(
+          //   child: Row(
+          //     children: [
+          //       SizedBox(
+          //         width: 18,
+          //       ),
+          //       Container(
+          //           width: 180,
+          //           child: Text('Export every piece \n  as G_code file',
+          //               style: TextStyle(
+          //                 fontSize: 14,
+          //               ))),
+          //       SizedBox(
+          //         width: 18,
+          //       ),
+          //       InkWell(
+          //           onTap: () {
+          //             draw_Controller.extract_xml_files(false);
+          //           },
+          //           child: Icon(
+          //             Icons.code,
+          //             size: 36,
+          //             color: Colors.teal,
+          //           )),
+          //     ],
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: 12,
+          // ),
 
           ///save the box
           Container(

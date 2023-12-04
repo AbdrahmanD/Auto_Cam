@@ -55,308 +55,279 @@ class _Add_Filler_DialogState extends State<Add_Filler_Dialog> {
   @override
   Widget build(BuildContext context) {
 
-    filler_width_value=double.parse(filler_width.text.toString());
-    filler_thickness_value=double.parse(filler_thickness.text.toString());
+    if(!(filler_width.text.toString()=="")){filler_width_value=double.parse(filler_width.text.toString());}
+    if(!(filler_thickness.text.toString()=="")){filler_thickness_value=double.parse(filler_thickness.text.toString());}
+
+
 
     Piece_model p = draw_controller.box_repository.box_model.value.box_pieces.where((element) => element.piece_name=="left").first;
 
-    Filler_model f = Filler_model(vertical_filler,inside_filler,filler_width_value,
-        100, filler_thickness_value, corner, x_move_value, y_move_value);
+    Filler_model f = Filler_model(vertical_filler,inside_filler,100,filler_width_value,
+         filler_thickness_value, corner, x_move_value, y_move_value);
 
 
 
     return Container(
-      width: 500,
-      height: 600,
-      child: Column(
+      width: 600,
+      height: 500,
+      child: Row(
         children: [
-
-
-          SizedBox(height: 12,),
-
-          /// horizontal or vertical
-          inside_filler?Row(mainAxisAlignment: MainAxisAlignment.center,
+          Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
 
-              Text('Horizontal'),
-              Checkbox(value: horizontal_filler, onChanged: (v){
-                vertical_filler=!vertical_filler  ;
-                horizontal_filler=!horizontal_filler;
-                setState(() {
 
-                });
-              }),
-              SizedBox(width: 12,),
+              SizedBox(height: 12,),
 
+              /// horizontal or vertical
+              inside_filler?Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
 
-              Text('Vertical'),
-              Checkbox(value: vertical_filler, onChanged: (v){
-                vertical_filler=!vertical_filler  ;
-                horizontal_filler=!horizontal_filler;
-                setState(() {
+                  Text('Horizontal'),
+                  Checkbox(value: horizontal_filler, onChanged: (v){
+                    vertical_filler=!vertical_filler  ;
+                    horizontal_filler=!horizontal_filler;
+                    setState(() {
 
-                });
-              }),
+                    });
+                  }),
+                  SizedBox(width: 12,),
 
 
-            ],
-          ):SizedBox(),
+                  Text('Vertical'),
+                  Checkbox(value: vertical_filler, onChanged: (v){
+                    vertical_filler=!vertical_filler  ;
+                    horizontal_filler=!horizontal_filler;
+                    setState(() {
 
-          SizedBox(height: 12,),
-
-          /// choose the corner
-          Text('choose the corner'),
-         inside_filler?
-         Row(mainAxisAlignment: MainAxisAlignment.center,
-           children: [
-
-             Text('1'),
-             Checkbox(value: (corner==1)?true:false, onChanged: (v){
-               corner=1;
-               setState(() {
-
-               });
-             }),
-             SizedBox(width: 12,),
-
-             Text('2'),
-             Checkbox(value: (corner==2)?true:false, onChanged: (v){
-               corner=2;
-               setState(() {
-
-               });
-             }),
-             SizedBox(width: 12,),
-
-             Text('3'),
-             Checkbox(value: (corner==3)?true:false, onChanged: (v){
-               corner=3;
-               setState(() {
-
-               });
-             }),
-             SizedBox(width: 12,),
+                    });
+                  }),
 
 
-             Text('4'),
-             Checkbox(value: (corner==4)?true:false, onChanged: (v){
-               corner=4;
-               setState(() {
+                ],
+              ):SizedBox(),
 
-               });
-             }),
-             SizedBox(width: 12,),
+              SizedBox(height: 12,),
 
-           ],
-         ):
-
-         Row(mainAxisAlignment: MainAxisAlignment.center,
+              /// choose the corner
+              Text('choose the corner'),
+              Row(mainAxisAlignment: MainAxisAlignment.center,
                children: [
 
-                 Text('left'),
-                 Checkbox(value: (corner==1)?true:false, onChanged: (v){
-          corner=1;
-          setState(() {
-
-          });
-                 }),
-                 SizedBox(width: 12,),
-
-                 Text('right'),
-                 Checkbox(value: (corner==2)?true:false, onChanged: (v){
-          corner=2;
-          setState(() {
-
-          });
-                 }),
-                 SizedBox(width: 12,),
-
-                 Text('top'),
-                 Checkbox(value: (corner==3)?true:false, onChanged: (v){
-          corner=3;
-          setState(() {
-
-          });
-                 }),
-                 SizedBox(width: 12,),
 
 
-                 Text('douwn'),
+                 Text('1'),
                  Checkbox(value: (corner==4)?true:false, onChanged: (v){
-          corner=4;
-          setState(() {
+                   corner=4;
+                   setState(() {
 
-          });
+                   });
                  }),
                  SizedBox(width: 12,),
+
+
+                 Text('2'),
+                 Checkbox(value: (corner==3)?true:false, onChanged: (v){
+                   corner=3;
+                   setState(() {
+
+                   });
+                 }),
+                 SizedBox(width: 12,),
+
+                 Text('3'),
+                 Checkbox(value: (corner==1)?true:false, onChanged: (v){
+                   corner=1;
+                   setState(() {
+
+                   });
+                 }),
+                 SizedBox(width: 12,),
+
+                 Text('4'),
+                 Checkbox(value: (corner==2)?true:false, onChanged: (v){
+                   corner=2;
+                   setState(() {
+
+                   });
+                 }),
+                 SizedBox(width: 12,),
+
+
 
                ],
              ),
 
+              SizedBox(height: 12,),
+
+              Row(
+                children: [
+                  Container(width:100,child: Text('filler width')),
+                  SizedBox(width: 6,),
+
+                  Container(width: 80,height: 32,
+                    child: TextFormField(
+                      onChanged: (_) {
+                        if (filler_width.text.toString()!='') {
+                          filler_width_value=double.parse(filler_width.text.toString());
+                        }
+                        setState(() {
+                        });                    },
+                      enabled: true,
+                      inputFormatters: [DecimalTextInputFormatter(2)],
+                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      controller: filler_width,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      validator: (d) {
+                        if (d!.isEmpty) {
+                          return 'add value please';
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12,),
 
 
-          SizedBox(height: 12,),
+              Row(
+                children: [
+                  Container(width:100,child: Text('filler thickness')),
+                  SizedBox(width: 6,),
+
+                  Container(width: 80,height: 32,
+                    child: TextFormField(
+                      onChanged: (_) {
+                        if(filler_thickness.text.toString()!=''){
+                          filler_thickness_value=double.parse(filler_thickness.text.toString());
+
+                        }
+                        setState(() {
+                        });
+                      },
+                      enabled: true,
+                      inputFormatters: [DecimalTextInputFormatter(2)],
+                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      controller: filler_thickness,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      validator: (d) {
+                        if (d!.isEmpty) {
+                          return 'add value please';
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 12,),
+
+              /// move the filler
+              Row(
+                children: [
+                  Container(width:100,child: Text('Move X')),
+                  SizedBox(width: 6,),
+
+                  Container(width: 80,height: 32,
+                    child: TextFormField(
+                      onChanged: (_) {
+                        if (x_move.text.toString()!='') {
+                          x_move_value=double.parse(x_move.text.toString());
+                        }
+                        setState(() {
+                        });                    },
+                      enabled: true,
+                      inputFormatters: [DecimalTextInputFormatter(2)],
+                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      controller: x_move,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      validator: (d) {
+                        if (d!.isEmpty) {
+                          return 'add value please';
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12,),
+
+
+              Row(
+                children: [
+                  Container(width:100,child: Text('Move Y')),
+                  SizedBox(width: 6,),
+
+                  Container(width: 80,height: 32,
+                    child: TextFormField(
+                      onChanged: (_) {
+                        if(y_move.text.toString()!=''){
+                          y_move_value=double.parse(y_move.text.toString());
+
+                        }
+                        setState(() {
+                        });
+                      },
+                      enabled: true,
+                      inputFormatters: [DecimalTextInputFormatter(2)],
+                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      controller: y_move,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      validator: (d) {
+                        if (d!.isEmpty) {
+                          return 'add value please';
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 32,),
+              /// add bottom
+              InkWell(onTap:(){
+
+                draw_controller.add_filler(f);
+                Navigator.of(Get.overlayContext!).pop();
+
+              },
+                  child: Container(width: 100,height: 54,
+                  decoration: BoxDecoration(color: Colors.teal[500],
+                  borderRadius: BorderRadius.circular(6)),
+                    child: Center(child: Text('Add Filler' ,style: TextStyle(fontSize: 14,color: Colors.white),)),
+                  )
+
+              )
+
+
+
+            ],
+          ),
+          SizedBox(width: 20,),
 
           /// painter
           Container(
-            width: 500,height:260,color: Colors.grey[200],
+            width: 300,height:500,color: Colors.grey[300],
 
             child: CustomPaint(
               painter: Filler_View_Painter(f,p),
             ),
           ),
-          SizedBox(height: 18,),
-
-          /// size of the filler
-
-          Row(mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('filler width'),
-              SizedBox(width: 6,),
-
-              Container(width: 80,height: 32,
-                child: TextFormField(
-                  onChanged: (_) {
-                    if (filler_width.text.toString()!='') {
-                      filler_width_value=double.parse(filler_width.text.toString());
-                    }
-                    setState(() {
-                    });                    },
-                  enabled: true,
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  controller: filler_width,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  validator: (d) {
-                    if (d!.isEmpty) {
-                      return 'add value please';
-                    }
-                  },
-                ),
-              ),
-              SizedBox(width: 18,),
-
-              Text('filler thickness'),
-              SizedBox(width: 6,),
-
-              Container(width: 80,height: 32,
-                child: TextFormField(
-                  onChanged: (_) {
-                    if(filler_thickness.text.toString()!=''){
-                      filler_thickness_value=double.parse(filler_thickness.text.toString());
-
-                    }
-                    setState(() {
-                    });
-                    },
-                  enabled: true,
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  controller: filler_thickness,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  validator: (d) {
-                    if (d!.isEmpty) {
-                      return 'add value please';
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-
-
-          /// move the filler
-          SizedBox(height: 8,),
-
-          Row(mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Move X'),
-              SizedBox(width: 6,),
-
-              Container(width: 80,height: 32,
-                child: TextFormField(
-                  onChanged: (_) {
-                    if (x_move.text.toString()!='') {
-                      x_move_value=double.parse(x_move.text.toString());
-                    }
-                    setState(() {
-                    });                    },
-                  enabled: true,
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  controller: x_move,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  validator: (d) {
-                    if (d!.isEmpty) {
-                      return 'add value please';
-                    }
-                  },
-                ),
-              ),
-              SizedBox(width: 18,),
-
-              Text('Move Y'),
-              SizedBox(width: 6,),
-
-              Container(width: 80,height: 32,
-                child: TextFormField(
-                  onChanged: (_) {
-                    if(y_move.text.toString()!=''){
-                      y_move_value=double.parse(y_move.text.toString());
-
-                    }
-                    setState(() {
-                    });
-                  },
-                  enabled: true,
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  controller: y_move,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  validator: (d) {
-                    if (d!.isEmpty) {
-                      return 'add value please';
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-
-          SizedBox(height: 24,),
-          /// add bottom
-          InkWell(onTap:(){
-
-            draw_controller.add_filler(f);
-            Navigator.of(Get.overlayContext!).pop();
-
-          },
-              child: Container(width: 100,height: 32,
-              decoration: BoxDecoration(color: Colors.teal[500],
-              borderRadius: BorderRadius.circular(6)),
-                child: Center(child: Text('Add Filler' ,style: TextStyle(fontSize: 14,color: Colors.white),)),
-              )
-          
-          )
-
-
-
         ],
       ),
     );
