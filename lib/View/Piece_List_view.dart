@@ -203,8 +203,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                         InkWell(
                             onTap: () {
                               Excel_Controller my_excel = Excel_Controller();
-                              my_excel.create_excel(draw_controller
-                                  .box_repository.box_model.value.box_name);
+                              my_excel.create_excel();
                             },
                             child: Icon(
                               Icons.file_open_rounded,

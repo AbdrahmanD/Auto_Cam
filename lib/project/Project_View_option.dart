@@ -529,7 +529,7 @@ List<Box_model> boxes=project_controller.box_repository.project_model.boxes;
               ),
             ),
 
-            Obx(()=> Container(height:200,child: SingleChildScrollView(child: Text(project_controller.my_print.value),),))
+            // Obx(()=> Container(height:200,child: SingleChildScrollView(child: Text(project_controller.my_print.value),),))
           ],
         ),
       ),

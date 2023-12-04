@@ -656,7 +656,6 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
         box_repository.box_file_path = outputFile;
         box_repository.box_have_been_saved = true;
 
-        print('box directory = ${outputFile}');
 
 
       } catch (e) {

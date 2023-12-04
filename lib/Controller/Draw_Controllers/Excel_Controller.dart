@@ -5,6 +5,7 @@ import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Cut_List_Item.dart';
 import 'package:excel/excel.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -12,20 +13,26 @@ import 'package:path_provider/path_provider.dart';
 
 class Excel_Controller extends GetxController {
 
+
+
   Draw_Controller draw_controller = Get.find();
 
-  create_excel( String box_name) async {
+  create_excel() async {
 
-    final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final Directory oldDirectory = Directory('${appDocDir.path}/Auto_Cam');
-    oldDirectory.createSync();
 
-    final Directory newDirectory = Directory('${oldDirectory.path}/$box_name');
+    String? directory0 = await FilePicker.platform.saveFile(
+      dialogTitle: 'Please select an output file:',
+      fileName: 'box name',
+    );
+
+    String file_name=directory0!.split("/")[directory0!.split("/").length-1];
+    String new_directory_0 =directory0!.split('/').sublist(0,directory0!.split("/").length-1).join("/");
+
+
+    final Directory newDirectory = Directory('$new_directory_0');
     newDirectory.createSync();
 
-    final path = newDirectory.path;
-    File file= File('$path/$box_name.xlsx');
-
+    File file= File('${newDirectory.path}/$file_name.xlsx');
 
 
     var excel = Excel.createExcel(); // automatically creates 1 empty sheet: Sheet1

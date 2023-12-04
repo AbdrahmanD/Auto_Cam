@@ -809,14 +809,7 @@ class kdt_file {
 
   extract_xml_file( String file_name)async{
 
-    //
-    // final Directory oldDirectory = Directory('${directory}/Auto_Cam');
-    // oldDirectory.createSync();
-    //
-    //
-    // final Directory newDirectory = Directory('${oldDirectory.path}/$folder_name');
-    // newDirectory.createSync();
-    //
+
     final Directory finalDirectory = Directory('$directory');
     finalDirectory.createSync();
 
