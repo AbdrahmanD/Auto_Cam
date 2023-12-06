@@ -19,6 +19,7 @@ class Piece_model{
 
   bool              is_changed=false;
   bool              piece_inable=true;
+  bool              nested=false;
 
 
   Piece_model(

@@ -790,8 +790,9 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 ),
                 InkWell(
                     onTap: () {
-                      Nesting_Pieces nest = Nesting_Pieces();
-                      Get.to(Nesting_View(nest));
+                      Nesting_Pieces nest = Nesting_Pieces(draw_Controller.box_repository.box_model.value.box_pieces);
+                      // print('from setting page : ${nest.nesting().rects}');
+                      Get.to(Nesting_View(nest.nesting()));
                     },
                     child: Icon(
                       Icons.margin_outlined,
