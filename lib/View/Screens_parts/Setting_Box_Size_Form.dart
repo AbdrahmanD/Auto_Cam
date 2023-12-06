@@ -1,84 +1,86 @@
 import 'package:auto_cam/Controller/DecimalTextInputFormatter.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
+import 'package:auto_cam/Controller/nesting/Nesting_Pieces.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/View/Main_Screen.dart';
+import 'package:auto_cam/View/Nesting_View.dart';
 import 'package:auto_cam/View/Piece_List_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class Setting_Box_Size_Form extends StatefulWidget {
-
-
-
   @override
   State<Setting_Box_Size_Form> createState() => _Setting_Box_Size_FormState();
 }
 
 class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
-
   late Box_model box_model;
 
-  bool is_back_panel=true;
+  bool is_back_panel = true;
 
   GlobalKey<FormState> form_key = GlobalKey();
 
   Draw_Controller draw_Controller = Get.find();
 
-  TextEditingController box_name_controller               =TextEditingController();
-  TextEditingController width_controller               =TextEditingController();
+  TextEditingController box_name_controller = TextEditingController();
+  TextEditingController width_controller = TextEditingController();
 
-  TextEditingController hight_controller               =TextEditingController();
+  TextEditingController hight_controller = TextEditingController();
 
-  TextEditingController depth_controller               =TextEditingController();
+  TextEditingController depth_controller = TextEditingController();
 
-  TextEditingController material_thickness_controller  =TextEditingController();
-  TextEditingController material_name_controller  =TextEditingController();
+  TextEditingController material_thickness_controller = TextEditingController();
+  TextEditingController material_name_controller = TextEditingController();
 
-  TextEditingController back_panel_thickness_controller=TextEditingController();
+  TextEditingController back_panel_thickness_controller =
+      TextEditingController();
 
-
-  TextEditingController  pack_panel_grove_depth_controller =TextEditingController();
-  TextEditingController  pack_panel_distence_controller    =TextEditingController();
-  TextEditingController  top_base_piece_width_controller    =TextEditingController();
+  TextEditingController pack_panel_grove_depth_controller =
+      TextEditingController();
+  TextEditingController pack_panel_distence_controller =
+      TextEditingController();
+  TextEditingController top_base_piece_width_controller =
+      TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+    box_model = draw_Controller.get_box();
 
-    box_model=draw_Controller.get_box();
-
-
-    box_name_controller.text="test box";
-    width_controller.text=               box_model.box_width.toString();
-    hight_controller.text=               box_model.box_height.toString();
-    depth_controller.text=               box_model.box_depth.toString();
-    material_thickness_controller.text=  box_model.init_material_thickness.toString();
-    back_panel_thickness_controller.text=box_model.back_panel_thickness.toString();
-    material_name_controller.text='MDF';
-    pack_panel_grove_depth_controller.text='${draw_Controller.box_repository.pack_panel_grove_depth}';
-    pack_panel_distence_controller.text   ='${draw_Controller.box_repository.pack_panel_distence}';
-    top_base_piece_width_controller.text  ='${draw_Controller.box_repository.top_base_piece_width}';
-
-
+    box_name_controller.text = "test box";
+    width_controller.text = box_model.box_width.toString();
+    hight_controller.text = box_model.box_height.toString();
+    depth_controller.text = box_model.box_depth.toString();
+    material_thickness_controller.text =
+        box_model.init_material_thickness.toString();
+    back_panel_thickness_controller.text =
+        box_model.back_panel_thickness.toString();
+    material_name_controller.text = 'MDF';
+    pack_panel_grove_depth_controller.text =
+        '${draw_Controller.box_repository.pack_panel_grove_depth}';
+    pack_panel_distence_controller.text =
+        '${draw_Controller.box_repository.pack_panel_distence}';
+    top_base_piece_width_controller.text =
+        '${draw_Controller.box_repository.top_base_piece_width}';
   }
+
   @override
   Widget build(BuildContext context) {
-
-
     return Form(
       key: form_key,
-      child: ListView(scrollDirection: Axis.vertical,
-
+      child: ListView(
+        scrollDirection: Axis.vertical,
         children: [
           SizedBox(
             height: 18,
           ),
+
           ///back button and lable
           Row(
             children: [
@@ -100,8 +102,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 200,
                 child: Center(
-                  child:
-                  Text(
+                  child: Text(
                     'setting up box size',
                     style: TextStyle(fontSize: 20),
                   ),
@@ -136,7 +137,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 140,
                 height: 26,
-                child: TextFormField(  style: TextStyle(fontSize: 14),
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
                   controller: box_name_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -148,16 +150,13 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       return 'please add value';
                     }
                   },
-
                 ),
               ),
-
             ],
           ),
           SizedBox(
             height: 12,
           ),
-
 
           ///width
           Row(
@@ -172,7 +171,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField( style: TextStyle(fontSize: 14),
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
                   controller: width_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -214,7 +214,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField( style: TextStyle(fontSize: 14),
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
                   controller: hight_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -256,7 +257,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                   width: 100,
                   height: 26,
-                  child: TextFormField( style: TextStyle(fontSize: 14),
+                  child: TextFormField(
+                    style: TextStyle(fontSize: 14),
                     controller: depth_controller,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -323,7 +325,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField( style: TextStyle(fontSize: 14),
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
                   controller: material_thickness_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -366,7 +369,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField( style: TextStyle(fontSize: 14),
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
                   controller: material_name_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -378,7 +382,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       return 'please add value';
                     }
                   },
-
                 ),
               ),
               Text(
@@ -411,7 +414,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField( style: TextStyle(fontSize: 14),
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
                   controller: back_panel_thickness_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -437,7 +441,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 6,
           ),
 
-
           ///pack_panel_grove_depth  form field
           Row(
             children: [
@@ -454,7 +457,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField( style: TextStyle(fontSize: 14),
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
                   controller: pack_panel_grove_depth_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -480,7 +484,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 6,
           ),
 
-
           ///pack_panel_distence_controller form field
           Row(
             children: [
@@ -497,7 +500,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField( style: TextStyle(fontSize: 14),
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
                   controller: pack_panel_distence_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -523,7 +527,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 6,
           ),
 
-
           ///top_base_piece_width_controller form field
           Row(
             children: [
@@ -540,7 +543,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               Container(
                 width: 100,
                 height: 26,
-                child: TextFormField( style: TextStyle(fontSize: 14),
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
                   controller: top_base_piece_width_controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -566,8 +570,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 6,
           ),
 
-
-
           SizedBox(
             height: 12,
           ),
@@ -584,6 +586,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           SizedBox(
             height: 6,
           ),
+
           ///chose or Edit fitting type
           Container(
             child: Row(
@@ -622,6 +625,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           SizedBox(
             height: 6,
           ),
+
           ///chose is there back panel or not
           Container(
             child: Row(
@@ -636,12 +640,12 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 SizedBox(
                   width: 18,
                 ),
-                Checkbox(value: is_back_panel, onChanged: (v){
-                  is_back_panel=!is_back_panel;
-                  setState(() {
-
-                  });
-                })
+                Checkbox(
+                    value: is_back_panel,
+                    onChanged: (v) {
+                      is_back_panel = !is_back_panel;
+                      setState(() {});
+                    })
               ],
             ),
           ),
@@ -661,29 +665,38 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 left: 18.0, right: 52, top: 18, bottom: 18),
             child: InkWell(
               onTap: () {
-                if(form_key.currentState!.validate()){
+                if (form_key.currentState!.validate()) {
+                  String box_name = box_name_controller.text.toString();
+                  double width_value =
+                      double.parse(width_controller.text.toString());
+                  double hight_value =
+                      double.parse(hight_controller.text.toString());
+                  double depth_value =
+                      double.parse(depth_controller.text.toString());
+                  double material_thickness_value = double.parse(
+                      material_thickness_controller.text.toString());
+                  String material_name_value =
+                      material_name_controller.text.toString();
+                  double pack_panel_thickness_value = double.parse(
+                      back_panel_thickness_controller.text.toString());
 
-                  String  box_name=box_name_controller.text.toString();
-                  double  width_value=double.parse(width_controller.text.toString());
-                  double  hight_value=double.parse(hight_controller.text.toString());
-                  double  depth_value=double.parse(depth_controller.text.toString());
-                  double  material_thickness_value=double.parse(material_thickness_controller  .text.toString());
-                  String  material_name_value=material_name_controller.text.toString();
-                  double  pack_panel_thickness_value=double.parse(back_panel_thickness_controller.text.toString());
+                  double pack_panel_grove_depth = double.parse(
+                      pack_panel_grove_depth_controller.text.toString());
+                  double pack_panel_distence = double.parse(
+                      pack_panel_distence_controller.text.toString());
+                  double top_base_piece_width = double.parse(
+                      top_base_piece_width_controller.text.toString());
 
-                  double pack_panel_grove_depth=double.parse(pack_panel_grove_depth_controller.text.toString());
-                  double    pack_panel_distence=double.parse(pack_panel_distence_controller.text   .toString());
-                  double   top_base_piece_width=double.parse(top_base_piece_width_controller.text  .toString());
+                  draw_Controller.box_repository.pack_panel_distence =
+                      pack_panel_distence;
+                  draw_Controller.box_repository.pack_panel_grove_depth =
+                      pack_panel_grove_depth;
+                  draw_Controller.box_repository.top_base_piece_width =
+                      top_base_piece_width;
+                  draw_Controller.box_repository.box_model.value
+                      .init_material_thickness = material_thickness_value;
 
-
-                  draw_Controller.box_repository.pack_panel_distence=pack_panel_distence;
-                  draw_Controller.box_repository.pack_panel_grove_depth=pack_panel_grove_depth;
-                  draw_Controller.box_repository.top_base_piece_width=top_base_piece_width;
-                  draw_Controller.box_repository.box_model.value.init_material_thickness=material_thickness_value;
-
-
-
-                  Box_model b=Box_model(
+                  Box_model b = Box_model(
                       box_name,
                       draw_Controller.box_type,
                       width_value,
@@ -693,15 +706,12 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       material_name_value,
                       pack_panel_thickness_value,
                       pack_panel_grove_depth,
-                         pack_panel_distence,
-                        top_base_piece_width,
-
+                      pack_panel_distence,
+                      top_base_piece_width,
                       is_back_panel,
                       Point_model(0, 0, 0));
 
-
                   draw_Controller.add_Box(b);
-
                 }
               },
               child: Container(
@@ -713,9 +723,9 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 ),
                 child: Center(
                     child: Text(
-                      'Draw in the Screen',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    )),
+                  'Draw in the Screen',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                )),
               ),
             ),
           ),
@@ -726,7 +736,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 1,
             color: Colors.grey,
           ),
-
 
           //review cut list
           Container(
@@ -747,9 +756,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 InkWell(
                     onTap: () {
                       draw_Controller.analyze();
-                      Future.delayed(Duration(milliseconds: 1000)).then((value) => Get.to(Piece_List_view(false)));
-
-
+                      Future.delayed(Duration(milliseconds: 1000))
+                          .then((value) => Get.to(Piece_List_view(false)));
                     },
                     child: Icon(
                       Icons.list,
@@ -763,8 +771,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           SizedBox(
             height: 12,
           ),
-
-
 
           ///preview Nesting sheets
           Container(
@@ -784,8 +790,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 ),
                 InkWell(
                     onTap: () {
-                      draw_Controller.print_pieces_coordinate();
-
+                      Nesting_Pieces nest = Nesting_Pieces();
+                      Get.to(Nesting_View(nest));
                     },
                     child: Icon(
                       Icons.margin_outlined,
@@ -851,7 +857,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 InkWell(
                     onTap: () {
                       draw_Controller.save_Box();
-                      },
+                    },
                     child: Icon(
                       Icons.save,
                       size: 36,
@@ -860,10 +866,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               ],
             ),
           ),
-
         ],
       ),
     );
-
   }
 }
