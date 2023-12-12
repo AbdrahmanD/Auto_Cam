@@ -13,6 +13,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 
 class Project_Controller extends GetxController {
+
+
   RxDouble drawing_scale = (0.5).obs;
   Rx<Size> screen_size = Size(800, 600).obs;
   Rx<Offset> mouse_position = Offset(0, 0).obs;

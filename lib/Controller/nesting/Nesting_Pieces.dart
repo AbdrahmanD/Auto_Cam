@@ -11,8 +11,11 @@ class Nesting_Pieces {
 
   Nesting_Pieces(this.pieces) {
 
-    container = My_Sheet(1220, 2440, Offset(0, 0), []);
+    container = My_Sheet("container",1220, 2440, Offset(0, 0), []);
     sheets.add(container);
+
+
+    container.pieces= nesting().pieces;
 
   }
 
@@ -65,12 +68,13 @@ class Nesting_Pieces {
   }
 
   List<My_Sheet> spilt_sheet(My_Sheet my_sheet, Piece_model my_piece) {
+
     List<My_Sheet> new_sheets = [];
 
-    My_Sheet my_sheet_1 = My_Sheet(my_sheet.w - my_piece.piece_width, my_piece.piece_height,
+    My_Sheet my_sheet_1 = My_Sheet("1",my_sheet.w - my_piece.piece_width, my_piece.piece_height,
         Offset(my_piece.piece_width + my_sheet.origin.dx, my_sheet.origin.dy), []);
 
-    My_Sheet my_sheet_2 = My_Sheet(my_sheet.w, my_sheet.h - my_piece.piece_height,
+    My_Sheet my_sheet_2 = My_Sheet("2",my_sheet.w, my_sheet.h - my_piece.piece_height,
         Offset(my_sheet.origin.dx, my_sheet.origin.dy + my_piece.piece_height), []);
 
     new_sheets.add(my_sheet_1);
@@ -80,6 +84,7 @@ class Nesting_Pieces {
   }
 
   insert_rect_in_sheet(My_Sheet my_sheet, Piece_model my_piece) {
+
     my_piece.piece_origin = Point_model(my_sheet.origin.dx, my_sheet.origin.dy, my_piece.piece_origin.z_coordinate);
   }
 
@@ -93,9 +98,10 @@ class Nesting_Pieces {
     return my_piece;
   }
 
+
   My_Sheet nesting() {
 
-    My_Sheet sheet = My_Sheet(container.w, container.h, container.origin, []);
+    My_Sheet sheet = My_Sheet("sheet 1",container.w, container.h, container.origin, []);
 
     sort_rect_big_to_small_by_height();
     sort_sheet_small_to_big();
@@ -104,7 +110,6 @@ class Nesting_Pieces {
 
     for (int r = 0; r < pieces.length; r++) {
       Piece_model my_piece = pieces[r];
-      if(pieces[r].piece_name.contains("inner") || pieces[r].piece_name.contains("Helper")){continue;}
       if (!my_piece.nested) {
         for (int sh = 0; sh < sheets.length; sh++) {
           My_Sheet my_sheet = sheets[sh];
@@ -126,10 +131,10 @@ class Nesting_Pieces {
           }
         }
       }
+
     }
 
     for (int r = 0; r < pieces.length; r++) {
-      if(pieces[r].piece_name.contains("inner") || pieces[r].piece_name.contains("Helper")){continue;}
 
       if (!pieces[r].nested) {
         Piece_model rotated_piece = rotate_rect(pieces[r]);
@@ -144,7 +149,6 @@ class Nesting_Pieces {
     /// rotate remained rects and try to nest it
     for (int r = 0; r < pieces.length; r++) {
 
-      if(pieces[r].piece_name.contains("inner") || pieces[r].piece_name.contains("Helper")){continue;}
 
       if (!pieces[r].nested) {
         pieces[r] = rotate_rect(pieces[r]);
@@ -170,7 +174,6 @@ class Nesting_Pieces {
       }
     }
 
-    // rects.forEach((element) {if(element.nested){print(element.origin.dx);}});
     return sheet;
   }
 }
@@ -185,10 +188,11 @@ class Nesting_Pieces {
 // }
 
 class My_Sheet {
+  late String name;
   late double w;
   late double h;
   late Offset origin;
   List<Piece_model> pieces = [];
 
-  My_Sheet(this.w, this.h, this.origin, this.pieces);
+  My_Sheet(this.name,this.w, this.h, this.origin, this.pieces);
 }

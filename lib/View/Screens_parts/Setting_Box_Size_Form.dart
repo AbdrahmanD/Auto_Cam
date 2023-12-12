@@ -2,11 +2,13 @@ import 'package:auto_cam/Controller/DecimalTextInputFormatter.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
 import 'package:auto_cam/Controller/nesting/Nesting_Pieces.dart';
+import 'package:auto_cam/Controller/nesting/Neting_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
+import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/View/Main_Screen.dart';
-import 'package:auto_cam/View/Nesting_View.dart';
+import 'package:auto_cam/project/Nesting_View.dart';
 import 'package:auto_cam/View/Piece_List_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,6 +74,9 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
   @override
   Widget build(BuildContext context) {
+
+    Neting_Controller nesting_controller = Get.find();
+
     return Form(
       key: form_key,
       child: ListView(
@@ -790,9 +795,8 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 ),
                 InkWell(
                     onTap: () {
-                      Nesting_Pieces nest = Nesting_Pieces(draw_Controller.box_repository.box_model.value.box_pieces);
-                      // print('from setting page : ${nest.nesting().rects}');
-                      Get.to(Nesting_View(nest.nesting()));
+                      nesting_controller.nesting_initilize();
+                      Get.to(Nesting_View());
                     },
                     child: Icon(
                       Icons.margin_outlined,

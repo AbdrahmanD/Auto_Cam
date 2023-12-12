@@ -1,6 +1,10 @@
+import 'dart:ui';
+
+import 'package:auto_cam/Controller/nesting/Nesting_Pieces.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Cut_List_Item.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
+import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
  import 'package:auto_cam/project/Project_model.dart';
 import 'package:get/get.dart';
 
@@ -26,6 +30,10 @@ class Box_Repository extends GetxController {
   };
 
   List<Cut_List_Item> cut_list_items = [];
+
+
+Nesting_Pieces nesting_pieces=Nesting_Pieces([]);
+bool nesting_pieces_saves=false;
 
   bool   box_have_been_saved = false;
   String box_file_path = '';

@@ -863,6 +863,23 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
 
 
 
+  ///nesting_pieces
+  List<Piece_model> nesting_pieces(){
+
+    List<Piece_model> nesting_pieces=[];
+
+
+    for (int r = 0; r < box_repository.box_model.value.box_pieces.length; r++) {
+      Piece_model my_piece = box_repository.box_model.value.box_pieces[r];
+      if(my_piece.piece_name.contains("inner") ||my_piece.piece_name.contains("Helper")){continue;}
+      else{
+        nesting_pieces.add(my_piece);
+      }
+    }
+
+    return nesting_pieces;
+
+  }
 
 
   /// /// / / / PROJECT /////////////

@@ -72,6 +72,8 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
     left_gape_controller.text = '1';
     right_gape_controller.text = '1';
     side_gap_controller.text = '12';
+    under_base_thickness.text = '20';
+
   }
 
   @override
