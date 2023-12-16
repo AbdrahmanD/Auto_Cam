@@ -8,13 +8,12 @@ class Nesting_Pieces {
   List<My_Sheet> sheets = [];
   late My_Sheet container;
  late List<Piece_model> pieces;
+ late double cut_tool_diameter;
 
-  Nesting_Pieces(this.pieces) {
+  Nesting_Pieces(this.pieces,this.cut_tool_diameter) {
 
     container = My_Sheet("container",1220, 2440, Offset(0, 0), []);
     sheets.add(container);
-
-
     container.pieces= nesting().pieces;
 
   }
@@ -34,6 +33,8 @@ class Nesting_Pieces {
     pieces = revers_pieces;
   }
 
+
+  /// still not used !!!!!!!
   sort_rect_big_to_small_by_width() {
     List<Piece_model> revers_pieces = [];
 
@@ -57,8 +58,8 @@ class Nesting_Pieces {
 
     bool can_contain = false;
 
-    bool compare_w = my_sheet.w >= piece.piece_width;
-    bool compare_h = my_sheet.h >= piece.piece_height;
+    bool compare_w = my_sheet.w >= piece.piece_width+cut_tool_diameter;
+    bool compare_h = my_sheet.h >= piece.piece_height+cut_tool_diameter;
 
     if (compare_w && compare_h) {
       can_contain = true;
@@ -71,11 +72,11 @@ class Nesting_Pieces {
 
     List<My_Sheet> new_sheets = [];
 
-    My_Sheet my_sheet_1 = My_Sheet("1",my_sheet.w - my_piece.piece_width, my_piece.piece_height,
-        Offset(my_piece.piece_width + my_sheet.origin.dx, my_sheet.origin.dy), []);
+    My_Sheet my_sheet_1 = My_Sheet("1",my_sheet.w - (my_piece.piece_width+cut_tool_diameter), my_piece.piece_height+cut_tool_diameter,
+        Offset(my_piece.piece_width + my_sheet.origin.dx+cut_tool_diameter, my_sheet.origin.dy), []);
 
-    My_Sheet my_sheet_2 = My_Sheet("2",my_sheet.w, my_sheet.h - my_piece.piece_height,
-        Offset(my_sheet.origin.dx, my_sheet.origin.dy + my_piece.piece_height), []);
+    My_Sheet my_sheet_2 = My_Sheet("2",my_sheet.w, my_sheet.h - my_piece.piece_height-cut_tool_diameter,
+        Offset(my_sheet.origin.dx, my_sheet.origin.dy + my_piece.piece_height+cut_tool_diameter), []);
 
     new_sheets.add(my_sheet_1);
     new_sheets.add(my_sheet_2);
@@ -178,14 +179,6 @@ class Nesting_Pieces {
   }
 }
 
-// class My_Rect {
-//   late double w;
-//   late double h;
-//   late Offset origin;
-//   bool nested = false;
-//
-//   My_Rect(this.w, this.h, this.origin);
-// }
 
 class My_Sheet {
   late String name;

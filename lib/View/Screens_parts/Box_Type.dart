@@ -174,21 +174,6 @@ class _Box_TypeState extends State<Box_Type> {
                 height: 24,
               ),
 
-              Container(width: w,
-                child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    InkWell(onTap: (){
-                      Get.defaultDialog(
-                          title: "Create KD Join pattern",
-                          content: CreateJoinholepatternDialog());
-                    }
-                        ,child: Icon(Icons.settings,size: 42,color: Colors.red[500],)),
-                    SizedBox(width: 32,),
-                    Text("setting",style: TextStyle(fontSize: 22),)
-                  ],
-                ),
-              ),
 
             ],
           ),

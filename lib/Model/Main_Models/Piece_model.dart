@@ -21,6 +21,7 @@ class Piece_model{
   bool              piece_inable=true;
   bool              nested=false;
 
+  List<Point_model> cutting_boarder=[];
 
   Piece_model(
 

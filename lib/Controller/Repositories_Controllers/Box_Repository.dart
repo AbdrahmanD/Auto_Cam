@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:auto_cam/Controller/nesting/Nesting_Pieces.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
+import 'package:auto_cam/Model/Main_Models/CNC_Tool.dart';
 import 'package:auto_cam/Model/Main_Models/Cut_List_Item.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
-import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
- import 'package:auto_cam/project/Project_model.dart';
+  import 'package:auto_cam/project/Project_model.dart';
 import 'package:get/get.dart';
 
 class Box_Repository extends GetxController {
@@ -31,8 +31,9 @@ class Box_Repository extends GetxController {
 
   List<Cut_List_Item> cut_list_items = [];
 
+  List<CNC_Tool> cnc_tools=[CNC_Tool("cut", 1, "cutting tool", 12, 18, 100, 100, 10000)];
 
-Nesting_Pieces nesting_pieces=Nesting_Pieces([]);
+Nesting_Pieces nesting_pieces=Nesting_Pieces([],12);
 bool nesting_pieces_saves=false;
 
   bool   box_have_been_saved = false;

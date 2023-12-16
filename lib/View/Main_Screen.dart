@@ -1,8 +1,9 @@
-
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/View/Cabinet_Editor.dart';
+import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/CreateJoinholepatternDialog.dart';
+import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Tools_Setting.dart';
 import 'package:auto_cam/View/Screens_parts/Box_Type.dart';
 import 'package:auto_cam/project/Projecet_Controller.dart';
 import 'package:auto_cam/project/Project_Editor.dart';
@@ -11,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Main_Screen extends StatelessWidget {
-  Draw_Controller draw_controller=Get.find();
-  Project_Controller project_controller=Get.find();
+  Draw_Controller draw_controller = Get.find();
+  Project_Controller project_controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +30,8 @@ class Main_Screen extends StatelessWidget {
                 end: Alignment.bottomLeft,
                 colors: [Colors.white, Colors.grey])),
         child: Center(
-          child:
-          Column(
+          child: Column(
             children: [
-
               SizedBox(
                 height: 128,
               ),
@@ -54,11 +53,11 @@ class Main_Screen extends StatelessWidget {
               ),
 
               /// row of items [ project , cabinet editor , single piece editor ]
-              Container(width: w-500,
+              Container(
+                width: w - 500,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     /// project
                     Flexible(
                       flex: 1,
@@ -76,7 +75,6 @@ class Main_Screen extends StatelessWidget {
                           InkWell(
                             onTap: () {
                               Get.to(Project_Editor());
-
                             },
                             child: Container(
                                 height: 150,
@@ -93,18 +91,29 @@ class Main_Screen extends StatelessWidget {
                           /// open new project
 
                           Container(
-                            child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-
-                                InkWell(onTap: () async{
-
-                                  draw_controller.box_repository.project_model=Project_model("current project",1,1,2023, "", "", []);
-                                  Get.to(Project_Editor());
-
-                                }
-                                    ,child: Icon(Icons.create,size: 42,color: Colors.red[500],)),
-                                SizedBox(width: 24,),
-                                Text("create new project",style: TextStyle(fontSize: 16),)
+                                InkWell(
+                                    onTap: () async {
+                                      draw_controller
+                                              .box_repository.project_model =
+                                          Project_model("current project", 1, 1,
+                                              2023, "", "", []);
+                                      Get.to(Project_Editor());
+                                    },
+                                    child: Icon(
+                                      Icons.create,
+                                      size: 42,
+                                      color: Colors.red[500],
+                                    )),
+                                SizedBox(
+                                  width: 24,
+                                ),
+                                Text(
+                                  "create new project",
+                                  style: TextStyle(fontSize: 16),
+                                )
                               ],
                             ),
                           ),
@@ -115,18 +124,27 @@ class Main_Screen extends StatelessWidget {
                           /// open project from repository
 
                           Container(
-                            child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-
-                                InkWell(onTap: () async{
-
-                                  await project_controller.read_Project_from_rebository();
-                                  Get.to(Project_Editor());
-
-                                }
-                                    ,child: Icon(Icons.file_open,size: 42,color: Colors.red[500],)),
-                                SizedBox(width: 24,),
-                                Text("open project from repository",style: TextStyle(fontSize: 16),)
+                                InkWell(
+                                    onTap: () async {
+                                      await project_controller
+                                          .read_Project_from_rebository();
+                                      Get.to(Project_Editor());
+                                    },
+                                    child: Icon(
+                                      Icons.file_open,
+                                      size: 42,
+                                      color: Colors.red[500],
+                                    )),
+                                SizedBox(
+                                  width: 24,
+                                ),
+                                Text(
+                                  "open project from repository",
+                                  style: TextStyle(fontSize: 16),
+                                )
                               ],
                             ),
                           ),
@@ -159,29 +177,53 @@ class Main_Screen extends StatelessWidget {
                                   "lib/assets/images/sc.png",
                                 )),
                           ),
-                           SizedBox(
+                          SizedBox(
                             height: 64,
                           ),
 
                           /// open new cabinet
 
                           Container(
-                            child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                InkWell(
+                                    onTap: () async {
+                                      draw_controller
+                                              .box_repository.box_model.value =
+                                          Box_model(
+                                              'box_name',
+                                              "wall_cabinet",
+                                              400,
+                                              600,
+                                              500,
+                                              18,
+                                              'MDF',
+                                              5,
+                                              9,
+                                              18,
+                                              100,
+                                              true,
+                                              Point_model(0, 0, 0));
+                                      draw_controller.box_repository
+                                          .box_have_been_saved = false;
+                                      draw_controller
+                                          .box_repository.box_file_path = '';
 
-                                InkWell(onTap: () async{
-
-                                  draw_controller.box_repository.box_model.value= Box_model('box_name', "wall_cabinet", 400, 600, 500,
-                                          18, 'MDF', 5, 9, 18, 100, true, Point_model(0, 0, 0));
-                                  draw_controller.box_repository.box_have_been_saved = false;
-                                  draw_controller.box_repository.box_file_path = '';
-
-                                  Get.to(Box_Type());
-
-                                }
-                                    ,child: Icon(Icons.create,size: 42,color: Colors.red[500],)),
-                                SizedBox(width: 24,),
-                                Text("create new box",style: TextStyle(fontSize: 16),)
+                                      Get.to(Box_Type());
+                                    },
+                                    child: Icon(
+                                      Icons.create,
+                                      size: 42,
+                                      color: Colors.red[500],
+                                    )),
+                                SizedBox(
+                                  width: 24,
+                                ),
+                                Text(
+                                  "create new box",
+                                  style: TextStyle(fontSize: 16),
+                                )
                               ],
                             ),
                           ),
@@ -192,39 +234,101 @@ class Main_Screen extends StatelessWidget {
                           /// open box from repository
 
                           Container(
-                            child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-
-                                InkWell(onTap: () async{
-
-                                  await draw_controller.read_Box_from_rebository();
-                                  Get.to(Cabinet_Editor());
-
-                                }
-                                    ,child: Icon(Icons.file_open,size: 42,color: Colors.red[500],)),
-                                SizedBox(width: 24,),
-                                Text("open box from repository",style: TextStyle(fontSize: 16),)
+                                InkWell(
+                                    onTap: () async {
+                                      await draw_controller
+                                          .read_Box_from_rebository();
+                                      Get.to(Cabinet_Editor());
+                                    },
+                                    child: Icon(
+                                      Icons.file_open,
+                                      size: 42,
+                                      color: Colors.red[500],
+                                    )),
+                                SizedBox(
+                                  width: 24,
+                                ),
+                                Text(
+                                  "open box from repository",
+                                  style: TextStyle(fontSize: 16),
+                                )
                               ],
                             ),
                           ),
                         ],
                       ),
                     ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 56,
+              ),
 
-
+              ///KD Join pattern setting
+              Container(
+                width: w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Get.defaultDialog(
+                              title: "Create KD Join pattern",
+                              content: CreateJoinholepatternDialog());
+                        },
+                        child: Icon(
+                          Icons.settings,
+                          size: 32,
+                          color: Colors.red[500],
+                        )),
+                    SizedBox(
+                      width: 32,
+                    ),
+                    Text(
+                      "KD Join pattern setting",
+                      style: TextStyle(fontSize: 16),
+                    )
                   ],
                 ),
               ),
 
-
-
-
-
+              SizedBox(
+                height: 12,
+              ),
+              ///Tool Setting
+              Container(
+                width: w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Get.defaultDialog(
+                              title: "Tool Setting", content: Tools_Setting());
+                        },
+                        child: Icon(
+                          Icons.settings,
+                          size: 32,
+                          color: Colors.red[500],
+                        )),
+                    SizedBox(
+                      width: 32,
+                    ),
+                    Text(
+                      "Tool Setting ",
+                      style: TextStyle(fontSize: 16),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
-
   }
 }

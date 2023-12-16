@@ -811,38 +811,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 12,
           ),
 
-          ///Export every piece \n  as G_code file
-          // Container(
-          //   child: Row(
-          //     children: [
-          //       SizedBox(
-          //         width: 18,
-          //       ),
-          //       Container(
-          //           width: 180,
-          //           child: Text('Export every piece \n  as G_code file',
-          //               style: TextStyle(
-          //                 fontSize: 14,
-          //               ))),
-          //       SizedBox(
-          //         width: 18,
-          //       ),
-          //       InkWell(
-          //           onTap: () {
-          //             draw_Controller.extract_xml_files(false);
-          //           },
-          //           child: Icon(
-          //             Icons.code,
-          //             size: 36,
-          //             color: Colors.teal,
-          //           )),
-          //     ],
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: 12,
-          // ),
-
           ///save the box
           Container(
             child: Row(

@@ -33,10 +33,7 @@ class _Nesting_ViewState extends State<Nesting_View> {
 
     x_move.text = '0';
     y_move.text = '0';
-
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +109,7 @@ class _Nesting_ViewState extends State<Nesting_View> {
                           style: TextStyle(fontSize: 12),
                           enabled: true,
                           keyboardType:
-                          TextInputType.numberWithOptions(
-                              decimal: true),
+                              TextInputType.numberWithOptions(decimal: true),
                           controller: x_move,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -141,8 +137,7 @@ class _Nesting_ViewState extends State<Nesting_View> {
                           style: TextStyle(fontSize: 12),
                           enabled: true,
                           keyboardType:
-                          TextInputType.numberWithOptions(
-                              decimal: true),
+                              TextInputType.numberWithOptions(decimal: true),
                           controller: y_move,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -160,52 +155,59 @@ class _Nesting_ViewState extends State<Nesting_View> {
                   ),
 
                   SizedBox(
-                    height: 8,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      x_move_value = double.parse(
-                          '${eval(x_move.text.toString())}');
-                      y_move_value = double.parse(
-                          '${eval(y_move.text.toString())}');
-
-                      nesting_controller.move_piece(
-                         Offset( x_move_value, y_move_value));
-                      x_move_value = 0;
-                      y_move_value = 0;
-                      x_move.text = '0';
-                      y_move.text = '0';
-                    },
-                    child: Container(
-                      width: 70,
-                      height: 32,
-                      decoration: BoxDecoration(
-                          color: Colors.teal[300],
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Center(child: Text('move')),
-                    ),
+                    height: 14,
                   ),
 
-                  /// flip
+                  ///move qnd flip
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          x_move_value =
+                              double.parse('${eval(x_move.text.toString())}');
+                          y_move_value =
+                              double.parse('${eval(y_move.text.toString())}');
+
+                          nesting_controller
+                              .move_piece(Offset(x_move_value, y_move_value));
+                          x_move_value = 0;
+                          y_move_value = 0;
+                          x_move.text = '0';
+                          y_move.text = '0';
+                        },
+                        child: Container(
+                          width: 70,
+                          height: 32,
+                          decoration: BoxDecoration(
+                              color: Colors.teal[300],
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Center(child: Text('move')),
+                        ),
+                      ),
+
+                      /// flip
+                      SizedBox(
+                        width: 12,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          nesting_controller.flip_piece();
+                        },
+                        child: Container(
+                          width: 70,
+                          height: 32,
+                          decoration: BoxDecoration(
+                              color: Colors.teal[300],
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Center(child: Text('Flip')),
+                        ),
+                      ),
+                    ],
+                  ),
+
                   SizedBox(
-                    height: 8,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      nesting_controller.flip_piece();
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 32,
-                      decoration: BoxDecoration(
-                          color: Colors.teal[300],
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Center(child: Text('Flip piece')),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 16,
+                    height: 12,
                   ),
 
                   ///divider
@@ -216,7 +218,7 @@ class _Nesting_ViewState extends State<Nesting_View> {
                   ),
 
                   SizedBox(
-                    height: 24,
+                    height: 12,
                   ),
 
                   /// save or cancel button
@@ -225,25 +227,7 @@ class _Nesting_ViewState extends State<Nesting_View> {
                     children: [
                       InkWell(
                         onTap: () {
-                          nesting_controller.reset();
-
-
-                        },
-                        child: Container(
-                          width: 70,
-                          height: 32,
-                          decoration: BoxDecoration(
-                              color: Colors.teal[300],
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Center(child: Text('reset')),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () {
-nesting_controller.save_sheet();
+                          nesting_controller.save_sheet();
                         },
                         child: Container(
                           width: 70,
@@ -254,22 +238,31 @@ nesting_controller.save_sheet();
                           child: Center(child: Text('Save')),
                         ),
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          nesting_controller.reset();
+                        },
+                        child: Container(
+                          width: 70,
+                          height: 32,
+                          decoration: BoxDecoration(
+                              color: Colors.teal[300],
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Center(child: Text('reset')),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
-                    height: 12,
-                  ),
-
-                  SizedBox(
-                    height: 12,
+                    height: 24,
                   ),
 
                   ///delete the piece
                   InkWell(
-                    onTap: () {
-
-
-                    },
+                    onTap: () {},
                     child: Container(
                       width: 150,
                       height: 32,
@@ -279,8 +272,6 @@ nesting_controller.save_sheet();
                       child: Center(child: Text('Delete the piece')),
                     ),
                   ),
-
-
                 ],
               ),
             ),

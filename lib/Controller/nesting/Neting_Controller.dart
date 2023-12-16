@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Painters/Nesting_Painter.dart';
 import 'package:auto_cam/Controller/nesting/Nesting_Pieces.dart';
+import 'package:auto_cam/Model/Main_Models/CNC_Tool.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:get/get.dart';
@@ -29,6 +30,9 @@ class Neting_Controller extends GetxController {
   List<Point_model> all_corners = [];
 
   late Nesting_Pieces nest;
+
+  List<CNC_Tool> used_cnc_tools=[];
+ late double cut_tool_diameter;
 
   find_hover_id(List<Piece_model> pieces) {
     hover_id = 'null';
@@ -84,23 +88,52 @@ class Neting_Controller extends GetxController {
     return is_hover;
   }
 
+
+
   nesting_initilize() {
+      cut_tool_diameter=draw_Controller.box_repository.cnc_tools[0].tool_diameter;
 
+    List<Piece_model> my_pieces0 = draw_Controller.nesting_pieces();
 
-    List<Piece_model> my_pieces = draw_Controller.nesting_pieces();
-
-    if(draw_Controller.box_repository.nesting_pieces_saves &&(my_pieces.length==draw_Controller.box_repository.nesting_pieces.container.pieces.length) ){
+    List<Piece_model> my_pieces= add_cutting_gap_to_pieces(my_pieces0);
+    if(draw_Controller.box_repository.nesting_pieces_saves
+        &&(my_pieces.length==draw_Controller.box_repository.nesting_pieces.container.pieces.length) ){
       nest=draw_Controller.box_repository.nesting_pieces;
-    }else{
+    }
+    else{
 
       my_pieces.forEach((element) {
         element.nested = false;
       });
-      nest = Nesting_Pieces(my_pieces);
+      nest = Nesting_Pieces(my_pieces,draw_Controller.box_repository.cnc_tools[0].tool_diameter);
 
     }
 
   }
+
+  List<Piece_model> add_cutting_gap_to_pieces(List<Piece_model> pieces){
+
+    List<Piece_model> my_pieces =[];
+
+     double cut_diameter=draw_Controller.box_repository.cnc_tools[0].tool_diameter;
+
+    for(int i=0;i<pieces.length;i++){
+      Point_model p1=pieces[i].piece_origin;
+      Point_model p2=Point_model(pieces[i].piece_origin.x_coordinate+pieces[i].piece_width+cut_diameter, pieces[i].piece_origin.y_coordinate, 0);
+      Point_model p3=Point_model(pieces[i].piece_origin.x_coordinate+pieces[i].piece_width+cut_diameter, pieces[i].piece_origin.y_coordinate+pieces[i].piece_height+cut_diameter, 0);
+      Point_model p4=Point_model(pieces[i].piece_origin.x_coordinate, pieces[i].piece_origin.y_coordinate+pieces[i].piece_height+cut_diameter, 0);
+
+      pieces[i].cutting_boarder=[p1,p2,p3,p4];
+
+
+      my_pieces.add(pieces[i]);
+
+    }
+
+
+    return my_pieces;
+  }
+
 
   Nesting_Painter draw_nested_sheet() {
     find_hover_id(nest.pieces);
@@ -142,8 +175,7 @@ class Neting_Controller extends GetxController {
   }
 
   move_piece(Offset offset) {
-    Piece_model p =
-        nest.pieces.where((element) => element.piece_id == selected_id).first;
+    Piece_model p = nest.pieces.where((element) => element.piece_id == selected_id).first;
 
     // p.piece_origin = Point_model(
     //     (mouse_position.value.dx-40)/ drawing_scale.value,
@@ -160,21 +192,40 @@ class Neting_Controller extends GetxController {
     selected_box_corners = [];
     all_corners = [];
 
+
+    Point_model c1 = Point_model(nest.container.origin.dx, nest.container.origin.dy, 0);
+    Point_model c2 = Point_model(c1.x_coordinate+nest.container.w,c1.y_coordinate,0);
+    Point_model c3 = Point_model(c1.x_coordinate+nest.container.w,c1.y_coordinate+nest.container.h,0);
+    Point_model c4 = Point_model(c1.x_coordinate                 ,c1.y_coordinate+nest.container.h,0);
+
+     all_corners.add(c1);
+     all_corners.add(c2);
+     all_corners.add(c3);
+     all_corners.add(c4);
+
+
     if (selected_id != 'null') {
       List<Piece_model> pieces = draw_Controller.nesting_pieces();
-      Piece_model p =
-          pieces.where((element) => element.piece_id == selected_id).first;
+      Piece_model p = pieces.where((element) => element.piece_id == selected_id).first;
 
-      Point_model c1 = p.piece_origin;
-      Point_model c2 = Point_model(p.piece_origin.x_coordinate + p.piece_width,
-          p.piece_origin.y_coordinate, p.piece_origin.z_coordinate);
-      Point_model c3 = Point_model(
-          p.piece_origin.x_coordinate + p.piece_width,
-          p.piece_origin.y_coordinate + p.piece_height,
+      Point_model c1 =Point_model(
+          p.piece_origin.x_coordinate-cut_tool_diameter/2,
+          p.piece_origin.y_coordinate-cut_tool_diameter/2,
           p.piece_origin.z_coordinate);
+
+      Point_model c2 = Point_model(
+          p.piece_origin.x_coordinate + p.piece_width+cut_tool_diameter/2,
+          p.piece_origin.y_coordinate-cut_tool_diameter/2,
+          p.piece_origin.z_coordinate);
+
+      Point_model c3 = Point_model(
+          p.piece_origin.x_coordinate + p.piece_width+cut_tool_diameter/2,
+          p.piece_origin.y_coordinate + p.piece_height+cut_tool_diameter/2,
+          p.piece_origin.z_coordinate);
+
       Point_model c4 = Point_model(
-          p.piece_origin.x_coordinate,
-          p.piece_origin.y_coordinate + p.piece_height,
+          p.piece_origin.x_coordinate-cut_tool_diameter/2,
+          p.piece_origin.y_coordinate + p.piece_height+cut_tool_diameter/2,
           p.piece_origin.z_coordinate);
 
       selected_box_corners.add(c1);
@@ -188,18 +239,24 @@ class Neting_Controller extends GetxController {
         } else {
           Piece_model sb = pieces[si];
 
-          Point_model sc1 = sb.piece_origin;
+          Point_model sc1 =Point_model(
+              sb.piece_origin.x_coordinate-cut_tool_diameter/2,
+              sb.piece_origin.y_coordinate-cut_tool_diameter/2,
+              sb.piece_origin.z_coordinate);
+
           Point_model sc2 = Point_model(
-              sb.piece_origin.x_coordinate + sb.piece_width,
-              sb.piece_origin.y_coordinate,
+              sb.piece_origin.x_coordinate + sb.piece_width+cut_tool_diameter/2,
+              sb.piece_origin.y_coordinate-cut_tool_diameter/2,
               sb.piece_origin.z_coordinate);
+
           Point_model sc3 = Point_model(
-              sb.piece_origin.x_coordinate + sb.piece_width,
-              sb.piece_origin.y_coordinate + sb.piece_height,
+              sb.piece_origin.x_coordinate + sb.piece_width+cut_tool_diameter/2,
+              sb.piece_origin.y_coordinate + sb.piece_height+cut_tool_diameter/2,
               sb.piece_origin.z_coordinate);
+
           Point_model sc4 = Point_model(
-              sb.piece_origin.x_coordinate,
-              sb.piece_origin.y_coordinate + sb.piece_height,
+              sb.piece_origin.x_coordinate-cut_tool_diameter/2,
+              sb.piece_origin.y_coordinate + sb.piece_height+cut_tool_diameter/2,
               sb.piece_origin.z_coordinate);
 
           all_corners.add(sc1);
@@ -240,6 +297,7 @@ class Neting_Controller extends GetxController {
       p.piece_origin.x_coordinate += offset.dx / drawing_scale.value;
       p.piece_origin.y_coordinate -= offset.dy / drawing_scale.value;
       snap_to_piece();
+
     }
   }
 
@@ -255,6 +313,7 @@ class Neting_Controller extends GetxController {
       double x_value;
       double y_value;
 
+
       x_value = (p2.x_coordinate - p1.x_coordinate);
       y_value = (p2.y_coordinate - p1.y_coordinate);
 
@@ -266,6 +325,9 @@ class Neting_Controller extends GetxController {
       selected_box_corners = [];
       all_corners = [];
     }
+
+
+
   }
 
   save_sheet(){
@@ -282,6 +344,9 @@ class Neting_Controller extends GetxController {
 nesting_initilize();
 
   }
+
+
+  add_tools_to_sheet(){}
 
 
 
