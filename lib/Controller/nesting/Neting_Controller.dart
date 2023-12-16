@@ -297,7 +297,7 @@ class Neting_Controller extends GetxController {
       p.piece_origin.x_coordinate += offset.dx / drawing_scale.value;
       p.piece_origin.y_coordinate -= offset.dy / drawing_scale.value;
       snap_to_piece();
-
+///
     }
   }
 
