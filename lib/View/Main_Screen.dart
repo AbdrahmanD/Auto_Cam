@@ -5,6 +5,7 @@ import 'package:auto_cam/View/Cabinet_Editor.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/CreateJoinholepatternDialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Tools_Setting.dart';
 import 'package:auto_cam/View/Screens_parts/Box_Type.dart';
+import 'package:auto_cam/View/Setting_Page.dart';
 import 'package:auto_cam/project/Projecet_Controller.dart';
 import 'package:auto_cam/project/Project_Editor.dart';
 import 'package:auto_cam/project/Project_model.dart';
@@ -276,9 +277,7 @@ class Main_Screen extends StatelessWidget {
                   children: [
                     InkWell(
                         onTap: () {
-                          Get.defaultDialog(
-                              title: "Create KD Join pattern",
-                              content: CreateJoinholepatternDialog());
+                         Get.to(Setting_Page());
                         },
                         child: Icon(
                           Icons.settings,

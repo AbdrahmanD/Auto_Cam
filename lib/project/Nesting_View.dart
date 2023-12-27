@@ -8,6 +8,7 @@ import 'package:dart_eval/dart_eval.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class Nesting_View extends StatefulWidget {
@@ -16,7 +17,9 @@ class Nesting_View extends StatefulWidget {
 }
 
 class _Nesting_ViewState extends State<Nesting_View> {
+
   Neting_Controller nesting_controller = Get.find();
+
   Draw_Controller draw_Controller = Get.find();
 
   TextEditingController x_move = TextEditingController();
@@ -25,6 +28,10 @@ class _Nesting_ViewState extends State<Nesting_View> {
   double x_move_value = 0;
 
   double y_move_value = 0;
+
+
+  bool shift_hold = false;
+
 
   @override
   void initState() {
@@ -37,6 +44,7 @@ class _Nesting_ViewState extends State<Nesting_View> {
 
   @override
   Widget build(BuildContext context) {
+
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     double f = 1;
@@ -164,13 +172,10 @@ class _Nesting_ViewState extends State<Nesting_View> {
                     children: [
                       InkWell(
                         onTap: () {
-                          x_move_value =
-                              double.parse('${eval(x_move.text.toString())}');
-                          y_move_value =
-                              double.parse('${eval(y_move.text.toString())}');
+                          x_move_value = double.parse('${eval(x_move.text.toString())}');
+                          y_move_value = double.parse('${eval(y_move.text.toString())}');
 
-                          nesting_controller
-                              .move_piece(Offset(x_move_value, y_move_value));
+                          nesting_controller.move_piece(Offset(x_move_value, y_move_value));
                           x_move_value = 0;
                           y_move_value = 0;
                           x_move.text = '0';
@@ -262,7 +267,12 @@ class _Nesting_ViewState extends State<Nesting_View> {
 
                   ///delete the piece
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      // nesting_controller.delete_piece();
+                      setState(() {
+
+                      });
+                    },
                     child: Container(
                       width: 150,
                       height: 32,
@@ -275,61 +285,81 @@ class _Nesting_ViewState extends State<Nesting_View> {
                 ],
               ),
             ),
-            Listener(
-              /// scaling
-              onPointerSignal: (PointerSignalEvent event) {
-                if (event is PointerScrollEvent) {
-                  if (f > 0 && f < 10) {
-                    nesting_controller.drawing_scale.value +=
-                        (event.scrollDelta.direction).toInt() / 50;
+
+            RawKeyboardListener(
+              focusNode: FocusNode(),
+              autofocus: true,
+              onKey: (RawKeyEvent event) {
+                if (event is RawKeyDownEvent) {
+                  if (event.isKeyPressed(LogicalKeyboardKey.shiftLeft) ||
+                      event.isKeyPressed(LogicalKeyboardKey.shiftRight)) {
+                    shift_hold = true;
+                    // setState(() {});
+                  }
+                } else if (event is RawKeyUpEvent) {
+                  if (event.isKeyPressed(LogicalKeyboardKey.controlLeft) == false &&
+                      event.isKeyPressed(LogicalKeyboardKey.controlRight) == false) {
+                    shift_hold = false;
+
+                    // setState(() {});
                   }
                 }
               },
-
-              /// left click
-              onPointerDown: (v) {
-                nesting_controller.mouse_left_click();
-                nesting_controller.hold_piece.value = true;
-                setState(() {});
-              },
-
-              /// left click end
-              onPointerUp: (v) {
-                nesting_controller.hold_piece.value = false;
-                nesting_controller.finish_draging();
-              },
-
-              /// dragging
-              onPointerMove: (v) {
-                nesting_controller.drag_piece(v.delta);
-
-                setState(() {});
-              },
-
-              child: MouseRegion(
-                onHover: (v) {
-                  if (!nesting_controller.hold_piece.value) {
-                    nesting_controller.mouse_position.value = v.localPosition;
+              child: Listener(
+                /// scaling
+                onPointerSignal: (PointerSignalEvent event) {
+                  if (event is PointerScrollEvent) {
+                    if (f > 0 && f < 10) {
+                      nesting_controller.drawing_scale.value +=
+                          (event.scrollDelta.direction).toInt() / 50;
+                    }
                   }
                 },
-                child: GestureDetector(
-                  onPanUpdate: (v) {
-                    if (nesting_controller.hold_piece.value) {
+
+                /// left click
+                onPointerDown: (v) {
+                  nesting_controller.mouse_left_click(shift_hold);
+                  nesting_controller.hold_piece.value = true;
+                 },
+
+                /// left click end
+                onPointerUp: (v) {
+                  nesting_controller.hold_piece.value = false;
+                  nesting_controller.finish_draging();
+                },
+
+                /// dragging
+                onPointerMove: (v) {
+                  nesting_controller.drag_piece(v.delta);
+
+
+
+                },
+
+                child: MouseRegion(
+                  onHover: (v) {
                       nesting_controller.mouse_position.value = v.localPosition;
-                    }
+setState(() {
+
+});
                   },
-                  child: Container(
-                    width: w - 600,
-                    height: h,
-                    color: Colors.grey[100],
-                    child: Obx(
-                      () => CustomPaint(
-                          painter: nesting_controller.draw_nested_sheet()),
+                  child: GestureDetector(
+
+                    child: Container(
+                      width: w - 600,
+                      height: h,
+                      color: Colors.grey[100],
+                      child:  CustomPaint(
+                        painter: nesting_controller.draw_selected_sheet(),
+
+                      )
                     ),
                   ),
                 ),
               ),
             ),
+
+
             SizedBox(
               width: 10,
             ),
@@ -360,3 +390,4 @@ class _Nesting_ViewState extends State<Nesting_View> {
     );
   }
 }
+

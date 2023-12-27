@@ -795,8 +795,10 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                 ),
                 InkWell(
                     onTap: () {
+
                       nesting_controller.nesting_initilize();
                       Get.to(Nesting_View());
+
                     },
                     child: Icon(
                       Icons.margin_outlined,

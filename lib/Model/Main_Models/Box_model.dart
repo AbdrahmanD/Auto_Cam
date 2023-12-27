@@ -22,6 +22,7 @@ class Box_model {
  late bool   is_back_panel;
  late Point_model box_origin;
    List<Piece_model> box_pieces=[];
+   List<Piece_model> box_deleted_pieces=[];
    int piece_id=0;
 
 
@@ -119,7 +120,7 @@ Map<String, dynamic> toJson() {
             correct_value(box_origin.x_coordinate + init_material_thickness),
             correct_value(box_origin.y_coordinate + box_height - init_material_thickness),
             correct_value(box_origin.z_coordinate)
-        )
+        ),"inner_0"
     );
     box_pieces.add(top_piece);
 
@@ -135,7 +136,7 @@ Map<String, dynamic> toJson() {
            correct_value( box_origin.x_coordinate + init_material_thickness),
            correct_value( box_origin.y_coordinate ),
            correct_value( box_origin.z_coordinate)
-        )
+        ),"inner_0"
     );
     box_pieces.add(base_piece);
 
@@ -151,7 +152,7 @@ Map<String, dynamic> toJson() {
            correct_value(box_origin.x_coordinate+box_width - init_material_thickness),
            correct_value(box_origin.y_coordinate) ,
            correct_value(box_origin.z_coordinate)
-        )
+        ),"inner_0"
     );
     box_pieces.add(right_piece);
 
@@ -167,7 +168,7 @@ Map<String, dynamic> toJson() {
           correct_value( box_origin.x_coordinate),
           correct_value( box_origin.y_coordinate ),
           correct_value( box_origin.z_coordinate)
-        )
+        ),"inner_0"
     );
     box_pieces.add(left_piece);
 
@@ -184,7 +185,7 @@ Map<String, dynamic> toJson() {
              correct_value( box_origin.x_coordinate+init_material_thickness-grove_value+1),
              correct_value( box_origin.y_coordinate+init_material_thickness-grove_value+1 ),
              correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
-          )
+          ),"inner-0"
       );
 
       Piece_model  back_panel_Helper = Piece_model(
@@ -199,7 +200,7 @@ Map<String, dynamic> toJson() {
               correct_value( box_origin.x_coordinate+init_material_thickness),
               correct_value( box_origin.y_coordinate+init_material_thickness ),
               correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
-          )
+          ),"inner-0"
       );
 
       box_pieces.add(back_panel);
@@ -208,7 +209,7 @@ Map<String, dynamic> toJson() {
 
     Piece_model  inner = Piece_model(
         get_id(),
-        'inner',
+        'inner_0',
         'F',
         'inner',
        correct_value( box_width-2*init_material_thickness),
@@ -218,7 +219,7 @@ Map<String, dynamic> toJson() {
            correct_value(box_origin.x_coordinate+init_material_thickness),
            correct_value(box_origin.y_coordinate+init_material_thickness) ,
            correct_value(box_origin.z_coordinate)
-        )
+        ),""
     );
     box_pieces.add(inner);
 
@@ -239,7 +240,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate + init_material_thickness,
             box_origin.y_coordinate + box_height - init_material_thickness,box_origin.z_coordinate)
-    );
+        ,"inner_0");
     Piece_model  top_piece_2 = Piece_model(
         get_id(),
         'top_2',
@@ -250,7 +251,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate + init_material_thickness,
             box_origin.y_coordinate + box_height - init_material_thickness,box_origin.z_coordinate+box_depth-top_base_piece_width)
-    );
+        ,"inner_0");
 
     box_pieces.add(top_piece_1);
     box_pieces.add(top_piece_2);
@@ -265,7 +266,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate + init_material_thickness,
             box_origin.y_coordinate ,box_origin.z_coordinate)
-    );
+        ,"inner_0");
     box_pieces.add(base_piece);
 
     Piece_model  right_piece = Piece_model(
@@ -278,7 +279,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate+box_width - init_material_thickness,
             box_origin.y_coordinate ,box_origin.z_coordinate)
-    );
+        ,"inner_0");
     box_pieces.add(right_piece);
 
     Piece_model  left_piece = Piece_model(
@@ -291,7 +292,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate,
             box_origin.y_coordinate ,box_origin.z_coordinate)
-    );
+        ,"inner_0");
     box_pieces.add(left_piece);
 
     if(is_back_panel){
@@ -306,7 +307,7 @@ Map<String, dynamic> toJson() {
           Point_model(box_origin.x_coordinate+init_material_thickness-grove_value+1,
               box_origin.y_coordinate+init_material_thickness-grove_value+1
               ,box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
-      );
+          ,"inner-0"  );
       Piece_model  back_panel_Helper = Piece_model(
           get_id(),
           'back_panel_Helper',
@@ -320,14 +321,14 @@ Map<String, dynamic> toJson() {
               correct_value( box_origin.y_coordinate+init_material_thickness ),
               correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
           )
-      );
+          ,"inner-0");
 
       box_pieces.add(back_panel);
       box_pieces.add(back_panel_Helper);
     }
     Piece_model  inner = Piece_model(
         get_id(),
-        'inner',
+        'inner_0',
         'F',
         'inner',
         box_width-2*init_material_thickness,
@@ -337,7 +338,7 @@ Map<String, dynamic> toJson() {
         Point_model(box_origin.x_coordinate+init_material_thickness,
             box_origin.y_coordinate+init_material_thickness ,
             box_origin.z_coordinate)
-    );
+        ,"" );
     box_pieces.add(inner);
 
   }
@@ -355,7 +356,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate + init_material_thickness,
             box_origin.y_coordinate + box_height - init_material_thickness,box_origin.z_coordinate)
-    );
+        ,"inner_0");
     Piece_model  top_piece_2 = Piece_model(
         get_id(),
         'top_2',
@@ -367,7 +368,7 @@ Map<String, dynamic> toJson() {
         Point_model(box_origin.x_coordinate + init_material_thickness,
             box_origin.y_coordinate + box_height - init_material_thickness,
             box_origin.z_coordinate+box_depth-top_base_piece_width)
-    );
+        ,"inner_0");
 
     box_pieces.add(top_piece_1);
     box_pieces.add(top_piece_2);
@@ -382,7 +383,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate + init_material_thickness,
             box_origin.y_coordinate ,box_origin.z_coordinate+box_depth-top_base_piece_width)
-    );
+        ,"inner_0");
     Piece_model  base_piece_2 = Piece_model(
         get_id(),
         'base_2',
@@ -393,7 +394,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate + init_material_thickness,
             box_origin.y_coordinate ,box_origin.z_coordinate)
-    );
+        ,"inner_0");
 
     box_pieces.add(base_piece_1);
     box_pieces.add(base_piece_2);
@@ -408,7 +409,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate+box_width - init_material_thickness,
             box_origin.y_coordinate ,box_origin.z_coordinate)
-    );
+        ,"inner_0");
     box_pieces.add(right_piece);
 
     Piece_model  left_piece = Piece_model(
@@ -421,7 +422,7 @@ Map<String, dynamic> toJson() {
         init_material_thickness,
         Point_model(box_origin.x_coordinate,
             box_origin.y_coordinate ,box_origin.z_coordinate)
-    );
+        ,"inner_0");
     box_pieces.add(left_piece);
 
     if(is_back_panel){
@@ -436,7 +437,7 @@ Map<String, dynamic> toJson() {
           Point_model(box_origin.x_coordinate+init_material_thickness-grove_value+1,
               box_origin.y_coordinate+init_material_thickness-grove_value+1 ,
               box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
-      );
+          ,"inner-0"  );
       Piece_model  back_panel_Helper = Piece_model(
           get_id(),
           'back_panel_Helper',
@@ -450,14 +451,14 @@ Map<String, dynamic> toJson() {
               correct_value( box_origin.y_coordinate+init_material_thickness ),
               correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
           )
-      );
+          ,"inner-0" );
 
       box_pieces.add(back_panel);
       box_pieces.add(back_panel_Helper);
     }
     Piece_model  inner = Piece_model(
         get_id(),
-        'inner',
+        'inner_0',
         'F',
         'inner',
         box_width-2*init_material_thickness,
@@ -466,7 +467,7 @@ Map<String, dynamic> toJson() {
         Point_model(box_origin.x_coordinate+init_material_thickness,
             box_origin.y_coordinate+init_material_thickness ,
             box_origin.z_coordinate)
-    );
+        ,"");
     box_pieces.add(inner);
 
   }
@@ -485,33 +486,33 @@ Map<String, dynamic> toJson() {
 
     Piece_model old_inner = Piece_model(
         get_id(),
-        'inner',
+        '${box_pieces[inner].piece_name}_1',
         'F',
         'inner',
         box_pieces[inner].piece_width,
         top_Distence,
-        (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
+        correct_value((is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate,
             box_pieces[inner].piece_origin.y_coordinate +
                 down_Distence +
                 shelf_material_thickness,
             box_pieces[inner].piece_origin.z_coordinate).correct_cordinate()
-    );
+        ,"");
 
     Piece_model new_inner = Piece_model(
       get_id(),
-        'inner',
+        '${box_pieces[inner].piece_name}_2',
         'F',
         'inner',
         box_pieces[inner].piece_width,
         down_Distence,
-      (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
+      correct_value((is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate,
             box_pieces[inner].piece_origin.y_coordinate,
             box_pieces[inner].piece_origin.z_coordinate).correct_cordinate(),
-        );
+       "");
 
     Piece_model new_piece = Piece_model(
       get_id(),
@@ -524,7 +525,7 @@ Map<String, dynamic> toJson() {
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate,
             box_pieces[inner].piece_origin.y_coordinate + down_Distence,
-            box_pieces[inner].piece_origin.z_coordinate+frontage_Gap).correct_cordinate(),
+            box_pieces[inner].piece_origin.z_coordinate+frontage_Gap).correct_cordinate(),"${box_pieces[inner].piece_name}"
          );
 
 
@@ -533,7 +534,9 @@ Map<String, dynamic> toJson() {
     box_pieces.add(new_piece);
     box_pieces.add(new_inner);
 
+    box_deleted_pieces.add(box_pieces[inner]);
     box_pieces.remove(box_pieces[inner]);
+
 
   }
 
@@ -589,7 +592,7 @@ Map<String, dynamic> toJson() {
 
     Piece_model old_inner = Piece_model(
       get_id(),
-        'inner',
+        '${box_pieces[inner].piece_name}_1',
         'F',
         'inner',
         correct_value(left_Distence),
@@ -599,13 +602,13 @@ Map<String, dynamic> toJson() {
            correct_value(box_pieces[inner].piece_origin.x_coordinate) ,
            correct_value(box_pieces[inner].piece_origin.y_coordinate) ,
            correct_value(box_pieces[inner].piece_origin.z_coordinate)
-        ),
+        ),""
         );
 
 
     Piece_model new_inner = Piece_model(
       get_id(),
-        'inner',
+        '${box_pieces[inner].piece_name}_1',
         'F',
         'inner',
       correct_value( right_Distence),
@@ -614,7 +617,7 @@ Map<String, dynamic> toJson() {
         Point_model(
             correct_value(box_pieces[inner].piece_origin.x_coordinate + left_Distence + partition_material_thickness),
             correct_value(box_pieces[inner].piece_origin.y_coordinate),
-            correct_value(box_pieces[inner].piece_origin.z_coordinate)),
+            correct_value(box_pieces[inner].piece_origin.z_coordinate)),""
          );
 
 
@@ -635,7 +638,7 @@ Map<String, dynamic> toJson() {
             correct_value( box_pieces[inner].piece_origin.x_coordinate + left_Distence)  ,
             correct_value( box_pieces[inner].piece_origin.y_coordinate  )  ,
             correct_value( box_pieces[inner].piece_origin.z_coordinate+frontage_Gap )  ,
-        ),
+        ),"${box_pieces[inner].piece_name}"
          );
 
     ///
@@ -647,6 +650,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(new_inner);
 
 
+    box_deleted_pieces.add(box_pieces[inner]);
     box_pieces.remove(box_pieces[inner]);
 
   }
@@ -748,23 +752,40 @@ Map<String, dynamic> toJson() {
         door_width,
         door_hight,
         door_model.material_thickness,
-        door_origin,
+        door_origin,"inner-0"
          );
 
 
-    double hw=(22.5-(init_material_thickness - door_model.right_gap))*2;
+    double hw=correct_value((22.5-(init_material_thickness - door_model.right_gap))*2);
+    double hh=init_material_thickness;
+    if(door_model.inner_door){
+      hh=door_hight;
+    }
+    else{
+      if(door_model.up_gap > init_material_thickness)
+      {
 
-    double hh=door_hight-(init_material_thickness-door_model.down_gap)-1;
+        hh=door_hight-init_material_thickness+door_model.down_gap-0.5;
+      }
+      else{
+       hh= door_inner.piece_height - 1;
+      }
+    }
     double hth=76;
 
     if(door_model.direction=="R"){
 
       Point_model door_helper_origin = Point_model(
           door_inner.piece_origin.x_coordinate +door_inner.piece_width-hw ,
-          door_inner.piece_origin.y_coordinate +  0.5 ,
-          (!door_model.inner_door)?
+
+          (door_model.inner_door)?
+          (door_inner.piece_origin.y_coordinate+door_model.down_gap):
+          (door_inner.piece_origin.y_coordinate+0.5)  ,
+
+          ! (door_model.inner_door)?
           (door_inner.piece_origin.z_coordinate-2 ):
-          (door_inner.piece_origin.z_coordinate)
+          (door_inner.piece_origin.z_coordinate+door_model.material_thickness)
+          
       );
 
       String hid=get_id();
@@ -777,7 +798,7 @@ Map<String, dynamic> toJson() {
         hw,
         hh,
         hth,
-        door_helper_origin,
+        door_helper_origin,""
       );
 
       box_pieces.add(door_Hinges_Helper);
@@ -804,7 +825,7 @@ Map<String, dynamic> toJson() {
         hw,
         hh,
         hth,
-        door_helper_origin,
+        door_helper_origin,""
       );
 
       box_pieces.add(door_Hinges_Helper);
@@ -874,7 +895,7 @@ String id = get_id();
         door_width,
         door_hight,
         door_model.material_thickness,
-        door_origin_1,
+        door_origin_1,""
          );
     String id2 = get_id();
     Piece_model door_piece_2 = Piece_model(
@@ -885,17 +906,42 @@ String id = get_id();
         door_width,
         door_hight,
         door_model.material_thickness,
-        door_origin_2,
+        door_origin_2,""
          );
 
     box_pieces.add(door_piece_1);
     box_pieces.add(door_piece_2);
 
 
-    double hw=(22.5-(init_material_thickness - door_model.right_gap))*2;
+    // double hw=(22.5-(init_material_thickness - door_model.right_gap))*2;
+    //
+    // double hh=door_hight-(init_material_thickness-door_model.down_gap)-1;
+    // double hth=76;
+    //
 
-    double hh=door_hight-(init_material_thickness-door_model.down_gap)-1;
+
+    double hw=correct_value((22.5-(init_material_thickness - door_model.right_gap))*2);
+
+
+
+    double hh=init_material_thickness;
+    if(door_model.inner_door){
+      hh=door_hight;
+    }
+    else{
+      if(door_model.up_gap > init_material_thickness)
+      {
+
+        hh=door_hight-init_material_thickness+door_model.down_gap-0.5;
+      }
+      else{
+       hh= door_inner.piece_height - 1;
+      }
+    }
+
     double hth=76;
+
+
 
 
     Point_model rdoor_helper_origin = Point_model(
@@ -916,7 +962,7 @@ String id = get_id();
     hw,
     hh,
     hth,
-    rdoor_helper_origin,
+    rdoor_helper_origin,""
     );
 
 
@@ -941,7 +987,7 @@ String id = get_id();
     hw,
     hh,
     hth,
-    ldoor_helper_origin,
+    ldoor_helper_origin,""
     );
 
     box_pieces.add(ldoor_Hinges_Helper);
@@ -1011,7 +1057,7 @@ String id = get_id();
             filler_w,
             filler_h,
             filler_th,
-            filler_origin);
+            filler_origin,"");
 
         box_pieces.add(filler);
 
@@ -1063,7 +1109,7 @@ String id = get_id();
             filler_w,
             filler_h,
             filler_th,
-            filler_origin);
+            filler_origin,"");
 
         box_pieces.add(filler);
       }
@@ -1126,7 +1172,7 @@ String id = get_id();
           filler_w,
           filler_h,
           filler_th,
-          filler_origin);
+          filler_origin,"");
 
       box_pieces.add(filler);
     }
@@ -1138,6 +1184,25 @@ String id = get_id();
     return resault;
   }
 
+
+  delete_piece(Piece_model piece_model){
+
+    String inner_1="${piece_model.enner_name}_1";
+    String inner_2="${piece_model.enner_name}_2";
+
+    Piece_model old_inner=box_deleted_pieces.where((element) => element.piece_name==piece_model.enner_name).first;
+
+
+    box_pieces.removeWhere((element) => element.piece_name==inner_1);
+    box_pieces.removeWhere((element) => element.piece_name==inner_2);
+
+    box_pieces.add(old_inner);
+
+    box_pieces.removeWhere((element) => element.piece_id==piece_id);
+
+
+
+  }
 
 
 }

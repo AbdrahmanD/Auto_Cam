@@ -163,9 +163,9 @@ late Offset start_select_window;
 
 
       if (i == hover_id) {
-        if (piece_model.piece_name == 'inner') {
+        if (piece_model.piece_name.contains('inner')) {
           canvas.drawPath(path, inners_filler);
-          canvas.drawPath(path, line_painter);
+          // canvas.drawPath(path, line_painter);
         } else {
           canvas.drawPath(path, pieces_filler);
           canvas.drawPath(path, line_painter);

@@ -158,7 +158,7 @@ class _CreateJoinholepatternDialogState
 
     corrent_category_patterns =
     await (draw_controller.box_repository.join_patterns
-    [category_controller.text.toString()]!.values.toList());
+    [category_controller.text.toString()]!);
 
 
     setState(() {});
@@ -911,24 +911,24 @@ class _CreateJoinholepatternDialogState
                 children: [
 
                   /// MIN Painter
-                  Container(
-                    height: 250,
-                    width: 400,
-                    child: CustomPaint(
-                      painter: draw_controller.draw_Pattern(
-                          Paint_bore_units_min, min_length, 300, max_length),
-                    ),
-                  ),
+                  // Container(
+                  //   height: 250,
+                  //   width: 400,
+                  //   child: CustomPaint(
+                  //     painter: draw_controller.draw_Pattern(
+                  //         Paint_bore_units_min, min_length, 300, max_length),
+                  //   ),
+                  // ),
 
                   ///MAX Painter
-                  Container(
-                    height: 250,
-                    width: 400,
-                    child: CustomPaint(
-                      painter: draw_controller.draw_Pattern(
-                          Paint_bore_units_max, max_length, 300, max_length),
-                    ),
-                  ),
+                  // Container(
+                  //   height: 250,
+                  //   width: 400,
+                  //   child: CustomPaint(
+                  //     painter: draw_controller.draw_Pattern(
+                  //         Paint_bore_units_max, max_length, 300, max_length),
+                  //   ),
+                  // ),
                 ],
               ),
 

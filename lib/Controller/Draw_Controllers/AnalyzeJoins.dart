@@ -15,6 +15,7 @@ class AnalyzeJoins {
   late Project_model project_model;
   Draw_Controller draw_controller = Get.find();
 
+
   AnalyzeJoins(bool project) {
 this.project=project;
 
@@ -42,6 +43,7 @@ project_model = draw_controller.box_repository.project_model;
       for (int f = 0; f < piece.piece_faces.faces.length; f++) {
         box_model.box_pieces[p].piece_faces.faces[f].joines = [];
         box_model.box_pieces[p].piece_faces.faces[f].bores = [];
+        box_model.box_pieces[p].piece_faces.faces[f].groves = [];
       }
     }
     draw_controller.box_repository.cut_list_items = [];
@@ -52,7 +54,7 @@ project_model = draw_controller.box_repository.project_model;
     for (int mp = 0; mp < box_model.box_pieces.length; mp++) {
       Piece_model mpiece = box_model.box_pieces[mp];
 
-      if (mpiece.piece_name == "inner" ||
+      if (mpiece.piece_name.contains("inner")||
           mpiece.piece_name.contains("back_panel") ||
           mpiece.piece_name.contains("base_panel")) {
         continue;
@@ -66,7 +68,7 @@ project_model = draw_controller.box_repository.project_model;
           Piece_model spiece = box_model.box_pieces[sp];
 
           if (spiece.piece_id == mpiece.piece_id ||
-              spiece.piece_name == "inner") {
+              spiece.piece_name.contains("inner")) {
             continue;
           }
           for (int sf = 0; sf < spiece.piece_faces.faces.length; sf++) {
@@ -89,7 +91,8 @@ project_model = draw_controller.box_repository.project_model;
             late Line line;
             if (check_face_in_face((mface), (sface))) {
               line = find_center_line(sface, spiece.piece_thickness);
-            } else {
+            }
+            else {
               line = check_tow_face_intersected(box_model,mface, sface);
             }
 
@@ -153,23 +156,37 @@ project_model = draw_controller.box_repository.project_model;
                   line.start_point, line.end_point, "Box_Fitting_DRILL");
             }
 
-            if (calculate_length_of_line(line, line_axis(line)) > 0) {
+            if (calculate_length_of_line(line, line_axis(line)) > 0)
+
+            {
               if (join_line.join_type=="Groove") {
 
                 double width;
+
                 if(mpiece.piece_name.contains("Helper")){
                   width=mpiece.piece_thickness;
-
-                }else if(spiece.piece_name.contains("Helper")){
-                  width=mpiece.piece_thickness;
-
-                }else{
-                  width=1;
                 }
-                mface.groves.add(Groove_model(line.start_point, line.end_point, width, 9));
+                else if(spiece.piece_name.contains("Helper")){
+                  width=spiece.piece_thickness;
+                }
+                else{
+                  width=draw_controller.box_repository.pack_panel_thickness;
+                }
+                mface.groves.add
+                  (Groove_model(line.start_point, line.end_point, width,
+                    draw_controller.box_repository.pack_panel_grove_depth)
+                );
+
+                print("mpiece.piece_name : ${mpiece.piece_name}");
+                print("mface.name : ${mface.name}");
+
+                mface.joines.add(join_line);
+
               }
+              else{
                 sface.joines.add(join_line);
                 mface.joines.add(join_line);
+              }
 
             }
 
@@ -714,7 +731,8 @@ project_model = draw_controller.box_repository.project_model;
   /// nesting the points of intersection rectangle corners
   /// and add join line for both faces
   Line extract_join_line(Box_model box_model,List<Point_model> corners, Single_Face face_1) {
-    late Line join_line;
+
+      Line local_join_line=Line(Point_model(0,0,0), Point_model(0,0,0));;
 
     late Point_model join_line_start_point;
     late Point_model join_line_end_point;
@@ -748,7 +766,6 @@ project_model = draw_controller.box_repository.project_model;
       join_line_end_point = Point_model(x_cord,
           ydir ? l2[0].y_coordinate : l1[0].y_coordinate, l2[0].z_coordinate);
     }
-
     else if (plane == "XZ") {
       l1.add(p1);
 
@@ -800,7 +817,6 @@ project_model = draw_controller.box_repository.project_model;
       join_line_start_point = Point_model(x_cord_1, l1[0].y_coordinate, z_cord_1);
       join_line_end_point = Point_model(x_cord_2, l1[0].y_coordinate, z_cord_2);
     }
-
     else if (plane == "YZ") {
 
       l1.add(p1);
@@ -862,21 +878,20 @@ project_model = draw_controller.box_repository.project_model;
       if(join_axis_is_Z){
         if (join_line_start_point.z_coordinate < join_line_end_point.z_coordinate)
         {
-          join_line = Line(join_line_start_point, join_line_end_point);
+          local_join_line = Line(join_line_start_point, join_line_end_point);
         }
         else
         {
-          join_line = Line(join_line_end_point, join_line_start_point);
+          local_join_line = Line(join_line_end_point, join_line_start_point);
         }
       }
       else{if (join_line_start_point.y_coordinate < join_line_end_point.y_coordinate)
       {
-        join_line = Line(join_line_start_point, join_line_end_point);
+        local_join_line = Line(join_line_start_point, join_line_end_point);
       }
-      else
-      {
-        join_line = Line(join_line_end_point, join_line_start_point);
-      }}
+
+
+      }
 
 
 
@@ -884,7 +899,9 @@ project_model = draw_controller.box_repository.project_model;
 
 
 
-    return join_line;
+
+
+    return local_join_line;
   }
 
   /// here we will transform hte join line into bore hole
@@ -926,20 +943,32 @@ project_model = draw_controller.box_repository.project_model;
   }
 
   transform_line_into_bores(Line l, String piece_direction, Single_Face face,
-      Single_Face second_face, String piece_name, String join_type) {
+      Single_Face second_face, String piece_name, String join_type)
+
+  {
+
+    // print("piece_name : ${piece_name}");
+    // print("face : ${face.name}");
+    // print("second_face : ${second_face.name}");
+    // print("=============");
+
     String join_line_axis = line_axis(l);
     double join_line_length = calculate_length_of_line(l, join_line_axis);
     String face_direction = detect_face_direction(piece_direction, face);
 
     TowFaceBoring towFaceBoring = TowFaceBoring([], [], []);
 
-    if (join_line_axis == "X") {
-      towFaceBoring = add_bore_holes_X_axis(l.start_point, join_line_length,
-          face_direction, face.name, piece_direction, join_type);
-    } else if (join_line_axis == "Y") {
+    if (join_line_axis == "X")
+    {
+      towFaceBoring = add_bore_holes_X_axis(l.start_point, join_line_length, face_direction, face.name, piece_direction, join_type);
+    }
+    else if (join_line_axis == "Y")
+    {
       towFaceBoring = add_bore_holes_Y_axis(l.start_point, join_line_length,
           face_direction, face.name, piece_direction, join_type);
-    } else if (join_line_axis == "Z") {
+    }
+    else if (join_line_axis == "Z")
+    {
       towFaceBoring = add_bore_holes_Z_axis(l.start_point, join_line_length,
           face_direction, face.name, piece_direction, join_type);
     }
@@ -948,7 +977,7 @@ project_model = draw_controller.box_repository.project_model;
       face.bores.add(element);
     });
 
-    if (face_direction != "V") {
+    if (face_direction != "V")  {
       towFaceBoring.V_bores.forEach((element) {
         second_face.bores.add(element);
       });
@@ -960,28 +989,33 @@ project_model = draw_controller.box_repository.project_model;
     int second_face_id = 0;
 
     if (piece_direction == "H") {
-      if (box_model.box_type == "wall_cabinet") {
-        if (piece_name == "top") {
+        if (piece_name.contains("top")) {
           second_face_id = 0;
         }else{
           second_face_id = 2;
 
         }
-      }
-      else {
-        second_face_id = 2;
-      }
+
     }
     else if (piece_direction == "V") {
-      if (piece_name == "left" || piece_name.contains("DBR")) {
+      if (piece_name.contains("left") || piece_name.contains("DBR")) {
         second_face_id = 1;
-      } else {
+      }
+      else {
         second_face_id = 3;
       }
     }
     else if (piece_direction == "F") {
-      second_face_id = 5;
-    }
+
+      if (piece_name.contains("DBF")) {
+        second_face_id = 4;
+      }
+      else {
+        second_face_id = 5;
+      }
+
+
+     }
 
     return second_face_id;
   }
@@ -1047,18 +1081,20 @@ project_model = draw_controller.box_repository.project_model;
       String face_direction,
       int face_name,
       String piece_direction,
-      String join_type) {
+      String join_type)
+  {
     List<Bore_model> H_bores = [];
     List<Bore_model> V_bores = [];
     List<Groove_model> Grooves = [];
 
-    Map<String, JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
+    List<JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
 
-    List<JoinHolePattern> my_patterns=my_patterns0!.values.toList();
+    List<JoinHolePattern> my_patterns=my_patterns0!;
 
     for (JoinHolePattern pattern in my_patterns) {
       if (join_line_length > pattern.min_length &&
-          join_line_length <= pattern.max_length) {
+          join_line_length <= pattern.max_length)
+      {
         JoinHolePattern new_pattern = pattern;
 
         List<Bore_unit> bore_units =
@@ -1069,7 +1105,8 @@ project_model = draw_controller.box_repository.project_model;
           Bore_model n_side_bore_model = n_bore_unit.side_bore;
           Bore_model n_face_bore = n_bore_unit.face_bore;
 
-          if (face_direction == "H") {
+          if (face_direction == "H")
+          {
             Point_model new_origin = Point_model(
                 origin.x_coordinate,
                 origin.y_coordinate,
@@ -1082,6 +1119,7 @@ project_model = draw_controller.box_repository.project_model;
 
             /// add face bore
             if (n_bore_unit.have_nut_bore) {
+
               Bore_model face_bore_model = n_bore_unit.nut_bore;
 
               late double x_cordinate;
@@ -1089,18 +1127,22 @@ project_model = draw_controller.box_repository.project_model;
               late double z_cordinate;
 
               if (piece_direction == "H") {
+
                 if (face_name == 2) {
+
                   x_cordinate =
                       origin.x_coordinate - n_bore_unit.nut_bore_distence;
                   y_cordinate = origin.y_coordinate;
                   z_cordinate = origin.z_coordinate + n_bore_unit.pre_distence;
                 } else if (face_name == 4) {
+
                   x_cordinate =
                       origin.x_coordinate + n_bore_unit.nut_bore_distence;
                   y_cordinate = origin.y_coordinate;
                   z_cordinate = origin.z_coordinate + n_bore_unit.pre_distence;
                 }
-              } else if (piece_direction == "V") {
+              }
+              else if (piece_direction == "V") {
                 if (face_name == 1) {
                   x_cordinate = origin.x_coordinate;
                   y_cordinate =
@@ -1120,7 +1162,9 @@ project_model = draw_controller.box_repository.project_model;
                   face_bore_model.diameter, face_bore_model.depth);
               V_bores.add(new_face_bore);
             }
-          } else if (face_direction == "V" || face_direction == "B") {
+          }
+          else if (face_direction == "V" || face_direction == "B")
+          {
             Point_model new_origin = Point_model(
                 origin.x_coordinate,
                 origin.y_coordinate,
@@ -1146,14 +1190,15 @@ project_model = draw_controller.box_repository.project_model;
       String face_direction,
       int face_name,
       String piece_direction,
-      String join_type) {
+      String join_type)
+  {
     List<Bore_model> H_bores = [];
     List<Bore_model> V_bores = [];
     List<Groove_model> Grooves = [];
 
-    Map<String, JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
+    List<JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
 
-    List<JoinHolePattern> my_patterns=my_patterns0!.values.toList();
+    List<JoinHolePattern> my_patterns=my_patterns0!;
     for (JoinHolePattern pattern in my_patterns) {
       if (join_line_length > pattern.min_length &&
           join_line_length <= pattern.max_length) {
@@ -1217,7 +1262,8 @@ project_model = draw_controller.box_repository.project_model;
                   face_bore_model.diameter, face_bore_model.depth);
               V_bores.add(new_face_bore);
             }
-          } else if (face_direction == "V" || face_direction == "B") {
+          }
+          else if (face_direction == "V" || face_direction == "B") {
             Point_model new_origin = Point_model(
                 origin.x_coordinate,
                 origin.y_coordinate + n_bore_unit.pre_distence,
@@ -1243,20 +1289,23 @@ project_model = draw_controller.box_repository.project_model;
       String face_direction,
       int face_name,
       String piece_direction,
-      String join_type) {
+      String join_type)
+  {
     List<Bore_model> H_bores = [];
     List<Bore_model> V_bores = [];
     List<Groove_model> Grooves = [];
-    Map<String, JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
 
-    List<JoinHolePattern> my_patterns=my_patterns0!.values.toList();
+    List<JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
+
+    List<JoinHolePattern> my_patterns=my_patterns0!;
+
+
     for (JoinHolePattern pattern in my_patterns) {
-      if (join_line_length > pattern.min_length &&
-          join_line_length <= pattern.max_length) {
+      if (join_line_length > pattern.min_length && join_line_length <= pattern.max_length)
+      {
         JoinHolePattern new_pattern = pattern;
 
-        List<Bore_unit> bore_units =
-            new_pattern.apply_pattern(join_line_length);
+        List<Bore_unit> bore_units = new_pattern.apply_pattern(join_line_length);
 
         for (int i = 0; i < bore_units.length; i++) {
           Bore_unit n_bore_unit = bore_units[i];

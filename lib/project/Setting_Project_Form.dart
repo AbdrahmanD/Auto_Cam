@@ -333,6 +333,7 @@ class _Setting_Project_FormState extends State<Setting_Project_Form> {
                   ),
                   InkWell(
                       onTap: () {
+
                         // draw_Controller.print_pieces_coordinate();
                         // print(draw_Controller.box_repository.project_model.boxes.length);
 

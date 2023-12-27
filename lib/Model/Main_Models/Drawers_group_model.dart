@@ -27,6 +27,7 @@ late bool inner_drawer;
   late double drawer_box_depth;
   late double side_gap;
   late  double drawer_slide_height;
+  late  double front_gape;
 
 
 
@@ -48,8 +49,8 @@ late bool inner_drawer;
       this.drawer_under_base_thickness,
       this.drawer_box_height,
       this.drawer_box_depth,
-      this.side_gap
-      );
+      this.side_gap,
+      this.front_gape);
 
   add_drawer()
   {
@@ -80,7 +81,8 @@ late bool inner_drawer;
 
     if (drawer_box_height + 40 < face_height) {
       box_height = drawer_box_height;
-    } else {
+    }
+    else {
       box_height = double.parse((single_inner - 40).toStringAsFixed(1));
 
     }
@@ -110,10 +112,13 @@ late bool inner_drawer;
       Point_model drawer_face_origin = Point_model(
           inner.piece_origin.x_coordinate - left_thickness + left_gape,
           y_distence,
-          inner_drawer?(inner.piece_origin.z_coordinate):(inner.piece_origin.z_coordinate-drawer_face_material_thickness-1));
+          inner_drawer?(inner.piece_origin.z_coordinate+front_gape):
+          (inner.piece_origin.z_coordinate-drawer_face_material_thickness-1));
+
       Point_model drawer_box_origin =
       Point_model(inner.piece_origin.x_coordinate + side_gap/2, y_distence + deferent_between_face_Y_and_box_y,
-          inner_drawer?inner.piece_origin.z_coordinate+drawer_face_material_thickness:(inner.piece_origin.z_coordinate-1));
+          inner_drawer?(inner.piece_origin.z_coordinate+drawer_face_material_thickness+front_gape):
+          (inner.piece_origin.z_coordinate-1));
 
       double dx =  drawer_box_origin.x_coordinate-drawer_face_origin.x_coordinate ;
       double dy = deferent_between_face_Y_and_box_y;
@@ -160,7 +165,7 @@ late bool inner_drawer;
         face_width,
         height,
         drawer_face_material_thickness,
-        face_origin
+        face_origin,""
     );
 
     return piece_model;
@@ -184,20 +189,20 @@ late bool inner_drawer;
 
     Piece_model drawer_box_left = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-        'drawer ${drawer_id} left ',
+        'drawer ${drawer_id} DBL ',
         'V',
         "${drawer_box_material_thickness} mm",
         drawer_box_depth,
         box_height,
         drawer_box_material_thickness,
-        Point_model(box_origin.x_coordinate, box_origin.y_coordinate, box_origin.z_coordinate),
+        Point_model(box_origin.x_coordinate, box_origin.y_coordinate, box_origin.z_coordinate),""
        );
 
 
     /// right side
     Piece_model drawer_box_right = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-        'drawer ${drawer_id} right ',
+        'drawer ${drawer_id} DBR ',
         'V',
         "${drawer_box_material_thickness} mm",
         drawer_box_depth,
@@ -206,7 +211,7 @@ late bool inner_drawer;
         Point_model(
             box_origin.x_coordinate + box_width - drawer_box_material_thickness,
             box_origin.y_coordinate,
-            box_origin.z_coordinate),
+            box_origin.z_coordinate),""
         );
 
 
@@ -216,14 +221,17 @@ late bool inner_drawer;
 
     Piece_model drawer_box_front = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-        'drawer ${drawer_id} front ',
+        'drawer ${drawer_id} DBF ',
         'F',
         "${drawer_box_material_thickness} mm",
-        box_width - drawer_box_material_thickness * 2,
-        box_height,
-        drawer_box_material_thickness,
-        Point_model(box_origin.x_coordinate + drawer_box_material_thickness,
-            box_origin.y_coordinate, box_origin.z_coordinate),
+       correct_value( box_width - drawer_box_material_thickness * 2),
+       correct_value( box_height),
+       correct_value( drawer_box_material_thickness),
+        Point_model(
+            box_origin.x_coordinate + drawer_box_material_thickness,
+            box_origin.y_coordinate,
+            box_origin.z_coordinate),
+        ""
         );
 
 
@@ -231,15 +239,20 @@ late bool inner_drawer;
 
     Piece_model drawer_box_back = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
-        'drawer ${drawer_id} back ',
+        'drawer ${drawer_id} DBP ',
         'F',
         "${drawer_box_material_thickness} mm",
-        box_width - drawer_box_material_thickness * 2,
-        box_height,
-        drawer_box_material_thickness,
-        Point_model(box_origin.x_coordinate + drawer_box_material_thickness,
-            box_origin.y_coordinate, box_origin.z_coordinate+drawer_box_depth-drawer_box_material_thickness),
-        );
+        correct_value(box_width - drawer_box_material_thickness * 2),
+        correct_value(box_height),
+        correct_value(drawer_box_material_thickness),
+        Point_model(
+            box_origin.x_coordinate + drawer_box_material_thickness,
+            box_origin.y_coordinate,
+            box_origin.z_coordinate+drawer_box_depth-drawer_box_material_thickness),
+        "");
+
+
+
 
     Piece_model drawer_box_base_panel = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
@@ -252,7 +265,8 @@ late bool inner_drawer;
         Point_model(box_origin.x_coordinate + drawer_box_material_thickness-10,
             box_origin.y_coordinate+drawer_under_base_thickness,
             box_origin.z_coordinate+drawer_box_material_thickness-grove_depth),
-        );
+        "");
+
 
     Piece_model drawer_box_base_panel_Helper = Piece_model(
       draw_controller.box_repository.box_model.value.get_id(),
@@ -266,7 +280,7 @@ late bool inner_drawer;
         Point_model(box_origin.x_coordinate + drawer_box_material_thickness,
             box_origin.y_coordinate+drawer_under_base_thickness,
             box_origin.z_coordinate+drawer_box_material_thickness),
-        );
+       "" );
 
 
 
@@ -282,7 +296,7 @@ late bool inner_drawer;
       drawer_slide_height,
 
       Point_model(box_origin.x_coordinate-side_gap/2, box_origin.y_coordinate, box_origin.z_coordinate-0.1),
-    );
+  ""  );
 
     /// right side slider
     Piece_model drawer_right_slider = Piece_model(
@@ -298,7 +312,7 @@ late bool inner_drawer;
           box_origin.x_coordinate + box_width ,
           box_origin.y_coordinate,
           box_origin.z_coordinate-0.1),
-    );
+   "" );
 
 
 
@@ -307,7 +321,9 @@ late bool inner_drawer;
     drawer_box.add(drawer_box_right);
     drawer_box.add(drawer_box_front);
     drawer_box.add(drawer_box_back);
+
     drawer_box.add(drawer_box_base_panel);
+
     drawer_box.add(drawer_box_base_panel_Helper);
     drawer_box.add(drawer_left_slider);
     drawer_box.add(drawer_right_slider);
@@ -315,5 +331,9 @@ late bool inner_drawer;
     return drawer_box;
   }
 
+  double  correct_value(double v){
+    double resault= double.parse(v.toStringAsFixed(2));
+    return resault;
+  }
 
 }

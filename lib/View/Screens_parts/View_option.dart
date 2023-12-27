@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:dart_eval/dart_eval.dart';
 
 class View_option extends StatelessWidget {
+
   Draw_Controller draw_controller = Get.find();
 
   double text_size = 12;
@@ -28,6 +29,9 @@ class View_option extends StatelessWidget {
   TextEditingController new_height = TextEditingController();
   TextEditingController new_thicknes = TextEditingController();
   TextEditingController new_material_name = TextEditingController();
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -381,6 +385,29 @@ class View_option extends StatelessWidget {
                                     height: 2,
                                     color: Colors.black,
                                   ),
+
+                                  ///
+
+                                  // Row(
+                                  //   children: [
+                                  //     Text(
+                                  //       'X${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.x_coordinate} \n, '
+                                  //           'Y:${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate} \n, '
+                                  //           'Z:${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate} \n',
+                                  //       style: TextStyle(fontSize: text_size),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 6,
+                                  // ),
+                                  // Divider(
+                                  //   height: 2,
+                                  //   color: Colors.black,
+                                  // ),
+
+
+
                                 ],
                               ),
                             );
@@ -928,7 +955,9 @@ class View_option extends StatelessWidget {
                                           p.piece_width,
                                           p.piece_height,
                                           p.piece_thickness,
-                                          p.piece_origin);
+                                          p.piece_origin,
+                                      p.enner_name
+                                      );
 
                                       draw_controller.box_repository.box_model
                                           .value.box_pieces
@@ -963,6 +992,7 @@ class View_option extends StatelessWidget {
                             InkWell(
                               onTap: () {
                                 draw_controller.delete_piece();
+
                               },
                               child: Container(
                                 width: 150,

@@ -12,48 +12,46 @@ class Nesting_Painter extends CustomPainter {
 
   late Offset mouse_Position;
 late String hover_id;
-late String selected_id;
+  List<String> selected_pieces_ids = [];
   late double scale;
   late List<List<Point_model>> corners;
 
-  Nesting_Painter(this.w, this.h, this.container,this.mouse_Position,this.hover_id,this.selected_id,this.scale,this.corners) {
+  Nesting_Painter(
+      this.w, this.h, this.container,
+      this.mouse_Position,this.hover_id,this.selected_pieces_ids,this.scale,this.corners)
+  {
     origin = Offset(40, h );
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-
-    draw_sheet(canvas, scale, container);
+      draw_sheet(canvas, scale, container);
 
       for (int i = 0; i < container.pieces.length; i++) {
-      bool hover=(container.pieces[i].piece_id==hover_id);
-      bool selected=(container.pieces[i].piece_id==selected_id);
-      // print('hover id : $hover_id , piece id : $i');
+        bool hover = (container.pieces[i].piece_id == hover_id);
+        bool selected = (selected_pieces_ids.contains(container.pieces[i].piece_id));
 
+        // print('hover id : $hover_id , piece id : $i');
 
-      if (container.pieces[i].nested) {
-        draw_nested_rect(canvas, scale, container.pieces[i], i + 1,hover,selected);
-
-      }
-    }
-    if(corners.length!=0){
-
-      for(int i=0;i<corners.length;i++){
-
-        double x1=corners[i][0].x_coordinate*scale+40;
-        double y1=h-corners[i][0].y_coordinate*scale;
-
-        double x2=corners[i][1].x_coordinate*scale+40;
-        double y2=h-corners[i][1].y_coordinate*scale;
-
-        canvas.drawCircle(Offset(x1,y1), 5*scale, Paint());
-        canvas.drawCircle(Offset(x2,y2), 5*scale, Paint());
-
-        canvas.drawLine(Offset(x1, y1),Offset(x2, y2), Paint());
-
+        if (container.pieces[i].nested) {
+          draw_nested_rect(canvas, scale, container.pieces[i], container.pieces[i].piece_id, hover, selected);
+        }
       }
 
-    }
+      if (corners.length != 0) {
+        for (int i = 0; i < corners.length; i++) {
+          double x1 = corners[i][0].x_coordinate * scale + 40;
+          double y1 = h - corners[i][0].y_coordinate * scale;
+
+          double x2 = corners[i][1].x_coordinate * scale + 40;
+          double y2 = h - corners[i][1].y_coordinate * scale;
+
+          canvas.drawCircle(Offset(x1, y1), 5 * scale, Paint());
+          canvas.drawCircle(Offset(x2, y2), 5 * scale, Paint());
+
+          canvas.drawLine(Offset(x1, y1), Offset(x2, y2), Paint());
+        }
+      }
 
     canvas.drawCircle(mouse_Position, 6, Paint());
 
@@ -94,7 +92,7 @@ late String selected_id;
         3);
   }
 
-  draw_nested_rect(Canvas canvas, double my_scale, Piece_model piece, int id,bool hover,bool selected) {
+  draw_nested_rect(Canvas canvas, double my_scale, Piece_model piece, String id,bool hover,bool selected) {
     Paint line_painter = Paint()
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke
@@ -142,7 +140,7 @@ late String selected_id;
     }
     draw_text(
         canvas,
-        "$id",
+        id,
         Offset(origin.dx + piece_origin.x_coordinate * my_scale + 5,
             origin.dy - piece_origin.y_coordinate * my_scale - 15),
         14,

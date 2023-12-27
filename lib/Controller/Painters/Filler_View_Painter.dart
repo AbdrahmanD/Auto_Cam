@@ -15,7 +15,7 @@ class Filler_View_Painter extends CustomPainter{
   void paint(Canvas canvas, Size size) {
 
 // size=Size(250, 350);
-double scale=180/piece_model.piece_width;
+double scale=200/piece_model.piece_height;
 
 if(filler_model.filler_inside){
   draw_front(canvas,scale);
@@ -39,7 +39,7 @@ else{
       ..color = Colors.black;
 
     Paint filler_painter = Paint()
-      ..style = PaintingStyle.stroke
+      ..style = PaintingStyle.fill
       ..color = Colors.blue;
 
     Offset front_origin=Offset(60, 250);
@@ -127,7 +127,7 @@ draw_text(canvas, 'front', Offset(front_origin.dx+piece_w/2-40, front_origin.dy-
       ..color = Colors.black;
 
     Paint filler_painter = Paint()
-      ..style = PaintingStyle.stroke
+      ..style = PaintingStyle.fill
       ..color = Colors.blue;
 
     Offset side_origin=Offset(60, 500);

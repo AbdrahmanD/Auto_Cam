@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+ import 'dart:io';
 
 import 'package:auto_cam/Controller/Draw_Controllers/AnalyzeJoins.dart';
 import 'package:auto_cam/Controller/Painters/Box_Painter.dart';
@@ -13,9 +13,7 @@ import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
  import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
-  import 'package:auto_cam/project/Project_Painter.dart';
-import 'package:auto_cam/project/Project_model.dart';
-import 'package:file_picker/file_picker.dart';
+  import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,7 +21,10 @@ import 'package:path_provider/path_provider.dart';
 import '../../View/Dialog_Boxes/Context_Menu_Dialogs/Out_Box_Menu.dart';
 
 class Draw_Controller extends GetxController {
-  RxDouble drawing_scale = (0.8).obs;
+
+
+
+  RxDouble drawing_scale = (0.9).obs;
   Rx<Size> screen_size = Size(800, 600).obs;
   Rx<Offset> mouse_position = Offset(0, 0).obs;
 
@@ -44,10 +45,13 @@ class Draw_Controller extends GetxController {
 
   Rx<Offset> box_move_offset = Offset(0, 0).obs;
 
+
+
+
+
   Draw_Controller() {
     read_pattern_files();
-    // read_Box_from_rebository();
-  }
+   }
 
   ///
   select_window_method(Offset offset, bool select) {
@@ -153,14 +157,15 @@ class Draw_Controller extends GetxController {
   }
 
   Box_Painter draw_Box() {
+
     Box_model box_model = get_box();
 
-    double w = screen_size.value.width;
-    hover_id_find(box_model);
+     hover_id_find(box_model);
+
     Box_Painter boxPainter = Box_Painter(
         box_model,
         drawing_scale.value,
-        Size(w, screen_size.value.height),
+        Size(screen_size.value.width, screen_size.value.height),
         hover_id,
         selected_id,
         view_port.value,
@@ -258,8 +263,8 @@ class Draw_Controller extends GetxController {
     String dialogs_titles = '';
 
     if (!(hover_id == 100)) {
-      if (box_repository.box_model.value.box_pieces[hover_id].piece_name ==
-          'inner') {
+      if (box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('inner')
+          ) {
         dialogs_titles = 'Edit Box';
       } else {
         dialogs_titles = 'Edit Piece';
@@ -277,8 +282,7 @@ class Draw_Controller extends GetxController {
     late Widget my_widget;
 
     if (!(hover_id == 100)) {
-      if (box_repository.box_model.value.box_pieces[hover_id].piece_name ==
-          'inner') {
+      if (box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('inner')) {
         my_widget = Main_Edit_Dialog();
       } else {
         my_widget = Container(
@@ -416,7 +420,7 @@ class Draw_Controller extends GetxController {
     }
 
     Piece_model piece_model = Piece_model(piece_id, piece_name, piece_direction,
-        material_name, piece_width, piece_height, piece_thickness, fix_origin);
+        material_name, piece_width, piece_height, piece_thickness, fix_origin,"");
 
     box_repository.box_model.value.box_pieces.add(piece_model);
     draw_Box();
@@ -426,14 +430,47 @@ class Draw_Controller extends GetxController {
   delete_piece() {
     Box_model b = box_repository.box_model.value;
 
-if(selected_id.length==1){      box_repository.box_model.value.box_pieces.removeAt(selected_id[0]);
+    Piece_model p = b.box_pieces.where((element) => element.piece_id==b.box_pieces[selected_id[0]].piece_id).first;
+if(selected_id.length==1){
+
+  //
+  // ///
+
+
+
+  if (!(
+  b.box_pieces[selected_id[0]].piece_name.contains("left") ||
+  b.box_pieces[selected_id[0]].piece_name.contains("right") ||
+  b.box_pieces[selected_id[0]].piece_name.contains("top") ||
+  b.box_pieces[selected_id[0]].piece_name.contains("base")
+
+  )){
+
+    String inner_1="${b.box_pieces[selected_id[0]].enner_name}_1";
+    String inner_2="${b.box_pieces[selected_id[0]].enner_name}_2";
+    Piece_model old_inner=b.box_deleted_pieces.
+    where((element) => element.piece_name==b.box_pieces[selected_id[0]].enner_name).first;
+
+    b.box_pieces.removeWhere((element) => element.piece_name==inner_1);
+    b.box_pieces.removeWhere((element) => element.piece_name==inner_2);
+
+
+    b.box_pieces .add(old_inner);
 
   }
 
 
-    box_repository.add_box_to_repo(b);
-    selected_id.value = [];
-    draw_Box();
+
+
+  box_repository.box_model.value.box_pieces.remove(p);
+
+  box_repository.add_box_to_repo(b);
+  selected_id.value = [];
+  draw_Box();
+
+   }
+
+
   }
 
   move_piece(double x_move_value, double y_move_value) {
@@ -466,23 +503,38 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
     }
 
     for (int w = 0; w < selected_id.length; w++) {
+      Piece_model p = box_repository.box_model.value.box_pieces[selected_id[w]];
+
       for (int i = 0; i < 4; i++) {
-        Piece_model p =
-            box_repository.box_model.value.box_pieces[selected_id[w]];
+
+        //
+        // p.piece_faces.faces[0].corners[i].x_coordinate += dx;
+        // p.piece_faces.faces[0].corners[i].y_coordinate += dy;
+        // p.piece_faces.faces[0].corners[i].z_coordinate += dz;
+        //
+        // p.piece_faces.faces[1].corners[i].x_coordinate += dx;
+        // p.piece_faces.faces[1].corners[i].y_coordinate += dy;
+        // p.piece_faces.faces[1].corners[i].z_coordinate += dz;
+        //
+        // p.piece_faces.faces[2].corners[i].x_coordinate += dx;
+        // p.piece_faces.faces[2].corners[i].y_coordinate += dy;
+        // p.piece_faces.faces[2].corners[i].z_coordinate += dz;
+        //
+        // p.piece_faces.faces[3].corners[i].x_coordinate += dx;
+        // p.piece_faces.faces[3].corners[i].y_coordinate += dy;
+        // p.piece_faces.faces[3].corners[i].z_coordinate += dz;
 
         p.piece_faces.faces[4].corners[i].x_coordinate += dx;
         p.piece_faces.faces[4].corners[i].y_coordinate += dy;
         p.piece_faces.faces[4].corners[i].z_coordinate += dz;
+
         p.piece_faces.faces[5].corners[i].x_coordinate += dx;
         p.piece_faces.faces[5].corners[i].y_coordinate += dy;
         p.piece_faces.faces[5].corners[i].z_coordinate += dz;
       }
-      box_repository.box_model.value.box_pieces[selected_id[w]].piece_origin
-          .x_coordinate += dx;
-      box_repository.box_model.value.box_pieces[selected_id[w]].piece_origin
-          .y_coordinate += dy;
-      box_repository.box_model.value.box_pieces[selected_id[w]].piece_origin
-          .z_coordinate += dz;
+      p.piece_origin.x_coordinate += dx;
+      p.piece_origin.y_coordinate += dy;
+      p.piece_origin.z_coordinate += dz;
     }
 
     ///
@@ -513,7 +565,8 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
           p.piece_height,
           p.piece_width,
           p.piece_thickness,
-          p.piece_origin);
+          p.piece_origin,
+      p.enner_name);
 
       b.box_pieces.remove(p);
       b.box_pieces.add(np);
@@ -544,66 +597,26 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
     AnalyzeJoins analayzejoins = AnalyzeJoins(false);
   }
 
-  move_box(Offset offset) {
-    // Offset offset = box_move_offset.value;
+  move_box(double dx,double dy)
+
+  {
 
     Box_model b = box_repository.box_model.value;
 
-    double dx = 0;
-    double dy = 0;
-    double dz = 0;
-
-    if (view_port == 'F') {
-      /// move X
-      dx += offset.dx / drawing_scale.value;
-
-      /// move Y
-      dy -= offset.dy / drawing_scale.value;
-    } else if (view_port == 'R') {
-      /// move Y
-      dy -= offset.dy / drawing_scale.value;
-
-      /// move Z
-      dz += offset.dx / drawing_scale.value;
-    } else if (view_port == 'T') {
-      /// move X
-      dx += offset.dx / drawing_scale.value;
-
-      /// move Z
-      dz -= offset.dy / drawing_scale.value;
-    }
-
-    for (int pe = 0;
-        pe < box_repository.box_model.value.box_pieces.length;
-        pe++) {
-      Piece_model p = box_repository.box_model.value.box_pieces[pe];
-
-      for (int i = 0; i < 4; i++) {
-        p.piece_faces.faces[4].corners[i].x_coordinate += dx;
-        p.piece_faces.faces[4].corners[i].y_coordinate += dy;
-        p.piece_faces.faces[4].corners[i].z_coordinate += dz;
-        p.piece_faces.faces[5].corners[i].x_coordinate += dx;
-        p.piece_faces.faces[5].corners[i].y_coordinate += dy;
-        p.piece_faces.faces[5].corners[i].z_coordinate += dz;
-      }
-      box_repository.box_model.value.box_pieces[pe].piece_origin.x_coordinate +=
-          dx;
-      box_repository.box_model.value.box_pieces[pe].piece_origin.y_coordinate +=
-          dy;
-      box_repository.box_model.value.box_pieces[pe].piece_origin.z_coordinate +=
-          dz;
-    }
-
-    ///
-    box_repository.add_box_to_repo(b);
-    draw_Box();
+  for(int pi=0;pi<b.box_pieces.length;pi++){
+    selected_id.value.add(pi);
   }
+  move_piece(dx*drawing_scale.value/40, dy*drawing_scale.value/40);
+
+
+  }
+
 
   /// extract executable files with xml extension  to use in this case with kdt drilling machine
   extract_xml_files_pattern(Box_model box_model ,String folder_name,String directory) {
 
     for (int i = 0; i < box_model.box_pieces.length; i++) {
-      if (box_model.box_pieces[i].piece_name == "inner" ||
+      if (box_model.box_pieces[i].piece_name.contains("inner") ||
           box_model.box_pieces[i].piece_name
               .contains("back_panel") ||
           box_model.box_pieces[i].piece_name
@@ -757,7 +770,7 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
     final dir = Directory(file_path);
     dir.deleteSync(recursive: true);
 
-    box_repository.join_patterns[category]!.removeWhere((key, value) => value==joinHolePattern);
+    box_repository.join_patterns[category]!.remove(joinHolePattern);
     await read_pattern_files();
 
 
@@ -765,7 +778,19 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
 
   read_pattern_files() async {
 
-    // box_repository.join_patterns.clear();
+
+    box_repository.join_patterns["Box_Fitting_DRILL"]!.clear();
+    box_repository.join_patterns["Drawer_Face"]!.clear();
+    box_repository.join_patterns["Drawer_Rail_Box"]!.clear();
+    box_repository.join_patterns["Drawer_Rail_Side"]!.clear();
+    box_repository.join_patterns["Door_Hinges"]!.clear();
+    box_repository.join_patterns["side_Hinges"]!.clear();
+    box_repository.join_patterns["Groove"]!.clear();
+
+
+
+
+
     final rootdirectory = await getApplicationDocumentsDirectory();
 
     final Directory directory0 =
@@ -801,7 +826,7 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
               JoinHolePattern joinHolePattern =
                   JoinHolePattern.fromJson(json.decode(content));
 
-              box_repository.join_patterns[category_name]![joinHolePattern.name]=joinHolePattern;
+              box_repository.join_patterns[category_name]!.add(joinHolePattern);
 
             }
           } else {
@@ -810,19 +835,33 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
         }
       }
     }
+
+    //
+    //
+    // print("Box_Fitting_DRILL= ${box_repository.join_patterns["Box_Fitting_DRILL"]!.length}");
+    // print("Drawer_Face= ${box_repository.join_patterns["Drawer_Face"]!.length}");
+    // print("Drawer_Rail_Box= ${box_repository.join_patterns["Drawer_Rail_Box"]!.length}");
+    // print("Drawer_Rail_Side= ${box_repository.join_patterns["Drawer_Rail_Side"]!.length}");
+    // print("Door_Hinges= ${box_repository.join_patterns["Door_Hinges"]!.length}");
+    // print("side_Hinges= ${box_repository.join_patterns["side_Hinges"]!.length}");
+    // print("Groove= ${box_repository.join_patterns["Groove"]!.length}");
+    //
+
+
+
   }
 
-  Pattern_Painter draw_Pattern(List<Bore_unit> Paint_bore_units, double width,
-      double screen_width, double max_width) {
-    Pattern_Painter pattern_painter = Pattern_Painter(
-        Paint_bore_units,
-        box_repository.box_model.value.init_material_thickness,
-        width,
-        screen_width,
-        max_width);
-
-    return pattern_painter;
-  }
+  // Pattern_Painter draw_Pattern(List<Bore_unit> Paint_bore_units, double width,
+  //     double screen_width, double max_width) {
+  //   Pattern_Painter pattern_painter = Pattern_Painter(
+  //       Paint_bore_units,
+  //       box_repository.box_model.value.init_material_thickness,
+  //       width,
+  //       screen_width,
+  //       max_width);
+  //
+  //   return pattern_painter;
+  // }
 
   /// this only debug mode method to get information off the box pieces
   print_pieces_coordinate() {
@@ -873,6 +912,7 @@ if(selected_id.length==1){      box_repository.box_model.value.box_pieces.remove
       Piece_model my_piece = box_repository.box_model.value.box_pieces[r];
       if(my_piece.piece_name.contains("inner") ||my_piece.piece_name.contains("Helper")){continue;}
       else{
+        my_piece.nested=false;
         nesting_pieces.add(my_piece);
       }
     }

@@ -16,14 +16,18 @@ class Drawing_Screen extends StatefulWidget {
 }
 
 class _Drawing_ScreenState extends State<Drawing_Screen> {
+
   Draw_Controller draw_controller = Get.find();
 
   bool shift_hold = false;
 
   @override
   Widget build(BuildContext context) {
+
     double h = MediaQuery.of(context).size.height;
+
     draw_controller.screen_size.value = Size(widget.w, h);
+
     double f = 1;
 
     return Container(
@@ -56,7 +60,13 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
             }
           },
           onPointerDown: (v) {
-            draw_controller.select_piece(v.localPosition);
+            if(shift_hold){
+              draw_controller.selected_id.value=[];
+
+            }else{
+              draw_controller.select_piece(v.localPosition);
+
+            }
           },
           child: MouseRegion(
             onHover: (d) {
@@ -65,7 +75,7 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
             child: GestureDetector(
               onPanUpdate: (v) {
                 if (shift_hold) {
-                  draw_controller.move_box(v.delta);
+                  draw_controller.move_box( v.delta.dx, -v.delta.dy) ;
                   setState(() {});
                 } else {
                   // if (!draw_controller.select_window.value) {
@@ -79,9 +89,18 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
                   setState(() {});
                 }
               },
-              onPanStart: (v){draw_controller.select_window.value=true;},
-              onPanEnd: (v){draw_controller.select_window.value=false;
+              onPanStart: (v){
+                draw_controller.select_window.value=true;
+                },
+              onPanEnd: (v){
+
+                draw_controller.select_window.value=false;
                 draw_controller.select_piece_via_window();
+
+                  // if (shift_hold) {
+                  //   draw_controller.selected_id.value=[];
+                  // }
+
               },
               onSecondaryTapUp: (v) {
                 Get.defaultDialog(

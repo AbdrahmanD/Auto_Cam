@@ -211,9 +211,10 @@ late  Box_model box_model;
 
       Paint all_paint = Paint();
 
-      all_paint.style = PaintingStyle.fill;
-      all_paint.color=Colors.grey;
-      all_paint.blendMode=BlendMode.colorBurn;
+      all_paint.style = PaintingStyle.stroke;
+      all_paint.strokeWidth=0.5;
+      all_paint.color=Colors.black;
+      // all_paint.blendMode=BlendMode.colorBurn;
       // all_paint.blendMode=BlendMode.values[];
 
 

@@ -4,7 +4,6 @@ import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart
 import 'package:auto_cam/Controller/View_3_D/CameraTransformer.dart';
 import 'package:auto_cam/Controller/Painters/three_D_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
-import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +60,7 @@ class transform_controller {
   Piece_model p = Piece_model(b.box_pieces[i].piece_id, b.box_pieces[i].piece_name,
       b.box_pieces[i].piece_direction, b.box_pieces[i].material_name,
       b.box_pieces[i].piece_width, b.box_pieces[i].piece_height,
-      b.box_pieces[i].piece_thickness, b.box_pieces[i].piece_origin);
+      b.box_pieces[i].piece_thickness, b.box_pieces[i].piece_origin,b.box_pieces[i].enner_name);
   box_model.box_pieces.add(p);
 }
 

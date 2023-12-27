@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Drawers_group_model.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +39,10 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
   TextEditingController right_gape_controller    = TextEditingController();
 
   TextEditingController round_gape_controller    = TextEditingController();
+  TextEditingController front_gape_controller    = TextEditingController();
 
   bool inner_drawer = false;
+
   inner_drawer_changed(){
     if(!inner_drawer){
       inner_drawer=true;
@@ -170,6 +174,39 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                     SizedBox(
                       height: 32,
                     ),
+
+
+                    /// front gap
+                    Row(
+                      children: [
+                        Text('front Gap'),
+                        SizedBox(
+                          width: 24,
+                        ),
+                        Container(
+                          height: 32,
+                          width: 60,
+                          child: TextFormField(
+                            controller: front_gape_controller,
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                            validator: (d) {
+                              if (d!.isEmpty) {
+                                return 'add value please';
+                              }
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+
                   ],
                 ):
                 /// overlap values
@@ -338,19 +375,24 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
               InkWell(
                 onTap: () {
                   if(inner_drawer){
+
                     All_base_gape_controller.text='${draw_controller.box_repository.box_model.value.init_material_thickness+double.parse(round_gape_controller.text.toString())}';
                     All_top_gape_controller.text='${draw_controller.box_repository.box_model.value.init_material_thickness+double.parse(round_gape_controller.text.toString())}';
                     each_top_gape_controller.text='${double.parse(round_gape_controller.text.toString())}';
                     left_gape_controller    .text='${draw_controller.box_repository.box_model.value.init_material_thickness+double.parse(round_gape_controller.text.toString())}';
                     right_gape_controller   .text='${draw_controller.box_repository.box_model.value.init_material_thickness+double.parse(round_gape_controller.text.toString())}';
-                    right_gape_controller   .text='${draw_controller.box_repository.box_model.value.init_material_thickness+double.parse(round_gape_controller.text.toString())}';
+                    round_gape_controller   .text='${draw_controller.box_repository.box_model.value.init_material_thickness+double.parse(round_gape_controller.text.toString())}';
 
                   }
 
 
 
-                  double double_drawer_box_material_thickness = double.parse(
-                      drawer_box_material_thickness.text.toString());
+                  double double_drawer_box_material_thickness = double.parse("${double.parse(
+                      drawer_box_material_thickness.text.toString()).
+                  toInt
+                  (
+                  )
+                }");
                   double double_drawer_face_material_thickness = double.parse(
                       drawer_face_material_thickness.text.toString());
                   double double_All_base_gape_controller =
@@ -373,8 +415,9 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                   int double_drawer_quantity =
                   double.parse(drawer_quantity.text.toString()).toInt();
 
-                  double double_slide_side_gap =
-                  double.parse(side_gap_controller.text.toString())*2;
+                  double double_slide_side_gap = double.parse(side_gap_controller.text.toString())*2;
+
+                  double front_gape = inner_drawer?(double.parse(front_gape_controller.text.toString())):0;
 
                   Drawers_group_model my_drawer = Drawers_group_model(
                       1,
@@ -394,7 +437,9 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                       double_under_base_thickness,
                       double_drawer_box_height,
                       double_drawer_box_depth,
-                      double_slide_side_gap);
+                      double_slide_side_gap,
+                      front_gape
+                  );
 
                   my_drawer.add_drawer();
                   Navigator.of(context).pop();

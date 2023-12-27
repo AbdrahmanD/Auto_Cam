@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
@@ -5,50 +6,34 @@ import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 
 class Nesting_Pieces {
 
-  List<My_Sheet> sheets = [];
-  late My_Sheet container;
- late List<Piece_model> pieces;
- late double cut_tool_diameter;
 
-  Nesting_Pieces(this.pieces,this.cut_tool_diameter) {
-
-    container = My_Sheet("container",1220, 2440, Offset(0, 0), []);
-    sheets.add(container);
-    container.pieces= nesting().pieces;
-
-  }
+   int sheet_num=1;
 
 
-  sort_rect_big_to_small_by_height() {
+  late List<Piece_model> all_pieces;
+  late double cut_tool_diameter;
+
+
+
+
+  Nesting_Pieces(this.all_pieces,this.cut_tool_diameter);
+
+
+  List<Piece_model> sort_rect_big_to_small_by_height(List<Piece_model> piece_list) {
 
     List<Piece_model> revers_pieces = [];
 
-    pieces.sort((a, b) {
+    piece_list.sort((a, b) {
       return (a.piece_height).compareTo((b.piece_height));
     });
 
-    for (int i = pieces.length - 1; i > -1; i--) {
-      revers_pieces.add(pieces[i]);
+    for (int i = piece_list.length - 1; i > -1; i--) {
+      revers_pieces.add(piece_list[i]);
     }
-    pieces = revers_pieces;
+    return revers_pieces;
   }
 
-
-  /// still not used !!!!!!!
-  sort_rect_big_to_small_by_width() {
-    List<Piece_model> revers_pieces = [];
-
-    pieces.sort((a, b) {
-      return (a.piece_width).compareTo((b.piece_width));
-    });
-
-    for (int i = pieces.length - 1; i > -1; i--) {
-      revers_pieces.add(pieces[i]);
-    }
-    pieces = revers_pieces;
-  }
-
-  sort_sheet_small_to_big() {
+  sort_sheet_small_to_big(List<My_Sheet> sheets) {
     sheets.sort((a, b) {
       return (a.h).compareTo((b.h));
     });
@@ -99,13 +84,36 @@ class Nesting_Pieces {
     return my_piece;
   }
 
+  List<Piece_model> detect_remain_pieces(List<Piece_model> my_pieces){
+    List<Piece_model> remain_pieces=[];
 
-  My_Sheet nesting() {
+    for(int r=0;r<my_pieces.length;r++){
+      Piece_model p = my_pieces[r];
+      if(!p.nested){
+        remain_pieces.add(p);
 
-    My_Sheet sheet = My_Sheet("sheet 1",container.w, container.h, container.origin, []);
+      }
+    }
 
-    sort_rect_big_to_small_by_height();
-    sort_sheet_small_to_big();
+    return remain_pieces;
+   }
+
+
+  Nested_and_Remained nesting(List<Piece_model> pieces0,My_Sheet my_container) {
+
+    List<My_Sheet> sheets = [];
+
+
+
+    My_Sheet sheet = My_Sheet("sheet=$sheet_num",my_container.w, my_container.h, my_container.origin, []);
+    my_container = My_Sheet("sheet=$sheet_num",my_container.w, my_container.h, my_container.origin, []);
+
+    sheets.add(sheet);
+
+
+
+    List<Piece_model> pieces= sort_rect_big_to_small_by_height(pieces0);
+    sort_sheet_small_to_big(sheets);
 
     /// nest all rects
 
@@ -120,7 +128,7 @@ class Nesting_Pieces {
             insert_rect_in_sheet(my_sheet, my_piece);
 
             my_piece.nested = true;
-            sheet.pieces.add(my_piece);
+            my_container.pieces.add(my_piece);
 
             sheets.remove(my_sheet);
             List<My_Sheet> nsh = spilt_sheet(my_sheet, my_piece);
@@ -145,26 +153,27 @@ class Nesting_Pieces {
       }
     }
 
-    sort_rect_big_to_small_by_height();
+
+    List<Piece_model> remain_pieces= sort_rect_big_to_small_by_height(detect_remain_pieces(pieces));
 
     /// rotate remained rects and try to nest it
-    for (int r = 0; r < pieces.length; r++) {
+    for (int r = 0; r < remain_pieces.length; r++) {
 
 
-      if (!pieces[r].nested) {
-        pieces[r] = rotate_rect(pieces[r]);
+      if (!remain_pieces[r].nested) {
+        remain_pieces[r] = rotate_rect(remain_pieces[r]);
 
         for (int sh = 0; sh < sheets.length; sh++) {
           My_Sheet my_sheet = sheets[sh];
 
-          if (can_contain(pieces[r], my_sheet)) {
-            insert_rect_in_sheet(my_sheet, pieces[r]);
-            pieces[r].nested = true;
-            sheet.pieces.add(pieces[r]);
+          if (can_contain(remain_pieces[r], my_sheet)) {
+            insert_rect_in_sheet(my_sheet, remain_pieces[r]);
+            remain_pieces[r].nested = true;
+            my_container.pieces.add(remain_pieces[r]);
 
 
             sheets.remove(my_sheet);
-            List<My_Sheet> nsh = spilt_sheet(my_sheet, pieces[r]);
+            List<My_Sheet> nsh = spilt_sheet(my_sheet, remain_pieces[r]);
             nsh.forEach((element) {
               sheets.add(element);
             });
@@ -175,8 +184,11 @@ class Nesting_Pieces {
       }
     }
 
-    return sheet;
+    Nested_and_Remained nested_and_remained = Nested_and_Remained(my_container,remain_pieces);
+    return nested_and_remained;
   }
+
+
 }
 
 
@@ -188,4 +200,13 @@ class My_Sheet {
   List<Piece_model> pieces = [];
 
   My_Sheet(this.name,this.w, this.h, this.origin, this.pieces);
+}
+
+
+class Nested_and_Remained{
+
+ late My_Sheet  nested_sheet;
+ late List<Piece_model> remain_pieces;
+
+ Nested_and_Remained(this.nested_sheet, this.remain_pieces);
 }

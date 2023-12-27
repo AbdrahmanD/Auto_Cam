@@ -89,7 +89,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                             ListView.builder(
                                 itemCount: pieces.length,
                                 itemBuilder: (context, i) {
-                                  if (pieces[i].piece_name == 'inner' ||
+                                  if (pieces[i].piece_name.contains("inner") ||
                                       pieces[i].piece_name.contains('Helper') ||
                                       (pieces[i].is_changed &&
                                           pieces[i]
@@ -120,7 +120,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                             ListView.builder(
                                 itemCount: pieces.length,
                                 itemBuilder: (context, i) {
-                                  if (pieces[i].piece_name == 'inner' ||
+                                  if (pieces[i].piece_name.contains("inner") ||
                                       pieces[i].piece_name.contains('Helper') ||
                                       (pieces[i].is_changed &&
                                           pieces[i]
@@ -263,8 +263,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
               child: ListView.builder(
                   itemCount: pieces.length,
                   itemBuilder: (context, i) {
-                    if (pieces[i].piece_name ==
-                            'inner' ||
+                    if (pieces[i].piece_name.contains("inner") ||
                         pieces[i].piece_direction ==
                             'help_shelf' ||
                         (pieces[i].is_changed && pieces[i].piece_name.contains('drawer')) ||
