@@ -89,9 +89,11 @@ class JoinHolePattern {
     }
     return data;
   }
+
 }
 
 class Bore_unit {
+
   late double pre_distence;
   late Bore_model side_bore;
   late bool have_nut_bore;

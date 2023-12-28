@@ -116,6 +116,7 @@ class Pattern_Painter extends CustomPainter {
 
 if(type_name=="Drawer_Face")
     {
+
       draw_text(canvas, "drawer side",
           Offset(second_origin.dx, second_origin.dy + 100), 2, 12);
       draw_text(canvas, "drawer face",

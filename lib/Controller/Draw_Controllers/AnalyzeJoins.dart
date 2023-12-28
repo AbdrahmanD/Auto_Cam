@@ -106,6 +106,7 @@ project_model = draw_controller.box_repository.project_model;
               mpiece.piece_name.contains("Door_Helper") || spiece.piece_name.contains("Door_Helper")) {
 
                 if(mpiece.piece_name.contains("Door") && !mpiece.piece_name.contains("Helper")){
+
                   join_line = Join_Line(line.start_point, line.end_point, "Door_Hinges");
 
                 }else{
@@ -1130,8 +1131,7 @@ project_model = draw_controller.box_repository.project_model;
 
                 if (face_name == 2) {
 
-                  x_cordinate =
-                      origin.x_coordinate - n_bore_unit.nut_bore_distence;
+                  x_cordinate = origin.x_coordinate - n_bore_unit.nut_bore_distence;
                   y_cordinate = origin.y_coordinate;
                   z_cordinate = origin.z_coordinate + n_bore_unit.pre_distence;
                 } else if (face_name == 4) {
@@ -1199,9 +1199,12 @@ project_model = draw_controller.box_repository.project_model;
     List<JoinHolePattern>? my_patterns0 = draw_controller.box_repository.join_patterns[join_type];
 
     List<JoinHolePattern> my_patterns=my_patterns0!;
+
     for (JoinHolePattern pattern in my_patterns) {
+
       if (join_line_length > pattern.min_length &&
           join_line_length <= pattern.max_length) {
+
         JoinHolePattern new_pattern = pattern;
 
         List<Bore_unit> bore_units =
@@ -1232,8 +1235,7 @@ project_model = draw_controller.box_repository.project_model;
 
               if (piece_direction == "F") {
                 if (face_name == 2) {
-                  x_cordinate =
-                      origin.x_coordinate - n_bore_unit.nut_bore_distence;
+                  x_cordinate = origin.x_coordinate - n_bore_unit.nut_bore_distence;
                   y_cordinate = origin.y_coordinate + n_bore_unit.pre_distence;
                   z_cordinate = origin.z_coordinate;
                 } else if (face_name == 4) {
@@ -1269,8 +1271,7 @@ project_model = draw_controller.box_repository.project_model;
                 origin.y_coordinate + n_bore_unit.pre_distence,
                 origin.z_coordinate);
 
-            Bore_model side_bore_model =
-                Bore_model(new_origin, n_face_bore.diameter, n_face_bore.depth);
+            Bore_model side_bore_model = Bore_model(new_origin, n_face_bore.diameter, n_face_bore.depth);
             H_bores.add(side_bore_model);
           }
         }
@@ -1362,7 +1363,8 @@ project_model = draw_controller.box_repository.project_model;
                   face_bore_model.diameter, face_bore_model.depth);
               V_bores.add(new_face_bore);
             }
-          } else if (face_direction == "V" || face_direction == "B") {
+          }
+          else if (face_direction == "V" || face_direction == "B") {
             Point_model new_origin = Point_model(
                 origin.x_coordinate + n_bore_unit.pre_distence,
                 origin.y_coordinate,

@@ -73,36 +73,91 @@ class Door_Pattern_Painter extends CustomPainter {
 
     for (int i = 0; i < door_bore_unit.length; i++)
     {
-      Bore_unit unit = door_bore_unit[i];
-
-      double pre_distence = unit.pre_distence;
-      Bore_model side_bore = unit.side_bore;
 
 
-      canvas.drawCircle(Offset(main_origin.dx + pre_distence * scal+th* scal/2, main_origin.dy - (th/2) * scal),
-          side_bore.diameter * scal / 2, bore_painter);
+
+      double pre_distence = door_bore_unit[i].pre_distence;
+
+      Bore_model unit = door_bore_unit[i].face_bore;
+      bool center=door_bore_unit[i].center;
+
+      if(door_bore_unit[i].mirror){
+        canvas.drawCircle(
+            Offset(
+                center?(widh/2* scal):(pre_distence*scal+second_origin.dx + unit.origin.x_coordinate * scal),
+               -22.5*scal+ second_origin.dy -unit.origin.y_coordinate* scal),
+            unit.diameter * scal / 2, bore_painter);
+
+        canvas.drawCircle(
+            Offset(
+                center?(widh/2* scal) :((widh-pre_distence)*scal+second_origin.dx + unit.origin.x_coordinate * scal),
+               - 22.5*scal+ second_origin.dy -unit.origin.y_coordinate* scal),
+            unit.diameter * scal / 2, bore_painter);
+
 
       }
+      else{
+        canvas.drawCircle(
+            Offset(
+                center?(widh/2* scal):(pre_distence*scal+second_origin.dx + unit.origin.x_coordinate * scal),
+                -22.5*scal+ second_origin.dy -unit.origin.y_coordinate* scal),
+            unit.diameter * scal / 2, bore_painter);
+
+      }
+
+      }
+
+
+
+
+
+
+
 
     for (int i = 0; i < side_bore_unit.length; i++)
     {
       Bore_unit unit = side_bore_unit[i];
 
       double pre_distence = unit.pre_distence;
-      Bore_model side_bore = unit.side_bore;
+      Bore_model face_bore = unit.face_bore;
+bool center=unit.center;
+      if(unit.mirror){
+        canvas.drawCircle(
+            Offset(
+                center?(widh/2* scal):(pre_distence*scal+ main_origin.dx + face_bore.origin.x_coordinate*scal),
+                main_origin.dy +face_bore.origin.y_coordinate*scal ),
+            face_bore.diameter * scal / 2,
+
+            bore_painter);
+
+        canvas.drawCircle(
+            Offset(
+                center?(widh/2* scal):((widh-pre_distence)*scal+ main_origin.dx + face_bore.origin.x_coordinate*scal),
+                main_origin.dy +face_bore.origin.y_coordinate*scal ),
+            face_bore.diameter * scal / 2,
+
+            bore_painter);
 
 
-      canvas.drawCircle(Offset(main_origin.dx + pre_distence * scal+th* scal/2, main_origin.dy - (th/2) * scal),
-          side_bore.diameter * scal / 2, bore_painter);
+      }
+      else{
+        canvas.drawCircle(
+            Offset(
+                center?(widh/2* scal):(pre_distence*scal+ main_origin.dx + face_bore.origin.x_coordinate*scal),
+                main_origin.dy +face_bore.origin.y_coordinate*scal ),
+            face_bore.diameter * scal / 2,
+
+            bore_painter);
+      }
+
+
 
     }
 
 
 
-    draw_text(canvas, "Box",
-        Offset(second_origin.dx+10, second_origin.dy + 50), 2, 12);
-    draw_text(canvas, "Door",
-        Offset(main_origin.dx+10, main_origin.dy - 100), 2, 12);
+    draw_text(canvas, "Box", Offset(second_origin.dx+10, second_origin.dy + 50), 2, 12);
+    draw_text(canvas, "Door", Offset(main_origin.dx+10, main_origin.dy - 100), 2, 12);
 
 
 
