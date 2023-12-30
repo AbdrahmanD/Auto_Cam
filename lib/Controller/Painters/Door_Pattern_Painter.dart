@@ -20,7 +20,7 @@ class Door_Pattern_Painter extends CustomPainter {
     if (max_width > screen_width) {
       scal = screen_width / max_width;
     } else {
-      scal = 1;
+      scal = 0.5;
     }
 
     double pw = widh;
@@ -82,15 +82,16 @@ class Door_Pattern_Painter extends CustomPainter {
       bool center=door_bore_unit[i].center;
 
       if(door_bore_unit[i].mirror){
+        // print(door_bore_unit[i].correct_num);
         canvas.drawCircle(
             Offset(
-                center?(widh/2* scal):(pre_distence*scal+second_origin.dx + unit.origin.x_coordinate * scal),
+                (pre_distence*scal+second_origin.dx +door_bore_unit[i].correct_x* scal),
                -22.5*scal+ second_origin.dy -unit.origin.y_coordinate* scal),
             unit.diameter * scal / 2, bore_painter);
 
         canvas.drawCircle(
             Offset(
-                center?(widh/2* scal) :((widh-pre_distence)*scal+second_origin.dx + unit.origin.x_coordinate * scal),
+              ((widh-pre_distence)*scal+second_origin.dx+door_bore_unit[i].correct_x* scal),
                - 22.5*scal+ second_origin.dy -unit.origin.y_coordinate* scal),
             unit.diameter * scal / 2, bore_painter);
 
@@ -99,7 +100,7 @@ class Door_Pattern_Painter extends CustomPainter {
       else{
         canvas.drawCircle(
             Offset(
-                center?(widh/2* scal):(pre_distence*scal+second_origin.dx + unit.origin.x_coordinate * scal),
+                center?(second_origin.dx +max_width/2* scal+door_bore_unit[i].correct_x*scal):(pre_distence*scal+second_origin.dx + unit.origin.x_coordinate * scal),
                 -22.5*scal+ second_origin.dy -unit.origin.y_coordinate* scal),
             unit.diameter * scal / 2, bore_painter);
 
@@ -109,22 +110,18 @@ class Door_Pattern_Painter extends CustomPainter {
 
 
 
-
-
-
-
-
     for (int i = 0; i < side_bore_unit.length; i++)
     {
       Bore_unit unit = side_bore_unit[i];
 
       double pre_distence = unit.pre_distence;
       Bore_model face_bore = unit.face_bore;
-bool center=unit.center;
+      bool center=unit.center;
+
       if(unit.mirror){
         canvas.drawCircle(
             Offset(
-                center?(widh/2* scal):(pre_distence*scal+ main_origin.dx + face_bore.origin.x_coordinate*scal),
+               (pre_distence*scal+ main_origin.dx+unit.correct_x*scal ),
                 main_origin.dy +face_bore.origin.y_coordinate*scal ),
             face_bore.diameter * scal / 2,
 
@@ -132,7 +129,7 @@ bool center=unit.center;
 
         canvas.drawCircle(
             Offset(
-                center?(widh/2* scal):((widh-pre_distence)*scal+ main_origin.dx + face_bore.origin.x_coordinate*scal),
+                ((widh-pre_distence)*scal+ main_origin.dx+unit.correct_x*scal),
                 main_origin.dy +face_bore.origin.y_coordinate*scal ),
             face_bore.diameter * scal / 2,
 
@@ -143,7 +140,7 @@ bool center=unit.center;
       else{
         canvas.drawCircle(
             Offset(
-                center?(widh/2* scal):(pre_distence*scal+ main_origin.dx + face_bore.origin.x_coordinate*scal),
+                center?(main_origin.dx +max_width/2* scal+unit.correct_x*scal):(pre_distence*scal+ main_origin.dx + face_bore.origin.x_coordinate*scal),
                 main_origin.dy +face_bore.origin.y_coordinate*scal ),
             face_bore.diameter * scal / 2,
 

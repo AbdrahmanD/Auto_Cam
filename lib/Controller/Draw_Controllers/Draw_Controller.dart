@@ -37,7 +37,7 @@ class Draw_Controller extends GetxController {
 
   RxList selected_id = [].obs;
 
-  String box_type = "wall_box";
+  String box_type = "wall_cabinet";
 
   RxBool draw_3_D = false.obs;
 

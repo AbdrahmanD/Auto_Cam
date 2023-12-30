@@ -77,6 +77,15 @@ class _Setting_PageState extends State<Setting_Page> {
 
 
 
+  TextEditingController correct_1_controller = TextEditingController();
+  TextEditingController correct_2_controller = TextEditingController();
+
+  double correct_1=0;
+  double correct_2=0;
+
+
+
+
 
 
   bool have_nut = false;
@@ -90,10 +99,11 @@ class _Setting_PageState extends State<Setting_Page> {
   List<Bore_unit> Paint_bore_units_min = [];
   List<Bore_unit> Paint_bore_units_max = [];
 
+  int selected_door_pattern=0;
+
+  bool add_new_door=false;
+
   refresh() async {
-    // Paint_bore_units_min=[];
-    // Paint_bore_units_max=[];
-    // corrent_category_patterns = [];
 
     min_length = double.parse(mini_distence_controller.text.toString());
     max_length = double.parse(max_distence_controller.text.toString());
@@ -102,27 +112,42 @@ class _Setting_PageState extends State<Setting_Page> {
 
     Paint_bore_units_min = corrent_join_pattern.apply_pattern(min_length);
     Paint_bore_units_max = corrent_join_pattern.apply_pattern(max_length);
-    // category_controller.text = corrent_category_name;
-
-    // corrent_category_patterns =
-    //     await (draw_controller.box_repository.join_patterns
-    //     [category_controller.text.toString()]!);
 
     category_controller.text = corrent_category;
 
+    if(!add_new_door){
+      door_bore_units = draw_controller.box_repository.join_patterns["Door_Hinges"]![selected_door_pattern].bores;
+      side_bore_units = draw_controller.box_repository.join_patterns["side_Hinges"]![selected_door_pattern].bores;
 
-    // print("list_Door_Hinges = ${list_Door_Hinges.length}");
-    // print("list_side_Hinges = ${list_side_Hinges.length}");
+      /// hinges
+      ///
+      if (corrent_category=="Doors") {
+        A_controller.text      ="${door_bore_units[0].face_bore.diameter}";
+        A_depth_controller.text="${door_bore_units[0].face_bore.depth}";
+        B_controller.text      ="${22.5-door_bore_units[0].face_bore.origin.y_coordinate}";
+        C_controller.text      ="${door_bore_units[1].face_bore.origin.y_coordinate+(22.5-door_bore_units[0].face_bore.origin.y_coordinate)}";
+        D_controller.text      ="${door_bore_units[1].correct_x*2}";
+        E_controller.text      ="${side_bore_units[0].face_bore.origin.y_coordinate  }";
+        F_controller.text      ="${side_bore_units[0].correct_x*2}";
+        H_depth_controller.text="${door_bore_units[1].face_bore.diameter}";
+        H_controller.text      ="${door_bore_units[1].face_bore.depth   }";
+        J_depth_controller.text="${side_bore_units[0].face_bore.depth }";
+        J_controller.text      ="${side_bore_units[0].face_bore.diameter }";
+      }
 
-    door_bore_units=list_Door_Hinges[0].bores;
-    side_bore_units=list_side_Hinges[0].bores;
+
+
+    }
 
 
 
 
+     have_mirror = true;
+     center = false;
 
 
     setState(() {});
+
   }
 
   add_to_pattern() {
@@ -152,7 +177,7 @@ class _Setting_PageState extends State<Setting_Page> {
     face_bore = Bore_model(init_origin, face_diameter, face_depth);
     nut_bore = Bore_model(init_origin, nut_diameter, nut_depth);
 
-    Bore_unit bore_unit = Bore_unit(pre_distance, side_bore, have_nut,
+    Bore_unit bore_unit = Bore_unit(pre_distance,0,0,side_bore, have_nut,
         nut_destance, nut_bore, face_bore, center, have_mirror);
 
     bore_units.add(bore_unit);
@@ -183,15 +208,30 @@ class _Setting_PageState extends State<Setting_Page> {
       await draw_controller.save_joinHolePattern(side_joinHolePattern, "side_Hinges".toString());
 
       await draw_controller.read_pattern_files();
+       selected_door_pattern= await draw_controller.box_repository.join_patterns["side_Hinges"]!.length;
+      add_new_door=false;
+      setState(() {
 
+      });
      }
 
     refresh();
   }
 
   void delete_pattern() async {
-    await draw_controller.delete_joinHolePattern(
-        corrent_join_pattern, category_controller.text.toString());
+
+    if(corrent_category=="Doors"){
+      await draw_controller.delete_joinHolePattern(corrent_join_pattern, "Door_Hinges");
+      await draw_controller.delete_joinHolePattern(corrent_join_pattern, "side_Hinges");
+
+      setState(() {
+
+      });
+    }
+    else{
+      await draw_controller.delete_joinHolePattern(corrent_join_pattern, category_controller.text.toString());
+
+    }
 
     refresh();
   }
@@ -300,8 +340,8 @@ class _Setting_PageState extends State<Setting_Page> {
                   side_bore_units,
                   draw_controller
                       .box_repository.box_model.value.init_material_thickness,
-                  min_length,
-                  600,
+                  max_length,
+                  500,
                   max_length,
                   corrent_category),
               child: Container(),
@@ -340,19 +380,20 @@ class _Setting_PageState extends State<Setting_Page> {
   add_door_unit()async{
 
 
-    double Pre_distance =double.parse(pre_distence_controller.text.toString());
-    double A_value =double.parse(A_controller.text.toString());
-    double A_depth_value =double.parse(A_depth_controller.text.toString());
-    double B_value =double.parse(B_controller.text.toString());
-    double C_value =double.parse(C_controller.text.toString());
-    double D_value =double.parse(D_controller.text.toString());
-    double E_value =double.parse(E_controller.text.toString());
-    double F_value =double.parse(F_controller.text.toString());
+    double Pre_distance   =double.parse(pre_distence_controller.text.toString());
+    double A_value        =double.parse(A_controller.text.toString());
+    double A_depth_value  =double.parse(A_depth_controller.text.toString());
+    double B_value        =double.parse(B_controller.text.toString());
+    double C_value        =double.parse(C_controller.text.toString());
+    double D_value        =double.parse(D_controller.text.toString());
+    double E_value        =double.parse(E_controller.text.toString());
+    double F_value        =double.parse(F_controller.text.toString());
 
-    double H_depth_value =double.parse(H_depth_controller.text.toString());
-    double H_value =double.parse(H_controller.text.toString());
-    double J_depth_value =double.parse(J_depth_controller.text.toString());
-    double J_value =double.parse(J_controller.text.toString());
+    double H_depth_value  =double.parse(H_depth_controller.text.toString());
+    double H_value        =double.parse(H_controller.text.toString());
+    double J_depth_value  =double.parse(J_depth_controller.text.toString());
+    double J_value        =double.parse(J_controller.text.toString());
+
 
     Bore_model main_hole=          Bore_model(Point_model(0,22.5-B_value,0), A_value, A_depth_value);
     Bore_model main_hole_support_1=Bore_model(Point_model(0,C_value-B_value,0), H_value,H_depth_value);
@@ -364,50 +405,29 @@ class _Setting_PageState extends State<Setting_Page> {
 
     Bore_model emety_bore=        Bore_model(Point_model(0,22,0), 0, 0);
 
+    Bore_unit Door_unit_1=Bore_unit(Pre_distance , 0        ,0, emety_bore , false, 0, emety_bore,  main_hole          , center, have_mirror);
+    Bore_unit Door_unit_2=Bore_unit(Pre_distance , D_value/2,C_value-B_value, emety_bore , false, 0, emety_bore,  main_hole_support_1, center, have_mirror);
+    Bore_unit Door_unit_3=Bore_unit(Pre_distance ,-D_value/2,C_value-B_value, emety_bore , false, 0, emety_bore,  main_hole_support_2, center, have_mirror);
 
 
-    // Bore_model door_test_bore =  Bore_model(Point_model(0,22,0),35, 14);
-    // Bore_model door_test_bore1 =  Bore_model(Point_model(33,33,0),3, 3);
-    // Bore_model door_test_bore2 =  Bore_model(Point_model(-33,33,0),3, 3);
-    //
-    // Bore_model side_test_bore =  Bore_model(Point_model(10,22,0),3, 3);
-    // Bore_model side_test_bore2 =  Bore_model(Point_model(-10,22,0),3, 3);
+    Bore_unit side_unit_1=Bore_unit(Pre_distance, F_value/2,37-E_value, emety_bore , false, 0,  emety_bore,  side_hole_1        , center, have_mirror);
+    Bore_unit side_unit_2=Bore_unit(Pre_distance,-F_value/2,37-E_value, emety_bore , false, 0,  emety_bore,  side_hole_2        , center, have_mirror);
 
-
-    Bore_unit Door_unit_1=Bore_unit(Pre_distance, emety_bore , false, 0, emety_bore,  main_hole          , center, have_mirror);
-    Bore_unit Door_unit_2=Bore_unit(Pre_distance-D_value/2, emety_bore , false, 0, emety_bore,  main_hole_support_1, center, have_mirror);
-    Bore_unit Door_unit_3=Bore_unit(Pre_distance+D_value/2, emety_bore , false, 0, emety_bore,  main_hole_support_2, center, have_mirror);
-
-
-    Bore_unit side_unit_1=Bore_unit(Pre_distance-F_value/2, emety_bore , false, 0,  emety_bore,  side_hole_1        , center, have_mirror);
-    Bore_unit side_unit_2=Bore_unit(Pre_distance+F_value/2, emety_bore , false, 0,  emety_bore,  side_hole_2        , center, have_mirror);
-
-    //
-    // Bore_unit Door_unit_1=Bore_unit(Pre_distance, emety_bore , true, 0, emety_bore,  door_test_bore , center, have_mirror);
-    // Bore_unit Door_unit_2=Bore_unit(Pre_distance, emety_bore , true, 0, emety_bore,  door_test_bore1 , center, have_mirror);
-    // Bore_unit Door_unit_3=Bore_unit(Pre_distance, emety_bore , true, 0, emety_bore,  door_test_bore2, center, have_mirror);
-    //
-    //
-    //
-    //
-    // Bore_unit side_unit_2=Bore_unit(Pre_distance, emety_bore , true, 0, emety_bore,  side_test_bore , center, have_mirror);
-    // Bore_unit side_unit_22=Bore_unit(Pre_distance, emety_bore , true, 0, emety_bore,  side_test_bore2 , center, have_mirror);
-    //
-    //
-    //
     door_bore_units.add( Door_unit_1 );
     door_bore_units.add( Door_unit_2 );
     door_bore_units.add( Door_unit_3 );
-    // door_bore_units.add( Door_unit_2 );
-    // door_bore_units.add( Door_unit_3 );
-    //
+
     side_bore_units.add(side_unit_1);
     side_bore_units.add(side_unit_2);
-    // side_bore_units.add(side_unit_22);
 
+    // selected_door_pattern=draw_controller.box_repository.join_patterns["Door_Hinges"]!.length+1;
+
+    // save_pattern();
     refresh();
 
   }
+
+
 
   Widget parameter_editor() {
     late Widget widget;
@@ -1873,7 +1893,7 @@ class _Setting_PageState extends State<Setting_Page> {
     }
     else if (corrent_category == "Doors")
     {
-      widget =    Padding(
+      widget = Padding(
         padding: const EdgeInsets.only(left: 12.0),
         child: Container(
             width: 300,
@@ -2661,7 +2681,6 @@ class _Setting_PageState extends State<Setting_Page> {
                         value: have_mirror,
                         onChanged: (v) {
                           have_mirror = !have_mirror;
-                          center = !center;
 
                           setState(() {});
                         }),
@@ -2689,7 +2708,6 @@ class _Setting_PageState extends State<Setting_Page> {
                         onChanged: (v) {
 
                           center = !center;
-                          have_mirror = !have_mirror;
 
                           pre_distence_controller.text="${min_length/2}";
 
@@ -2699,6 +2717,82 @@ class _Setting_PageState extends State<Setting_Page> {
                 ),
 
 
+                ///correction
+              // center?  Row(
+              //     children: [
+              //       Container(
+              //         width: 50,
+              //         height: 35,
+              //         child: Center(
+              //           child: Center(
+              //             child: Text(
+              //               'v 1',
+              //               style: TextStyle(fontSize: 16),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //
+              //       Container(
+              //         width: 75,
+              //         height: 35,
+              //         child: TextFormField(
+              //           keyboardType: TextInputType.number,
+              //           inputFormatters: [DecimalTextInputFormatter(2)],
+              //           controller: correct_1_controller,
+              //           onChanged: (_) {
+              //             correct_1=double.parse(correct_1_controller.text.toString());
+              //
+              //           },
+              //           validator: (d) {
+              //             if (d!.isEmpty) {
+              //               return 'add value please';
+              //             }
+              //           },
+              //           decoration: InputDecoration(
+              //             border: OutlineInputBorder(
+              //               borderRadius: BorderRadius.circular(4),
+              //             ),
+              //           ),
+              //         ),
+              //       ),   Container(
+              //         width: 50,
+              //         height: 35,
+              //         child: Center(
+              //           child: Center(
+              //             child: Text(
+              //               'v 2',
+              //               style: TextStyle(fontSize: 16),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //
+              //       Container(
+              //         width: 100,
+              //         height: 35,
+              //         child: TextFormField(
+              //           keyboardType: TextInputType.number,
+              //           inputFormatters: [DecimalTextInputFormatter(2)],
+              //           controller: correct_2_controller,
+              //           onChanged: (_) {
+              //             correct_2=double.parse(correct_2_controller.text.toString());
+              //           },
+              //           validator: (d) {
+              //             if (d!.isEmpty) {
+              //               return 'add value please';
+              //             }
+              //           },
+              //           decoration: InputDecoration(
+              //             border: OutlineInputBorder(
+              //               borderRadius: BorderRadius.circular(4),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //
+              //     ],
+              //   ):SizedBox(),
 
                 SizedBox(
                   height: 12,
@@ -2848,6 +2942,55 @@ class _Setting_PageState extends State<Setting_Page> {
 
     return secondary_bore_units;
   }
+
+
+  add_new_pattern(){
+
+    name_controller.text = '0';
+    category_controller.text = corrent_category;
+    mini_distence_controller.text = '0';
+    max_distence_controller.text = '0';
+    pre_distence_controller.text = '0';
+    diameter_controller.text = '0';
+    face_diameter_controller.text = '0';
+    depth_controller.text = '0';
+    face_depth_controller.text = '0';
+    nut_distence_controller.text = '0';
+    nut_diameter_controller.text = '0';
+    nut_depth_controller.text = '0';
+
+    /// hinges
+    A_controller.text="35";
+    A_depth_controller.text="13";
+    B_controller.text="22.5";
+    C_controller.text="32";
+    D_controller.text="45";
+    E_controller.text="37";
+    F_controller.text="32";
+
+    H_depth_controller.text="3";
+    H_controller.text="3";
+    J_depth_controller.text="3";
+    J_controller.text="3";
+
+    bore_units = [];
+    Paint_bore_units_min = [];
+    Paint_bore_units_max = [];
+    door_bore_units = [];
+    side_bore_units = [];
+    selected_door_pattern=1000;
+
+
+    corrent_join_pattern = JoinHolePattern('name', 150, 300, []);
+    add_new_door=true;
+      // initState();
+    // refresh();
+setState(() {
+
+});
+  }
+
+
 
   @override
   void initState() {
@@ -3071,6 +3214,9 @@ refresh();
                         corrent_paterns_list = list_Door_Hinges;
                         corrent_join_pattern_id = 0;
                         corrent_category = "Doors";
+                        door_bore_units = [];
+                        side_bore_units = [];
+
                         refresh();
 
                         setState(() {});
@@ -3094,50 +3240,64 @@ refresh();
 
 
             /// join patterns list
-            Container(
-                width: w / 8,
-                height: h - 50,
-                color: Colors.grey[100],
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 70.0),
-                  child: ListView.builder(
-                      itemCount: corrent_paterns_list.length,
-                      itemBuilder: (context, i) {
-                        bool corrent = (corrent_join_pattern_id == i);
-                        String pattern_name = corrent_paterns_list[i].name;
+            Column(
+              children: [
+                Container(
+                    width: w / 8,
+                    height: h - 350,
+                    color: Colors.grey[100],
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 70.0),
+                      child: ListView.builder(
+                          itemCount: corrent_paterns_list.length,
+                          itemBuilder: (context, i) {
+                            bool corrent = (corrent_join_pattern_id == i);
+                            String pattern_name = corrent_paterns_list[i].name;
 
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            onTap: () {
-                              corrent_join_pattern = corrent_paterns_list[i];
-                              corrent_join_pattern_id = i;
-                              min_length = corrent_join_pattern.min_length;
-                              max_length = corrent_join_pattern.max_length;
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: () {
+                                  corrent_join_pattern = corrent_paterns_list[i];
+                                  corrent_join_pattern_id = i;
+                                  min_length = corrent_join_pattern.min_length;
+                                  max_length = corrent_join_pattern.max_length;
 
-                              name_controller.text = corrent_join_pattern.name;
-                              mini_distence_controller.text = '$min_length';
-                              max_distence_controller.text = '$max_length';
+                                  name_controller.text = corrent_join_pattern.name;
+                                  mini_distence_controller.text = '$min_length';
+                                  max_distence_controller.text = '$max_length';
+                                  selected_door_pattern=i;
+                                  door_bore_units = [];
+                                  side_bore_units = [];
 
-                              refresh();
+                                  refresh();
 
-                              setState(() {});
-                            },
-                            child: Container(
-                              width: corrent ? 100 : 750,
-                              color:
-                                  corrent ? Colors.teal[300] : Colors.grey[100],
-                              child: Center(
-                                child: Text(
-                                  pattern_name,
-                                  style: TextStyle(fontSize: corrent ? 24 : 12),
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  width: corrent ? 100 : 750,
+                                  color:
+                                      corrent ? Colors.teal[300] : Colors.grey[100],
+                                  child: Center(
+                                    child: Text(
+                                      pattern_name,
+                                      style: TextStyle(fontSize: corrent ? 24 : 12),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        );
-                      }),
-                )),
+                            );
+                          }),
+                    )),
+                SizedBox(height: 32,),
+
+                Container(width: 65,height: 65,child: InkWell(
+                  onTap: (){
+                    add_new_pattern();
+                  },child: Icon(Icons.add_circle_outline,color: Colors.teal,size: 24,),
+                ),)
+              ],
+            ),
 
             /// parameter editor
             parameter_editor(),

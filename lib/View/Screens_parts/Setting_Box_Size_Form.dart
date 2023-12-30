@@ -593,43 +593,44 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
           ///chose or Edit fitting type
-          Container(
-            child: Row(
-              children: [
-                SizedBox(width: 18),
-                Container(
-                    width: 180,
-                    child: Text('chose or Edit fitting type',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ))),
-                SizedBox(
-                  width: 18,
-                ),
-                InkWell(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.draw,
-                      size: 36,
-                      color: Colors.teal,
-                    )),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 6,
-          ),
-
-          ///divider
-          Container(
-            height: 1,
-            color: Colors.grey,
-          ),
+          // Container(
+          //   child: Row(
+          //     children: [
+          //       SizedBox(width: 18),
+          //       Container(
+          //           width: 180,
+          //           child: Text('chose or Edit fitting type',
+          //               style: TextStyle(
+          //                 fontSize: 14,
+          //               ))),
+          //       SizedBox(
+          //         width: 18,
+          //       ),
+          //       InkWell(
+          //           onTap: () {},
+          //           child: Icon(
+          //             Icons.draw,
+          //             size: 36,
+          //             color: Colors.teal,
+          //           )),
+          //     ],
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: 6,
+          // ),
+          //
+          // ///divider
+          // Container(
+          //   height: 1,
+          //   color: Colors.grey,
+          // ),
 
           ///////////////////////
           SizedBox(
             height: 6,
           ),
+
 
           ///chose is there back panel or not
           Container(
@@ -717,6 +718,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                       Point_model(0, 0, 0));
 
                   draw_Controller.add_Box(b);
+
                 }
               },
               child: Container(
@@ -742,6 +744,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             color: Colors.grey,
           ),
 
+          SizedBox(height: 12,),
           //review cut list
           Container(
             child: Row(
@@ -778,36 +781,36 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
           ///preview Nesting sheets
-          Container(
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 18,
-                ),
-                Container(
-                    width: 180,
-                    child: Text('preview Nesting sheets',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ))),
-                SizedBox(
-                  width: 18,
-                ),
-                InkWell(
-                    onTap: () {
-
-                      nesting_controller.nesting_initilize();
-                      Get.to(Nesting_View());
-
-                    },
-                    child: Icon(
-                      Icons.margin_outlined,
-                      size: 36,
-                      color: Colors.teal,
-                    )),
-              ],
-            ),
-          ),
+          // Container(
+          //   child: Row(
+          //     children: [
+          //       SizedBox(
+          //         width: 18,
+          //       ),
+          //       Container(
+          //           width: 180,
+          //           child: Text('preview Nesting sheets',
+          //               style: TextStyle(
+          //                 fontSize: 14,
+          //               ))),
+          //       SizedBox(
+          //         width: 18,
+          //       ),
+          //       InkWell(
+          //           onTap: () {
+          //
+          //             nesting_controller.nesting_initilize();
+          //             Get.to(Nesting_View());
+          //
+          //           },
+          //           child: Icon(
+          //             Icons.margin_outlined,
+          //             size: 36,
+          //             color: Colors.teal,
+          //           )),
+          //     ],
+          //   ),
+          // ),
 
           SizedBox(
             height: 12,

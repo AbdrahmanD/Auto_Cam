@@ -703,7 +703,6 @@ Map<String, dynamic> toJson() {
     }
   }
 
-  /// end door
 
   add_door(Door_Model door_model) {
     if (door_model.door_num == 1) {
@@ -746,7 +745,7 @@ Map<String, dynamic> toJson() {
 
     Piece_model door_piece = Piece_model(
       id,
-        'Door_$id',
+        (door_model.direction=="R")?('Door_right_$id'):('Door_left_$id'),
         'F',
         door_model.material_name,
         door_width,
@@ -889,7 +888,7 @@ Map<String, dynamic> toJson() {
 String id = get_id();
     Piece_model door_piece_1 = Piece_model(
      id,
-        'Door_$id Right',
+        'Door_$id left',
         'F',
         door_model.material_name,
         door_width,
@@ -900,7 +899,7 @@ String id = get_id();
     String id2 = get_id();
     Piece_model door_piece_2 = Piece_model(
       id2,
-      'Door_$id left',
+      'Door_$id right',
         'F',
         door_model.material_name,
         door_width,

@@ -76,7 +76,7 @@ class _CreateJoinholepatternDialogState
     nut_bore = Bore_model(init_origin, nut_diameter, nut_depth);
 
     Bore_unit bore_unit = Bore_unit(
-        pre_distance,
+        pre_distance,0,0,
         side_bore,
         have_nut,
         nut_destance,

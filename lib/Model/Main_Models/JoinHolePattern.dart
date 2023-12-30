@@ -18,14 +18,15 @@ class JoinHolePattern {
     for (Bore_unit bore_unit in bores) {
       if(bore_unit.center==true){
         Bore_unit center_bore_unit = Bore_unit(
-            length/2,
+            length/2+bore_unit.correct_x,bore_unit.correct_x ,bore_unit.correct_y,
             bore_unit.side_bore,
             bore_unit.have_nut_bore,
             bore_unit.nut_bore_distence,
             bore_unit.nut_bore,
             bore_unit.face_bore,
             bore_unit.center,
-            bore_unit.mirror);
+            bore_unit.mirror
+        );
         applied_bores.add(center_bore_unit);
       }
       else{
@@ -33,24 +34,26 @@ class JoinHolePattern {
           double pre_dis = bore_unit.pre_distence;
 
           Bore_unit mirror_bore_unit_1 = Bore_unit(
-              pre_dis,
+              pre_dis+bore_unit.correct_x,bore_unit.correct_x,bore_unit.correct_y,
               bore_unit.side_bore,
               bore_unit.have_nut_bore,
               bore_unit.nut_bore_distence,
               bore_unit.nut_bore,
               bore_unit.face_bore,
               bore_unit.center,
-              bore_unit.mirror);
+              bore_unit.mirror
+          );
 
           Bore_unit mirror_bore_unit_2 = Bore_unit(
-              length - pre_dis,
+              length -pre_dis-bore_unit.correct_x,bore_unit.correct_x,bore_unit.correct_y,
               bore_unit.side_bore,
               bore_unit.have_nut_bore,
               bore_unit.nut_bore_distence,
               bore_unit.nut_bore,
               bore_unit.face_bore,
               bore_unit.center,
-              bore_unit.mirror);
+              bore_unit.mirror
+          );
 
           applied_bores.add(mirror_bore_unit_1);
           applied_bores.add(mirror_bore_unit_2);
@@ -95,6 +98,8 @@ class JoinHolePattern {
 class Bore_unit {
 
   late double pre_distence;
+  late double correct_x;
+  late double correct_y;
   late Bore_model side_bore;
   late bool have_nut_bore;
   late double nut_bore_distence;
@@ -107,6 +112,8 @@ class Bore_unit {
 
   Bore_unit(
       this.pre_distence,
+      this.correct_x,
+      this.correct_y,
       this.side_bore,
       this.have_nut_bore,
       this.nut_bore_distence,
@@ -117,6 +124,8 @@ class Bore_unit {
 
   Bore_unit.fromJson(Map<String, dynamic> json) {
     pre_distence = json['pre_distence'];
+    correct_x = json['correct_x'];
+    correct_y = json['correct_y'];
     side_bore = json['side_bore'] = Bore_model.fromJson(json['side_bore']);
     have_nut_bore = json['have_nut_bore'];
     nut_bore_distence = json['nut_bore_distence'];
@@ -129,6 +138,8 @@ class Bore_unit {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data["pre_distence"] = this.pre_distence;
+    data["correct_x"] = this.correct_x;
+    data["correct_y"] = this.correct_y;
     if (this.side_bore != null) {
       data["side_bore"] = this.side_bore!.toJson();
     }

@@ -966,7 +966,7 @@ project_model = draw_controller.box_repository.project_model;
     else if (join_line_axis == "Y")
     {
       towFaceBoring = add_bore_holes_Y_axis(l.start_point, join_line_length,
-          face_direction, face.name, piece_direction, join_type);
+          face_direction, face.name, piece_direction, join_type,piece_name);
     }
     else if (join_line_axis == "Z")
     {
@@ -1098,8 +1098,7 @@ project_model = draw_controller.box_repository.project_model;
       {
         JoinHolePattern new_pattern = pattern;
 
-        List<Bore_unit> bore_units =
-            new_pattern.apply_pattern(join_line_length);
+        List<Bore_unit> bore_units = new_pattern.apply_pattern(join_line_length);
 
         for (int i = 0; i < bore_units.length; i++) {
           Bore_unit n_bore_unit = bore_units[i];
@@ -1190,7 +1189,9 @@ project_model = draw_controller.box_repository.project_model;
       String face_direction,
       int face_name,
       String piece_direction,
-      String join_type)
+      String join_type,
+      String Piece_name
+      )
   {
     List<Bore_model> H_bores = [];
     List<Bore_model> V_bores = [];
@@ -1265,11 +1266,33 @@ project_model = draw_controller.box_repository.project_model;
               V_bores.add(new_face_bore);
             }
           }
+
           else if (face_direction == "V" || face_direction == "B") {
+
+            double correct_value=0;
+            double z_correct_value=0;
+
+
+            if (Piece_name.contains("Door")) {
+              if(Piece_name.contains("left")){
+                correct_value=n_bore_unit.correct_y;
+              }
+              else if(Piece_name.contains("right")){
+                correct_value=-n_bore_unit.correct_y;
+              }
+            }
+            else {
+                z_correct_value=n_bore_unit.correct_y;
+            }
+
+
+            // print("correct_value = ${correct_value}");
+            // print("z_correct_value = ${z_correct_value}");
+
             Point_model new_origin = Point_model(
-                origin.x_coordinate,
+                origin.x_coordinate+correct_value,
                 origin.y_coordinate + n_bore_unit.pre_distence,
-                origin.z_coordinate);
+                origin.z_coordinate-z_correct_value);
 
             Bore_model side_bore_model = Bore_model(new_origin, n_face_bore.diameter, n_face_bore.depth);
             H_bores.add(side_bore_model);
@@ -1316,7 +1339,7 @@ project_model = draw_controller.box_repository.project_model;
           if (face_direction == "H") {
             Point_model new_origin = Point_model(
                 origin.x_coordinate + n_bore_unit.pre_distence,
-                origin.y_coordinate,
+                origin.y_coordinate + n_bore_unit.correct_y,
                 origin.z_coordinate);
 
             Bore_model side_bore_model = Bore_model(new_origin,

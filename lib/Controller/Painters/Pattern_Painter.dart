@@ -145,6 +145,7 @@ if(type_name=="Drawer_Face")
             side_bore.diameter * scal / 2,
             secondary_bore_painter);
         if (have_nut_bore) {
+
           canvas.drawCircle(
               Offset(main_origin.dx + pre_distence * scal, main_origin.dy + nut_bore_distence * scal),
               nut_bore.diameter * scal / 2,
