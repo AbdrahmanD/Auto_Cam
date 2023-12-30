@@ -25,7 +25,7 @@ class Box_Repository extends GetxController {
   Map<String, List<JoinHolePattern>> join_patterns = {
     "Box_Fitting_DRILL": [],
     "Drawer_Face": [],
-    "Drawer_Rail_Box": [],
+    "Drawer_Rail_Box" : [],
     "Drawer_Rail_Side": [],
     "Door_Hinges": [],
     "side_Hinges": [],

@@ -1093,6 +1093,9 @@ project_model = draw_controller.box_repository.project_model;
     List<JoinHolePattern> my_patterns=my_patterns0!;
 
     for (JoinHolePattern pattern in my_patterns) {
+      if(!pattern.pattern_enable){
+        continue;
+      }
       if (join_line_length > pattern.min_length &&
           join_line_length <= pattern.max_length)
       {
@@ -1202,7 +1205,9 @@ project_model = draw_controller.box_repository.project_model;
     List<JoinHolePattern> my_patterns=my_patterns0!;
 
     for (JoinHolePattern pattern in my_patterns) {
-
+      if(!pattern.pattern_enable){
+        continue;
+      }
       if (join_line_length > pattern.min_length &&
           join_line_length <= pattern.max_length) {
 
@@ -1325,6 +1330,9 @@ project_model = draw_controller.box_repository.project_model;
 
 
     for (JoinHolePattern pattern in my_patterns) {
+      if(!pattern.pattern_enable){
+        continue;
+      }
       if (join_line_length > pattern.min_length && join_line_length <= pattern.max_length)
       {
         JoinHolePattern new_pattern = pattern;

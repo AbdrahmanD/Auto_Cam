@@ -8,8 +8,9 @@ class JoinHolePattern {
   late double min_length;
   late double max_length;
   late List<Bore_unit> bores;
+  late bool pattern_enable ;
 
-  JoinHolePattern( this.name, this.min_length, this.max_length, this.bores);
+  JoinHolePattern( this.name, this.min_length, this.max_length, this.bores,this.pattern_enable);
 
   List<Bore_unit> apply_pattern(double length) {
 
@@ -79,6 +80,7 @@ class JoinHolePattern {
         bores!.add(new Bore_unit.fromJson(v));
       });
     }
+    pattern_enable=json["pattern_enable"];
   }
 
   Map<String, dynamic> toJson() {
@@ -90,6 +92,8 @@ class JoinHolePattern {
     if (this.bores != null) {
       data["bores"] = this.bores!.map((v) => v.toJson()).toList();
     }
+    data["pattern_enable"] = this.pattern_enable;
+
     return data;
   }
 

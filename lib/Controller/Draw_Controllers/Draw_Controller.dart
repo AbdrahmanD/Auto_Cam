@@ -776,6 +776,63 @@ if(selected_id.length==1){
 
   }
 
+
+  enable_pattern(JoinHolePattern joinHolePattern,String category) async {
+
+    final directory = await getApplicationDocumentsDirectory();
+
+    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    oldDirectory.createSync();
+
+    final Directory newDirectory = Directory('${oldDirectory.path}/Setting');
+    newDirectory.createSync();
+
+    final Directory finalDirectory0 =
+        Directory('${newDirectory.path}/Join_Patterns');
+    finalDirectory0.createSync();
+
+    final Directory finalDirectory =
+        Directory('${finalDirectory0.path}/${category}');
+    finalDirectory.createSync();
+
+    JoinHolePattern new_join_pattern=joinHolePattern;
+    new_join_pattern.pattern_enable=true;
+
+    box_repository.join_patterns[category]!.remove(joinHolePattern);
+
+    save_joinHolePattern(new_join_pattern, category);
+
+
+  }
+  disable_pattern(JoinHolePattern joinHolePattern,String category) async {
+
+    final directory = await getApplicationDocumentsDirectory();
+
+    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    oldDirectory.createSync();
+
+    final Directory newDirectory = Directory('${oldDirectory.path}/Setting');
+    newDirectory.createSync();
+
+    final Directory finalDirectory0 =
+    Directory('${newDirectory.path}/Join_Patterns');
+    finalDirectory0.createSync();
+
+    final Directory finalDirectory =
+    Directory('${finalDirectory0.path}/${category}');
+    finalDirectory.createSync();
+
+    JoinHolePattern new_join_pattern=joinHolePattern;
+    new_join_pattern.pattern_enable=false;
+
+    box_repository.join_patterns[category]!.remove(joinHolePattern);
+
+    save_joinHolePattern(new_join_pattern, category);
+
+
+  }
+
+
   read_pattern_files() async {
 
 

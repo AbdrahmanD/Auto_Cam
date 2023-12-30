@@ -46,7 +46,7 @@ class _CreateJoinholepatternDialogState
   List<JoinHolePattern> corrent_category_patterns = [];
 
   JoinHolePattern corrent_join_pattern =
-  JoinHolePattern( 'name', 150, 300, []);
+  JoinHolePattern( 'name', 150, 300, [],true);
 
   add_to_pattern() {
     double pre_distance = double.parse(pre_distence_controller.text.toString());
@@ -98,7 +98,7 @@ class _CreateJoinholepatternDialogState
         name_controller.text.toString(),
         mini_length,
         max_length,
-        bore_units);
+        bore_units,true);
 
     await draw_controller.save_joinHolePattern(joinHolePattern,category_controller.text.toString());
     await draw_controller.read_pattern_files();

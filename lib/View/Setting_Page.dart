@@ -1,6 +1,7 @@
 import 'package:auto_cam/Controller/DecimalTextInputFormatter.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Painters/Door_Pattern_Painter.dart';
+import 'package:auto_cam/Controller/Painters/Drawer_Pattern_Painter.dart';
 import 'package:auto_cam/Controller/Painters/Pattern_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +26,10 @@ class _Setting_PageState extends State<Setting_Page> {
   String correct_join_type = "Box fitting";
   bool boxes_fitting = true;
   bool Drawer_face = false;
+  bool Drawer_slide = false;
   bool Doors = false;
 
-  JoinHolePattern corrent_join_pattern = JoinHolePattern('name', 150, 300, []);
+  JoinHolePattern corrent_join_pattern = JoinHolePattern('name', 150, 300, [],true);
 
   int corrent_join_pattern_id = 0;
 
@@ -35,10 +37,12 @@ class _Setting_PageState extends State<Setting_Page> {
 
   List<JoinHolePattern> list_boxes_fitting = [];
   List<JoinHolePattern> list_Drawer_face = [];
-  List<JoinHolePattern> list_Drawer_Rail_Box = [];
-  List<JoinHolePattern> list_Drawer_Rail_Side = [];
   List<JoinHolePattern> list_Door_Hinges = [];
   List<JoinHolePattern> list_side_Hinges = [];
+
+  List<JoinHolePattern> list_drawr_slide = [];
+  List<JoinHolePattern> list_box_slide   = [];
+
   List<JoinHolePattern> list_Groove = [];
 
   // List<CNC_Tool> cnc_tools = [];
@@ -60,6 +64,19 @@ class _Setting_PageState extends State<Setting_Page> {
 
 
 
+
+
+  /// drawer setting
+  TextEditingController drawer_pre_distance = TextEditingController();
+  TextEditingController drawer_diameter     = TextEditingController();
+  TextEditingController drawer_depth        = TextEditingController();
+  TextEditingController box_pre_distance    = TextEditingController();
+  TextEditingController box_diameter        = TextEditingController();
+  TextEditingController box_depth           = TextEditingController();
+
+
+
+
   TextEditingController A_controller = TextEditingController();
   TextEditingController A_depth_controller = TextEditingController();
   TextEditingController B_controller = TextEditingController();
@@ -75,7 +92,8 @@ class _Setting_PageState extends State<Setting_Page> {
   List<Bore_unit> door_bore_units = [];
   List<Bore_unit> side_bore_units = [];
 
-
+  List<Bore_unit> drawr_slide_units = [];
+  List<Bore_unit> box_slide_units  = [];
 
   TextEditingController correct_1_controller = TextEditingController();
   TextEditingController correct_2_controller = TextEditingController();
@@ -100,6 +118,8 @@ class _Setting_PageState extends State<Setting_Page> {
   List<Bore_unit> Paint_bore_units_max = [];
 
   int selected_door_pattern=0;
+
+  int selected_pattern=0;
 
   bool add_new_door=false;
 
@@ -139,7 +159,13 @@ class _Setting_PageState extends State<Setting_Page> {
 
     }
 
+if(corrent_category=="Drawer_Slides"){
 
+  drawr_slide_units=list_drawr_slide[selected_pattern].bores;
+  box_slide_units=list_box_slide  [selected_pattern].bores;
+
+
+}
 
 
      have_mirror = true;
@@ -191,29 +217,44 @@ class _Setting_PageState extends State<Setting_Page> {
     double max_length = double.parse(max_distence_controller.text.toString());
 
 
-    if (category_controller.text.toString()!="Doors") {
+    if (category_controller.text.toString()=="Doors") {
+      JoinHolePattern door_joinHolePattern = JoinHolePattern(name_controller.text.toString(), mini_length, max_length, door_bore_units,true);
+      JoinHolePattern side_joinHolePattern = JoinHolePattern(name_controller.text.toString(), mini_length, max_length, side_bore_units,true);
 
-      JoinHolePattern joinHolePattern = JoinHolePattern(name_controller.text.toString(), mini_length, max_length, bore_units);
+      await draw_controller.save_joinHolePattern(door_joinHolePattern, "Door_Hinges" );
+      await draw_controller.save_joinHolePattern(side_joinHolePattern, "side_Hinges" );
+
+      await draw_controller.read_pattern_files();
+      selected_door_pattern= await draw_controller.box_repository.join_patterns["side_Hinges"]!.length;
+      add_new_door=false;
+      setState(() {
+
+      });
+    }
+    else if (category_controller.text.toString()=="Drawer_Slides") {
+
+      JoinHolePattern drawer_joinHolePattern = JoinHolePattern(name_controller.text.toString(), mini_length, max_length, drawr_slide_units,true);
+      JoinHolePattern box_joinHolePattern    = JoinHolePattern(name_controller.text.toString(), mini_length, max_length, box_slide_units,true);
+
+      await draw_controller.save_joinHolePattern(drawer_joinHolePattern , "Drawer_Rail_Box" );
+      await draw_controller.save_joinHolePattern(box_joinHolePattern    , "Drawer_Rail_Side");
+
+      await draw_controller.read_pattern_files();
+      selected_door_pattern= await draw_controller.box_repository.join_patterns["Drawer_Rail_Box"]!.length;
+      setState(() {
+
+      });
+
+    }
+    else{
+
+      JoinHolePattern joinHolePattern = JoinHolePattern(name_controller.text.toString(), mini_length, max_length, bore_units,true);
 
       await draw_controller.save_joinHolePattern(joinHolePattern, category_controller.text.toString());
 
       await draw_controller.read_pattern_files();
 
     }
-    else{
-      JoinHolePattern door_joinHolePattern = JoinHolePattern(name_controller.text.toString(), mini_length, max_length, door_bore_units);
-      JoinHolePattern side_joinHolePattern = JoinHolePattern(name_controller.text.toString(), mini_length, max_length, side_bore_units);
-
-      await draw_controller.save_joinHolePattern(door_joinHolePattern, "Door_Hinges".toString());
-      await draw_controller.save_joinHolePattern(side_joinHolePattern, "side_Hinges".toString());
-
-      await draw_controller.read_pattern_files();
-       selected_door_pattern= await draw_controller.box_repository.join_patterns["side_Hinges"]!.length;
-      add_new_door=false;
-      setState(() {
-
-      });
-     }
 
     refresh();
   }
@@ -223,6 +264,14 @@ class _Setting_PageState extends State<Setting_Page> {
     if(corrent_category=="Doors"){
       await draw_controller.delete_joinHolePattern(corrent_join_pattern, "Door_Hinges");
       await draw_controller.delete_joinHolePattern(corrent_join_pattern, "side_Hinges");
+
+      setState(() {
+
+      });
+    }
+   else if(corrent_category=="Drawer_Slides"){
+      await draw_controller.delete_joinHolePattern(corrent_join_pattern, "Drawer_Rail_Box" );
+      await draw_controller.delete_joinHolePattern(corrent_join_pattern, "Drawer_Rail_Side");
 
       setState(() {
 
@@ -243,7 +292,7 @@ class _Setting_PageState extends State<Setting_Page> {
       widget = Column(
         children: [
           Container(
-            height: 400,
+            height: 350,
             color: Colors.grey[200],
             child: CustomPaint(
               painter: Pattern_Painter(
@@ -251,7 +300,7 @@ class _Setting_PageState extends State<Setting_Page> {
                   [],
                   draw_controller.box_repository.box_model.value.init_material_thickness,
                   min_length,
-                  500,
+                  400,
                   max_length,
                   corrent_category),
               child: Container(),
@@ -270,7 +319,7 @@ class _Setting_PageState extends State<Setting_Page> {
                   draw_controller
                       .box_repository.box_model.value.init_material_thickness,
                   max_length,
-                  500,
+                  400,
                   max_length,
                   corrent_category),
               child: Container(),
@@ -297,7 +346,7 @@ class _Setting_PageState extends State<Setting_Page> {
                   draw_controller
                       .box_repository.box_model.value.init_material_thickness,
                   min_length,
-                  500,
+                  400,
                   max_length,
                   corrent_category),
               child: Container(),
@@ -316,12 +365,41 @@ class _Setting_PageState extends State<Setting_Page> {
                   draw_controller
                       .box_repository.box_model.value.init_material_thickness,
                   max_length,
-                  500,
+                  400,
                   max_length,
                   corrent_category),
               child: Container(),
             ),
           ),
+        ],
+      );
+    }
+    else if (corrent_category == "Drawer_Slides")
+     {
+
+
+      widget = Column(
+        children: [
+          Container(
+            height: 300,
+            color: Colors.grey[200],
+            child: CustomPaint(
+              painter: Drawer_Pattern_Painter(
+                  drawr_slide_units,
+                  box_slide_units,
+                  draw_controller
+                      .box_repository.box_model.value.init_material_thickness,
+                  max_length,
+                  400,
+                  max_length,
+                  corrent_category),
+              child: Container(),
+            ),
+          ),
+          SizedBox(
+            height: 32,
+          ),
+
         ],
       );
     }
@@ -341,7 +419,7 @@ class _Setting_PageState extends State<Setting_Page> {
                   draw_controller
                       .box_repository.box_model.value.init_material_thickness,
                   max_length,
-                  500,
+                  400,
                   max_length,
                   corrent_category),
               child: Container(),
@@ -369,6 +447,7 @@ class _Setting_PageState extends State<Setting_Page> {
         ],
       );
     }
+
     else
     {
       widget = Container();
@@ -427,6 +506,41 @@ class _Setting_PageState extends State<Setting_Page> {
 
   }
 
+
+  add_slide_unit(){
+
+    double value_drawer_pre_distance  =double.parse(drawer_pre_distance.text.toString());
+    double value_drawer_diameter      =double.parse(drawer_diameter    .text.toString());
+    double value_drawer_depth         =double.parse(drawer_depth       .text.toString());
+    double value_box_pre_distance     =double.parse(box_pre_distance   .text.toString());
+    double value_box_diameter         =double.parse(box_diameter       .text.toString());
+    double value_box_depth            =double.parse(box_depth          .text.toString());
+
+
+    Bore_model emety_bore=        Bore_model(Point_model(0,22,0), 0, 0);
+
+
+    Bore_model drawer_bore=          Bore_model(Point_model(0,0,0), value_drawer_diameter, value_drawer_depth);
+    Bore_model box_bore   =          Bore_model(Point_model(0,0,0), value_box_diameter, value_box_depth);
+
+    Bore_unit drawer_unit=Bore_unit(value_drawer_pre_distance , 0  ,0, emety_bore , false, 0, emety_bore,  drawer_bore  , false, false);
+    Bore_unit box_unit=Bore_unit(value_box_pre_distance , 0  ,0, emety_bore , false, 0, emety_bore,  box_bore  , false, false);
+
+
+    drawr_slide_units.add(drawer_unit);
+      box_slide_units.add(box_unit);
+
+    setState(() {
+
+    });
+    print("drawr_slide_units.length = ${drawr_slide_units.length}");
+    print("box_slide_units.length = ${box_slide_units.length}");
+
+    refresh();
+
+
+
+  }
 
 
   Widget parameter_editor() {
@@ -1891,8 +2005,598 @@ class _Setting_PageState extends State<Setting_Page> {
       );
 
     }
-    else if (corrent_category == "Doors")
+
+    else if (corrent_category == "Drawer_Slides")
     {
+
+      widget =  Padding(
+        padding: const EdgeInsets.only(left: 12.0),
+        child: Container(
+            width: 300,
+            child: ListView(
+              children: [
+
+                SizedBox(height: 70,),
+                /// pattern category
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      child: Center(
+                        child: Text(
+                          'pattern category',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 150,
+                      height: 30,
+                      child: TextFormField(
+                        controller: category_controller,
+                        style: TextStyle(fontSize: 12),
+                        onChanged: (_) {},
+                        enabled: false,
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 8,
+                ),
+
+                /// pattern name
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      child: Center(
+                        child: Text(
+                          'pattern name',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 150,
+                      height: 30,
+                      child: TextFormField(
+                        controller: name_controller,
+                        style: TextStyle(fontSize: 12),
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 8,
+                ),
+
+                /// minimum length
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'Minimum length',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: mini_distence_controller,
+                        style: TextStyle(fontSize: 12),
+                        onChanged: (_) {
+                          refresh();
+                        },
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 8,
+                ),
+
+                /// maximum length
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'Maximum length',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: max_distence_controller,
+                        style: TextStyle(fontSize: 12),
+                        onChanged: (_) {
+                          refresh();
+                        },
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                ///divider
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 2,
+                    width: 300,
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Text("Box side setting"),
+                SizedBox(
+                  height: 12,
+                ),
+                /// Pre Distance
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Center(
+                          child: Text(
+                            'Pre Distance',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: drawer_pre_distance,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                /// Diameter
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'Diameter',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: drawer_diameter,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                /// Depth
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'Depth',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: drawer_depth,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                ///divider
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 2,
+                    width: 300,
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+
+                ///Box side setting
+                Text("Drawer side setting"),
+                SizedBox(
+                  height: 12,
+                ),
+                /// Pre Distance
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Center(
+                          child: Text(
+                            'Pre Distance',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: box_pre_distance,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                /// Diameter
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'Diameter',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: box_diameter,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                /// Depth
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'Depth',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: box_depth,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                ///divider
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 2,
+                    width: 300,
+                    color: Colors.grey,
+                  ),
+                ),
+
+
+
+
+
+                /// add to pattern button
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          add_slide_unit();
+                          setState(() {});
+                        },
+                        child: Container(
+                          width: 120,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: Colors.teal[200],
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                              child: Text(
+                                'ADD TO PATTERN',
+                                style: TextStyle(fontSize: 12),
+                              )),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 8.0, right: 8, bottom: 8),
+                      child: InkWell(
+                        onTap: () {
+                          if (drawr_slide_units.length != 0) {
+                            drawr_slide_units.removeAt(drawr_slide_units.length - 1);
+                            box_slide_units.removeAt(box_slide_units.length - 1);
+                          }
+                          refresh();
+                        },
+                        child: Container(
+                          width: 50,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: Colors.teal,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                              child: Icon(
+                                Icons.undo,
+                                color: Colors.white,
+                              )),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 12,
+                ),
+
+                /// save pattern
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {
+                      save_pattern();
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          color: Colors.teal,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Center(
+                          child: Text(
+                            'save pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  height: 12,
+                ),
+
+                /// delete pattern
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {
+                      delete_pattern();
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          color: Colors.redAccent[200],
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Center(
+                          child: Text(
+                            'delete pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  height: 32,
+                ),
+              ],
+            )),
+      );
+
+    }
+
+    else if (corrent_category == "Doors") {
       widget = Padding(
         padding: const EdgeInsets.only(left: 12.0),
         child: Container(
@@ -2981,7 +3685,7 @@ class _Setting_PageState extends State<Setting_Page> {
     selected_door_pattern=1000;
 
 
-    corrent_join_pattern = JoinHolePattern('name', 150, 300, []);
+    corrent_join_pattern = JoinHolePattern('name', 150, 300, [],true);
     add_new_door=true;
       // initState();
     // refresh();
@@ -3035,13 +3739,14 @@ setState(() {
 
     list_boxes_fitting = draw_controller.box_repository.join_patterns["Box_Fitting_DRILL"]!;
     list_Drawer_face = draw_controller.box_repository.join_patterns["Drawer_Face"]!;
-    list_Drawer_Rail_Box = draw_controller.box_repository.join_patterns["Drawer_Rail_Box"]!;
-    list_Drawer_Rail_Side = draw_controller.box_repository.join_patterns["Drawer_Rail_Side"]!;
+     list_drawr_slide  = draw_controller.box_repository.join_patterns["Drawer_Rail_Box"]!;
+     list_box_slide    = draw_controller.box_repository.join_patterns["Drawer_Rail_Side"]!;
 
 
 
     list_Door_Hinges = draw_controller.box_repository.join_patterns["Door_Hinges"]!;
     list_side_Hinges = draw_controller.box_repository.join_patterns["side_Hinges"]!;
+
 
     list_Groove = draw_controller.box_repository.join_patterns["Groove"]!;
   }
@@ -3148,6 +3853,7 @@ setState(() {
 
                         boxes_fitting = true;
                         Drawer_face = false;
+                        Drawer_slide = false;
                         Doors = false;
                         corrent_paterns_list = list_boxes_fitting;
                         corrent_join_pattern_id = 0;
@@ -3179,6 +3885,7 @@ refresh();
                         corrent_setting = "Drawer face";
                         boxes_fitting = false;
                         Drawer_face = true;
+                        Drawer_slide = false;
                         Doors = false;
                         corrent_paterns_list = list_Drawer_face;
                         corrent_join_pattern_id = 0;
@@ -3202,6 +3909,38 @@ refresh();
                     ),
                   ),
 
+                  ///Drawer slide
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: InkWell(
+                      onTap: () {
+                        corrent_setting = "Drawer Slides";
+                        boxes_fitting = false;
+                        Drawer_face = false;
+                        Drawer_slide = true;
+                        Doors = false;
+                        corrent_paterns_list =list_drawr_slide;
+                        corrent_join_pattern_id = 0;
+                        corrent_category = "Drawer_Slides";
+                        refresh();
+
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: Drawer_slide ? 150 : 100,
+                        height: Drawer_slide ? 65 : 45,
+                        color:
+                        Drawer_slide ? Colors.teal[300] : Colors.grey[200],
+                        child: Center(
+                          child: Text(
+                            'Drawer Slides',
+                            style: TextStyle(fontSize: Drawer_slide ? 18 : 14),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
                   ///Doors
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -3210,6 +3949,8 @@ refresh();
                         corrent_setting = "Doors";
                         boxes_fitting = false;
                         Drawer_face = false;
+                        Drawer_slide = false;
+
                         Doors = true;
                         corrent_paterns_list = list_Door_Hinges;
                         corrent_join_pattern_id = 0;
@@ -3242,8 +3983,9 @@ refresh();
             /// join patterns list
             Column(
               children: [
+
                 Container(
-                    width: w / 8,
+                    width: 300,
                     height: h - 350,
                     color: Colors.grey[100],
                     child: Padding(
@@ -3252,45 +3994,89 @@ refresh();
                           itemCount: corrent_paterns_list.length,
                           itemBuilder: (context, i) {
                             bool corrent = (corrent_join_pattern_id == i);
+                            bool enable_pattern = corrent_paterns_list[i].pattern_enable;
                             String pattern_name = corrent_paterns_list[i].name;
 
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: () {
-                                  corrent_join_pattern = corrent_paterns_list[i];
-                                  corrent_join_pattern_id = i;
-                                  min_length = corrent_join_pattern.min_length;
-                                  max_length = corrent_join_pattern.max_length;
+                              child: Container(width: 300,
+                                child: Row(
+                                  children: [
+                                    Checkbox(value: enable_pattern, onChanged: (v){
+                                      corrent_join_pattern = corrent_paterns_list[i];
+                                      corrent_join_pattern_id = i;
+                                      min_length = corrent_join_pattern.min_length;
+                                      max_length = corrent_join_pattern.max_length;
 
-                                  name_controller.text = corrent_join_pattern.name;
-                                  mini_distence_controller.text = '$min_length';
-                                  max_distence_controller.text = '$max_length';
-                                  selected_door_pattern=i;
-                                  door_bore_units = [];
-                                  side_bore_units = [];
+                                      name_controller.text = corrent_join_pattern.name;
+                                      mini_distence_controller.text = '$min_length';
+                                      max_distence_controller.text = '$max_length';
+                                      selected_door_pattern=i;
+                                      selected_pattern=i;
+                                      door_bore_units = [];
+                                      side_bore_units = [];
 
-                                  refresh();
 
-                                  setState(() {});
-                                },
-                                child: Container(
-                                  width: corrent ? 100 : 750,
-                                  color:
-                                      corrent ? Colors.teal[300] : Colors.grey[100],
-                                  child: Center(
-                                    child: Text(
-                                      pattern_name,
-                                      style: TextStyle(fontSize: corrent ? 24 : 12),
+                                      refresh();
+
+                                      setState(() {});
+
+
+                                      if(enable_pattern){
+                                        draw_controller.disable_pattern(corrent_join_pattern ,corrent_category);
+                                      }else{
+                                        draw_controller.enable_pattern(corrent_join_pattern ,corrent_category);
+
+                                      }
+
+initState();
+setState(() {
+
+                                      });
+                                    }),
+                                    SizedBox(width: 12,),
+
+                                    InkWell(
+                                      onTap: () {
+                                        corrent_join_pattern = corrent_paterns_list[i];
+                                        corrent_join_pattern_id = i;
+                                        min_length = corrent_join_pattern.min_length;
+                                        max_length = corrent_join_pattern.max_length;
+
+                                        name_controller.text = corrent_join_pattern.name;
+                                        mini_distence_controller.text = '$min_length';
+                                        max_distence_controller.text = '$max_length';
+                                        selected_door_pattern=i;
+                                        door_bore_units = [];
+                                        side_bore_units = [];
+
+                                        refresh();
+
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        width: corrent ? 200 : 150,
+                                        color:
+                                            corrent ? Colors.teal[200] : Colors.grey[100],
+                                        child: Center(
+                                          child: Text(
+                                            pattern_name,
+                                            style: TextStyle(fontSize: corrent ? 20 : 12),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+
+                                  ],
                                 ),
                               ),
                             );
                           }),
                     )),
+
                 SizedBox(height: 32,),
 
+                /// add new pattern
                 Container(width: 65,height: 65,child: InkWell(
                   onTap: (){
                     add_new_pattern();
