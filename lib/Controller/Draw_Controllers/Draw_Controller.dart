@@ -127,8 +127,10 @@ class Draw_Controller extends GetxController {
 
       if (x_compare &&
           y_compare &&
-          p.piece_name != 'inner' &&
-          p.piece_name != 'back_panel') {
+          !p.piece_name.contains('inner'     ) &&
+          !p.piece_name.contains('back_panel') &&
+          !p.piece_name.contains('Helper')
+      ) {
         selected_id.add(i);
       }
     }
@@ -141,8 +143,12 @@ class Draw_Controller extends GetxController {
 
   select_piece(Offset offset) {
     if (hover_id != 100) {
-      if (box_repository.box_model.value.box_pieces[hover_id].piece_name !=
-          'inner') {
+      if (
+      !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('inner') &&
+      !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('Helper')
+
+      )
+      {
         if (!selected_id.contains(hover_id)) {
           selected_id.add(hover_id);
         }

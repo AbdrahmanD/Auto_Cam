@@ -271,7 +271,8 @@ class View_option extends StatelessWidget {
                             .box_repository.box_model.value.box_pieces.length,
                         itemBuilder: (context, i) {
                           if (
-                              draw_controller.box_repository.box_model.value.box_pieces[i].piece_name != 'inner'
+                              !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
+                              !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('Helper'))
                               ) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),

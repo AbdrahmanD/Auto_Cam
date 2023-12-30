@@ -512,7 +512,9 @@ center_gap=double.parse(center_gap_controller.text.toString());
                          door_direction,
                          inner_door
                        );
+                       print("up gap : ${up_gap}");
                        draw_controller.add_door(door_model);
+
                        Navigator.of(Get.overlayContext!).pop();
 
                       },

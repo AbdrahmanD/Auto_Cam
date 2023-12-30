@@ -856,8 +856,8 @@ Map<String, dynamic> toJson() {
         2 ).toStringAsFixed(1));
 
     double door_hight = double.parse((door_inner.piece_height +
-        top_thickness + base_thickness
-        - door_model.center_gap).toStringAsFixed(1));
+        top_thickness + base_thickness).toStringAsFixed(1)
+    );
 
     Point_model door_origin_1 = Point_model(
         door_inner.piece_origin.x_coordinate -
