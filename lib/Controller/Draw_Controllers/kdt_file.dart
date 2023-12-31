@@ -802,7 +802,7 @@ class kdt_file {
 
     kdt_file_content += "</KDTPanelFormat>";
 
-    extract_xml_file("${piece_model.piece_id}-${piece_model.piece_name}");
+    extract_xml_file("${piece_model.piece_id}");
 
 
   }

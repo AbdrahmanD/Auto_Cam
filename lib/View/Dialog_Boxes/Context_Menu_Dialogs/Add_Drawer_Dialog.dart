@@ -69,6 +69,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
     drawer_box_depth.text = '${400}';
     drawer_quantity.text = '${1}';
     drawer_face_material_thickness.text = '18';
+    drawer_face_material_name.text = 'MDF';
     drawer_base_material_thickness.text = '5';
     All_base_gape_controller.text = '4';
     All_top_gape_controller.text='4';

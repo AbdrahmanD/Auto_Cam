@@ -1,9 +1,10 @@
+import 'dart:math';
+
+import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
-import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
-import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
+ import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
-import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
-import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
+ import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,6 @@ class Box_model {
    List<Piece_model> box_pieces=[];
    List<Piece_model> box_deleted_pieces=[];
    int piece_id=0;
-
 
   Box_model(
       this.box_name,
@@ -49,7 +49,6 @@ class Box_model {
     { base_cabinet();}
     else if(box_type=="inner_cabinet")
     { inner_cabinet();}
-
 
 
 
@@ -100,16 +99,17 @@ Map<String, dynamic> toJson() {
   return data;
 }
 
-  String  get_id(){
+  String  get_id(String piece_name){
     piece_id++;
-    // print("piece_id : $piece_id");
-    return "$box_name-$piece_id";
+    String piece_ID= first_chart_every_word_with_random_num(piece_name);
+
+    return "${box_name}_$piece_ID";
   }
 
   wall_cabinet()
   {
     Piece_model  top_piece = Piece_model(
-        get_id(),
+        get_id("TOP"),
         'top',
         'H',
         init_material_name,
@@ -125,7 +125,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(top_piece);
 
     Piece_model  base_piece = Piece_model(
-        get_id(),
+        get_id("BASE"),
         'base',
         'H',
         init_material_name,
@@ -141,7 +141,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(base_piece);
 
     Piece_model  right_piece = Piece_model(
-        get_id(),
+        get_id("RIGHT"),
         'right',
         'V',
         init_material_name,
@@ -157,7 +157,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(right_piece);
 
     Piece_model  left_piece = Piece_model(
-        get_id(),
+        get_id("LEFT"),
         'left',
         'V',
         init_material_name,
@@ -174,7 +174,7 @@ Map<String, dynamic> toJson() {
 
     if(is_back_panel){
       Piece_model  back_panel = Piece_model(
-          get_id(),
+          get_id("BP"),
           'back_panel',
           'F',
           init_material_name,
@@ -189,7 +189,7 @@ Map<String, dynamic> toJson() {
       );
 
       Piece_model  back_panel_Helper = Piece_model(
-          get_id(),
+          get_id("Helper"),
           'back_panel_Helper',
           'F',
           init_material_name,
@@ -208,7 +208,7 @@ Map<String, dynamic> toJson() {
     }
 
     Piece_model  inner = Piece_model(
-        get_id(),
+        get_id("inner"),
         'inner_0',
         'F',
         'inner',
@@ -231,7 +231,7 @@ Map<String, dynamic> toJson() {
   base_cabinet()
   {
     Piece_model  top_piece_1 = Piece_model(
-        get_id(),
+        get_id("Top 1"),
         'top_1',
         'H',
         init_material_name,
@@ -242,7 +242,7 @@ Map<String, dynamic> toJson() {
             box_origin.y_coordinate + box_height - init_material_thickness,box_origin.z_coordinate)
         ,"inner_0");
     Piece_model  top_piece_2 = Piece_model(
-        get_id(),
+        get_id("Top 2"),
         'top_2',
         'H',
         init_material_name,
@@ -257,7 +257,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(top_piece_2);
 
     Piece_model  base_piece = Piece_model(
-        get_id(),
+        get_id("Base"),
         'base',
         'H',
         init_material_name,
@@ -270,7 +270,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(base_piece);
 
     Piece_model  right_piece = Piece_model(
-        get_id(),
+        get_id("Rught"),
         'right',
         'V',
         init_material_name,
@@ -283,7 +283,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(right_piece);
 
     Piece_model  left_piece = Piece_model(
-        get_id(),
+        get_id("Left"),
         'left',
         'V',
         init_material_name,
@@ -297,7 +297,7 @@ Map<String, dynamic> toJson() {
 
     if(is_back_panel){
       Piece_model  back_panel = Piece_model(
-          get_id(),
+          get_id("BP"),
           'back_panel',
           'F',
           init_material_name,
@@ -309,7 +309,7 @@ Map<String, dynamic> toJson() {
               ,box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
           ,"inner-0"  );
       Piece_model  back_panel_Helper = Piece_model(
-          get_id(),
+          get_id("Helper"),
           'back_panel_Helper',
           'F',
           init_material_name,
@@ -327,7 +327,7 @@ Map<String, dynamic> toJson() {
       box_pieces.add(back_panel_Helper);
     }
     Piece_model  inner = Piece_model(
-        get_id(),
+        get_id("inner"),
         'inner_0',
         'F',
         'inner',
@@ -347,7 +347,7 @@ Map<String, dynamic> toJson() {
   inner_cabinet()
   {
     Piece_model  top_piece_1 = Piece_model(
-        get_id(),
+        get_id("Top 1"),
         'top_1',
         'H',
         init_material_name,
@@ -358,7 +358,7 @@ Map<String, dynamic> toJson() {
             box_origin.y_coordinate + box_height - init_material_thickness,box_origin.z_coordinate)
         ,"inner_0");
     Piece_model  top_piece_2 = Piece_model(
-        get_id(),
+        get_id("Top 2"),
         'top_2',
         'H',
         init_material_name,
@@ -374,7 +374,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(top_piece_2);
 
     Piece_model  base_piece_1 = Piece_model(
-        get_id(),
+        get_id("Base 1"),
         'base_1',
         'H',
         init_material_name,
@@ -385,7 +385,7 @@ Map<String, dynamic> toJson() {
             box_origin.y_coordinate ,box_origin.z_coordinate+box_depth-top_base_piece_width)
         ,"inner_0");
     Piece_model  base_piece_2 = Piece_model(
-        get_id(),
+        get_id("Base 2"),
         'base_2',
         'H',
         init_material_name,
@@ -400,7 +400,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(base_piece_2);
 
     Piece_model  right_piece = Piece_model(
-        get_id(),
+        get_id("Right"),
         'right',
         'V',
         init_material_name,
@@ -413,7 +413,7 @@ Map<String, dynamic> toJson() {
     box_pieces.add(right_piece);
 
     Piece_model  left_piece = Piece_model(
-        get_id(),
+        get_id("Left"),
         'left',
         'V',
         init_material_name,
@@ -427,7 +427,7 @@ Map<String, dynamic> toJson() {
 
     if(is_back_panel){
       Piece_model  back_panel = Piece_model(
-          get_id(),
+          get_id("BP"),
           'back_panel',
           'F',
           init_material_name,
@@ -439,7 +439,7 @@ Map<String, dynamic> toJson() {
               box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
           ,"inner-0"  );
       Piece_model  back_panel_Helper = Piece_model(
-          get_id(),
+          get_id("Helper"),
           'back_panel_Helper',
           'F',
           init_material_name,
@@ -457,7 +457,7 @@ Map<String, dynamic> toJson() {
       box_pieces.add(back_panel_Helper);
     }
     Piece_model  inner = Piece_model(
-        get_id(),
+        get_id("inner"),
         'inner_0',
         'F',
         'inner',
@@ -485,7 +485,7 @@ Map<String, dynamic> toJson() {
     (box_depth -frontage_Gap));
 
     Piece_model old_inner = Piece_model(
-        get_id(),
+        get_id("inner"),
         '${box_pieces[inner].piece_name}_1',
         'F',
         'inner',
@@ -501,7 +501,7 @@ Map<String, dynamic> toJson() {
         ,"");
 
     Piece_model new_inner = Piece_model(
-      get_id(),
+      get_id("inner"),
         '${box_pieces[inner].piece_name}_2',
         'F',
         'inner',
@@ -515,8 +515,8 @@ Map<String, dynamic> toJson() {
        "");
 
     Piece_model new_piece = Piece_model(
-      get_id(),
-        '$shelf_type-${piece_id}',
+      get_id("Shelf"),
+        '$shelf_type',
        'H',
         init_material_name,
         depth_of_shelf,
@@ -591,7 +591,7 @@ Map<String, dynamic> toJson() {
     (box_depth - frontage_Gap));
 
     Piece_model old_inner = Piece_model(
-      get_id(),
+      get_id("inner"),
         '${box_pieces[inner].piece_name}_1',
         'F',
         'inner',
@@ -607,7 +607,7 @@ Map<String, dynamic> toJson() {
 
 
     Piece_model new_inner = Piece_model(
-      get_id(),
+      get_id("inner"),
         '${box_pieces[inner].piece_name}_1',
         'F',
         'inner',
@@ -627,8 +627,8 @@ Map<String, dynamic> toJson() {
 
 
     Piece_model new_piece = Piece_model(
-      get_id(),
-      helper?"HELPER": 'partition-${piece_id}',
+      get_id("Partition"),
+      helper?"HELPER": 'partition_${piece_id}',
         'V',
        init_material_name,
        correct_value( depth_of_partition),
@@ -741,7 +741,7 @@ Map<String, dynamic> toJson() {
         (door_inner.piece_origin.z_coordinate-door_model.material_thickness-2 ):
         (door_inner.piece_origin.z_coordinate)
     );
-    String id=get_id();
+    String id=get_id("Door ${door_model.direction}");
 
     Piece_model door_piece = Piece_model(
       id,
@@ -787,7 +787,7 @@ Map<String, dynamic> toJson() {
           
       );
 
-      String hid=get_id();
+      String hid=get_id("Helper");
 
       Piece_model door_Hinges_Helper = Piece_model(
         hid,
@@ -814,7 +814,7 @@ Map<String, dynamic> toJson() {
           (door_inner.piece_origin.z_coordinate)
       );
 
-      String hid=get_id();
+      String hid=get_id("Helper");
 
       Piece_model door_Hinges_Helper = Piece_model(
         hid,
@@ -885,7 +885,7 @@ Map<String, dynamic> toJson() {
     ///  ///////////////////////////////////////
 
 
-String id = get_id();
+String id = get_id("Door Left");
     Piece_model door_piece_1 = Piece_model(
      id,
         'Door_$id left',
@@ -896,7 +896,7 @@ String id = get_id();
         door_model.material_thickness,
         door_origin_1,""
          );
-    String id2 = get_id();
+    String id2 = get_id("Door Right");
     Piece_model door_piece_2 = Piece_model(
       id2,
       'Door_$id right',
@@ -951,7 +951,7 @@ String id = get_id();
     (door_inner.piece_origin.z_coordinate)
     );
 
-    String rhid=get_id();
+    String rhid=get_id("Helper");
 
     Piece_model rdoor_Hinges_Helper = Piece_model(
     rhid,
@@ -976,7 +976,7 @@ String id = get_id();
     (door_inner.piece_origin.z_coordinate)
     );
 
-    String lhid=get_id();
+    String lhid=get_id("Helper");
 
     Piece_model ldoor_Hinges_Helper = Piece_model(
     lhid,
@@ -1047,7 +1047,7 @@ String id = get_id();
 
 
         Point_model filler_origin = Point_model(x, y, z);
-        String id=get_id();
+        String id=get_id("Filler");
         Piece_model filler = Piece_model(
             id ,
             'filler_$id',
@@ -1098,7 +1098,7 @@ String id = get_id();
 
 
         Point_model filler_origin = Point_model(x, y, z);
-        String id=get_id();
+        String id=get_id("Filler");
 
         Piece_model filler = Piece_model(
             id ,
@@ -1161,7 +1161,7 @@ String id = get_id();
 
 
       Point_model filler_origin = Point_model(x, y, z);
-      String id=get_id();
+      String id=get_id("Filler");
 
       Piece_model filler = Piece_model(
           id ,
@@ -1202,6 +1202,46 @@ String id = get_id();
 
 
   }
+
+
+  String first_chart_every_word(String name){
+
+    List<String> Lbox_name=name.split(" ");
+    String nbn;
+    if (Lbox_name.length>1) {
+      String nn1=Lbox_name[0].substring(0,1);
+      String nn2=Lbox_name[1].substring(0,1);
+      nbn="$nn1$nn2";
+    }else{
+      String nn1=Lbox_name[0].substring(0,2);
+      nbn="$nn1";
+    }
+
+    return nbn;
+  }
+
+
+
+  String first_chart_every_word_with_random_num(String name){
+
+    String nbn="";
+
+    String nn=first_chart_every_word(name);
+    int n = Random().nextInt(1000);
+    if(n<10){
+      nbn="${nn}_00${n}";
+
+    }else if(n>10&&n<100){
+      nbn="${nn}_0${n}";
+
+    }else{
+      nbn="${nn}_${n}";
+
+    }
+
+    return nbn;
+  }
+
 
 
 }

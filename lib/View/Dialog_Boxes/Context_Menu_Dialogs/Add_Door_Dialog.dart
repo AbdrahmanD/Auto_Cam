@@ -55,6 +55,7 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
     down_gap_controller.text='1';
     left_gap_controller.text='1';
     center_gap_controller.text='1';
+    material_name_controller.text='MDF';
 
   }
 
@@ -512,8 +513,7 @@ center_gap=double.parse(center_gap_controller.text.toString());
                          door_direction,
                          inner_door
                        );
-                       print("up gap : ${up_gap}");
-                       draw_controller.add_door(door_model);
+                        draw_controller.add_door(door_model);
 
                        Navigator.of(Get.overlayContext!).pop();
 

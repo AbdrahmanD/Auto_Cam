@@ -82,6 +82,7 @@ flutter:
     - lib/assets/images/10u.png
     - lib/assets/images/normal.png
     - lib/assets/images/hinges.png
+    - lib/assets/images/flexible_shelf.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

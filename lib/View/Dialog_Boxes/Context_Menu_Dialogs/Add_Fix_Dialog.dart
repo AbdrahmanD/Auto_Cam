@@ -140,12 +140,7 @@ class _Add_Fix_DialogState extends State<Add_Fix_Dialog> {
                 height: 32,
                 child: TextFormField(
                   onChanged: (_) {
-                    if (fix_material_name_controller.text.toString() != '') {
-                      fix_material_name =
-                          fix_material_name_controller.text.toString();
-                    }
-                    setState(() {});
-                  },
+                   },
                   enabled: true,
                   inputFormatters: [DecimalTextInputFormatter(2)],
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -183,11 +178,7 @@ class _Add_Fix_DialogState extends State<Add_Fix_Dialog> {
                 height: 32,
                 child: TextFormField(
                   onChanged: (_) {
-                    if (filler_thickness_controller.text.toString() != '') {
-                      fix_thickness_value = double.parse(
-                          filler_thickness_controller.text.toString());
-                    }
-                    setState(() {});
+
                   },
                   enabled: true,
                   inputFormatters: [DecimalTextInputFormatter(2)],
@@ -215,8 +206,15 @@ class _Add_Fix_DialogState extends State<Add_Fix_Dialog> {
           /// add bottom
           InkWell(
               onTap: () {
+
+                fix_material_name =
+                    fix_material_name_controller.text.toString();
+                fix_thickness_value = double.parse(
+                    filler_thickness_controller.text.toString());
+
                 draw_controller.add_fix_panel(
                     fix_thickness_value, fix_material_name, corner);
+
                 Navigator.of(Get.overlayContext!).pop();
               },
               child: Container(

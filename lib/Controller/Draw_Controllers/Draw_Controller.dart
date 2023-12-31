@@ -1,5 +1,6 @@
 import 'dart:convert';
  import 'dart:io';
+import 'dart:math';
 
 import 'package:auto_cam/Controller/Draw_Controllers/AnalyzeJoins.dart';
 import 'package:auto_cam/Controller/Painters/Box_Painter.dart';
@@ -386,7 +387,7 @@ class Draw_Controller extends GetxController {
   /// add panel
   add_fix_panel(double piece_thickness, String material_name, int corner) {
 
-    String piece_id = box_repository.box_model.value.get_id();
+    String piece_id = box_repository.box_model.value.get_id("Fix Panel");
     String piece_name = "Fix_panel_$piece_id";
     double piece_width = box_repository.box_model.value.box_depth;
     late double piece_height;
@@ -843,6 +844,7 @@ if(selected_id.length==1){
 
 
     box_repository.join_patterns["Box_Fitting_DRILL"]!.clear();
+    box_repository.join_patterns["Flexible_Shelves"]!.clear();
     box_repository.join_patterns["Drawer_Face"]!.clear();
     box_repository.join_patterns["Drawer_Rail_Box"]!.clear();
     box_repository.join_patterns["Drawer_Rail_Side"]!.clear();
@@ -899,32 +901,10 @@ if(selected_id.length==1){
       }
     }
 
-    //
-    //
-    // print("Box_Fitting_DRILL= ${box_repository.join_patterns["Box_Fitting_DRILL"]!.length}");
-    // print("Drawer_Face= ${box_repository.join_patterns["Drawer_Face"]!.length}");
-    // print("Drawer_Rail_Box= ${box_repository.join_patterns["Drawer_Rail_Box"]!.length}");
-    // print("Drawer_Rail_Side= ${box_repository.join_patterns["Drawer_Rail_Side"]!.length}");
-    // print("Door_Hinges= ${box_repository.join_patterns["Door_Hinges"]!.length}");
-    // print("side_Hinges= ${box_repository.join_patterns["side_Hinges"]!.length}");
-    // print("Groove= ${box_repository.join_patterns["Groove"]!.length}");
-    //
-
 
 
   }
 
-  // Pattern_Painter draw_Pattern(List<Bore_unit> Paint_bore_units, double width,
-  //     double screen_width, double max_width) {
-  //   Pattern_Painter pattern_painter = Pattern_Painter(
-  //       Paint_bore_units,
-  //       box_repository.box_model.value.init_material_thickness,
-  //       width,
-  //       screen_width,
-  //       max_width);
-  //
-  //   return pattern_painter;
-  // }
 
   /// this only debug mode method to get information off the box pieces
   print_pieces_coordinate() {
@@ -987,6 +967,44 @@ if(selected_id.length==1){
 
   /// /// / / / PROJECT /////////////
 
+
+/// String tools
+
+  String first_chart_every_word(String name){
+
+    List<String> Lbox_name=name.split(" ");
+    String nbn;
+    if (Lbox_name.length>1) {
+      String nn1=Lbox_name[0].substring(0,1);
+      String nn2=Lbox_name[1].substring(0,1);
+      nbn="$nn1$nn2";
+    }else{
+      String nn1=Lbox_name[0].substring(0,2);
+      nbn="$nn1";
+    }
+
+    return nbn;
+  }
+
+  String first_chart_every_word_with_random_num(String name){
+
+    String nbn="";
+
+    String nn=first_chart_every_word(name);
+    int n = Random().nextInt(1000);
+    if(n<10){
+      nbn="${nn}_00${n}";
+
+    }else if(n>10&&n<100){
+      nbn="${nn}_0${n}";
+
+    }else{
+      nbn="${nn}_${n}";
+
+    }
+
+    return nbn;
+  }
 
 
 

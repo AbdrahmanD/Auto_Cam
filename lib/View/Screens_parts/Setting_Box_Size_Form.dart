@@ -55,8 +55,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
     box_model = draw_Controller.get_box();
 
-    box_name_controller.text = "test box";
-    width_controller.text = box_model.box_width.toString();
+     width_controller.text = box_model.box_width.toString();
     hight_controller.text = box_model.box_height.toString();
     depth_controller.text = box_model.box_depth.toString();
     material_thickness_controller.text =
@@ -141,7 +140,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               ),
               Container(
                 width: 140,
-                height: 26,
+                height: 50,
                 child: TextFormField(
                   style: TextStyle(fontSize: 14),
                   controller: box_name_controller,
@@ -702,8 +701,10 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                   draw_Controller.box_repository.box_model.value
                       .init_material_thickness = material_thickness_value;
 
+                 String nbn= draw_Controller.first_chart_every_word_with_random_num(box_name);
+
                   Box_model b = Box_model(
-                      box_name,
+                      nbn,
                       draw_Controller.box_type,
                       width_value,
                       hight_value,

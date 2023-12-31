@@ -89,6 +89,7 @@ project_model = draw_controller.box_repository.project_model;
             }
 
             late Line line;
+
             if (check_face_in_face((mface), (sface))) {
               line = find_center_line(sface, spiece.piece_thickness);
             }
@@ -148,13 +149,15 @@ project_model = draw_controller.box_repository.project_model;
               join_line = Join_Line(line.start_point, line.end_point, "Drawer_Face");
             }
 
+            else if ( spiece.piece_name.contains("shelf") && !spiece.piece_name.contains("fixed"))
+            {
 
-            /// Final the normal fixing method
-            ///  Box_Fitting_DRILL
+              join_line = Join_Line(line.start_point, line.end_point, "Flexible_Shelves");
+            }
+
             else
             {
-              join_line = Join_Line(
-                  line.start_point, line.end_point, "Box_Fitting_DRILL");
+              join_line = Join_Line(line.start_point, line.end_point, "Box_Fitting_DRILL");
             }
 
             if (calculate_length_of_line(line, line_axis(line)) > 0)
@@ -1167,9 +1170,12 @@ project_model = draw_controller.box_repository.project_model;
           }
           else if (face_direction == "V" || face_direction == "B")
           {
+
+
+
             Point_model new_origin = Point_model(
                 origin.x_coordinate,
-                origin.y_coordinate,
+                origin.y_coordinate-n_bore_unit.correct_y,
                 origin.z_coordinate + n_bore_unit.pre_distence);
 
             Bore_model side_bore_model =
@@ -1481,7 +1487,7 @@ if(project){
       String material_name = items[0].material_name;
       items.forEach((element) {
         names = '$names\n '
-            '${element.piece_id} -${element.piece_name}   ';
+            '${element.piece_id}';
       });
       Cut_List_Item cut_list_item = Cut_List_Item(
           names,
@@ -1493,10 +1499,6 @@ if(project){
 
       draw_controller.box_repository.cut_list_items.add(cut_list_item);
     });
-
-
-
-    print(draw_controller.box_repository.cut_list_items.length);
   }
 
   bool tow_pieces_are_same(Piece_model m_piece, Piece_model s_piece) {
