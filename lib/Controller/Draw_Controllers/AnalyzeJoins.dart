@@ -88,14 +88,31 @@ project_model = draw_controller.box_repository.project_model;
               continue;
             }
 
+
             late Line line;
+            bool is_groove=false;
+
+            if (mpiece.piece_name.contains("Helper") || spiece.piece_name.contains("Helper"))
+            {
+                if (
+              mpiece.piece_name.contains("back_panel") || spiece.piece_name.contains("back_panel")||
+                  mpiece.piece_name.contains("base_panel") || spiece.piece_name.contains("base_panel")
+              ) {
+                  is_groove=true;
+              }}
+
+
 
             if (check_face_in_face((mface), (sface))) {
-              line = find_center_line(sface, spiece.piece_thickness);
+              line = find_center_line(sface, spiece.piece_thickness,is_groove);
+
             }
             else {
               line = check_tow_face_intersected(box_model,mface, sface);
             }
+
+
+
 
             late Join_Line join_line;
 
@@ -134,7 +151,9 @@ project_model = draw_controller.box_repository.project_model;
               mpiece.piece_name.contains("back_panel") || spiece.piece_name.contains("back_panel")||
               mpiece.piece_name.contains("base_panel") || spiece.piece_name.contains("base_panel")
               ) {
+
                 join_line = Join_Line(line.start_point, line.end_point, "Groove");
+
               }
 
               /// drawer Helper
@@ -166,6 +185,8 @@ project_model = draw_controller.box_repository.project_model;
               if (join_line.join_type=="Groove") {
 
                 double width;
+                double grove_depth=draw_controller.box_repository.pack_panel_grove_depth;
+
 
                 if(mpiece.piece_name.contains("Helper")){
                   width=mpiece.piece_thickness;
@@ -177,12 +198,13 @@ project_model = draw_controller.box_repository.project_model;
                   width=draw_controller.box_repository.pack_panel_thickness;
                 }
                 mface.groves.add
-                  (Groove_model(line.start_point, line.end_point, width,
+                  (Groove_model(
+                    line.start_point, line.end_point, width,
                     draw_controller.box_repository.pack_panel_grove_depth)
                 );
 
-                print("mpiece.piece_name : ${mpiece.piece_name}");
-                print("mface.name : ${mface.name}");
+                // print("mpiece.piece_name : ${mpiece.piece_name}");
+                // print("mface.name : ${mface.name}");
 
                 mface.joines.add(join_line);
 
@@ -202,7 +224,7 @@ project_model = draw_controller.box_repository.project_model;
     add_drill_bores_to_faces(box_model);
   }
 
-  Line find_center_line(Single_Face face, double thickness) {
+  Line find_center_line(Single_Face face, double thickness,bool is_groove) {
     // print('thickness thickness thickness : $thickness');
 
     Point_model corner_1 = face.corners[0];
@@ -210,6 +232,16 @@ project_model = draw_controller.box_repository.project_model;
 
     Point_model sp = Point_model(0, 0, 0);
     Point_model ep = Point_model(0, 0, 0);
+
+    double x_correct=0;
+    double y_correct=0;
+    double z_coorect=0;
+
+    if(is_groove){
+      x_correct=draw_controller.box_repository.pack_panel_grove_depth;
+      y_correct=draw_controller.box_repository.pack_panel_grove_depth;
+      z_coorect=draw_controller.box_repository.pack_panel_grove_depth;
+    }
 
     if (face.name == 1 || face.name == 3) {
       if (((corner_1.x_coordinate - corner_3.x_coordinate).abs() - thickness) <
@@ -222,11 +254,11 @@ project_model = draw_controller.box_repository.project_model;
         ep.y_coordinate = face.corners[2].y_coordinate;
         ep.z_coordinate = face.corners[2].z_coordinate;
       } else {
-        sp.x_coordinate = face.corners[0].x_coordinate;
+        sp.x_coordinate = face.corners[0].x_coordinate-x_correct;
         sp.y_coordinate = face.corners[0].y_coordinate;
         sp.z_coordinate = face.corners[0].z_coordinate + thickness / 2;
 
-        ep.x_coordinate = face.corners[2].x_coordinate;
+        ep.x_coordinate = face.corners[2].x_coordinate+x_correct;
         ep.y_coordinate = face.corners[2].y_coordinate;
         ep.z_coordinate = face.corners[2].z_coordinate - thickness / 2;
       }
@@ -235,20 +267,20 @@ project_model = draw_controller.box_repository.project_model;
       if (((corner_3.z_coordinate - corner_1.z_coordinate).abs() - thickness) <
           1) {
         sp.x_coordinate = face.corners[0].x_coordinate;
-        sp.y_coordinate = face.corners[0].y_coordinate;
+        sp.y_coordinate = face.corners[0].y_coordinate-y_correct;
         sp.z_coordinate = face.corners[0].z_coordinate + thickness / 2;
 
         ep.x_coordinate = face.corners[2].x_coordinate;
-        ep.y_coordinate = face.corners[2].y_coordinate;
+        ep.y_coordinate = face.corners[2].y_coordinate+y_correct;
         ep.z_coordinate = face.corners[2].z_coordinate - thickness / 2;
       } else {
         sp.x_coordinate = face.corners[0].x_coordinate;
         sp.y_coordinate = face.corners[0].y_coordinate + thickness / 2;
-        sp.z_coordinate = face.corners[0].z_coordinate;
+        sp.z_coordinate = face.corners[0].z_coordinate-z_coorect;
 
         ep.x_coordinate = face.corners[2].x_coordinate;
         ep.y_coordinate = face.corners[2].y_coordinate - thickness / 2;
-        ep.z_coordinate = face.corners[2].z_coordinate;
+        ep.z_coordinate = face.corners[2].z_coordinate+z_coorect;
       }
     }
     else if (face.name == 5 || face.name == 6) {
@@ -264,12 +296,12 @@ project_model = draw_controller.box_repository.project_model;
         ep.y_coordinate = face.corners[2].y_coordinate;
         ep.z_coordinate = face.corners[2].z_coordinate;
       } else {
-        sp.x_coordinate = face.corners[0].x_coordinate;
+        sp.x_coordinate = face.corners[0].x_coordinate-x_correct;
         sp.y_coordinate = face.corners[0].y_coordinate +
             (corner_3.y_coordinate - corner_1.y_coordinate) / 2;
         sp.z_coordinate = face.corners[0].z_coordinate;
 
-        ep.x_coordinate = face.corners[2].x_coordinate;
+        ep.x_coordinate = face.corners[2].x_coordinate+z_coorect;
         ep.y_coordinate = face.corners[2].y_coordinate -
             (corner_3.y_coordinate - corner_1.y_coordinate) / 2;
         ep.z_coordinate = face.corners[2].z_coordinate;

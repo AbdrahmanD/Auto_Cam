@@ -3,7 +3,6 @@ import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
  import 'package:auto_cam/project/Project_model.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Project_Painter extends CustomPainter {
 
@@ -17,7 +16,7 @@ class Project_Painter extends CustomPainter {
    late List<List<Point_model>> corners;
 late Offset mouse_positio;
   late String view_port;
-
+late bool show_measurement;
 
 
   Project_Painter(
@@ -28,7 +27,8 @@ late Offset mouse_positio;
       this.selected_id,
       this.view_port,
        this.corners,
-      this.mouse_positio
+      this.mouse_positio,
+      this.show_measurement
 
       )
   {
@@ -56,6 +56,80 @@ late Offset mouse_positio;
          draw_box(canvas,b,size,false,false);
 
        }
+
+      Paint mesure_painter = Paint()
+        ..strokeWidth = 2
+        ..style = PaintingStyle.stroke
+        ..color = Colors.blue;
+
+Color color = Colors.deepOrangeAccent;
+
+      if (show_measurement) {
+        if (view_port!="R") {
+        
+        draw_text(canvas, "${b.box_width}", Offset(
+            b.box_origin.x_coordinate*drawing_scale+size.width/2+(b.box_width/2-100)*drawing_scale,
+            b.box_origin.y_coordinate*drawing_scale+size.height/2+25
+        ), 40*drawing_scale, 12,color);
+        
+        
+        
+           canvas.drawLine(
+               Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2,
+                   b.box_origin.y_coordinate*drawing_scale+size.height/2+20),
+               Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2+b.box_width*drawing_scale,
+                   b.box_origin.y_coordinate*drawing_scale+size.height/2+20),
+               mesure_painter);
+        
+                 canvas.drawLine(
+              Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2,
+                  b.box_origin.y_coordinate*drawing_scale+size.height/2+5),
+              Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2,
+                  b.box_origin.y_coordinate*drawing_scale+size.height/2+35),
+                     mesure_painter);
+        
+                 canvas.drawLine(
+              Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2+b.box_width*drawing_scale,
+                  b.box_origin.y_coordinate*drawing_scale+size.height/2+5),
+              Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2+b.box_width*drawing_scale,
+                  b.box_origin.y_coordinate*drawing_scale+size.height/2+35),
+                     mesure_painter);
+        
+        
+         }
+        if (view_port!="T") {
+        
+        
+        
+           canvas.drawLine(
+               Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2+b.box_width*drawing_scale/2,
+                   b.box_origin.y_coordinate*drawing_scale+size.height/2),
+               Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2+b.box_width*drawing_scale/2,
+                   b.box_origin.y_coordinate*drawing_scale+size.height/2-b.box_height*drawing_scale),
+               mesure_painter);
+        
+                 canvas.drawLine(
+              Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2+b.box_width*drawing_scale/2-50*drawing_scale,
+                  b.box_origin.y_coordinate*drawing_scale+size.height/2),
+                     Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2+b.box_width*drawing_scale/2+50*drawing_scale,
+                  b.box_origin.y_coordinate*drawing_scale+size.height/2),
+                     mesure_painter);
+        
+                 canvas.drawLine(
+                     Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2+b.box_width*drawing_scale/2-50*drawing_scale,
+                  b.box_origin.y_coordinate*drawing_scale+size.height/2-b.box_height*drawing_scale),
+                     Offset(b.box_origin.x_coordinate*drawing_scale+size.width/2+b.box_width*drawing_scale/2+50*drawing_scale,
+                  b.box_origin.y_coordinate*drawing_scale+size.height/2-b.box_height*drawing_scale),
+                     mesure_painter);
+        
+           draw_text(canvas, "${b.box_height}", Offset(
+               b.box_origin.x_coordinate*drawing_scale+size.width/2+(b.box_width/2-80)*drawing_scale,
+               b.box_origin.y_coordinate*drawing_scale+size.height/2-(b.box_height/2)*drawing_scale
+           ), 40*drawing_scale, 12,color);
+        
+        
+        }
+      }
 
 
     }
@@ -162,27 +236,24 @@ late Offset mouse_positio;
       }
       else if(view_port=='R'){
 
-        path.moveTo( (p2.z_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p2.y_coordinate )* drawing_scale);
-        path.lineTo( (p6.z_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p6.y_coordinate )* drawing_scale);
-        path.lineTo( (p7.z_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p7.y_coordinate )* drawing_scale);
-        path.lineTo( (p3.z_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p3.y_coordinate )* drawing_scale);
-        path.lineTo( (p2.z_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p2.y_coordinate )* drawing_scale);
+        path.moveTo( (p2.z_coordinate  + box_model.box_origin.z_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p2.y_coordinate )* drawing_scale);
+        path.lineTo( (p6.z_coordinate  + box_model.box_origin.z_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p6.y_coordinate )* drawing_scale);
+        path.lineTo( (p7.z_coordinate  + box_model.box_origin.z_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p7.y_coordinate )* drawing_scale);
+        path.lineTo( (p3.z_coordinate  + box_model.box_origin.z_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p3.y_coordinate )* drawing_scale);
+        path.lineTo( (p2.z_coordinate  + box_model.box_origin.z_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p2.y_coordinate )* drawing_scale);
 
 
       }
-
 
       else if(view_port=='T'){
 
-        path.moveTo((p1.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p1.z_coordinate) * drawing_scale);
-        path.lineTo((p2.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p2.z_coordinate) * drawing_scale);
-        path.lineTo((p6.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p6.z_coordinate) * drawing_scale);
-        path.lineTo((p5.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p5.z_coordinate) * drawing_scale);
-        path.lineTo((p1.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.y_coordinate - p1.z_coordinate) * drawing_scale);
+        path.moveTo((p1.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.z_coordinate - p1.z_coordinate) * drawing_scale);
+        path.lineTo((p2.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.z_coordinate - p2.z_coordinate) * drawing_scale);
+        path.lineTo((p6.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.z_coordinate - p6.z_coordinate) * drawing_scale);
+        path.lineTo((p5.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.z_coordinate - p5.z_coordinate) * drawing_scale);
+        path.lineTo((p1.x_coordinate  + box_model.box_origin.x_coordinate)* drawing_scale+w,h+( box_model.box_origin.z_coordinate - p1.z_coordinate) * drawing_scale);
 
       }
-
-
 
 
       if (selected) {
@@ -191,7 +262,8 @@ late Offset mouse_positio;
           canvas.drawPath(path, line_painter);
 
 
-       } else if (hover) {
+       }
+      else if (hover) {
 
         canvas.drawPath(path, hovered_pieces_filler);
         canvas.drawPath(path, line_painter);
@@ -212,17 +284,15 @@ late Offset mouse_positio;
 
       }
 
-
-
-
-
-
     }
+
+
+
   }
 
-  draw_text(Canvas c, String text, Offset offset, double t_size , int my_text_size) {
+  draw_text(Canvas c, String text, Offset offset, double t_size , int my_text_size , Color color) {
     TextSpan ts = TextSpan(
-        text: text, style: TextStyle(fontSize: t_size/10*my_text_size, color: Colors.black));
+        text: text, style: TextStyle(fontSize: t_size/10*my_text_size, color: color));
     TextPainter tp = TextPainter(text: ts, textDirection: TextDirection.ltr);
     tp.layout();
 

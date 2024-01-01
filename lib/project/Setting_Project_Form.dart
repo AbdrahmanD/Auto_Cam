@@ -24,7 +24,7 @@ class _Setting_Project_FormState extends State<Setting_Project_Form> {
 
   late Box_model box_model;
 
-  bool is_back_panel=true;
+  bool show_measurement=true;
 
   GlobalKey<FormState> form_key = GlobalKey();
 
@@ -57,6 +57,7 @@ class _Setting_Project_FormState extends State<Setting_Project_Form> {
   Widget build(BuildContext context) {
 
 
+    project_controller.show_measurement=show_measurement;
     return Form(
       key: form_key,
       child: Padding(
@@ -416,6 +417,32 @@ class _Setting_Project_FormState extends State<Setting_Project_Form> {
                 ],
               ),
             ),
+
+            SizedBox(height: 100,),
+
+            Container(
+              child: Row(
+                children: [
+                  SizedBox(width: 18),
+                  Container(
+                      width: 180,
+                      child: Text('show measurement',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ))),
+                  SizedBox(
+                    width: 18,
+                  ),
+                  Checkbox(
+                      value: show_measurement,
+                      onChanged: (v) {
+                        show_measurement = !show_measurement;
+                        setState(() {});
+                      })
+                ],
+              ),
+            ),
+
 
           ],
         ),

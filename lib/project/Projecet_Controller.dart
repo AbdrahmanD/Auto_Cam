@@ -32,6 +32,7 @@ class Project_Controller extends GetxController {
   RxString my_print="my_print".obs;
 
 
+  bool show_measurement=true;
   List<List<Point_model>> corners = [];
   List<Point_model> selected_box_corners = [];
   List<Point_model> all_corners = [];
@@ -263,6 +264,12 @@ class Project_Controller extends GetxController {
               .y_coordinate =
           (mouse_position.value.dy / drawing_scale.value) -
               (screen_size.value.height / drawing_scale.value) / 2;
+
+      box_repository
+          .project_model
+          .boxes[box_repository.project_model.boxes.length - 1]
+          .box_origin
+          .z_coordinate =0;
     }
 
     hovered_Box();
@@ -274,7 +281,8 @@ class Project_Controller extends GetxController {
         selected_id.value,
         view_port.value,
         corners,
-        mouse_position.value);
+        mouse_position.value,
+    show_measurement);
 
     snap_to_box();
 
