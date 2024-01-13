@@ -4,6 +4,7 @@ import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
 import 'package:auto_cam/Controller/nesting/Nesting_Pieces.dart';
 import 'package:auto_cam/Controller/nesting/Neting_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
+import 'package:auto_cam/Model/Main_Models/Cut_List_Item.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
@@ -69,12 +70,12 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
         '${draw_Controller.box_repository.pack_panel_distence}';
     top_base_piece_width_controller.text =
         '${draw_Controller.box_repository.top_base_piece_width}';
-  }
+   }
+
 
   @override
   Widget build(BuildContext context) {
 
-    Neting_Controller nesting_controller = Get.find();
 
     return Form(
       key: form_key,
@@ -720,6 +721,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
                   draw_Controller.add_Box(b);
 
+
                 }
               },
               child: Container(
@@ -777,9 +779,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             ),
           ),
 
-          SizedBox(
-            height: 12,
-          ),
 
           ///preview Nesting sheets
           // Container(
@@ -845,6 +844,17 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               ],
             ),
           ),
+
+          SizedBox(
+            height: 12,
+          ),
+
+
+
+          SizedBox(
+            height: 24,
+          ),
+
         ],
       ),
     );

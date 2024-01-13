@@ -29,12 +29,13 @@ class _Piece_List_viewState extends State<Piece_List_view> {
     this.project = project;
 
     if (project) {
-      for (int i = 0; i < project_controller.box_repository.project_model.boxes.length;i++) {
-
-        for (int p = 0;p < project_controller.box_repository.project_model.boxes[i].box_pieces.length; p++) {
-
-          pieces.add(project_controller.box_repository.project_model.boxes[i].box_pieces[p]);
-
+      for (int i = 0; i <
+          project_controller.box_repository.project_model.boxes.length; i++) {
+        for (int p = 0; p <
+            project_controller.box_repository.project_model.boxes[i].box_pieces
+                .length; p++) {
+          pieces.add(project_controller.box_repository.project_model.boxes[i]
+              .box_pieces[p]);
         }
       }
     }
@@ -44,6 +45,143 @@ class _Piece_List_viewState extends State<Piece_List_view> {
 
     print(pieces.length);
   }
+
+  TextEditingController quantity_controller = TextEditingController();
+
+
+  Widget quantity_dialog() {
+    Widget widget = Container(width: 400, height: 300,
+      child:
+      Column(
+        children: [
+          SizedBox(height: 32,),
+
+          Text("add the quantity of this item or project",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 24,),
+          Row(mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Quantity : ",
+                style: TextStyle(fontSize: 16),
+              ),
+              Container(width: 200,
+                child: TextFormField(
+                  style: TextStyle(fontSize: 14),
+                  controller: quantity_controller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  validator: (d) {
+                    if (d!.isEmpty) {
+                      return 'please add value';
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 24,),
+
+          InkWell(
+            onTap: () {
+              int quantity = double.parse(quantity_controller.text.toString())
+                  .toInt();
+              Excel_Controller my_excel = Excel_Controller();
+              my_excel.create_excel(quantity);
+              Navigator.of(Get.overlayContext!).pop();
+            },
+            child: Container(width: 200,
+              height: 65,
+              color: Colors.teal[200],
+              child: Center(child:
+              Text("Export Excel file",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+
+              )),),
+          )
+
+        ],
+      ),
+
+    );
+
+
+    return widget;
+  }
+
+
+  double material_size_1 = 0;
+  double material_size_2 = 0;
+  double material_size_3 = 0;
+
+
+  double material_thickness_1 = 0;
+  double material_thickness_2 = 0;
+  double material_thickness_3 = 0;
+
+  @override
+  void initState() {
+    calc_size();
+  }
+
+  calc_size() async {
+
+    material_size_1 = 0;
+    material_size_2 = 0;
+    material_size_3 = 0;
+
+
+
+    List<Cut_List_Item> p = await draw_controller.box_repository.cut_list_items;
+
+    material_thickness_1=p[0].material_thickness;
+
+    for(int i=1;i<p.length;i++){
+      if(
+      material_thickness_2==0 &&
+          p[i].material_thickness!=material_thickness_1
+      ){
+        material_thickness_2=p[i].material_thickness;
+      }
+      else
+        if(
+        material_thickness_3==0 &&
+          p[i].material_thickness!=material_thickness_1 &&
+          p[i].material_thickness!=material_thickness_2
+        )
+      {
+        material_thickness_3=p[i].material_thickness;
+
+      }
+
+    }
+
+
+    for(int i=0;i<p.length;i++){
+
+      double value=double.parse(((p[i].width/1000)*(p[i].hight/1000)*(p[i].quantity)).toStringAsFixed(2));
+
+      if(material_thickness_1==p[i].material_thickness){
+        material_size_1+=value;
+      }else if(material_thickness_2==p[i].material_thickness){
+        material_size_2+=value;
+
+      }else if(material_thickness_3==p[i].material_thickness){
+        material_size_3+=value;
+      }
+
+
+    }
+    setState(() {
+
+    });
+
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +198,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
         child: Row(
           children: [
             Container(
-              width: 300,
+              width: 250,
               color: Colors.grey[300],
               child: Column(
                 children: [
@@ -80,8 +218,8 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                               'to delete any piece from the \n cut list : un check it'))),
                   Padding(
                     padding: const EdgeInsets.only(left: 18.0),
-                    child: Container(color:Colors.grey[200],
-                        height: h - 400,
+                    child: Container(color:Colors.grey[100],
+                        height: 350,
                         child: project
                             ?
 
@@ -159,7 +297,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                           width: 18,
                         ),
                         Container(
-                            width: 180,
+                            width: 150,
                             child: Text('Export XML files',
                                 style: TextStyle(
                                   fontSize: 14,
@@ -179,6 +317,8 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                       ],
                     ),
                   ),
+
+
                   SizedBox(
                     height: 12,
                   ),
@@ -192,7 +332,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                           width: 18,
                         ),
                         Container(
-                            width: 180,
+                            width: 150,
                             child: Text('Export cut list as excel ',
                                 style: TextStyle(
                                   fontSize: 14,
@@ -200,16 +340,21 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                         SizedBox(
                           width: 18,
                         ),
-                        InkWell(
-                            onTap: () {
-                              Excel_Controller my_excel = Excel_Controller();
-                              my_excel.create_excel();
-                            },
-                            child: Icon(
-                              Icons.file_open_rounded,
-                              size: 24,
-                              color: Colors.teal,
-                            )),
+                        Container(
+                          child: InkWell(
+                              onTap: () {
+                                // Excel_Controller my_excel = Excel_Controller();
+                                // my_excel.create_excel();
+                                Get.dialog(Dialog(
+                                    child:quantity_dialog()));
+
+                              },
+                              child: Icon(
+                                Icons.file_open_rounded,
+                                size: 24,
+                                color: Colors.teal,
+                              )),
+                        ),
                       ],
                     ),
                   ),
@@ -229,7 +374,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                           width: 18,
                         ),
                         Container(
-                            width: 180,
+                            width: 150,
                             child: Text('Details sheets as   PDF ',
                                 style: TextStyle(
                                   fontSize: 14,
@@ -248,7 +393,100 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                     ),
                   ),
 
+                  SizedBox(
+                    height: 12,
+                  ),
 
+                  /// size 1
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 18,
+                      ),
+                      Text(
+                        "${material_thickness_1} mm  :",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        "${material_size_1}",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+
+                      Text(
+                        "m2",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(
+                    height: 12,
+                  ),
+
+                  /// size 2
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 18,
+                      ),
+                      Text(
+                        "${material_thickness_2} mm  :",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        "${material_size_2}",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+
+                      Text(
+                        "m2",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+
+                  /// size 3
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 18,
+                      ),
+                      Text(
+                        "${material_thickness_3} mm  :",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        "${material_size_3}",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+
+                      Text(
+                        "m2",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
 
 
                 ],
@@ -258,7 +496,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
               width: 12,
             ),
             Container(
-              width: 600,
+              width: 550,
               color: Colors.grey[300],
               child: ListView.builder(
                   itemCount: pieces.length,
@@ -294,16 +532,16 @@ class _Piece_List_viewState extends State<Piece_List_view> {
               width: 12,
             ),
             Container(
-                width: 486,
+                width: 450,
                 color: Colors.grey[300],
                 child: Column(
                   children: [
                     SizedBox(
                       height: 12,
                     ),
-                    Container(width: 486, height: 2, color: Colors.black),
+                    Container(width: 450, height: 2, color: Colors.black),
                     Container(
-                      width: 486,
+                      width: 450,
                       height: 36,
                       color: Colors.white,
                       child:
@@ -322,7 +560,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                           ),
                           Container(width: 2, height: 36, color: Colors.black),
                           Container(
-                            width: 140,
+                            width: 100,
                             child: Center(
                                 child: Text(
                               "Name",
@@ -390,7 +628,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                         ],
                       ),
                     ),
-                    Container(width: 486, height: 2, color: Colors.black),
+                    Container(width: 450, height: 2, color: Colors.black),
                     Container(
                       width: 486,
                       height: h - 300,
@@ -406,7 +644,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                             return Column(
                               children: [
                                 Container(
-                                  width: 486,
+                                  width: 450,
                                   // height: 36,
                                   color: Colors.white,
                                   child: Row(
@@ -416,7 +654,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                           child: Center(
                                               child: Text("${index + 1}"))),
                                       Container(
-                                          width: 140,
+                                          width: 120,
                                           child: Center(
                                               child:
                                               Text("${p.pieces_names}"))),
@@ -446,7 +684,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                   ),
                                 ),
                                 Container(
-                                    width: 486, height: 2, color: Colors.black),
+                                    width: 450, height: 2, color: Colors.black),
                               ],
                             );
                           })
@@ -461,3 +699,4 @@ class _Piece_List_viewState extends State<Piece_List_view> {
     );
   }
 }
+

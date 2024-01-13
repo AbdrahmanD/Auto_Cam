@@ -1,6 +1,8 @@
 import 'package:auto_cam/View/Main_Screen.dart';
+import 'package:auto_cam/View/View_Active_port.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 
 class Splash_Screen extends StatefulWidget {
@@ -11,15 +13,21 @@ class Splash_Screen extends StatefulWidget {
 }
 
 class _Splash_ScreenState extends State<Splash_Screen> {
+
+
+
+
   @override
   void initState() {
-
     Future.delayed(Duration(seconds: 3)).then((value) {
-      Get.offAll(Main_Screen());
+        Get.offAll(Main_Screen());
+
     });
     // TODO: implement initState
     super.initState();
   }
+
+
   @override
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;

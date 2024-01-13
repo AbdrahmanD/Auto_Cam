@@ -1,7 +1,6 @@
 import 'dart:math';
 
-import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
-import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
+ import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
  import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
  import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
@@ -44,9 +43,14 @@ class Box_model {
 
   {
     if(box_type=="wall_cabinet")
-      { wall_cabinet();}
+    { wall_cabinet();}
+
     else if(box_type=="base_cabinet")
     { base_cabinet();}
+
+    else if(box_type=="sink_cabinet")
+    { sink_cabinet();}
+
     else if(box_type=="inner_cabinet")
     { inner_cabinet();}
 
@@ -228,8 +232,7 @@ Map<String, dynamic> toJson() {
 
   }
 
-  base_cabinet()
-  {
+  base_cabinet() {
     Piece_model  top_piece_1 = Piece_model(
         get_id("Top 1"),
         'top_1',
@@ -315,6 +318,125 @@ Map<String, dynamic> toJson() {
           init_material_name,
           correct_value(box_width-2*init_material_thickness),
           correct_value(box_height-2*init_material_thickness),
+          correct_value(back_panel_thickness),
+          Point_model(
+              correct_value( box_origin.x_coordinate+init_material_thickness),
+              correct_value( box_origin.y_coordinate+init_material_thickness ),
+              correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+          )
+          ,"inner-0");
+
+      box_pieces.add(back_panel);
+      box_pieces.add(back_panel_Helper);
+    }
+    Piece_model  inner = Piece_model(
+        get_id("inner"),
+        'inner_0',
+        'F',
+        'inner',
+        box_width-2*init_material_thickness,
+        box_height-2*init_material_thickness,
+        (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth),
+
+        Point_model(box_origin.x_coordinate+init_material_thickness,
+            box_origin.y_coordinate+init_material_thickness ,
+            box_origin.z_coordinate)
+        ,"" );
+    box_pieces.add(inner);
+
+  }
+
+
+  sink_cabinet() {
+
+    Piece_model  top_piece_1 = Piece_model(
+        get_id("Top 1"),
+        'top_1',
+        'H',
+        init_material_name,
+        top_base_piece_width,
+        box_width - 2 * init_material_thickness,
+        init_material_thickness,
+        Point_model(box_origin.x_coordinate + init_material_thickness,
+            box_origin.y_coordinate + box_height - init_material_thickness,box_origin.z_coordinate)
+        ,"inner_0");
+
+    double back_distance=bac_panel_distence+back_panel_thickness/2+init_material_thickness/2;
+    Piece_model  top_piece_2 = Piece_model(
+        get_id("Top 2"),
+        'top_2',
+        'F',
+        init_material_name,
+        box_width - 2 * init_material_thickness,
+        top_base_piece_width,
+        init_material_thickness,
+        Point_model(box_origin.x_coordinate + init_material_thickness,
+            box_origin.y_coordinate + box_height -top_base_piece_width,
+            box_origin.z_coordinate+box_depth-back_distance)
+        ,"inner_0");
+
+    box_pieces.add(top_piece_1);
+    box_pieces.add(top_piece_2);
+
+    Piece_model  base_piece = Piece_model(
+        get_id("Base"),
+        'base',
+        'H',
+        init_material_name,
+        box_depth,
+        box_width - 2 * init_material_thickness,
+        init_material_thickness,
+        Point_model(box_origin.x_coordinate + init_material_thickness,
+            box_origin.y_coordinate ,box_origin.z_coordinate)
+        ,"inner_0");
+    box_pieces.add(base_piece);
+
+    Piece_model  right_piece = Piece_model(
+        get_id("Rught"),
+        'right',
+        'V',
+        init_material_name,
+        box_depth,
+        box_height,
+        init_material_thickness,
+        Point_model(box_origin.x_coordinate+box_width - init_material_thickness,
+            box_origin.y_coordinate ,box_origin.z_coordinate)
+        ,"inner_0");
+    box_pieces.add(right_piece);
+
+    Piece_model  left_piece = Piece_model(
+        get_id("Left"),
+        'left',
+        'V',
+        init_material_name,
+        box_depth,
+        box_height,
+        init_material_thickness,
+        Point_model(box_origin.x_coordinate,
+            box_origin.y_coordinate ,box_origin.z_coordinate)
+        ,"inner_0");
+    box_pieces.add(left_piece);
+
+    if(is_back_panel){
+      Piece_model  back_panel = Piece_model(
+          get_id("BP"),
+          'back_panel',
+          'F',
+          init_material_name,
+          box_width-2*init_material_thickness+2*grove_value-1,
+          box_height-top_base_piece_width- init_material_thickness+2*grove_value-1,
+          back_panel_thickness,
+          Point_model(box_origin.x_coordinate+init_material_thickness-grove_value+1,
+              box_origin.y_coordinate+init_material_thickness-grove_value+1
+              ,box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+          ,"inner-0"  );
+      Piece_model  back_panel_Helper = Piece_model(
+          get_id("Helper"),
+          'back_panel_Helper',
+          'F',
+          init_material_name,
+          correct_value(box_width-2*init_material_thickness),
+          correct_value(box_height- init_material_thickness-top_base_piece_width),
           correct_value(back_panel_thickness),
           Point_model(
               correct_value( box_origin.x_coordinate+init_material_thickness),
@@ -745,7 +867,7 @@ Map<String, dynamic> toJson() {
 
     Piece_model door_piece = Piece_model(
       id,
-        (door_model.direction=="R")?('Door_right_$id'):('Door_left_$id'),
+        (door_model.direction=="R")?('Door right'):('Door left'),
         'F',
         door_model.material_name,
         door_width,
@@ -888,7 +1010,7 @@ Map<String, dynamic> toJson() {
 String id = get_id("Door Left");
     Piece_model door_piece_1 = Piece_model(
      id,
-        'Door_$id left',
+        'Door left',
         'F',
         door_model.material_name,
         door_width,
@@ -899,7 +1021,7 @@ String id = get_id("Door Left");
     String id2 = get_id("Door Right");
     Piece_model door_piece_2 = Piece_model(
       id2,
-      'Door_$id right',
+      'Door right',
         'F',
         door_model.material_name,
         door_width,

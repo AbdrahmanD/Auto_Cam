@@ -96,10 +96,10 @@ late Offset start_select_window;
       ..style = PaintingStyle.fill
       ..color = Colors.teal[100]!;
 
-    Paint helper_filler = Paint()
-      ..style = PaintingStyle.fill
-      ..color = Colors.grey[400]!
-    ..blendMode=BlendMode.darken;
+    // Paint helper_filler = Paint()
+    //   ..style = PaintingStyle.fill
+    //   ..color = Colors.grey[400]!
+    // ..blendMode=BlendMode.darken;
 
     Paint doors_filler = Paint()
       ..style = PaintingStyle.fill
@@ -184,7 +184,7 @@ late Offset start_select_window;
       }
 
       if(piece_model.piece_name.contains("Helper")){
-        canvas.drawPath(path, helper_filler);
+        // canvas.drawPath(path, helper_filler);
       }
       else if(piece_model.piece_name.contains('Door')){
         canvas.drawPath(path, doors_filler);

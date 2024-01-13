@@ -1,3 +1,4 @@
+import 'package:auto_cam/Controller/Active_controller.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
@@ -15,6 +16,7 @@ class MY_Binding extends Bindings{
    Get.lazyPut(()=> Draw_Controller());
    Get.lazyPut(()=> Neting_Controller());
    Get.lazyPut(()=> Project_Controller());
+   Get.lazyPut(()=> Active_controller());
 
 
   }

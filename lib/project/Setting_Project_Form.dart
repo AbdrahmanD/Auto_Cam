@@ -152,85 +152,85 @@ class _Setting_Project_FormState extends State<Setting_Project_Form> {
             ),
 
 
-            ///date
-            Row(
-              children: [
-
-
-                Text(' Date   : s'),
-                SizedBox(
-                  width: 12,
-                ),
-                Container(
-                  width: 150,
-                  height: 26,
-                  child: Text('12-2-2023')),
-
-              ],
-            ),
-            SizedBox(
-              height: 24,
-            ),
-
-            ///project description
-            SizedBox(
-              width: 16,
-            ),
-            Text('project description:'),
-            SizedBox(
-              height: 12,
-            ),
-            Container(
-              width: 140,
-              // height: 26,
-              child: TextFormField(  style: TextStyle(fontSize: 14),
-                controller: project_description_controller,minLines: 1,maxLines: 3,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                validator: (d) {
-                  if (d!.isEmpty) {
-                    return 'please add value';
-                  }
-                },
-
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-
-            ///project note
-            SizedBox(
-              width: 16,
-            ),
-            Text(' project note  :'),
-            SizedBox(
-              height: 12,
-            ),
-            Container(
-              width: 100,
-              // height: 26,
-              child: TextFormField(  style: TextStyle(fontSize: 14),
-                controller: project_note_controller,minLines: 2,maxLines: 5,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                validator: (d) {
-                  if (d!.isEmpty) {
-                    return 'please add value';
-                  }
-                },
-
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
+            // ///date
+            // Row(
+            //   children: [
+            //
+            //
+            //     Text(' Date   : s'),
+            //     SizedBox(
+            //       width: 12,
+            //     ),
+            //     Container(
+            //       width: 150,
+            //       height: 26,
+            //       child: Text('12-2-2023')),
+            //
+            //   ],
+            // ),
+            // SizedBox(
+            //   height: 24,
+            // ),
+            //
+            // ///project description
+            // SizedBox(
+            //   width: 16,
+            // ),
+            // Text('project description:'),
+            // SizedBox(
+            //   height: 12,
+            // ),
+            // Container(
+            //   width: 140,
+            //   // height: 26,
+            //   child: TextFormField(  style: TextStyle(fontSize: 14),
+            //     controller: project_description_controller,minLines: 1,maxLines: 3,
+            //     decoration: InputDecoration(
+            //       border: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(8),
+            //       ),
+            //     ),
+            //     validator: (d) {
+            //       if (d!.isEmpty) {
+            //         return 'please add value';
+            //       }
+            //     },
+            //
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 12,
+            // ),
+            //
+            // ///project note
+            // SizedBox(
+            //   width: 16,
+            // ),
+            // Text(' project note  :'),
+            // SizedBox(
+            //   height: 12,
+            // ),
+            // Container(
+            //   width: 100,
+            //   // height: 26,
+            //   child: TextFormField(  style: TextStyle(fontSize: 14),
+            //     controller: project_note_controller,minLines: 2,maxLines: 5,
+            //     decoration: InputDecoration(
+            //       border: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(8),
+            //       ),
+            //     ),
+            //     validator: (d) {
+            //       if (d!.isEmpty) {
+            //         return 'please add value';
+            //       }
+            //     },
+            //
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 12,
+            // ),
 
 
 

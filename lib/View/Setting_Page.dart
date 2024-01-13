@@ -333,8 +333,8 @@ if(corrent_category=="Drawer_Slides"){
       widget = Column(
         children: [
           Container(
-            height: 350,
-            color: Colors.grey[200],
+            height: 300,width: 400,
+            // color: Colors.grey[200],
             child: CustomPaint(
               painter: Pattern_Painter(
                   Paint_bore_units_min,
@@ -351,8 +351,8 @@ if(corrent_category=="Drawer_Slides"){
             height: 32,
           ),
           Container(
-            height: 400,
-            color: Colors.grey[200],
+            height: 300,width: 400,
+            // color: Colors.grey[200],
             child: CustomPaint(
               painter: Pattern_Painter(
                   Paint_bore_units_max,
@@ -374,7 +374,7 @@ if(corrent_category=="Drawer_Slides"){
       widget = Column(
         children: [
           ///photo
-          Container( height: 370,
+          Container( height: 270,
             child: Image.asset("lib/assets/images/flexible_shelf.png"),),
 
           ///divider
@@ -413,8 +413,8 @@ if(corrent_category=="Drawer_Slides"){
       widget = Column(
         children: [
           Container(
-            height: 400,
-            color: Colors.grey[200],
+            height: 300,width: 350,
+            // color: Colors.grey[200],
             child: CustomPaint(
               painter: Pattern_Painter(
                   Paint_bore_units_min,
@@ -432,8 +432,8 @@ if(corrent_category=="Drawer_Slides"){
             height: 32,
           ),
           Container(
-            height: 400,
-            color: Colors.grey[200],
+            height: 300,width: 350,
+            // color: Colors.grey[200],
             child: CustomPaint(
               painter: Pattern_Painter(
                   Paint_bore_units_max,
@@ -4544,70 +4544,70 @@ setState(() {
         child: Container(
           child: Row(children: [
             /// main chois : cnc tool setting \ kd fitting patterns
-            Container(
-              width: w / 10,
-              height: h - 50,
-              color: Colors.grey[300],
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 70,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: InkWell(
-                      onTap: () {
-                        corrent_setting = "KD patters setting";
-                        kd_patterns_setting = true;
-                        cnc_tool_setting = false;
-                        setState(() {});
-                      },
-                      child: Container(
-                        width: kd_patterns_setting ? 150 : 100,
-                        height: kd_patterns_setting ? 65 : 45,
-                        color: kd_patterns_setting
-                            ? Colors.teal[300]
-                            : Colors.grey,
-                        child: Center(
-                          child: Text(
-                            'KD patterns',
-                            style: TextStyle(
-                                fontSize: kd_patterns_setting ? 18 : 12),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: InkWell(
-                      onTap: () {
-                        // corrent_setting="cnc tool setting";
-                        // kd_patterns_setting=false;
-                        // cnc_tool_setting=true;
-                        // setState(() {
-                        //
-                        // });
-                      },
-                      child: Container(
-                        width: cnc_tool_setting ? 150 : 100,
-                        height: cnc_tool_setting ? 65 : 45,
-                        color: cnc_tool_setting
-                            ? Colors.teal[300]
-                            : Colors.grey[300],
-                        child: Center(
-                          child: Text(
-                            'cnc tools',
-                            style:
-                                TextStyle(fontSize: cnc_tool_setting ? 22 : 12),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   width: w / 10,
+            //   height: h - 50,
+            //   color: Colors.grey[300],
+            //   child: Column(
+            //     children: [
+            //       SizedBox(
+            //         height: 70,
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.all(16.0),
+            //         child: InkWell(
+            //           onTap: () {
+            //             corrent_setting = "KD patters setting";
+            //             kd_patterns_setting = true;
+            //             cnc_tool_setting = false;
+            //             setState(() {});
+            //           },
+            //           child: Container(
+            //             width: kd_patterns_setting ? 150 : 100,
+            //             height: kd_patterns_setting ? 65 : 45,
+            //             color: kd_patterns_setting
+            //                 ? Colors.teal[300]
+            //                 : Colors.grey,
+            //             child: Center(
+            //               child: Text(
+            //                 'KD patterns',
+            //                 style: TextStyle(
+            //                     fontSize: kd_patterns_setting ? 18 : 12),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.all(16.0),
+            //         child: InkWell(
+            //           onTap: () {
+            //             // corrent_setting="cnc tool setting";
+            //             // kd_patterns_setting=false;
+            //             // cnc_tool_setting=true;
+            //             // setState(() {
+            //             //
+            //             // });
+            //           },
+            //           child: Container(
+            //             width: cnc_tool_setting ? 150 : 100,
+            //             height: cnc_tool_setting ? 65 : 45,
+            //             color: cnc_tool_setting
+            //                 ? Colors.teal[300]
+            //                 : Colors.grey[300],
+            //             child: Center(
+            //               child: Text(
+            //                 'cnc tools',
+            //                 style:
+            //                     TextStyle(fontSize: cnc_tool_setting ? 22 : 12),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             /// second choices :  kd pattern to set
             Container(

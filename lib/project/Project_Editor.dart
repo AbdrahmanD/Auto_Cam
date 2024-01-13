@@ -10,12 +10,19 @@ import 'package:get/get.dart';
 class Project_Editor extends StatelessWidget {
   Draw_Controller draw_controller = Get.find();
 
+  late bool active;
+
+  Project_Editor(this.active);
+
   @override
   Widget build(BuildContext context) {
     var screen_size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Stack(
+      body:!active?Container(width: screen_size.width
+        ,height: screen_size.height,child: Center(child: Text("active key is requested ",style: TextStyle(fontSize: 32),),),):
+
+      Stack(
         children: [
           Obx(() => Positioned(
             top: 0,

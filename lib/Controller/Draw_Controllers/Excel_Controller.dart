@@ -17,22 +17,22 @@ class Excel_Controller extends GetxController {
 
   Draw_Controller draw_controller = Get.find();
 
-  create_excel() async {
+  create_excel(int box_quantity) async {
 
+    bool windows_platform=Platform.isWindows;
 
     String? directory0 = await FilePicker.platform.saveFile(
       dialogTitle: 'Please select an output file:',
       fileName: 'box name',
     );
 
-    String file_name=directory0!.split("/")[directory0!.split("/").length-1];
-    String new_directory_0 =directory0!.split('/').sublist(0,directory0!.split("/").length-1).join("/");
+    String file_name=windows_platform?(directory0!.split("\\")[directory0!.split("\\").length-1]):(directory0!.split("/")[directory0!.split("/").length-1]);
+    // String new_directory_0 =directory0!.split('/').sublist(0,directory0!.split("/").length-1).join("/");
 
-
-    final Directory newDirectory = Directory('$new_directory_0');
+    final Directory newDirectory = Directory('$directory0');
     newDirectory.createSync();
 
-    File file= File('${newDirectory.path}/$file_name.xlsx');
+    File file=windows_platform?( File('${newDirectory.path}\\$file_name.xlsx')):( File('${newDirectory.path}/$file_name.xlsx'));
 
 
     var excel = Excel.createExcel(); // automatically creates 1 empty sheet: Sheet1
@@ -74,7 +74,7 @@ int n=2;
         var title6 = sheet.cell(CellIndex.indexByString('F$n'));
         title6.value = '${p[i].hight}';
         var title7 = sheet.cell(CellIndex.indexByString('G$n'));
-        title7.value = "${p[i].quantity}";
+        title7.value = "${p[i].quantity*box_quantity}";
 
         n++;
 

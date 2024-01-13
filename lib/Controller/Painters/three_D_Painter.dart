@@ -199,7 +199,7 @@ late  Box_model box_model;
     base_path__paint.strokeWidth=2;
 
 
-    if(piece_model.piece_name=='inner'){}
+    if(piece_model.piece_name.contains('inner') || piece_model.piece_name.contains('Helper')){}
     else{
       canvas.drawPath(front_path, front_path_paint);
       canvas.drawPath(back_path , back_path__paint);

@@ -28,7 +28,7 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
 
     draw_controller.screen_size.value = Size(widget.w, h);
 
-    double f = 1;
+    double f = 3.1;
 
     return Container(
       child: RawKeyboardListener(
@@ -53,9 +53,12 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
         child: Listener(
           onPointerSignal: (PointerSignalEvent event) {
             if (event is PointerScrollEvent) {
-              if (f > 0 && f < 10) {
-                draw_controller.drawing_scale.value +=
-                    (event.scrollDelta.direction).toInt() / 10;
+              f += (event.scrollDelta.direction).toInt() / 3;
+
+              if (f >3 && f < 15) {
+                draw_controller.drawing_scale.value += (event.scrollDelta.direction).toInt() / 10;
+                f += (event.scrollDelta.direction).toInt() / 3;
+                print(f);
               }
             }
           },

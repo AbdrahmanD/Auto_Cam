@@ -1,8 +1,6 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
-import 'package:auto_cam/Controller/Painters/Nesting_Painter.dart';
-import 'package:auto_cam/Controller/Painters/Nesting_Piece_Painter.dart';
-import 'package:auto_cam/Controller/nesting/Nesting_Pieces.dart';
-import 'package:auto_cam/Controller/nesting/Neting_Controller.dart';
+ import 'package:auto_cam/Controller/Painters/Nesting_Piece_Painter.dart';
+ import 'package:auto_cam/Controller/nesting/Neting_Controller.dart';
 import 'package:auto_cam/View/Cabinet_Editor.dart';
 import 'package:dart_eval/dart_eval.dart';
 import 'package:flutter/gestures.dart';
@@ -68,7 +66,7 @@ class _Nesting_ViewState extends State<Nesting_View> {
                   ///back button and lable
                   InkWell(
                     onTap: () {
-                      Get.to(Cabinet_Editor());
+                      Get.to(Cabinet_Editor(true));
                     },
                     child: Row(
                       children: [

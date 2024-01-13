@@ -161,7 +161,7 @@ late bool inner_drawer;
 
     Piece_model piece_model = Piece_model(
         id,
-        ' ${drawer_id} Drawer Face ',
+        'Drawer Face ',
         'F',
         '${drawer_face_material_name}',
         face_width,
@@ -191,7 +191,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_left = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("DB Left"),
-        'drawer ${drawer_id} DBL ',
+        'drawer Left DBL ',
         'V',
         "MDF",
         drawer_box_depth,
@@ -204,7 +204,7 @@ late bool inner_drawer;
     /// right side
     Piece_model drawer_box_right = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("DB Right"),
-        'drawer ${drawer_id} DBR ',
+        'drawer right DBR ',
         'V',
         "MDF",
         drawer_box_depth,
@@ -223,7 +223,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_front = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("DB Front"),
-        'drawer ${drawer_id} DBF ',
+        'drawer Front DBF ',
         'F',
         "MDF",
        correct_value( box_width - drawer_box_material_thickness * 2),
@@ -241,7 +241,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_back = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("DB Back"),
-        'drawer ${drawer_id} DBP ',
+        'drawer back DBP ',
         'F',
         "MDF",
         correct_value(box_width - drawer_box_material_thickness * 2),
@@ -258,7 +258,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_base_panel = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("Drawer Panel"),
-        'drawer ${drawer_id} back_panel',
+        'drawer base_panel',
         'H',
         "MDF",
 

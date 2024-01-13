@@ -1478,59 +1478,94 @@ if(project){
 }
 
 
+    //
+    // List<String> compared = [];
+    //
+    // List<List<Piece_model>> same_pices = [];
+    //
+    // for (int m = 0; m < pices.length; m++) {
+    //   Piece_model m_piece = pices[m];
+    //
+    //   if (!compared.contains(m_piece.piece_id) &&
+    //       !m_piece.piece_name.contains('Helper') &&
+    //       !m_piece.piece_name.contains('inner')) {
+    //     List<Piece_model> same_pices_item = [];
+    //     same_pices_item.add(m_piece);
+    //     compared.add(m_piece.piece_id);
+    //
+    //     ///
+    //
+    //     for (int s = 0; s < pices.length; s++) {
+    //       Piece_model s_piece = pices[s];
+    //
+    //       if (!compared.contains(s_piece.piece_id) &&
+    //           !s_piece.piece_name.contains('Helper') &&
+    //           !s_piece.piece_name.contains('inner')) {
+    //         if (tow_pieces_are_same(m_piece, s_piece)) {
+    //           same_pices_item.add(s_piece);
+    //           compared.add(s_piece.piece_id);
+    //         }
+    //       }
+    //     }
+    //
+    //     ///
+    //
+    //     same_pices.add(same_pices_item);
+    //   }
+    // }
+    //
+    // same_pices.forEach((items) {
+    //   String names = '';
+    //   String ids = '';
+    //
+    //   String material_name = items[0].material_name;
+    //   items.forEach((element) {
+    //     names = '$names\n '
+    //         '${element.piece_name}';
+    //
+    //   });
+    //
+    //   items.forEach((element) {
+    //     ids = '$ids\n '
+    //         '${element.piece_id}';
+    //
+    //   });
+    //
+    //   Cut_List_Item cut_list_item = Cut_List_Item(
+    //       ids,
+    //       names,
+    //       material_name,
+    //       items[0].piece_thickness,
+    //       items[0].piece_width,
+    //       items[0].piece_height,
+    //       items.length);
+    //
+    //   draw_controller.box_repository.cut_list_items.add(cut_list_item);
+    // });
+    //
 
-    List<String> compared = [];
 
-    List<List<Piece_model>> same_pices = [];
+    for(int pi=0;pi<pices.length;pi++){
+      if(
+      !pices[pi].piece_name.contains("Helper") &&
+      !pices[pi].piece_name.contains("inner")
 
-    for (int m = 0; m < pices.length; m++) {
-      Piece_model m_piece = pices[m];
+      ){
 
-      if (!compared.contains(m_piece.piece_id) &&
-          !m_piece.piece_name.contains('Helper') &&
-          !m_piece.piece_name.contains('inner')) {
-        List<Piece_model> same_pices_item = [];
-        same_pices_item.add(m_piece);
-        compared.add(m_piece.piece_id);
+        Cut_List_Item cut_list_item = Cut_List_Item(
+            pices[pi].piece_id,
+            pices[pi].piece_name,
+            pices[pi].material_name,
+            pices[pi].piece_thickness,
+            pices[pi].piece_width,
+            pices[pi].piece_height,
+            1
+        );
 
-        ///
-
-        for (int s = 0; s < pices.length; s++) {
-          Piece_model s_piece = pices[s];
-
-          if (!compared.contains(s_piece.piece_id) &&
-              !s_piece.piece_name.contains('Helper') &&
-              !s_piece.piece_name.contains('inner')) {
-            if (tow_pieces_are_same(m_piece, s_piece)) {
-              same_pices_item.add(s_piece);
-              compared.add(s_piece.piece_id);
-            }
-          }
-        }
-
-        ///
-
-        same_pices.add(same_pices_item);
+        draw_controller.box_repository.cut_list_items.add(cut_list_item);
       }
     }
 
-    same_pices.forEach((items) {
-      String names = '';
-      String material_name = items[0].material_name;
-      items.forEach((element) {
-        names = '$names\n '
-            '${element.piece_id}';
-      });
-      Cut_List_Item cut_list_item = Cut_List_Item(
-          names,
-          material_name,
-          items[0].piece_thickness,
-          items[0].piece_width,
-          items[0].piece_height,
-          items.length);
-
-      draw_controller.box_repository.cut_list_items.add(cut_list_item);
-    });
   }
 
   bool tow_pieces_are_same(Piece_model m_piece, Piece_model s_piece) {

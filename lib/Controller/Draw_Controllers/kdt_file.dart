@@ -809,12 +809,13 @@ class kdt_file {
 
   extract_xml_file( String file_name)async{
 
+    bool windows_platform=Platform.isWindows;
 
     final Directory finalDirectory = Directory('$directory');
     finalDirectory.createSync();
 
     final path = await finalDirectory.path;
-    File file =await File("$path/$file_name.xml");
+    File file =await windows_platform?(File("$path\\$file_name.xml")):(File("$path/$file_name.xml"));
 
     // File file =await File('$file_path.xml');
     file.writeAsString('$kdt_file_content');

@@ -1,11 +1,12 @@
 import 'dart:convert';
  import 'dart:io';
-import 'dart:math';
+import 'dart:io' show Platform;
+
+ import 'dart:math';
 
 import 'package:auto_cam/Controller/Draw_Controllers/AnalyzeJoins.dart';
 import 'package:auto_cam/Controller/Painters/Box_Painter.dart';
-import 'package:auto_cam/Controller/Painters/Pattern_Painter.dart';
-import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
+ import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
@@ -17,7 +18,7 @@ import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
   import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
+ import 'package:path_provider/path_provider.dart';
 
 import '../../View/Dialog_Boxes/Context_Menu_Dialogs/Out_Box_Menu.dart';
 
@@ -47,12 +48,13 @@ class Draw_Controller extends GetxController {
   Rx<Offset> box_move_offset = Offset(0, 0).obs;
 
 
-
-
-
   Draw_Controller() {
     read_pattern_files();
-   }
+
+  }
+
+
+
 
   ///
   select_window_method(Offset offset, bool select) {
@@ -128,9 +130,10 @@ class Draw_Controller extends GetxController {
 
       if (x_compare &&
           y_compare &&
-          !p.piece_name.contains('inner'     ) &&
-          !p.piece_name.contains('back_panel') &&
-          !p.piece_name.contains('Helper')
+          !p.piece_name.contains('inner'     )
+      // &&
+          // !p.piece_name.contains('back_panel') &&
+          // !p.piece_name.contains('Helper')
       ) {
         selected_id.add(i);
       }
@@ -552,8 +555,8 @@ if(selected_id.length==1){
   flip_piece() {
     Box_model b = box_repository.box_model.value;
 
-    for (int i = 0; i < selected_id.length; i++) {
-      Piece_model p = b.box_pieces[selected_id[i]];
+    if (selected_id.length==1) {
+      Piece_model p = b.box_pieces[selected_id[0]];
 
       if (view_port == 'F') {
       } else if (view_port == 'R') {
@@ -678,6 +681,7 @@ if(selected_id.length==1){
 
 
 
+        print("file file $file");
       } catch (e) {
         print('Error writing JSON data to the file: $e');
       }
@@ -718,24 +722,26 @@ if(selected_id.length==1){
   }
 
   save_joinHolePattern(JoinHolePattern joinHolePattern,String category) async {
+
+    bool windows_platform=Platform.isWindows;
     final directory = await getApplicationDocumentsDirectory();
 
-    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    final Directory oldDirectory = windows_platform?(Directory('${directory.path}\\Auto_Cam')):(Directory('${directory.path}/Auto_Cam'));
     oldDirectory.createSync();
 
-    final Directory newDirectory = Directory('${oldDirectory.path}/Setting');
+    final Directory newDirectory = windows_platform?(Directory('${oldDirectory.path}\\Setting')):(Directory('${oldDirectory.path}/Setting'));
     newDirectory.createSync();
 
-    final Directory finalDirectory0 =
-        Directory('${newDirectory.path}/Join_Patterns');
+    final Directory finalDirectory0 = windows_platform?(Directory('${newDirectory.path}\\Join_Patterns')):(Directory('${newDirectory.path}/Join_Patterns'));
     finalDirectory0.createSync();
 
-    final Directory finalDirectory =
-        Directory('${finalDirectory0.path}/${category}');
+    final Directory finalDirectory =windows_platform?(        Directory('${finalDirectory0.path}\\${category}')
+    ):(        Directory('${finalDirectory0.path}/${category}')
+    );
     finalDirectory.createSync();
 
     final path = await finalDirectory.path;
-    String file_path = '$path/${joinHolePattern.name}-pattern';
+    String file_path = windows_platform?('$path\\${joinHolePattern.name}-pattern'):('$path/${joinHolePattern.name}-pattern');
     // writeJsonToFile(joinHolePattern.toJson(),file_path);
     File file = File(file_path);
 
@@ -755,24 +761,25 @@ if(selected_id.length==1){
 
   delete_joinHolePattern(JoinHolePattern joinHolePattern,String category) async {
 
+    bool windows_platform=Platform.isWindows;
     final directory = await getApplicationDocumentsDirectory();
 
-    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    final Directory oldDirectory = windows_platform?(Directory('${directory.path}\\Auto_Cam')):(Directory('${directory.path}/Auto_Cam'));
     oldDirectory.createSync();
 
-    final Directory newDirectory = Directory('${oldDirectory.path}/Setting');
+    final Directory newDirectory = windows_platform?(Directory('${oldDirectory.path}\\Setting')):(Directory('${oldDirectory.path}/Setting'));
     newDirectory.createSync();
 
-    final Directory finalDirectory0 =
-        Directory('${newDirectory.path}/Join_Patterns');
+    final Directory finalDirectory0 = windows_platform?(Directory('${newDirectory.path}\\Join_Patterns')):(Directory('${newDirectory.path}/Join_Patterns'));
     finalDirectory0.createSync();
 
-    final Directory finalDirectory =
-        Directory('${finalDirectory0.path}/${category}');
+    final Directory finalDirectory =windows_platform?(        Directory('${finalDirectory0.path}\\${category}')
+    ):(        Directory('${finalDirectory0.path}/${category}')
+    );
     finalDirectory.createSync();
 
     final path = await finalDirectory.path;
-    String file_path = '$path/${joinHolePattern.name}-pattern';
+    String file_path = windows_platform?('$path\\${joinHolePattern.name}-pattern'):('$path/${joinHolePattern.name}-pattern');
 
     final dir = Directory(file_path);
     dir.deleteSync(recursive: true);
@@ -786,20 +793,21 @@ if(selected_id.length==1){
 
   enable_pattern(JoinHolePattern joinHolePattern,String category) async {
 
+    bool windows_platform=Platform.isWindows;
     final directory = await getApplicationDocumentsDirectory();
 
-    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    final Directory oldDirectory = windows_platform?(Directory('${directory.path}\\Auto_Cam')):(Directory('${directory.path}/Auto_Cam'));
     oldDirectory.createSync();
 
-    final Directory newDirectory = Directory('${oldDirectory.path}/Setting');
+    final Directory newDirectory = windows_platform?(Directory('${oldDirectory.path}\\Setting')):(Directory('${oldDirectory.path}/Setting'));
     newDirectory.createSync();
 
-    final Directory finalDirectory0 =
-        Directory('${newDirectory.path}/Join_Patterns');
+    final Directory finalDirectory0 = windows_platform?(Directory('${newDirectory.path}\\Join_Patterns')):(Directory('${newDirectory.path}/Join_Patterns'));
     finalDirectory0.createSync();
 
-    final Directory finalDirectory =
-        Directory('${finalDirectory0.path}/${category}');
+    final Directory finalDirectory =windows_platform?(        Directory('${finalDirectory0.path}\\${category}')
+    ):(        Directory('${finalDirectory0.path}/${category}')
+    );
     finalDirectory.createSync();
 
     JoinHolePattern new_join_pattern=joinHolePattern;
@@ -812,23 +820,22 @@ if(selected_id.length==1){
 
   }
   disable_pattern(JoinHolePattern joinHolePattern,String category) async {
-
+    bool windows_platform=Platform.isWindows;
     final directory = await getApplicationDocumentsDirectory();
 
-    final Directory oldDirectory = Directory('${directory.path}/Auto_Cam');
+    final Directory oldDirectory = windows_platform?(Directory('${directory.path}\\Auto_Cam')):(Directory('${directory.path}/Auto_Cam'));
     oldDirectory.createSync();
 
-    final Directory newDirectory = Directory('${oldDirectory.path}/Setting');
+    final Directory newDirectory = windows_platform?(Directory('${oldDirectory.path}\\Setting')):(Directory('${oldDirectory.path}/Setting'));
     newDirectory.createSync();
 
-    final Directory finalDirectory0 =
-    Directory('${newDirectory.path}/Join_Patterns');
+    final Directory finalDirectory0 = windows_platform?(Directory('${newDirectory.path}\\Join_Patterns')):(Directory('${newDirectory.path}/Join_Patterns'));
     finalDirectory0.createSync();
 
-    final Directory finalDirectory =
-    Directory('${finalDirectory0.path}/${category}');
+    final Directory finalDirectory =windows_platform?(        Directory('${finalDirectory0.path}\\${category}')
+    ):(        Directory('${finalDirectory0.path}/${category}')
+    );
     finalDirectory.createSync();
-
     JoinHolePattern new_join_pattern=joinHolePattern;
     new_join_pattern.pattern_enable=false;
 
@@ -855,18 +862,24 @@ if(selected_id.length==1){
 
 
 
+    bool windows_platform=Platform.isWindows;
 
     final rootdirectory = await getApplicationDocumentsDirectory();
 
-    final Directory directory0 =
-        Directory('${rootdirectory.path}/Auto_Cam/Setting/Join_Patterns');
+    final Directory directory0 =windows_platform?
+(        Directory('${rootdirectory.path}\\Auto_Cam\\Setting\\Join_Patterns')
+
+):(
+        Directory('${rootdirectory.path}/Auto_Cam/Setting/Join_Patterns')
+    )
+    ;
     directory0.createSync();
 
     for (int i = 0; i < box_repository.join_patterns.length; i++) {
       String category_name = box_repository.join_patterns.keys.toList()[i];
 
-      final Directory directory =
-          Directory('${directory0.path}/${category_name}');
+      final Directory directory =windows_platform?
+          (Directory('${directory0.path}\\${category_name}')):(Directory('${directory0.path}/${category_name}'));
       directory.createSync();
 
       if (directory.existsSync()) {
@@ -1005,6 +1018,10 @@ if(selected_id.length==1){
 
     return nbn;
   }
+
+
+
+
 
 
 
