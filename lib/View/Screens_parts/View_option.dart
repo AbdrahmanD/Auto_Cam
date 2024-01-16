@@ -1,5 +1,6 @@
 import 'package:auto_cam/Controller/DecimalTextInputFormatter.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
+import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -627,9 +628,16 @@ class View_option extends StatelessWidget {
                                       draw_controller.box_repository.box_model
                                           .value.box_pieces
                                           .remove(p);
+
+                                      if(p.piece_name.contains("Door")){
+                                        draw_controller.add_door(Door_Model(1, p.piece_thickness, p.material_name, draw_controller.selected_id[i], 0, 0, 0, 0, 0, "R",false
+                                        ));
+                                      }else{
                                       draw_controller.box_repository.box_model
                                           .value.box_pieces
                                           .add(np);
+                                    }
+
                                     }
 
                                     draw_controller.selected_id.value = [];

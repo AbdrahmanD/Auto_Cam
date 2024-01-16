@@ -67,7 +67,45 @@ class _Box_TypeState extends State<Box_Type> {
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+
                 children: [
+
+                  /// standard_unit
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "standard unit",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 32,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            // Get.to(Project_Screen());
+                            draw_controller.box_type="standard_unit";
+                            Get.to(Cabinet_Editor(active));
+
+                          },
+                          child: Container(
+                              height: 200,
+                              // color: Colors.red,
+                              child: Image.asset(
+                                "lib/assets/images/unit.png",
+                              )),
+                        ),
+                        // Text(
+                        //   "normal cabinet",
+                        //   style: TextStyle(fontSize: 14),
+                        // ),
+                      ],
+                    ),
+                  ),
+
 
                   /// wall cabinet
                   Flexible(

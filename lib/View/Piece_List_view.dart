@@ -1,3 +1,4 @@
+import 'package:auto_cam/Controller/Draw_Controllers/AnalyzeJoins.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Excel_Controller.dart';
 import 'package:auto_cam/Controller/Painters/Piece_Painter.dart';
@@ -122,6 +123,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
   double material_thickness_2 = 0;
   double material_thickness_3 = 0;
 
+  bool collect_same_pieces=false;
   @override
   void initState() {
     calc_size();
@@ -174,13 +176,19 @@ class _Piece_List_viewState extends State<Piece_List_view> {
       }
 
 
-    }
+
+
+      material_size_1=double.parse("${material_size_1.toStringAsFixed(2)}");
+      material_size_2=double.parse("${material_size_2.toStringAsFixed(2)}");
+      material_size_3=double.parse("${material_size_3.toStringAsFixed(2)}");
+
+
     setState(() {
 
     });
 
 
-  }
+  }}
 
 
   @override
@@ -367,31 +375,31 @@ class _Piece_List_viewState extends State<Piece_List_view> {
 
 
                   ///Export Details sheets as PDF
-                  Container(
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 18,
-                        ),
-                        Container(
-                            width: 150,
-                            child: Text('Details sheets as   PDF ',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ))),
-                        SizedBox(
-                          width: 18,
-                        ),
-                        InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.picture_as_pdf,
-                              size: 24,
-                              color: Colors.teal,
-                            )),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   child: Row(
+                  //     children: [
+                  //       SizedBox(
+                  //         width: 18,
+                  //       ),
+                  //       Container(
+                  //           width: 150,
+                  //           child: Text('Details sheets as   PDF ',
+                  //               style: TextStyle(
+                  //                 fontSize: 14,
+                  //               ))),
+                  //       SizedBox(
+                  //         width: 18,
+                  //       ),
+                  //       InkWell(
+                  //           onTap: () {},
+                  //           child: Icon(
+                  //             Icons.picture_as_pdf,
+                  //             size: 24,
+                  //             color: Colors.teal,
+                  //           )),
+                  //     ],
+                  //   ),
+                  // ),
 
                   SizedBox(
                     height: 12,
@@ -536,6 +544,25 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                 color: Colors.grey[300],
                 child: Column(
                   children: [
+                    SizedBox(
+                      height: 12,
+                    ),
+
+                    /// collect same pieces
+                    Row(children: [
+                      Text("Collect Same Pieces "),
+                      SizedBox(width: 12,),
+                      Checkbox(value: collect_same_pieces, onChanged: (v){
+                        collect_same_pieces=!collect_same_pieces;
+                        AnalyzeJoins analayzejoins = AnalyzeJoins(project,collect_same_pieces);
+
+                        setState(() {
+
+});
+                      }),
+
+
+                    ],),
                     SizedBox(
                       height: 12,
                     ),

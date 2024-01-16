@@ -14,6 +14,7 @@ import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
+import 'package:auto_cam/Model/Main_Models/Support_Filler.dart';
  import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
   import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -129,8 +130,8 @@ class Draw_Controller extends GetxController {
       bool y_compare = right_up_point_y > ssy && left_down_point_y < esy;
 
       if (x_compare &&
-          y_compare &&
-          !p.piece_name.contains('inner'     )
+          y_compare
+          // && !p.piece_name.contains('inner')
       // &&
           // !p.piece_name.contains('back_panel') &&
           // !p.piece_name.contains('Helper')
@@ -354,6 +355,35 @@ class Draw_Controller extends GetxController {
       bool helper) {
     box_repository.box_model.value.add_Partition(hover_id, left_Distence,
         frontage_Gap, material_thickness, quantity, back_distance, helper);
+    //
+    // Box_model b = box_repository.box_model.value;
+    // Box_model nb = Box_model(
+    //     b.box_name,
+    //     box_type,
+    //     b.box_width,
+    //     b.box_height,
+    //     b.box_depth,
+    //     b.init_material_thickness,
+    //     b.init_material_name,
+    //     b.back_panel_thickness,
+    //     b.grove_value,
+    //     b.bac_panel_distence,
+    //     b.top_base_piece_width,
+    //     b.is_back_panel,
+    //     b.box_origin);
+    // nb.piece_id = b.piece_id;
+    // nb.box_pieces = b.box_pieces;
+    // add_Box(nb);
+    draw_Box();
+  }
+
+
+  /// add support
+  add_support(Support_Filler support_filler,
+      int quantity,
+      ) {
+    box_repository.box_model.value.add_support(hover_id, support_filler.left_distance,support_filler.width,
+        support_filler.thickness, quantity );
     //
     // Box_model b = box_repository.box_model.value;
     // Box_model nb = Box_model(
@@ -604,7 +634,7 @@ if(selected_id.length==1){
 
   /// analyze box
   analyze() {
-    AnalyzeJoins analayzejoins = AnalyzeJoins(false);
+    AnalyzeJoins analayzejoins = AnalyzeJoins(false,false);
   }
 
   move_box(double dx,double dy)

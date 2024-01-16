@@ -55,6 +55,9 @@ class Box_model {
     { inner_cabinet();}
 
 
+    else if(box_type=="standard_unit")
+    { standard_unit();}
+
 
   }
 
@@ -109,6 +112,130 @@ Map<String, dynamic> toJson() {
 
     return "${box_name}_$piece_ID";
   }
+
+
+  standard_unit()
+  {
+    Piece_model  top_piece = Piece_model(
+        get_id("TOP"),
+        'top',
+        'H',
+        init_material_name,
+        correct_value(box_depth),
+        correct_value( box_width),
+        correct_value( init_material_thickness),
+        Point_model(
+            correct_value(box_origin.x_coordinate),
+            correct_value(box_origin.y_coordinate + box_height - init_material_thickness),
+            correct_value(box_origin.z_coordinate)
+        ),"inner_0"
+    );
+    box_pieces.add(top_piece);
+
+    Piece_model  base_piece = Piece_model(
+        get_id("BASE"),
+        'base',
+        'H',
+        init_material_name,
+        correct_value(box_depth),
+        correct_value( box_width - 2 * init_material_thickness),
+        correct_value(init_material_thickness),
+        Point_model(
+            correct_value( box_origin.x_coordinate + init_material_thickness),
+            correct_value( box_origin.y_coordinate ),
+            correct_value( box_origin.z_coordinate)
+        ),"inner_0"
+    );
+    box_pieces.add(base_piece);
+
+    Piece_model  right_piece = Piece_model(
+        get_id("RIGHT"),
+        'right',
+        'V',
+        init_material_name,
+        correct_value( box_depth),
+        correct_value( box_height-init_material_thickness),
+        correct_value( init_material_thickness),
+        Point_model(
+            correct_value(box_origin.x_coordinate+box_width - init_material_thickness),
+            correct_value(box_origin.y_coordinate) ,
+            correct_value(box_origin.z_coordinate)
+        ),"inner_0"
+    );
+    box_pieces.add(right_piece);
+
+    Piece_model  left_piece = Piece_model(
+        get_id("LEFT"),
+        'left',
+        'V',
+        init_material_name,
+        correct_value( box_depth),
+        correct_value( box_height-init_material_thickness),
+        correct_value( init_material_thickness),
+        Point_model(
+            correct_value( box_origin.x_coordinate),
+            correct_value( box_origin.y_coordinate ),
+            correct_value( box_origin.z_coordinate)
+        ),"inner_0"
+    );
+    box_pieces.add(left_piece);
+
+    if(is_back_panel){
+      Piece_model  back_panel = Piece_model(
+          get_id("BP"),
+          'back_panel',
+          'F',
+          init_material_name,
+          correct_value(box_width-2*init_material_thickness+2*grove_value-1),
+          correct_value(box_height-2*init_material_thickness+2*grove_value-1),
+          correct_value(back_panel_thickness),
+          Point_model(
+              correct_value( box_origin.x_coordinate+init_material_thickness-grove_value+1),
+              correct_value( box_origin.y_coordinate+init_material_thickness-grove_value+1 ),
+              correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+          ),"inner-0"
+      );
+
+      Piece_model  back_panel_Helper = Piece_model(
+          get_id("Helper"),
+          'back_panel_Helper',
+          'F',
+          init_material_name,
+          correct_value(box_width-2*init_material_thickness),
+          correct_value(box_height-2*init_material_thickness),
+          correct_value(back_panel_thickness),
+          Point_model(
+              correct_value( box_origin.x_coordinate+init_material_thickness),
+              correct_value( box_origin.y_coordinate+init_material_thickness ),
+              correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+          ),"inner-0"
+      );
+
+      box_pieces.add(back_panel);
+      box_pieces.add(back_panel_Helper);
+    }
+
+    Piece_model  inner = Piece_model(
+        get_id("inner"),
+        'inner_0',
+        'F',
+        'inner',
+        correct_value( box_width-2*init_material_thickness),
+        correct_value( box_height-2*init_material_thickness),
+        correct_value( (is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
+        Point_model(
+            correct_value(box_origin.x_coordinate+init_material_thickness),
+            correct_value(box_origin.y_coordinate+init_material_thickness) ,
+            correct_value(box_origin.z_coordinate)
+        ),""
+    );
+    box_pieces.add(inner);
+
+
+
+
+  }
+
 
   wall_cabinet()
   {
@@ -647,7 +774,8 @@ Map<String, dynamic> toJson() {
         Point_model(
             box_pieces[inner].piece_origin.x_coordinate,
             box_pieces[inner].piece_origin.y_coordinate + down_Distence,
-            box_pieces[inner].piece_origin.z_coordinate+frontage_Gap).correct_cordinate(),"${box_pieces[inner].piece_name}"
+            box_pieces[inner].piece_origin.z_coordinate+frontage_Gap).correct_cordinate(),
+        "${box_pieces[inner].piece_name}"
          );
 
 
@@ -825,6 +953,125 @@ Map<String, dynamic> toJson() {
     }
   }
 
+
+
+  ///
+  /// support
+
+  add_support_pattern(int inner, double left_Distence, double width,
+      double partition_material_thickness, int Partition_quantity )
+  {
+
+
+    double right_Distence =correct_value(box_pieces[inner].piece_width - left_Distence - width);
+
+
+    Piece_model old_inner = Piece_model(
+        get_id("inner"),
+        '${box_pieces[inner].piece_name}_1',
+        'F',
+        'inner',
+        correct_value(left_Distence),
+        correct_value(box_pieces[inner].piece_height),
+        correct_value(box_depth),
+        Point_model(
+            correct_value(box_pieces[inner].piece_origin.x_coordinate) ,
+            correct_value(box_pieces[inner].piece_origin.y_coordinate) ,
+            correct_value(box_pieces[inner].piece_origin.z_coordinate)
+        ),""
+    );
+
+
+    Piece_model new_inner = Piece_model(
+        get_id("inner"),
+        '${box_pieces[inner].piece_name}_2',
+        'F',
+        'inner',
+        correct_value( right_Distence),
+        correct_value(  box_pieces[inner].piece_height),
+        correct_value(box_depth),
+        Point_model(
+            correct_value(box_pieces[inner].piece_origin.x_coordinate + left_Distence + width),
+            correct_value(box_pieces[inner].piece_origin.y_coordinate),
+            correct_value(box_pieces[inner].piece_origin.z_coordinate)),""
+    );
+
+
+    /// new piece partition
+
+
+
+
+    Piece_model new_piece = Piece_model(
+        get_id("Partition"),
+        'support${piece_id}',
+        'F',
+        init_material_name,
+        correct_value( width),
+        correct_value( box_pieces[inner].piece_height),
+        correct_value( partition_material_thickness),
+        Point_model(
+          correct_value( box_pieces[inner].piece_origin.x_coordinate + left_Distence)  ,
+          correct_value( box_pieces[inner].piece_origin.y_coordinate  )  ,
+          correct_value( box_pieces[inner].piece_origin.z_coordinate )  ,
+        ),"${box_pieces[inner].piece_name}"
+    );
+
+    ///
+    ///
+
+
+    box_pieces.add(old_inner);
+    box_pieces.add(new_piece);
+    box_pieces.add(new_inner);
+
+
+    box_deleted_pieces.add(box_pieces[inner]);
+    box_pieces.remove(box_pieces[inner]);
+
+  }
+
+  add_support(int inner, double left_Distence, double width,
+      double partition_material_thickness, int Quantity)
+  {
+    if (Quantity == 1) {
+         add_support_pattern(inner, left_Distence, width, partition_material_thickness, Quantity );
+        Navigator.of(Get.overlayContext!).pop();
+
+    }
+
+
+    else {
+
+      if (
+      ( (Quantity - 1) * left_Distence + Quantity * width) < box_pieces[inner].piece_width
+      )
+      {
+        double distance = double.parse(((box_pieces[inner].piece_width - Quantity * width)
+            / (Quantity + 1))
+            .toStringAsFixed(1));
+
+        add_support_pattern(inner, distance, width,  partition_material_thickness, Quantity  );
+
+        for (int i = 1; i < Quantity; i++) {
+          add_support_pattern(box_pieces.length - 1, distance,width, partition_material_thickness,Quantity );
+        }
+
+
+        Navigator.of(Get.overlayContext!).pop();
+
+
+      }
+      else
+      {
+        Get.defaultDialog(
+            title: 'Error',
+            content: Text('you enter wrong value , please check again'));
+      }
+    }
+  }
+
+  ///
 
   add_door(Door_Model door_model) {
     if (door_model.door_num == 1) {
@@ -1120,12 +1367,14 @@ String id = get_id("Door Left");
 
   }
 
+
   add_filler(Filler_model filler_model , int hover_id){
 
     double x = 0;
     double y = 0;
     double z = 0;
 
+    print((filler_model.corner));
 
     late double filler_w;
     late double filler_h;
@@ -1168,8 +1417,45 @@ String id = get_id("Door Left");
         }
 
 
+        Piece_model old_inner = Piece_model(
+            get_id("inner"),
+            '${box_pieces[hover_id].piece_name}_1',
+            'F',
+            'inner',
+            box_pieces[hover_id].piece_width,
+            (filler_model.corner==4)?(box_pieces[hover_id].piece_height-(filler_h)):0,
+            correct_value((is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
+            Point_model(
+                box_pieces[hover_id].piece_origin.x_coordinate,
+                box_pieces[hover_id].piece_origin.y_coordinate,
+                box_pieces[hover_id].piece_origin.z_coordinate).correct_cordinate()
+            ,"");
+
+        Piece_model new_inner = Piece_model(
+            get_id("inner"),
+            '${box_pieces[hover_id].piece_name}_2',
+            'F',
+            'inner',
+            box_pieces[hover_id].piece_width,
+            (filler_model.corner==4)?0:(box_pieces[hover_id].piece_height-(filler_h)),
+
+            correct_value((is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
+            Point_model(
+                box_pieces[hover_id].piece_origin.x_coordinate,
+
+                (y+filler_h)
+
+                ,
+
+                box_pieces[hover_id].piece_origin.z_coordinate).correct_cordinate(),
+            "");
+
+
+
         Point_model filler_origin = Point_model(x, y, z);
+
         String id=get_id("Filler");
+
         Piece_model filler = Piece_model(
             id ,
             'filler_$id',
@@ -1178,9 +1464,26 @@ String id = get_id("Door Left");
             filler_w,
             filler_h,
             filler_th,
-            filler_origin,"");
+            filler_origin,box_pieces[hover_id].piece_name);
 
-        box_pieces.add(filler);
+
+
+if(filler_model.corner==1||filler_model.corner==4){
+  box_pieces.add(old_inner);
+  box_pieces.add(filler);
+  box_pieces.add(new_inner);
+
+  box_deleted_pieces.add(box_pieces[hover_id]);
+  box_pieces.remove(box_pieces[hover_id]);
+}else{
+  box_pieces.add(filler);
+
+}
+
+
+
+
+
 
       }
       /// horizontal filler
@@ -1219,6 +1522,43 @@ String id = get_id("Door Left");
         }
 
 
+
+
+        Piece_model old_inner = Piece_model(
+            get_id("inner"),
+            '${box_pieces[hover_id].piece_name}_1',
+            'F',
+            'inner',
+            box_pieces[hover_id].piece_width,
+            (filler_model.corner==4)?(box_pieces[hover_id].piece_height-(filler_th)):0,
+            correct_value((is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
+            Point_model(
+                box_pieces[hover_id].piece_origin.x_coordinate,
+                box_pieces[hover_id].piece_origin.y_coordinate,
+                box_pieces[hover_id].piece_origin.z_coordinate).correct_cordinate()
+            ,"");
+
+        Piece_model new_inner = Piece_model(
+            get_id("inner"),
+            '${box_pieces[hover_id].piece_name}_2',
+            'F',
+            'inner',
+            box_pieces[hover_id].piece_width,
+            (filler_model.corner==4)?0:(box_pieces[hover_id].piece_height-(filler_th)),
+
+            correct_value((is_back_panel)?(box_depth-bac_panel_distence-back_panel_thickness):(box_depth)),
+            Point_model(
+                box_pieces[hover_id].piece_origin.x_coordinate,
+                (y+filler_th)
+
+
+                ,
+
+                box_pieces[hover_id].piece_origin.z_coordinate).correct_cordinate(),
+            "");
+
+
+
         Point_model filler_origin = Point_model(x, y, z);
         String id=get_id("Filler");
 
@@ -1230,9 +1570,19 @@ String id = get_id("Door Left");
             filler_w,
             filler_h,
             filler_th,
-            filler_origin,"");
+            filler_origin,box_pieces[hover_id].piece_name);
 
-        box_pieces.add(filler);
+        if(filler_model.corner==1||filler_model.corner==4){
+          box_pieces.add(old_inner);
+          box_pieces.add(filler);
+          box_pieces.add(new_inner);
+
+          box_deleted_pieces.add(box_pieces[hover_id]);
+          box_pieces.remove(box_pieces[hover_id]);
+        }else{
+          box_pieces.add(filler);
+
+        }
       }
     }
 
@@ -1365,5 +1715,44 @@ String id = get_id("Door Left");
   }
 
 
+  add_back_panel(String inner_id,double back_panel_thickness,double groove_depth , bool over_all){
+
+Piece_model inner_piece=box_pieces.where((element) => element.piece_id==inner_id).first;
+    Piece_model  back_panel = Piece_model(
+        get_id("BP"),
+        'back_panel',
+        'F',
+        init_material_name,
+        correct_value(box_width-2*init_material_thickness+2*grove_value-1),
+        correct_value(box_height-2*init_material_thickness+2*grove_value-1),
+        correct_value(back_panel_thickness),
+        Point_model(
+            correct_value( box_origin.x_coordinate+init_material_thickness-grove_value+1),
+            correct_value( box_origin.y_coordinate+init_material_thickness-grove_value+1 ),
+            correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+        ),"inner-0"
+    );
+
+    Piece_model  back_panel_Helper = Piece_model(
+        get_id("Helper"),
+        'back_panel_Helper',
+        'F',
+        init_material_name,
+        correct_value(box_width-2*init_material_thickness),
+        correct_value(box_height-2*init_material_thickness),
+        correct_value(back_panel_thickness),
+        Point_model(
+            correct_value( box_origin.x_coordinate+init_material_thickness),
+            correct_value( box_origin.y_coordinate+init_material_thickness ),
+            correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+        ),"inner-0"
+    );
+
+    box_pieces.add(back_panel);
+    box_pieces.add(back_panel_Helper);
+
+
+
+  }
 
 }

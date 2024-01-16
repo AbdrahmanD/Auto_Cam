@@ -11,4 +11,8 @@ class Filler_model{
 
   Filler_model(this.filler_vertical,this.filler_inside,this.width, this.height, this.thickness, this.corner,
       this.x_move, this.y_move);
+
+
+
+
 }

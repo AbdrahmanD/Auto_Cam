@@ -12,11 +12,12 @@ import 'package:get/get.dart';
 class AnalyzeJoins {
 
   late bool project;
+  late bool collect_same_pieces;
   late Project_model project_model;
   Draw_Controller draw_controller = Get.find();
 
 
-  AnalyzeJoins(bool project) {
+  AnalyzeJoins(this.project,this.collect_same_pieces) {
 this.project=project;
 
     draw_controller.box_repository.cut_list_items = [];
@@ -34,7 +35,7 @@ project_model = draw_controller.box_repository.project_model;
       all_face_check(box_model);
     }
 
-    collect_all_same_pieces();
+    collect_all_same_pieces(collect_same_pieces);
    }
 
   clean_faces(Box_model box_model) {
@@ -1456,7 +1457,7 @@ project_model = draw_controller.box_repository.project_model;
   add_Door_hole(Piece_model m_piece, Piece_model s_piece) {}
 
   /// collect same pieces [] ....
-  collect_all_same_pieces() {
+  collect_all_same_pieces(bool collect) {
 
     List<Piece_model> pices =[];
 
@@ -1476,95 +1477,99 @@ if(project){
 }else{
   pices=draw_controller.box_repository.box_model.value.box_pieces;
 }
+if(collect)
+    {
 
+      List<String> compared = [];
 
-    //
-    // List<String> compared = [];
-    //
-    // List<List<Piece_model>> same_pices = [];
-    //
-    // for (int m = 0; m < pices.length; m++) {
-    //   Piece_model m_piece = pices[m];
-    //
-    //   if (!compared.contains(m_piece.piece_id) &&
-    //       !m_piece.piece_name.contains('Helper') &&
-    //       !m_piece.piece_name.contains('inner')) {
-    //     List<Piece_model> same_pices_item = [];
-    //     same_pices_item.add(m_piece);
-    //     compared.add(m_piece.piece_id);
-    //
-    //     ///
-    //
-    //     for (int s = 0; s < pices.length; s++) {
-    //       Piece_model s_piece = pices[s];
-    //
-    //       if (!compared.contains(s_piece.piece_id) &&
-    //           !s_piece.piece_name.contains('Helper') &&
-    //           !s_piece.piece_name.contains('inner')) {
-    //         if (tow_pieces_are_same(m_piece, s_piece)) {
-    //           same_pices_item.add(s_piece);
-    //           compared.add(s_piece.piece_id);
-    //         }
-    //       }
-    //     }
-    //
-    //     ///
-    //
-    //     same_pices.add(same_pices_item);
-    //   }
-    // }
-    //
-    // same_pices.forEach((items) {
-    //   String names = '';
-    //   String ids = '';
-    //
-    //   String material_name = items[0].material_name;
-    //   items.forEach((element) {
-    //     names = '$names\n '
-    //         '${element.piece_name}';
-    //
-    //   });
-    //
-    //   items.forEach((element) {
-    //     ids = '$ids\n '
-    //         '${element.piece_id}';
-    //
-    //   });
-    //
-    //   Cut_List_Item cut_list_item = Cut_List_Item(
-    //       ids,
-    //       names,
-    //       material_name,
-    //       items[0].piece_thickness,
-    //       items[0].piece_width,
-    //       items[0].piece_height,
-    //       items.length);
-    //
-    //   draw_controller.box_repository.cut_list_items.add(cut_list_item);
-    // });
-    //
+      List<List<Piece_model>> same_pices = [];
 
+      for (int m = 0; m < pices.length; m++) {
+        Piece_model m_piece = pices[m];
 
-    for(int pi=0;pi<pices.length;pi++){
-      if(
-      !pices[pi].piece_name.contains("Helper") &&
-      !pices[pi].piece_name.contains("inner")
+        if (!compared.contains(m_piece.piece_id) &&
+            !m_piece.piece_name.contains('Helper') &&
+            !m_piece.piece_name.contains('inner')) {
+          List<Piece_model> same_pices_item = [];
+          same_pices_item.add(m_piece);
+          compared.add(m_piece.piece_id);
 
-      ){
+          ///
+
+          for (int s = 0; s < pices.length; s++) {
+            Piece_model s_piece = pices[s];
+
+            if (!compared.contains(s_piece.piece_id) &&
+                !s_piece.piece_name.contains('Helper') &&
+                !s_piece.piece_name.contains('inner')) {
+              if (tow_pieces_are_same(m_piece, s_piece)) {
+                same_pices_item.add(s_piece);
+                compared.add(s_piece.piece_id);
+              }
+            }
+          }
+
+          ///
+
+          same_pices.add(same_pices_item);
+        }
+      }
+
+      same_pices.forEach((items) {
+        String names = '';
+        String ids = '';
+
+        String material_name = items[0].material_name;
+        items.forEach((element) {
+          names = '$names\n '
+              '${element.piece_name}';
+
+        });
+
+        items.forEach((element) {
+          ids = '$ids\n '
+              '${element.piece_id}';
+
+        });
 
         Cut_List_Item cut_list_item = Cut_List_Item(
-            pices[pi].piece_id,
-            pices[pi].piece_name,
-            pices[pi].material_name,
-            pices[pi].piece_thickness,
-            pices[pi].piece_width,
-            pices[pi].piece_height,
-            1
-        );
+            ids,
+            names,
+            material_name,
+            items[0].piece_thickness,
+            items[0].piece_width,
+            items[0].piece_height,
+            items.length);
 
         draw_controller.box_repository.cut_list_items.add(cut_list_item);
-      }
+      });
+
     }
+else
+{
+
+  for(int pi=0;pi<pices.length;pi++){
+    if(
+    !pices[pi].piece_name.contains("Helper") &&
+        !pices[pi].piece_name.contains("inner")
+
+    ){
+
+      Cut_List_Item cut_list_item = Cut_List_Item(
+          pices[pi].piece_id,
+          pices[pi].piece_name,
+          pices[pi].material_name,
+          pices[pi].piece_thickness,
+          pices[pi].piece_width,
+          pices[pi].piece_height,
+          1
+      );
+
+      draw_controller.box_repository.cut_list_items.add(cut_list_item);
+    }
+  }
+}
+
 
   }
 

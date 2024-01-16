@@ -230,73 +230,73 @@ class _Add_Filler_DialogState extends State<Add_Filler_Dialog> {
               SizedBox(height: 12,),
 
               /// move the filler
-              Row(
-                children: [
-                  Container(width:100,child: Text('Move X')),
-                  SizedBox(width: 6,),
+              // Row(
+              //   children: [
+              //     Container(width:100,child: Text('Move X')),
+              //     SizedBox(width: 6,),
+              //
+              //     Container(width: 80,height: 32,
+              //       child: TextFormField(
+              //         onChanged: (_) {
+              //           if (x_move.text.toString()!='') {
+              //             x_move_value=double.parse(x_move.text.toString());
+              //           }
+              //           setState(() {
+              //           });                    },
+              //         enabled: true,
+              //         inputFormatters: [DecimalTextInputFormatter(2)],
+              //         keyboardType: TextInputType.numberWithOptions(decimal: true),
+              //         controller: x_move,
+              //         decoration: InputDecoration(
+              //           border: OutlineInputBorder(
+              //             borderRadius: BorderRadius.circular(4),
+              //           ),
+              //         ),
+              //         validator: (d) {
+              //           if (d!.isEmpty) {
+              //             return 'add value please';
+              //           }
+              //         },
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // SizedBox(height: 12,),
 
-                  Container(width: 80,height: 32,
-                    child: TextFormField(
-                      onChanged: (_) {
-                        if (x_move.text.toString()!='') {
-                          x_move_value=double.parse(x_move.text.toString());
-                        }
-                        setState(() {
-                        });                    },
-                      enabled: true,
-                      inputFormatters: [DecimalTextInputFormatter(2)],
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                      controller: x_move,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      validator: (d) {
-                        if (d!.isEmpty) {
-                          return 'add value please';
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 12,),
 
-
-              Row(
-                children: [
-                  Container(width:100,child: Text('Move Y')),
-                  SizedBox(width: 6,),
-
-                  Container(width: 80,height: 32,
-                    child: TextFormField(
-                      onChanged: (_) {
-                        if(y_move.text.toString()!=''){
-                          y_move_value=double.parse(y_move.text.toString());
-
-                        }
-                        setState(() {
-                        });
-                      },
-                      enabled: true,
-                      inputFormatters: [DecimalTextInputFormatter(2)],
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                      controller: y_move,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      validator: (d) {
-                        if (d!.isEmpty) {
-                          return 'add value please';
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     Container(width:100,child: Text('Move Y')),
+              //     SizedBox(width: 6,),
+              //
+              //     Container(width: 80,height: 32,
+              //       child: TextFormField(
+              //         onChanged: (_) {
+              //           if(y_move.text.toString()!=''){
+              //             y_move_value=double.parse(y_move.text.toString());
+              //
+              //           }
+              //           setState(() {
+              //           });
+              //         },
+              //         enabled: true,
+              //         inputFormatters: [DecimalTextInputFormatter(2)],
+              //         keyboardType: TextInputType.numberWithOptions(decimal: true),
+              //         controller: y_move,
+              //         decoration: InputDecoration(
+              //           border: OutlineInputBorder(
+              //             borderRadius: BorderRadius.circular(4),
+              //           ),
+              //         ),
+              //         validator: (d) {
+              //           if (d!.isEmpty) {
+              //             return 'add value please';
+              //           }
+              //         },
+              //       ),
+              //     ),
+              //   ],
+              // ),
 
               SizedBox(height: 32,),
               /// add bottom

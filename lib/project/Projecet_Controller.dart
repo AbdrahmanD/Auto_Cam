@@ -339,7 +339,7 @@ class Project_Controller extends GetxController {
 
   extract_cutList(){
 
-    AnalyzeJoins analyzeJoins=AnalyzeJoins(true);
+    AnalyzeJoins analyzeJoins=AnalyzeJoins(true,false);
 
 
 
