@@ -55,7 +55,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
     super.initState();
 
     box_model = draw_Controller.get_box();
-
+    box_name_controller.text=box_model.box_name.toString();
      width_controller.text = box_model.box_width.toString();
     hight_controller.text = box_model.box_height.toString();
     depth_controller.text = box_model.box_depth.toString();
@@ -70,6 +70,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
         '${draw_Controller.box_repository.pack_panel_distence}';
     top_base_piece_width_controller.text =
         '${draw_Controller.box_repository.top_base_piece_width}';
+    is_back_panel=box_model.is_back_panel;
    }
 
 
@@ -404,180 +405,180 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
           ///back Panel thickness form field
-          Row(
-            children: [
-              SizedBox(
-                width: 18,
-              ),
-              Text(
-                "Back Panel :",
-                style: TextStyle(fontSize: 14),
-              ),
-              SizedBox(
-                width: 12,
-              ),
-              Container(
-                width: 100,
-                height: 26,
-                child: TextFormField(
-                  style: TextStyle(fontSize: 14),
-                  controller: back_panel_thickness_controller,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (d) {
-                    if (d!.isEmpty) {
-                      return 'please add value';
-                    }
-                  },
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-              ),
-              Text(
-                "  mm",
-                style: TextStyle(fontSize: 14),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 6,
-          ),
-
-          ///pack_panel_grove_depth  form field
-          Row(
-            children: [
-              SizedBox(
-                width: 18,
-              ),
-              Text(
-                "grove depth:",
-                style: TextStyle(fontSize: 14),
-              ),
-              SizedBox(
-                width: 12,
-              ),
-              Container(
-                width: 100,
-                height: 26,
-                child: TextFormField(
-                  style: TextStyle(fontSize: 14),
-                  controller: pack_panel_grove_depth_controller,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (d) {
-                    if (d!.isEmpty) {
-                      return 'please add value';
-                    }
-                  },
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-              ),
-              Text(
-                "  mm",
-                style: TextStyle(fontSize: 14),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 6,
-          ),
-
-          ///pack_panel_distence_controller form field
-          Row(
-            children: [
-              SizedBox(
-                width: 18,
-              ),
-              Text(
-                "Back distence :",
-                style: TextStyle(fontSize: 14),
-              ),
-              SizedBox(
-                width: 12,
-              ),
-              Container(
-                width: 100,
-                height: 26,
-                child: TextFormField(
-                  style: TextStyle(fontSize: 14),
-                  controller: pack_panel_distence_controller,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (d) {
-                    if (d!.isEmpty) {
-                      return 'please add value';
-                    }
-                  },
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-              ),
-              Text(
-                "  mm",
-                style: TextStyle(fontSize: 14),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 6,
-          ),
-
-          ///top_base_piece_width_controller form field
-          Row(
-            children: [
-              SizedBox(
-                width: 18,
-              ),
-              Text(
-                "filler width :",
-                style: TextStyle(fontSize: 14),
-              ),
-              SizedBox(
-                width: 12,
-              ),
-              Container(
-                width: 100,
-                height: 26,
-                child: TextFormField(
-                  style: TextStyle(fontSize: 14),
-                  controller: top_base_piece_width_controller,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (d) {
-                    if (d!.isEmpty) {
-                      return 'please add value';
-                    }
-                  },
-                  inputFormatters: [DecimalTextInputFormatter(2)],
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-              ),
-              Text(
-                "  mm",
-                style: TextStyle(fontSize: 14),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 6,
-          ),
-
-          SizedBox(
-            height: 12,
-          ),
+          // Row(
+          //   children: [
+          //     SizedBox(
+          //       width: 18,
+          //     ),
+          //     Text(
+          //       "Back Panel :",
+          //       style: TextStyle(fontSize: 14),
+          //     ),
+          //     SizedBox(
+          //       width: 12,
+          //     ),
+          //     Container(
+          //       width: 100,
+          //       height: 26,
+          //       child: TextFormField(
+          //         style: TextStyle(fontSize: 14),
+          //         controller: back_panel_thickness_controller,
+          //         decoration: InputDecoration(
+          //           border: OutlineInputBorder(
+          //             borderRadius: BorderRadius.circular(8),
+          //           ),
+          //         ),
+          //         validator: (d) {
+          //           if (d!.isEmpty) {
+          //             return 'please add value';
+          //           }
+          //         },
+          //         inputFormatters: [DecimalTextInputFormatter(2)],
+          //         keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //       ),
+          //     ),
+          //     Text(
+          //       "  mm",
+          //       style: TextStyle(fontSize: 14),
+          //     ),
+          //   ],
+          // ),
+          // SizedBox(
+          //   height: 6,
+          // ),
+          //
+          // ///pack_panel_grove_depth  form field
+          // Row(
+          //   children: [
+          //     SizedBox(
+          //       width: 18,
+          //     ),
+          //     Text(
+          //       "grove depth:",
+          //       style: TextStyle(fontSize: 14),
+          //     ),
+          //     SizedBox(
+          //       width: 12,
+          //     ),
+          //     Container(
+          //       width: 100,
+          //       height: 26,
+          //       child: TextFormField(
+          //         style: TextStyle(fontSize: 14),
+          //         controller: pack_panel_grove_depth_controller,
+          //         decoration: InputDecoration(
+          //           border: OutlineInputBorder(
+          //             borderRadius: BorderRadius.circular(8),
+          //           ),
+          //         ),
+          //         validator: (d) {
+          //           if (d!.isEmpty) {
+          //             return 'please add value';
+          //           }
+          //         },
+          //         inputFormatters: [DecimalTextInputFormatter(2)],
+          //         keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //       ),
+          //     ),
+          //     Text(
+          //       "  mm",
+          //       style: TextStyle(fontSize: 14),
+          //     ),
+          //   ],
+          // ),
+          // SizedBox(
+          //   height: 6,
+          // ),
+          //
+          // ///pack_panel_distence_controller form field
+          // Row(
+          //   children: [
+          //     SizedBox(
+          //       width: 18,
+          //     ),
+          //     Text(
+          //       "Back distence :",
+          //       style: TextStyle(fontSize: 14),
+          //     ),
+          //     SizedBox(
+          //       width: 12,
+          //     ),
+          //     Container(
+          //       width: 100,
+          //       height: 26,
+          //       child: TextFormField(
+          //         style: TextStyle(fontSize: 14),
+          //         controller: pack_panel_distence_controller,
+          //         decoration: InputDecoration(
+          //           border: OutlineInputBorder(
+          //             borderRadius: BorderRadius.circular(8),
+          //           ),
+          //         ),
+          //         validator: (d) {
+          //           if (d!.isEmpty) {
+          //             return 'please add value';
+          //           }
+          //         },
+          //         inputFormatters: [DecimalTextInputFormatter(2)],
+          //         keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //       ),
+          //     ),
+          //     Text(
+          //       "  mm",
+          //       style: TextStyle(fontSize: 14),
+          //     ),
+          //   ],
+          // ),
+          // SizedBox(
+          //   height: 6,
+          // ),
+          //
+          // ///top_base_piece_width_controller form field
+          // Row(
+          //   children: [
+          //     SizedBox(
+          //       width: 18,
+          //     ),
+          //     Text(
+          //       "filler width :",
+          //       style: TextStyle(fontSize: 14),
+          //     ),
+          //     SizedBox(
+          //       width: 12,
+          //     ),
+          //     Container(
+          //       width: 100,
+          //       height: 26,
+          //       child: TextFormField(
+          //         style: TextStyle(fontSize: 14),
+          //         controller: top_base_piece_width_controller,
+          //         decoration: InputDecoration(
+          //           border: OutlineInputBorder(
+          //             borderRadius: BorderRadius.circular(8),
+          //           ),
+          //         ),
+          //         validator: (d) {
+          //           if (d!.isEmpty) {
+          //             return 'please add value';
+          //           }
+          //         },
+          //         inputFormatters: [DecimalTextInputFormatter(2)],
+          //         keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //       ),
+          //     ),
+          //     Text(
+          //       "  mm",
+          //       style: TextStyle(fontSize: 14),
+          //     ),
+          //   ],
+          // ),
+          // SizedBox(
+          //   height: 6,
+          // ),
+          //
+          // SizedBox(
+          //   height: 12,
+          // ),
 
           //divider
           Container(
@@ -627,43 +628,43 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           // ),
 
           ///////////////////////
-          SizedBox(
-            height: 6,
-          ),
-
-
-          ///chose is there back panel or not
-          Container(
-            child: Row(
-              children: [
-                SizedBox(width: 18),
-                Container(
-                    width: 180,
-                    child: Text('               with back panel ',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ))),
-                SizedBox(
-                  width: 18,
-                ),
-                Checkbox(
-                    value: is_back_panel,
-                    onChanged: (v) {
-                      is_back_panel = !is_back_panel;
-                      setState(() {});
-                    })
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 6,
-          ),
+          // SizedBox(
+          //   height: 6,
+          // ),
+          //
+          //
+          // ///chose is there back panel or not
+          // Container(
+          //   child: Row(
+          //     children: [
+          //       SizedBox(width: 18),
+          //       Container(
+          //           width: 180,
+          //           child: Text('               with back panel ',
+          //               style: TextStyle(
+          //                 fontSize: 14,
+          //               ))),
+          //       SizedBox(
+          //         width: 18,
+          //       ),
+          //       Checkbox(
+          //           value: is_back_panel,
+          //           onChanged: (v) {
+          //             is_back_panel = !is_back_panel;
+          //             setState(() {});
+          //           })
+          //     ],
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: 6,
+          // ),
 
           //divider
-          Container(
-            height: 1,
-            color: Colors.grey,
-          ),
+          // Container(
+          //   height: 1,
+          //   color: Colors.grey,
+          // ),
           ///////////////////////
           ///Draw in the Screen button
           Padding(
@@ -849,6 +850,37 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 12,
           ),
 
+          ///analyze
+          // Container(
+          //   child: Row(
+          //     children: [
+          //       SizedBox(
+          //         width: 18,
+          //       ),
+          //       Container(
+          //           width: 180,
+          //           child: Text('analyze',
+          //               style: TextStyle(
+          //                 fontSize: 14,
+          //               ))),
+          //       SizedBox(
+          //         width: 18,
+          //       ),
+          //       InkWell(
+          //           onTap: () {
+          //             draw_Controller.anlyze_inners();
+          //             setState(() {
+          //
+          //             });
+          //           },
+          //           child: Icon(
+          //             Icons.ac_unit,
+          //             size: 36,
+          //             color: Colors.teal,
+          //           )),
+          //     ],
+          //   ),
+          // ),
 
 
           SizedBox(

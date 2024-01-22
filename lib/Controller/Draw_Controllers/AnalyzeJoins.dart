@@ -126,10 +126,10 @@ project_model = draw_controller.box_repository.project_model;
 
                 if(mpiece.piece_name.contains("Door") && !mpiece.piece_name.contains("Helper")){
 
-                  join_line = Join_Line(line.start_point, line.end_point, "Door_Hinges");
+                  join_line = Join_Line(line.start_point, line.end_point, "Door_Hinges",line.line_width);
 
                 }else{
-                  join_line = Join_Line(line.start_point, line.end_point, "side_Hinges");
+                  join_line = Join_Line(line.start_point, line.end_point, "side_Hinges",line.line_width);
 
                 }
 
@@ -140,10 +140,10 @@ project_model = draw_controller.box_repository.project_model;
               mpiece.piece_name.contains("Drawer_Helper") || spiece.piece_name.contains("Drawer_Helper"))
               {
                 if(mpiece.piece_name.contains("drawer")||spiece.piece_name.contains("drawer")){
-                  join_line = Join_Line(line.start_point, line.end_point, "Drawer_Rail_Side");
+                  join_line = Join_Line(line.start_point, line.end_point, "Drawer_Rail_Side",line.line_width);
                 }
                 else{
-                  join_line = Join_Line(line.start_point, line.end_point, "Drawer_Rail_Box");
+                  join_line = Join_Line(line.start_point, line.end_point, "Drawer_Rail_Box",line.line_width);
                 }
               }
 
@@ -153,31 +153,31 @@ project_model = draw_controller.box_repository.project_model;
               mpiece.piece_name.contains("base_panel") || spiece.piece_name.contains("base_panel")
               ) {
 
-                join_line = Join_Line(line.start_point, line.end_point, "Groove");
+                join_line = Join_Line(line.start_point, line.end_point, "Groove",line.line_width);
 
               }
 
               /// drawer Helper
               else if (mpiece.piece_name.contains("DBF") || spiece.piece_name.contains("DBF")) {
-                join_line = Join_Line(line.start_point, line.end_point, "DBF");
+                join_line = Join_Line(line.start_point, line.end_point, "DBF",line.line_width);
               }
             }
 
             /// Drawer Face
             else if (mpiece.piece_name.contains("Drawer Face") || spiece.piece_name.contains("Drawer Face"))
             {
-              join_line = Join_Line(line.start_point, line.end_point, "Drawer_Face");
+              join_line = Join_Line(line.start_point, line.end_point, "Drawer_Face",line.line_width);
             }
 
             else if ( spiece.piece_name.contains("shelf") && !spiece.piece_name.contains("fixed"))
             {
 
-              join_line = Join_Line(line.start_point, line.end_point, "Flexible_Shelves");
+              join_line = Join_Line(line.start_point, line.end_point, "Flexible_Shelves",line.line_width);
             }
 
             else
             {
-              join_line = Join_Line(line.start_point, line.end_point, "Box_Fitting_DRILL");
+              join_line = Join_Line(line.start_point, line.end_point, "Box_Fitting_DRILL",line.line_width);
             }
 
             if (calculate_length_of_line(line, line_axis(line)) > 0)
@@ -200,8 +200,7 @@ project_model = draw_controller.box_repository.project_model;
                 }
                 mface.groves.add
                   (Groove_model(
-                    line.start_point, line.end_point, width,
-                    draw_controller.box_repository.pack_panel_grove_depth)
+                    line.start_point, line.end_point, width,grove_depth)
                 );
 
                 // print("mpiece.piece_name : ${mpiece.piece_name}");
@@ -233,6 +232,7 @@ project_model = draw_controller.box_repository.project_model;
 
     Point_model sp = Point_model(0, 0, 0);
     Point_model ep = Point_model(0, 0, 0);
+    double line_width=2;
 
     double x_correct=0;
     double y_correct=0;
@@ -242,6 +242,7 @@ project_model = draw_controller.box_repository.project_model;
       x_correct=draw_controller.box_repository.pack_panel_grove_depth;
       y_correct=draw_controller.box_repository.pack_panel_grove_depth;
       z_coorect=draw_controller.box_repository.pack_panel_grove_depth;
+      line_width=draw_controller.box_repository.pack_panel_thickness;
     }
 
     if (face.name == 1 || face.name == 3) {
@@ -309,7 +310,7 @@ project_model = draw_controller.box_repository.project_model;
       }
     }
 
-    Line line = Line(sp, ep);
+    Line line = Line(sp, ep,line_width);
 
     return line;
   }
@@ -636,11 +637,11 @@ project_model = draw_controller.box_repository.project_model;
     for (int i = 0; i < 4; i++) {
       int t = i;
       if (t == 3) {
-        Line line = Line(face.corners[i], face.corners[0]);
+        Line line = Line(face.corners[i], face.corners[0],1);
         face_line.add(line);
         continue;
       } else {
-        Line line = Line(face.corners[i], face.corners[i + 1]);
+        Line line = Line(face.corners[i], face.corners[i + 1],1);
         face_line.add(line);
       }
     }
@@ -703,7 +704,7 @@ project_model = draw_controller.box_repository.project_model;
   }
 
   Line check_tow_face_intersected(Box_model box_model,Single_Face face1, Single_Face face2) {
-    late Line line = Line(Point_model(0, 0, 0), Point_model(0, 0, 0));
+    late Line line = Line(Point_model(0, 0, 0), Point_model(0, 0, 0),1);
 
     List<Point_model> intersection_rect = [];
 
@@ -769,7 +770,7 @@ project_model = draw_controller.box_repository.project_model;
   /// and add join line for both faces
   Line extract_join_line(Box_model box_model,List<Point_model> corners, Single_Face face_1) {
 
-      Line local_join_line=Line(Point_model(0,0,0), Point_model(0,0,0));;
+      Line local_join_line=Line(Point_model(0,0,0), Point_model(0,0,0),1);
 
     late Point_model join_line_start_point;
     late Point_model join_line_end_point;
@@ -915,16 +916,16 @@ project_model = draw_controller.box_repository.project_model;
       if(join_axis_is_Z){
         if (join_line_start_point.z_coordinate < join_line_end_point.z_coordinate)
         {
-          local_join_line = Line(join_line_start_point, join_line_end_point);
+          local_join_line = Line(join_line_start_point, join_line_end_point,1);
         }
         else
         {
-          local_join_line = Line(join_line_end_point, join_line_start_point);
+          local_join_line = Line(join_line_end_point, join_line_start_point,1);
         }
       }
       else{if (join_line_start_point.y_coordinate < join_line_end_point.y_coordinate)
       {
-        local_join_line = Line(join_line_start_point, join_line_end_point);
+        local_join_line = Line(join_line_start_point, join_line_end_point,1);
       }
 
 
@@ -956,7 +957,7 @@ project_model = draw_controller.box_repository.project_model;
         for (int j = 0; j < face.joines.length; j++) {
           Join_Line join_line = face.joines[j];
 
-          Line line = Line(join_line.start_point, join_line.end_point);
+          Line line = Line(join_line.start_point, join_line.end_point,1);
 
           int second_face_id =
               detect_second_face(box_model,p.piece_name, p.piece_direction, face);

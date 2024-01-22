@@ -1,6 +1,5 @@
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
-import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
-import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
+ import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,9 +14,9 @@ class Box_Painter extends CustomPainter {
 
   late String view_port;
 
-late Offset start_select_window;
+  late Offset start_select_window;
   late Offset end_select_window  ;
-
+  // List<Point_model> corners=[];
 
   Box_Painter(
       this.box_model,
@@ -27,7 +26,9 @@ late Offset start_select_window;
       this.selected_id,
       this.view_port,
       this.start_select_window,
-      this.end_select_window){
+      this.end_select_window,
+      // this.corners
+      ){
 
     this.box_model = box_model;
 
@@ -45,6 +46,10 @@ late Offset start_select_window;
   void paint(Canvas canvas, Size size) {
     draw_box(canvas);
     draw_select_rect(canvas);
+
+
+
+
   }
 
   @override
@@ -94,7 +99,12 @@ late Offset start_select_window;
 
     Paint inners_filler = Paint()
       ..style = PaintingStyle.fill
-      ..color = Colors.teal[100]!;
+      ..color = Colors.teal;
+
+    Paint unselect_inner_filler = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.red[200]!;
+
 
     // Paint helper_filler = Paint()
     //   ..style = PaintingStyle.fill
@@ -103,7 +113,7 @@ late Offset start_select_window;
 
     Paint doors_filler = Paint()
       ..style = PaintingStyle.fill
-      ..color = Colors.blue[100]!
+      ..color = Colors.brown[100]!
       ..blendMode=BlendMode.darken;
 
 
@@ -123,7 +133,16 @@ late Offset start_select_window;
       Point_model p8 = piece_model.piece_faces.faces[5].corners[3];
 
 
-
+      //
+      // for(Point_model poi in corners){
+      //
+      //   canvas.drawCircle(
+      //       Offset(
+      //           poi.x_coordinate* drawing_scale + box_model.box_origin.x_coordinate,
+      //           box_model.box_origin.y_coordinate-poi.y_coordinate* drawing_scale
+      //       ), 3, Paint());
+      //
+      // }
 
       Path path = Path();
 
@@ -162,17 +181,6 @@ late Offset start_select_window;
 
 
 
-      if (i == hover_id) {
-        if (piece_model.piece_name.contains('inner')) {
-          canvas.drawPath(path, inners_filler);
-          // canvas.drawPath(path, line_painter);
-        } else {
-          canvas.drawPath(path, pieces_filler);
-          canvas.drawPath(path, line_painter);
-
-        }
-      }
-
       for(int s=0;s<selected_id.length;s++){
         if (i == selected_id[s]) {
           if (piece_model.piece_name != 'inner' && piece_model.piece_name != 'Door') {
@@ -183,17 +191,33 @@ late Offset start_select_window;
         }
       }
 
+
       if(piece_model.piece_name.contains("Helper")){
         // canvas.drawPath(path, helper_filler);
+      }else if(piece_model.piece_name.contains('EM')){
+        canvas.drawPath(path, unselect_inner_filler);
+        canvas.drawPath(path, thin_line_painter);
       }
       else if(piece_model.piece_name.contains('Door')){
         canvas.drawPath(path, doors_filler);
         canvas.drawPath(path, thin_line_painter);
       }
+
         else {
         canvas.drawPath(path, line_painter);
       }
 
+
+      if (i == hover_id) {
+        if (piece_model.piece_name.contains('EM')) {
+          canvas.drawPath(path, inners_filler);
+          // canvas.drawPath(path, line_painter);
+        } else {
+          canvas.drawPath(path, pieces_filler);
+          canvas.drawPath(path, line_painter);
+
+        }
+      }
 
 
 

@@ -1,6 +1,5 @@
 import 'dart:convert';
- import 'dart:io';
-import 'dart:io' show Platform;
+  import 'dart:io';
 
  import 'dart:math';
 
@@ -49,6 +48,9 @@ class Draw_Controller extends GetxController {
   Rx<Offset> box_move_offset = Offset(0, 0).obs;
 
 
+  List<Point_model> corners_points=[];
+
+
   Draw_Controller() {
     read_pattern_files();
 
@@ -60,9 +62,21 @@ class Draw_Controller extends GetxController {
   ///
   select_window_method(Offset offset, bool select) {
     if (select) {
-      start_select_window.value = mouse_position.value;
+      double sx=0;
+      double sy=0;
+      double ex=0;
+      double ey=0;
 
-      end_select_window.value = offset;
+      if(mouse_position.value.dx>offset.dx){sx=mouse_position.value.dx;ex=offset.dx;}
+      if(mouse_position.value.dx<offset.dx){ex=mouse_position.value.dx;sx=offset.dx;}
+      if(mouse_position.value.dy<offset.dy){sy=mouse_position.value.dy;ey=offset.dy;}
+      if(mouse_position.value.dy>offset.dy){ey=mouse_position.value.dy;sy=offset.dy;}
+
+
+
+      start_select_window.value = Offset(sx,sy);
+
+      end_select_window.value = Offset(ex,ey);
     } else {
       start_select_window.value = Offset(0, 0);
       end_select_window.value = Offset(0, 0);
@@ -181,7 +195,9 @@ class Draw_Controller extends GetxController {
         selected_id,
         view_port.value,
         start_select_window.value,
-        end_select_window.value);
+        end_select_window.value,
+        // corners_points
+    );
     return boxPainter;
   }
 
@@ -189,6 +205,8 @@ class Draw_Controller extends GetxController {
     // box_repository.box_model.value = box_model;
 
     box_repository.add_box_to_repo(box_model);
+    anlyze_inners();
+
     draw_Box();
   }
 
@@ -206,7 +224,7 @@ class Draw_Controller extends GetxController {
     hover_id = 100;
     for (int i = 0; i < box_pieces.length; i++) {
       Piece_model p = box_pieces[i];
-      if (p.piece_name.contains('back_panel') ||
+      if ((p.piece_name.contains('back_panel')&&view_port=="F") ||
           p.piece_name.contains('Door')) {
         continue;
       } else if (check_position(p, my_origin)) {
@@ -312,15 +330,22 @@ class Draw_Controller extends GetxController {
   /// add shelf method
   add_shelf(double top_Distence, double frontage_Gap, double material_thickness,
       int quantity, String shelf_type) {
+
+    double back_panel_distance=0;
+    if(box_repository.back_panel_type=="groove"){
+      back_panel_distance= box_repository.box_model.value.bac_panel_distence +
+          box_repository.box_model.value.back_panel_thickness;
+    }
     box_repository.box_model.value.add_Shelf(
         hover_id,
-        top_Distence,
         frontage_Gap,
+      back_panel_distance,
         material_thickness,
-        quantity,
+      top_Distence,
+
+      quantity,
         shelf_type,
-        box_repository.box_model.value.bac_panel_distence +
-            box_repository.box_model.value.back_panel_thickness);
+      );
     // print_pieces_coordinate();
 
     // Box_model b = box_repository.box_model.value;
@@ -342,6 +367,8 @@ class Draw_Controller extends GetxController {
     // nb.box_pieces = b.box_pieces;
     // add_Box(nb);
 
+    anlyze_inners();
+
     draw_Box();
   }
 
@@ -351,10 +378,17 @@ class Draw_Controller extends GetxController {
       double frontage_Gap,
       double material_thickness,
       int quantity,
-      double back_distance,
-      bool helper) {
-    box_repository.box_model.value.add_Partition(hover_id, left_Distence,
-        frontage_Gap, material_thickness, quantity, back_distance, helper);
+       bool helper) {
+
+    double back_panel_distance=0;
+    if(box_repository.back_panel_type=="groove"){
+      back_panel_distance= box_repository.box_model.value.bac_panel_distence +
+          box_repository.box_model.value.back_panel_thickness;
+    }
+
+    box_repository.box_model.value.add_Partition(hover_id,frontage_Gap,back_panel_distance,material_thickness,
+        left_Distence,
+          quantity,  helper?"Help_partition":"partition");
     //
     // Box_model b = box_repository.box_model.value;
     // Box_model nb = Box_model(
@@ -374,42 +408,38 @@ class Draw_Controller extends GetxController {
     // nb.piece_id = b.piece_id;
     // nb.box_pieces = b.box_pieces;
     // add_Box(nb);
+    anlyze_inners();
+
     draw_Box();
   }
 
 
   /// add support
-  add_support(Support_Filler support_filler,
-      int quantity,
-      ) {
-    box_repository.box_model.value.add_support(hover_id, support_filler.left_distance,support_filler.width,
-        support_filler.thickness, quantity );
-    //
-    // Box_model b = box_repository.box_model.value;
-    // Box_model nb = Box_model(
-    //     b.box_name,
-    //     box_type,
-    //     b.box_width,
-    //     b.box_height,
-    //     b.box_depth,
-    //     b.init_material_thickness,
-    //     b.init_material_name,
-    //     b.back_panel_thickness,
-    //     b.grove_value,
-    //     b.bac_panel_distence,
-    //     b.top_base_piece_width,
-    //     b.is_back_panel,
-    //     b.box_origin);
-    // nb.piece_id = b.piece_id;
-    // nb.box_pieces = b.box_pieces;
-    // add_Box(nb);
+  add_support(Support_Filler support_filler, int quantity) {
+    if (support_filler.vertical) {
+      box_repository.box_model.value.add_vertical_support(
+          hover_id,
+          support_filler.left_distance,
+          support_filler.width,
+          support_filler.thickness,
+          quantity);
+    } else {
+      box_repository.box_model.value.add_horizontal_support(
+          hover_id,
+          support_filler.left_distance,
+          support_filler.width,
+          support_filler.thickness,
+          quantity);
+    }
+    anlyze_inners();
+
     draw_Box();
   }
 
-  add_filler(Filler_model filler_model) {
-    box_repository.box_model.value.add_filler(filler_model, hover_id);
-    draw_Box();
-  }
+  // add_filler(Filler_model filler_model) {
+  //   box_repository.box_model.value.add_filler(filler_model, hover_id);
+  //   draw_Box();
+  // }
 
   /// add door method
   add_door(Door_Model door_model) {
@@ -460,11 +490,85 @@ class Draw_Controller extends GetxController {
     }
 
     Piece_model piece_model = Piece_model(piece_id, piece_name, piece_direction,
-        material_name, piece_width, piece_height, piece_thickness, fix_origin,"");
-
+        material_name, piece_width, piece_height, piece_thickness, fix_origin);
     box_repository.box_model.value.box_pieces.add(piece_model);
+    anlyze_inners();
+
     draw_Box();
+
   }
+
+
+  /// add back panel
+
+  add_back_banel(String back_panel_type , String back_panel_material_name ,double material_thickness,double back_distance , double groove_depth){
+
+    if(back_panel_type=="groove")
+    {
+
+
+      Piece_model  back_panel = Piece_model(
+              box_repository.box_model.value.get_id("BP"),
+              'back_panel',
+              'F',
+          box_repository.box_model.value.init_material_name,
+              correct_value(box_repository.box_model.value.box_width-2*box_repository.box_model.value.init_material_thickness+2*groove_depth-1),
+              correct_value(box_repository.box_model.value.box_height-2*box_repository.box_model.value.init_material_thickness+2*groove_depth-1),
+              correct_value(material_thickness),
+              Point_model(
+                  correct_value(box_repository.box_model.value.init_material_thickness-groove_depth+1),
+                  correct_value(box_repository.box_model.value.init_material_thickness-groove_depth+1 ),
+                  correct_value(box_repository.box_model.value.box_depth-back_distance-material_thickness)
+              )
+          );
+
+      Piece_model  back_panel_Helper = Piece_model(
+          box_repository.box_model.value.get_id("BP"),
+          'back_panel_Helper',
+          'F',
+          box_repository.box_model.value.init_material_name,
+          correct_value(box_repository.box_model.value.box_width-2*box_repository.box_model.value.init_material_thickness),
+          correct_value(box_repository.box_model.value.box_height-2*box_repository.box_model.value.init_material_thickness),
+          correct_value(material_thickness),
+          Point_model(
+              correct_value(box_repository.box_model.value.init_material_thickness),
+              correct_value(box_repository.box_model.value.init_material_thickness ),
+              correct_value(box_repository.box_model.value.box_depth-back_distance-material_thickness)
+          )
+      );
+
+
+      box_repository.box_model.value.box_pieces.add(back_panel);
+      box_repository.box_model.value.box_pieces.add(back_panel_Helper);
+
+    }
+    else if(back_panel_type=="full_cover"){
+      Piece_model back_panel=Piece_model(
+          box_repository.box_model.value.get_id("back_panel"),
+          "full cover back_panel",
+          "F",
+          back_panel_material_name,
+          box_repository.box_model.value.box_width,
+          box_repository.box_model.value.box_height,
+          material_thickness,
+          Point_model(
+              0,
+              0,
+              0+box_repository.box_model.value.box_depth
+          )
+      );
+
+      box_repository.box_model.value.box_pieces.add(back_panel);
+      box_repository.back_panel_type=back_panel_type;
+
+    }
+
+
+
+  }
+
+
+
 
   /// delete piece
   delete_piece() {
@@ -477,27 +581,27 @@ if(selected_id.length==1){
   // ///
 
 
-
-  if (!(
-  b.box_pieces[selected_id[0]].piece_name.contains("left") ||
-  b.box_pieces[selected_id[0]].piece_name.contains("right") ||
-  b.box_pieces[selected_id[0]].piece_name.contains("top") ||
-  b.box_pieces[selected_id[0]].piece_name.contains("base")
-
-  )){
-
-    String inner_1="${b.box_pieces[selected_id[0]].enner_name}_1";
-    String inner_2="${b.box_pieces[selected_id[0]].enner_name}_2";
-    Piece_model old_inner=b.box_deleted_pieces.
-    where((element) => element.piece_name==b.box_pieces[selected_id[0]].enner_name).first;
-
-    b.box_pieces.removeWhere((element) => element.piece_name==inner_1);
-    b.box_pieces.removeWhere((element) => element.piece_name==inner_2);
-
-
-    b.box_pieces .add(old_inner);
-
-  }
+  //
+  // if (!(
+  // b.box_pieces[selected_id[0]].piece_name.contains("left") ||
+  // b.box_pieces[selected_id[0]].piece_name.contains("right") ||
+  // b.box_pieces[selected_id[0]].piece_name.contains("top") ||
+  // b.box_pieces[selected_id[0]].piece_name.contains("base")
+  //
+  // )){
+  //
+  //   String inner_1="${b.box_pieces[selected_id[0]].enner_name}_1";
+  //   String inner_2="${b.box_pieces[selected_id[0]].enner_name}_2";
+  //   Piece_model old_inner=b.box_deleted_pieces.
+  //   where((element) => element.piece_name==b.box_pieces[selected_id[0]].enner_name).first;
+  //
+  //   b.box_pieces.removeWhere((element) => element.piece_name==inner_1);
+  //   b.box_pieces.removeWhere((element) => element.piece_name==inner_2);
+  //
+  //
+  //   b.box_pieces .add(old_inner);
+  //
+  // }
 
 
 
@@ -510,6 +614,7 @@ if(selected_id.length==1){
 
    }
 
+    anlyze_inners();
 
   }
 
@@ -524,26 +629,26 @@ if(selected_id.length==1){
 
     if (view_port == 'F') {
       /// move X
-      dx += x_move_value;
+      dx = x_move_value;
 
       /// move Y
-      dy += y_move_value;
+      dy = y_move_value;
     } else if (view_port == 'R') {
       /// move Y
-      dy += y_move_value;
+      dy = y_move_value;
 
       /// move Z
-      dz += x_move_value;
+      dz = x_move_value;
     } else if (view_port == 'T') {
       /// move X
-      dx += x_move_value;
+      dx = x_move_value;
 
       /// move Z
-      dz += y_move_value;
+      dz = y_move_value;
     }
 
-    for (int w = 0; w < selected_id.length; w++) {
-      Piece_model p = box_repository.box_model.value.box_pieces[selected_id[w]];
+    if (selected_id.length==1) {
+      Piece_model p = box_repository.box_model.value.box_pieces[selected_id[0]];
 
       for (int i = 0; i < 4; i++) {
 
@@ -575,47 +680,121 @@ if(selected_id.length==1){
       p.piece_origin.x_coordinate += dx;
       p.piece_origin.y_coordinate += dy;
       p.piece_origin.z_coordinate += dz;
+
+      // String inner_1="${b.box_pieces[selected_id[0]].enner_name}_1";
+      // String inner_2="${b.box_pieces[selected_id[0]].enner_name}_2";
+      //
+      // Piece_model orgin_inner_1=b.box_pieces.where((element) => element.piece_name==inner_1).first;
+      // Piece_model orgin_inner_2=b.box_pieces.where((element) => element.piece_name==inner_2).first;
+      //
+      // //
+      // // print("orgin_inner_1 : ${orgin_inner_1.piece_name}");
+      // // print("orgin_inner_2 : ${orgin_inner_2.piece_name}");
+      // //
+      //
+      //
+      // // Piece_model new_inner_1=orgin_inner_1;
+      // // Piece_model new_inner_2=orgin_inner_2;
+      //   //
+      //   // new_inner_1.piece_width+=dx;
+      //   // new_inner_1.piece_height-=dy;
+      //   // new_inner_1.piece_thickness-=dz;
+      //   //
+      //   //
+      //   // new_inner_2.piece_width-=    dx;
+      //   // new_inner_2.piece_height+=   dy;
+      //   // new_inner_2.piece_thickness+=dz;
+      //   //
+      //
+      //   Piece_model n_inner_1=Piece_model(
+      //       orgin_inner_1.piece_id,
+      //       orgin_inner_1.piece_name,
+      //       orgin_inner_1.piece_direction,
+      //       orgin_inner_1.material_name,
+      //       orgin_inner_1.piece_width+dx,
+      //       orgin_inner_1.piece_height+dy,
+      //       orgin_inner_1.piece_thickness+dz,
+      //       Point_model(
+      //           orgin_inner_1.piece_origin.x_coordinate,
+      //           orgin_inner_1.piece_origin.y_coordinate,
+      //           orgin_inner_1.piece_origin.z_coordinate
+      //       ),
+      //       orgin_inner_1.enner_name);
+      //
+      // Piece_model n_inner_2=Piece_model(
+      //     orgin_inner_2.piece_id,
+      //     orgin_inner_2.piece_name,
+      //     orgin_inner_2.piece_direction,
+      //     orgin_inner_2.material_name,
+      //     orgin_inner_2.piece_width-dx,
+      //     orgin_inner_2.piece_height-dy,
+      //     orgin_inner_2.piece_thickness-dz,
+      //     Point_model(
+      //         orgin_inner_2.piece_origin.x_coordinate+dx,
+      //         orgin_inner_2.piece_origin.y_coordinate+dy,
+      //         orgin_inner_2.piece_origin.z_coordinate+dz
+      //     ),
+      //     orgin_inner_1.enner_name);
+      //
+      //
+      //
+      //   box_repository.box_model.value.box_pieces.removeWhere((element) => element.piece_name==inner_1);
+      //   box_repository.box_model.value.box_pieces.removeWhere((element) => element.piece_name==inner_2);
+      //
+      //   box_repository.box_model.value.box_pieces.add(n_inner_1);
+      //   box_repository.box_model.value.box_pieces.add(n_inner_2);
+
+      ///
+      box_repository.add_box_to_repo(b);
+      anlyze_inners();
+
+      draw_Box();
+
+
+
     }
 
-    ///
-    box_repository.add_box_to_repo(b);
-    draw_Box();
+
+
+
+
+
   }
 
-  flip_piece() {
-    Box_model b = box_repository.box_model.value;
-
-    if (selected_id.length==1) {
-      Piece_model p = b.box_pieces[selected_id[0]];
-
-      if (view_port == 'F') {
-      } else if (view_port == 'R') {
-        if (p.piece_direction == 'H') {
-          p.piece_direction = "F";
-        } else if (p.piece_direction == 'F') {
-          p.piece_direction = "H";
-        }
-      } else if (view_port == 'T') {}
-
-      Piece_model np = Piece_model(
-          p.piece_id,
-          p.piece_name,
-          p.piece_direction,
-          p.material_name,
-          p.piece_height,
-          p.piece_width,
-          p.piece_thickness,
-          p.piece_origin,
-      p.enner_name);
-
-      b.box_pieces.remove(p);
-      b.box_pieces.add(np);
-    }
-
-    box_repository.add_box_to_repo(b);
-
-    draw_Box();
-  }
+  // flip_piece() {
+  //   Box_model b = box_repository.box_model.value;
+  //
+  //   if (selected_id.length==1) {
+  //     Piece_model p = b.box_pieces[selected_id[0]];
+  //
+  //     if (view_port == 'F') {
+  //     } else if (view_port == 'R') {
+  //       if (p.piece_direction == 'H') {
+  //         p.piece_direction = "F";
+  //       } else if (p.piece_direction == 'F') {
+  //         p.piece_direction = "H";
+  //       }
+  //     } else if (view_port == 'T') {}
+  //
+  //     Piece_model np = Piece_model(
+  //         p.piece_id,
+  //         p.piece_name,
+  //         p.piece_direction,
+  //         p.material_name,
+  //         p.piece_height,
+  //         p.piece_width,
+  //         p.piece_thickness,
+  //         p.piece_origin,
+  //     p.enner_name);
+  //
+  //     b.box_pieces.remove(p);
+  //     b.box_pieces.add(np);
+  //   }
+  //
+  //   box_repository.add_box_to_repo(b);
+  //
+  //   draw_Box();
+  // }
 
   rotate_around_X(Piece_model p) {
     double h = p.piece_width;
@@ -637,8 +816,8 @@ if(selected_id.length==1){
     AnalyzeJoins analayzejoins = AnalyzeJoins(false,false);
   }
 
+  /// move_box
   move_box(double dx,double dy)
-
   {
 
     Box_model b = box_repository.box_model.value;
@@ -1050,6 +1229,290 @@ if(selected_id.length==1){
   }
 
 
+
+
+  /// automatic detect inners
+
+  anlyze_inners(){
+
+    clear_inners_list();
+    corners_points=detct_corners();
+    List<Rectangle_model> rectangles=  draw_rectangles();
+    List<Rectangle_model> correct_rectangles=  cancel_contained_rectangle_in_piece(rectangles);
+
+    for(Rectangle_model rectangle in correct_rectangles){
+      Piece_model inner=Piece_model(box_repository.box_model.value.get_id("inner"),
+          "inner",
+          "F",
+          "gh",
+          rectangle.width,
+          rectangle.height,
+          0,
+          origin_of_rectangle(rectangle)
+       );
+      box_repository.box_model.value.box_pieces.add(inner);
+    }
+
+
+
+
+
+  }
+
+  ///clear_inners_list
+  clear_inners_list(){
+    List<Piece_model> box_pieces_without_inners=[];
+    for(Piece_model piece_model in box_repository.box_model.value.box_pieces){
+      if(piece_model.piece_name!="inner"){
+        box_pieces_without_inners.add(piece_model);
+      }
+    }
+    box_repository.box_model.value.box_pieces=box_pieces_without_inners;
+  }
+
+
+
+
+  ///origin of rectangle
+  Point_model origin_of_rectangle(Rectangle_model rectangle){
+    double x=rectangle.corners[0].x_coordinate;
+    double y=rectangle.corners[0].y_coordinate;
+    double z=rectangle.corners[0].z_coordinate;
+
+    for(int poi=1;poi<3;poi++){
+      if(rectangle.corners[poi].x_coordinate<x){
+        x=rectangle.corners[poi].x_coordinate;
+      }
+
+      if(rectangle.corners[poi].y_coordinate<y){
+        y=rectangle.corners[poi].y_coordinate;
+      }
+
+    }
+
+    Point_model origin=Point_model(x, y, z);
+
+    return origin;
+  }
+
+  /// detect corners off inners
+  List<Point_model> detct_corners(){
+    List<Point_model> corners=[];
+    for(int i=0;i<box_repository.box_model.value.box_pieces.length;i++){
+      Piece_model p = box_repository.box_model.value.box_pieces[i];
+      if(
+      p.piece_name.contains("shelf")||
+          p.piece_name.contains("partition")||
+          p.piece_name.contains("top")||
+          p.piece_name.contains("base")||
+          p.piece_name.contains("right")||
+          p.piece_name.contains("left")
+      )
+      {
+        Single_Face front_face=p.piece_faces.faces[4];
+
+        for(Point_model poi in front_face.corners)
+        {
+          corners.add(poi);
+        }
+
+      }
+    }
+
+    return corners;
+  }
+
+
+  ///
+  List<Rectangle_model> draw_rectangles(){
+
+    List<Rectangle_model> rects=[];
+
+    for(Point_model p in  corners_points){
+      if(can_draw_rect_from_point(p)){
+        Rectangle_model rectangle_model=   rect_from_point(p);
+
+        if(rectangle_model.width!=0 && rectangle_model.height!=0){
+          rects.add(rectangle_model);
+
+        }
+      }
+    }
+
+
+
+    return rects;
+
+
+  }
+
+
+  List<Rectangle_model> cancel_contained_rectangle_in_piece(List<Rectangle_model> rects){
+    List<Rectangle_model> inners=[];
+
+    for(Rectangle_model rect in rects){
+      if(!the_face_contained_in_piece(rect)){
+        inners.add(rect);
+      }
+    }
+
+    return inners;
+  }
+
+  bool the_face_contained_in_piece(Rectangle_model rect){
+    bool contained=false;
+
+    for(Piece_model piece in box_repository.box_model.value.box_pieces){
+      if(piece.piece_name.contains("back_panel")){
+        continue;
+      }
+      if(center_in_piece(piece, rectangle_center(rect))){
+        contained=true;
+      }
+    }
+
+
+    return contained;
+  }
+
+
+  ///can_draw_rect_from_point
+ bool  can_draw_rect_from_point(Point_model p){
+    bool can_draw=false;
+
+    if(have_next_X(p)){
+      Point_model p2=next_X(p);
+      if(have_next_Y(p2)){
+        can_draw=true;
+      }
+    }
+
+    return can_draw;
+  }
+
+  Rectangle_model rect_from_point(Point_model p){
+
+
+    Point_model p1=Point_model(p.x_coordinate,p.y_coordinate,0);
+    Point_model p2=next_X(p);
+    Point_model p3=next_Y(p2);
+
+
+
+    Rectangle_model rectangle_model=Rectangle_model([p1,p2,p3,p1]);
+
+    return rectangle_model;
+  }
+
+  bool have_next_X(Point_model p ){
+    bool have_next_x=false;
+
+    for(Point_model poi in corners_points){
+      if(poi.y_coordinate==p.y_coordinate && poi.x_coordinate>p.x_coordinate){
+        have_next_x=true;
+      }
+    }
+
+    return have_next_x;
+  }
+
+  bool have_next_Y(Point_model p ){
+    bool have_next_y=false;
+
+    for(Point_model poi in corners_points){
+      if(poi.x_coordinate==p.x_coordinate && poi.y_coordinate<p.y_coordinate){
+        have_next_y=true;
+      }
+    }
+    return have_next_y;
+  }
+
+
+  Point_model next_X(Point_model p ){
+
+    List<double> next_x_value=[];
+
+    for(Point_model poi in corners_points){
+      if(poi.y_coordinate==p.y_coordinate){
+        if(poi.x_coordinate>p.x_coordinate){
+            next_x_value.add(poi.x_coordinate);
+        }
+      }
+    }
+    next_x_value.sort();
+    Point_model next_x_point=Point_model(
+        next_x_value[0],
+        p.y_coordinate,
+        0);
+
+
+
+    return next_x_point;
+  }
+
+
+
+  Point_model next_Y(Point_model p ){
+
+
+    List<double> next_y_value=[];
+
+    for(Point_model poi in corners_points){
+      if(poi.x_coordinate==p.x_coordinate){
+        if(poi.y_coordinate<p.y_coordinate){
+            next_y_value.add(poi.y_coordinate);
+        }
+      }
+    }
+
+
+    next_y_value.sort();
+
+    Point_model next_y_point=Point_model(
+        p.x_coordinate,
+        next_y_value[next_y_value.length-1],
+        0);
+
+
+    return next_y_point;
+  }
+
+
+  Point_model rectangle_center(Rectangle_model rectangle_model){
+
+    Point_model center=Point_model(
+origin_of_rectangle(rectangle_model).x_coordinate+rectangle_model.width/2,
+origin_of_rectangle(rectangle_model).y_coordinate+rectangle_model.height/2,
+        0);
+
+
+    return center;
+  }
+
+  bool center_in_piece(Piece_model piece , Point_model center){
+    bool center_in_piece=false;
+
+    Rectangle_model rectangle_model=Rectangle_model(piece.piece_faces.faces[4].corners);
+
+    bool compare_x=rectangle_model.corners[0].x_coordinate<center.x_coordinate &&
+        rectangle_model.corners[2].x_coordinate>center.x_coordinate;
+
+    bool compare_y=rectangle_model.corners[0].y_coordinate<center.y_coordinate &&
+                   rectangle_model.corners[2].y_coordinate>center.y_coordinate;
+
+
+    if(compare_x && compare_y){
+      center_in_piece=true;
+    }
+    return center_in_piece;
+
+  }
+
+
+  double  correct_value(double v){
+    double resault= double.parse(v.toStringAsFixed(2));
+    return resault;
+  }
 
 
 

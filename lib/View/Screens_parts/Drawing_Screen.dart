@@ -58,7 +58,7 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
               if (f >3 && f < 15) {
                 draw_controller.drawing_scale.value += (event.scrollDelta.direction).toInt() / 10;
                 f += (event.scrollDelta.direction).toInt() / 3;
-                print(f);
+                // print(f);
               }
             }
           },

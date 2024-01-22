@@ -87,6 +87,20 @@ class Single_Face {
 }
 
 
+class Rectangle_model{
+late  List<Point_model> corners;
+late double width;
+late double height;
+
+Rectangle_model(this.corners){
+  width =corners[1].x_coordinate-corners[0].x_coordinate;
+  height=corners[0].y_coordinate-corners[2].y_coordinate;
+}
+
+
+
+}
+
 
 class Groove_model{
 

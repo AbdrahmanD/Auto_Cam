@@ -299,32 +299,32 @@ class View_option extends StatelessWidget {
                             .box_repository.box_model.value.box_pieces.length,
                         itemBuilder: (context, i) {
                           if (
-                              !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
+                              // !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
                               !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('Helper'))
                               ) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
-                                  // Row(
-                                  //   children: [
-                                  //     Text(
-                                  //       'id :',
-                                  //       style: TextStyle(fontSize: text_size),
-                                  //     ),
-                                  //     Text(
-                                  //       '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_id}',
-                                  //       style: TextStyle(
-                                  //           fontSize: text_size,
-                                  //           fontWeight: FontWeight.bold),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  // Container(
-                                  //   height: 0.5,
-                                  //   width: 100,
-                                  //   color: Colors.grey,
-                                  // ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'id :',
+                                        style: TextStyle(fontSize: text_size),
+                                      ),
+                                      Text(
+                                        '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_id}',
+                                        style: TextStyle(
+                                            fontSize: text_size,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    height: 0.5,
+                                    width: 100,
+                                    color: Colors.grey,
+                                  ),
                                   Row(
                                     children: [
                                       Text(
@@ -622,8 +622,7 @@ class View_option extends StatelessWidget {
                                           p.piece_height,
                                           p.piece_thickness,
                                           p.piece_origin,
-                                      p.enner_name
-                                      );
+                                       );
 
                                       draw_controller.box_repository.box_model
                                           .value.box_pieces

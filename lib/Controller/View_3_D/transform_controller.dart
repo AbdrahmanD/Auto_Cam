@@ -60,7 +60,7 @@ class transform_controller {
   Piece_model p = Piece_model(b.box_pieces[i].piece_id, b.box_pieces[i].piece_name,
       b.box_pieces[i].piece_direction, b.box_pieces[i].material_name,
       b.box_pieces[i].piece_width, b.box_pieces[i].piece_height,
-      b.box_pieces[i].piece_thickness, b.box_pieces[i].piece_origin,b.box_pieces[i].enner_name);
+      b.box_pieces[i].piece_thickness, b.box_pieces[i].piece_origin );
   box_model.box_pieces.add(p);
 }
 
@@ -92,7 +92,8 @@ class transform_controller {
       for(int l=0;l<old_line.lines.length;l++){
         Line nLine=Line(
             cameraTransformer.transform(old_line.lines[l].start_point),
-            cameraTransformer.transform(old_line.lines[l].end_point)
+            cameraTransformer.transform(old_line.lines[l].end_point),
+          1
         );
         new_lines.add(nLine);
       }
@@ -119,8 +120,8 @@ class transform_controller {
       Point_model py1=Point_model( -500,0,  i   );
       Point_model py2=Point_model( 500, 0,  i   );
 
-      Line line_1=Line(px1,px2);
-      Line line_2=Line(py1,py2);
+      Line line_1=Line(px1,px2,1);
+      Line line_2=Line(py1,py2,1);
       lines.add(line_1);
       lines.add(line_2);
 
@@ -131,18 +132,18 @@ class transform_controller {
     Point_model px= Point_model( 0,0,0);
     Point_model px_2=Point_model( 50,0,00);
 
-    Line x_Axis=Line(px, px_2);
+    Line x_Axis=Line(px, px_2,1);
 
 
     Point_model py=Point_model( 0,0,0);
     Point_model py_2=Point_model( 0,50,00);
 
-    Line y_Axis=Line(py, py_2);
+    Line y_Axis=Line(py, py_2,1);
 
     Point_model pz=Point_model( 0,0,0);
     Point_model pz_2=Point_model( 0,0,50);
 
-    Line z_Axis=Line(pz, pz_2);
+    Line z_Axis=Line(pz, pz_2,1);
 
     LineWithType X_axis=LineWithType([x_Axis], 'X',Colors.red);
     LineWithType Y_axis=LineWithType([y_Axis], 'Y',Colors.blue);

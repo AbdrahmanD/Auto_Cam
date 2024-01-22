@@ -302,7 +302,7 @@ class _Add_Filler_DialogState extends State<Add_Filler_Dialog> {
               /// add bottom
               InkWell(onTap:(){
 
-                draw_controller.add_filler(f);
+                // draw_controller.add_filler(f);
                 Navigator.of(Get.overlayContext!).pop();
 
               },

@@ -239,8 +239,9 @@ class Line{
 
   late Point_model start_point;
   late Point_model end_point;
+  late double line_width;
 
-  Line(this.start_point, this.end_point);
+  Line(this.start_point, this.end_point,this.line_width);
 
 
 }
@@ -250,8 +251,9 @@ class tow_D_Line{
   late Offset start_point;
   late Offset end_point;
   late String line_type;
+  late double line_width;
 
-  tow_D_Line(this.start_point, this.end_point,this.line_type);
+  tow_D_Line(this.start_point, this.end_point,this.line_type,this.line_width);
 
 
 }
@@ -261,14 +263,16 @@ class Join_Line{
   late Point_model start_point;
   late Point_model end_point;
   late String join_type;
+  late double join_width;
 
-  Join_Line(this.start_point, this.end_point, this.join_type);
+  Join_Line(this.start_point, this.end_point, this.join_type,this.join_width);
 
 
   Join_Line.fromJson(Map<String, dynamic> json) {
     start_point =  Point_model.fromJson(json['start_point']) ;
     end_point = Point_model.fromJson(json['origend_pointin']) ;
     join_type = json['join_type'];
+    join_width = json['join_width'];
   }
 
   Map<String, dynamic> toJson() {
@@ -280,6 +284,7 @@ class Join_Line{
       data['origend_pointin'] = this.end_point!.toJson();
     }
     data['join_type'] = this.join_type;
+    data['join_width'] = this.join_width;
     return data;
   }
 

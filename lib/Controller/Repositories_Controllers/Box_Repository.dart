@@ -19,6 +19,10 @@ class Box_Repository extends GetxController {
           18, 'MDF', 5, 9, 18, 100, true, Point_model(0, 0, 0))
       .obs;
 
+  String back_panel_type = "full_cover";
+
+
+
   Project_model project_model =
       Project_model("current project", 1, 1, 2023, "", "", []);
 
@@ -57,7 +61,10 @@ class Box_Repository extends GetxController {
   Box_Repository();
 
   add_box_to_repo(Box_model b) {
+
+    box_model.value.box_pieces=b.box_pieces;
     box_model.value = b;
+
   }
 
   add_box_to_project(Box_model box_model) {

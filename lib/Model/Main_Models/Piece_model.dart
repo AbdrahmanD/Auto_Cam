@@ -15,7 +15,6 @@ class Piece_model{
   late double       piece_thickness;
   late Point_model  piece_origin;
   late Faces_model   piece_faces;
-  late String      enner_name ;
 
 
   bool              is_changed=false;
@@ -34,8 +33,7 @@ class Piece_model{
       this.piece_height,
       this.piece_thickness,
       this.piece_origin,
-this.enner_name
-      )
+       )
   {
     late Point_model p_1;
     late Point_model p_2;

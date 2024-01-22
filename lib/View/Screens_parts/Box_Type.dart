@@ -1,4 +1,6 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
+import 'package:auto_cam/Model/Main_Models/Box_model.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/View/Cabinet_Editor.dart';
  import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -88,6 +90,9 @@ class _Box_TypeState extends State<Box_Type> {
                           onTap: () {
                             // Get.to(Project_Screen());
                             draw_controller.box_type="standard_unit";
+                            draw_controller.box_repository.box_model.value=Box_model
+                              ('box_name', "standard_unit", 400, 600, 500,
+                                18, 'MDF', 5, 9, 18, 100, true, Point_model(0, 0, 0));
                             Get.to(Cabinet_Editor(active));
 
                           },
@@ -125,6 +130,9 @@ class _Box_TypeState extends State<Box_Type> {
                           onTap: () {
                             // Get.to(Project_Screen());
                             draw_controller.box_type="wall_cabinet";
+                            draw_controller.box_repository.box_model.value=Box_model
+                              ('box_name', "wall_cabinet", 400, 600, 500,
+                                18, 'MDF', 5, 9, 18, 100, true, Point_model(0, 0, 0));
                             Get.to(Cabinet_Editor(active));
 
                           },
@@ -160,7 +168,9 @@ class _Box_TypeState extends State<Box_Type> {
                         InkWell(
                           onTap: () {
                             draw_controller.box_type="base_cabinet";
-
+                            draw_controller.box_repository.box_model.value=Box_model
+                              ('box_name', "base_cabinet", 400, 600, 500,
+                                18, 'MDF', 5, 9, 18, 100, true, Point_model(0, 0, 0));
                             Get.to(Cabinet_Editor(active));
                           },
                           child: Container(
@@ -196,6 +206,9 @@ class _Box_TypeState extends State<Box_Type> {
                           onTap: () {
                             // Get.to(Single_Piece_Editor());
                             draw_controller.box_type="sink_cabinet";
+                            draw_controller.box_repository.box_model.value=Box_model
+                              ('box_name', "sink_cabinet", 400, 600, 500,
+                                18, 'MDF', 5, 9, 18, 100, true, Point_model(0, 0, 0));
                             Get.to(Cabinet_Editor(active));
                           },
                           child: Container(
@@ -231,6 +244,9 @@ class _Box_TypeState extends State<Box_Type> {
                           onTap: () {
                             // Get.to(Single_Piece_Editor());
                             draw_controller.box_type="inner_cabinet";
+                            draw_controller.box_repository.box_model.value=Box_model
+                              ('box_name', "inner_cabinet", 400, 600, 500,
+                                18, 'MDF', 5, 9, 18, 100, true, Point_model(0, 0, 0));
                             Get.to(Cabinet_Editor(active));
                           },
                           child: Container(

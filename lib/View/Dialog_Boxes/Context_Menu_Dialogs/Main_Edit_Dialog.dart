@@ -6,6 +6,7 @@ import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Partition_Di
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Shelf_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Filler_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Support_Dialog.dart';
+import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_back_panel_Dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -157,18 +158,18 @@ class Main_Edit_Dialog extends StatelessWidget {
         ),
 
 
-        ///add fix panel
+        ///add back panel
         InkWell(
           onTap: () {
             Navigator.of(Get.overlayContext!).pop();
             Get.defaultDialog(
-                title: 'add Fix panel',
-                content: Add_Fix_Dialog()
+                title: 'add back panel',
+                content: Add_back_panel_Dialog()
             );
             // draw_controller.add_door(1.5);
           },
           child: Text(
-            'Add Fix Panel',
+            'Add back Panel',
             style: TextStyle(fontSize: 18),
           ),
         ),

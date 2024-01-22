@@ -44,16 +44,78 @@ class _Add_Support_Dialog extends State<Add_Support_Dialog> {
 
   double width=60;
   double thickness=18;
-  double Left_Distance_value=0;
-  double right_Distance_value=0;
+  double left_or_down_Distance_value=0;
+  double right_or_top_Distance_value=0;
+
+  String right_or_top="Right";
+  String left_or_down="Left";
+
+
+  left_change(){
+
+late double full_distance;
+    if(vertical){
+      full_distance= draw_Controller.box_repository.box_model.value.
+      box_pieces[draw_Controller.hover_id].piece_width;
+    }
+    else{
+      full_distance= draw_Controller.box_repository.box_model.value.
+      box_pieces[draw_Controller.hover_id].piece_height;
+    }
+
+if (distance) {
+  if (Left_Distance.text.toString() != '') {
+    double  double_left_distance_0 = double.parse(Left_Distance.text.toString());
+    left_or_down_Distance_value=double.parse(double_left_distance_0.toStringAsFixed(2));
+
+    double right_distance=full_distance - left_or_down_Distance_value-width;
+
+    Right_Distance.text ='${double.parse(right_distance.toStringAsFixed(2))}';
+    // '${}';
+  }
+}
+
+
+
+setState(() {});
+
+  }
+
+
+  right_change(){
+
+late double full_distance;
+    if(vertical){
+      full_distance= draw_Controller.box_repository.box_model.value.
+      box_pieces[draw_Controller.hover_id].piece_width;
+    }
+    else{
+      full_distance= draw_Controller.box_repository.box_model.value.
+      box_pieces[draw_Controller.hover_id].piece_height;
+    }
+
+if (distance) {
+  if (Right_Distance.text.toString() != '') {
+    double  double_right_distance_0 = double.parse(Right_Distance.text.toString());
+    right_or_top_Distance_value=double.parse(double_right_distance_0.toStringAsFixed(2));
+
+    double left_distance=full_distance - right_or_top_Distance_value-width;
+left_or_down_Distance_value=left_distance;
+    Left_Distance.text ='${double.parse(left_distance.toStringAsFixed(2))}';
+    // '${}';
+  }
+}
+
+
+
+setState(() {});
+
+  }
+
 
   add_support() {
 
     int Quantity_value      =  double.parse(Quantity.text.toString()).toInt() ;
-    double support_width_value =  double.parse((double.parse(support_width.text.toString()).toStringAsFixed(2))) ;
-    double Material_value      =  double.parse((double.parse(Material.text.toString()).toStringAsFixed(2))) ;
-    double Left_Distance_value =  double.parse((double.parse(Left_Distance.text.toString()).toStringAsFixed(2))) ;
-
 
     if (add_partition_dialog_key.currentState!.validate()) {
 
@@ -62,7 +124,7 @@ class _Add_Support_Dialog extends State<Add_Support_Dialog> {
         if (!partition_center) {
 
            if (proportional) {
-             Left_Distance_value =
+             left_or_down_Distance_value =
                 (double.parse((double.parse(Left_Distance.text.toString()).toStringAsFixed(2))) / 100) *
                     (draw_Controller.box_repository.box_model.value
                         .box_pieces[draw_Controller.hover_id].piece_width) -
@@ -71,28 +133,40 @@ class _Add_Support_Dialog extends State<Add_Support_Dialog> {
 
           }
 
-          Support_Filler support_filler=Support_Filler(vertical, face, back, width, thickness, Left_Distance_value);
+          Support_Filler support_filler=Support_Filler(vertical, face, back, width, thickness, left_or_down_Distance_value);
 
 draw_controller.add_support(support_filler, 1);
 
         }
         ///if partation center
         else {
-            Left_Distance_value = draw_Controller.box_repository.box_model.value
-              .box_pieces[draw_Controller.hover_id].piece_width /
-              2 - width/ 2;
-          Support_Filler support_filler=Support_Filler(vertical, face, back, width, thickness, Left_Distance_value);
+          if(vertical){
+            left_or_down_Distance_value = draw_Controller.box_repository.box_model.value
+                        .box_pieces[draw_Controller.hover_id].piece_width /
+                    2 -
+                width / 2;
+          }else{
+            left_or_down_Distance_value = draw_Controller.box_repository.box_model.value
+                .box_pieces[draw_Controller.hover_id].piece_height /
+                2 -
+                width / 2;
+          }
+          Support_Filler support_filler=Support_Filler(vertical, face, back, width, thickness, left_or_down_Distance_value);
 
           draw_controller.add_support(support_filler, 1);
 
         }
       }
+
       else{
+        Support_Filler support_filler=Support_Filler(vertical, face, back, width, thickness, left_or_down_Distance_value);
 
-        Support_Filler support_filler=Support_Filler(vertical, face, back, width, thickness, Left_Distance_value);
+          draw_controller.add_support(support_filler, Quantity_value);
 
-        draw_controller.add_support(support_filler, Quantity_value);
+
+
       }
+
     }
     setState(() {
 
@@ -107,8 +181,8 @@ draw_controller.add_support(support_filler, 1);
       proportional = false;
       edit_enable = false;
       Quantity.text='1';
-      Left_Distance.text = '0';
-      Right_Distance.text = '0';
+      // Left_Distance.text = '0';
+      // Right_Distance.text = '0';
     }
     else if (partition_center) {
       partition_center = false;
@@ -138,10 +212,10 @@ draw_controller.add_support(support_filler, 1);
     distance = false;
     proportional = false;
     edit_enable = false;
-    double d_Left_Distance = draw_Controller.box_repository.box_model.value.
+    left_or_down_Distance_value = draw_Controller.box_repository.box_model.value.
     box_pieces[draw_Controller.hover_id].piece_width-60;
 
-    Left_Distance.text='${double.parse(d_Left_Distance.toStringAsFixed(2))}';
+    Left_Distance.text='${double.parse(left_or_down_Distance_value.toStringAsFixed(2))}';
     Right_Distance.text = '0';
 
 
@@ -151,16 +225,10 @@ draw_controller.add_support(support_filler, 1);
   @override
   Widget build(BuildContext context) {
 
-
     width=double.parse(double.parse(support_width.text.toString()).toStringAsFixed(2));
-
-
-
-
     Piece_model p = draw_controller.box_repository.box_model.value.box_pieces.where((element) => element.piece_name=="left").first;
+    Support_Filler support_filler = Support_Filler(vertical, face, back, width, thickness,1);
 
-
-  Support_Filler support_filler = Support_Filler(vertical, face, back, width, thickness,1);
 
 
     return Row(
@@ -177,6 +245,12 @@ draw_controller.add_support(support_filler, 1);
                 Text('Horizontal'),
                 Checkbox(value: !vertical, onChanged: (v){
                   vertical=!vertical  ;
+                  right_or_top="Top";
+                  left_or_down="Down";
+
+                  left_or_down_Distance_value= draw_Controller.box_repository.box_model.value.
+                  box_pieces[draw_Controller.hover_id].piece_height-width;
+
                   setState(() {
 
                   });
@@ -188,6 +262,12 @@ draw_controller.add_support(support_filler, 1);
                 Text('Vertical'),
                 Checkbox(value:  vertical, onChanged: (v){
                   vertical=!vertical  ;
+                  right_or_top="Right";
+                  left_or_down="Left";
+
+                  left_or_down_Distance_value= draw_Controller.box_repository.box_model.value.
+                  box_pieces[draw_Controller.hover_id].piece_width-width;
+
                   setState(() {
 
                   });
@@ -257,6 +337,8 @@ draw_controller.add_support(support_filler, 1);
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+
+                  ///ok
                   InkWell(
                     onTap: () {
                       add_support();
@@ -268,9 +350,12 @@ draw_controller.add_support(support_filler, 1);
                       color: Colors.teal[200],
                     ),
                   ),
+
                   SizedBox(
                     width: 12,
                   ),
+
+                  ///cancel
                   InkWell(
                     onTap: () {
                       Navigator.of(Get.overlayContext!).pop();
@@ -321,8 +406,6 @@ draw_controller.add_support(support_filler, 1);
                                 1) {
                               quantity = false;
                               partition_center=false;
-                              Left_Distance.text = '0';
-                              Right_Distance.text = '0';
                               setState(() {});
                             } else {
                               quantity = true;
@@ -464,57 +547,57 @@ draw_controller.add_support(support_filler, 1);
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Container(
-                        width: 30,
-                        child: Checkbox(
-                          value: distance,
-                          onChanged: (bool? value) {
-                            if (edit_enable) {
-                              distance = !distance;
-                              proportional = !proportional;
-                              Left_Distance.text = '0';
-                              Right_Distance.text = '0';
-                              setState(() {});
-                            }
-                          },
-                        )),
-                    Container(
-                        width: 80,
-                        child: Text(
-                          'Distence',
-                        )),
-                    Container(
-                        width: 30,
-                        child: Checkbox(
-                          value: proportional,
-                          onChanged: (bool? value) {
-                            if (edit_enable) {
-                              distance = !distance;
-                              proportional = !proportional;
-                              Left_Distance.text = '0';
-                              Right_Distance.text = '0';
-                              setState(() {});
-                            }
-                          },
-                        )),
-                    Container(
-                        width: 100,
-                        child: Text(
-                          'Proportional',
-                        )),
-                  ],
-                ),
-                SizedBox(
-                  height: 6,
-                ),
+                /// distance or proportional
+                // Row(
+                //   children: [
+                //     Container(
+                //         width: 30,
+                //         child: Checkbox(
+                //           value: distance,
+                //           onChanged: (bool? value) {
+                //             if (edit_enable) {
+                //               distance = !distance;
+                //               proportional = !proportional;
+                //               Left_Distance.text = '0';
+                //               Right_Distance.text = '0';
+                //               setState(() {});
+                //             }
+                //           },
+                //         )),
+                //     Container(
+                //         width: 80,
+                //         child: Text(
+                //           'Distence',
+                //         )),
+                //     // Container(
+                //     //     width: 30,
+                //     //     child: Checkbox(
+                //     //       value: proportional,
+                //     //       onChanged: (bool? value) {
+                //     //         if (edit_enable) {
+                //     //           distance = !distance;
+                //     //           proportional = !proportional;
+                //     //           Left_Distance.text = '0';
+                //     //           Right_Distance.text = '0';
+                //     //           setState(() {});
+                //     //         }
+                //     //       },
+                //     //     )),
+                //     // Container(
+                //     //     width: 100,
+                //     //     child: Text(
+                //     //       'Proportional',
+                //     //     )),
+                //   ],
+                // ),
+
+                ///right_or_top
                 Row(
                   children: [
                     Container(
                       width: 100,
                       child: Text(
-                        'Left',
+                        right_or_top,
                       ),
                     ),
                     Container(
@@ -522,9 +605,47 @@ draw_controller.add_support(support_filler, 1);
                       height: 40,
                       child: TextFormField(
                         onChanged: (_) {
-                          setState(() {
+                        right_change();
+                        },
+                        enabled: (quantity && edit_enable),
+                        inputFormatters: [DecimalTextInputFormatter(1)],
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        controller: Right_Distance,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                      ),
+                    ),
+                    Container(width: 45, child: Text(distance ? '  mm' : '  %'))
+                  ],
+                ),
+                SizedBox(
+                  height: 6,
+                ),
 
-                          });
+                ///left_or_down
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      child: Text(
+                        left_or_down,
+                      ),
+                    ),
+                    Container(
+                      width: 120,
+                      height: 40,
+                      child: TextFormField(
+                        onChanged: (_) {
+left_change();
+
                         },
                         enabled: (quantity && edit_enable),
                         inputFormatters: [DecimalTextInputFormatter(1)],
@@ -548,43 +669,9 @@ draw_controller.add_support(support_filler, 1);
                 SizedBox(
                   height: 6,
                 ),
-                Row(
-                  children: [
-                    Container(
-                      width: 100,
-                      child: Text(
-                        'Right',
-                      ),
-                    ),
-                    Container(
-                      width: 120,
-                      height: 40,
-                      child: TextFormField(
-                        onChanged: (_) {
-                          setState(() {
 
-                          });
-                        },
-                        enabled: (quantity && edit_enable),
-                        inputFormatters: [DecimalTextInputFormatter(1)],
-                        keyboardType: TextInputType.numberWithOptions(decimal: true),
-                        controller: Right_Distance,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                        validator: (d) {
-                          if (d!.isEmpty) {
-                            return 'add value please';
-                          }
-                        },
-                      ),
-                    ),
-                    Container(width: 45, child: Text(distance ? '  mm' : '  %'))
-                  ],
-                ),
               ],
             )))]);
+
   }
 }

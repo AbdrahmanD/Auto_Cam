@@ -144,6 +144,7 @@ late bool inner_drawer;
 
       drawer_pieces.forEach((element) {
         draw_controller.box_repository.box_model.value.box_pieces.add(element);
+
       });
 
 
@@ -167,7 +168,7 @@ late bool inner_drawer;
         face_width,
         height,
         drawer_face_material_thickness,
-        face_origin,""
+        face_origin,
     );
 
     return piece_model;
@@ -197,7 +198,7 @@ late bool inner_drawer;
         drawer_box_depth,
         box_height,
         drawer_box_material_thickness,
-        Point_model(box_origin.x_coordinate, box_origin.y_coordinate, box_origin.z_coordinate),""
+        Point_model(box_origin.x_coordinate, box_origin.y_coordinate, box_origin.z_coordinate),
        );
 
 
@@ -213,7 +214,7 @@ late bool inner_drawer;
         Point_model(
             box_origin.x_coordinate + box_width - drawer_box_material_thickness,
             box_origin.y_coordinate,
-            box_origin.z_coordinate),""
+            box_origin.z_coordinate),
         );
 
 
@@ -233,7 +234,7 @@ late bool inner_drawer;
             box_origin.x_coordinate + drawer_box_material_thickness,
             box_origin.y_coordinate,
             box_origin.z_coordinate),
-        ""
+
         );
 
 
@@ -251,7 +252,7 @@ late bool inner_drawer;
             box_origin.x_coordinate + drawer_box_material_thickness,
             box_origin.y_coordinate,
             box_origin.z_coordinate+drawer_box_depth-drawer_box_material_thickness),
-        "");
+        );
 
 
 
@@ -267,7 +268,7 @@ late bool inner_drawer;
         Point_model(box_origin.x_coordinate + drawer_box_material_thickness-10,
             box_origin.y_coordinate+drawer_under_base_thickness,
             box_origin.z_coordinate+drawer_box_material_thickness-grove_depth),
-        "");
+         );
 
 
     Piece_model drawer_box_base_panel_Helper = Piece_model(
@@ -282,7 +283,7 @@ late bool inner_drawer;
         Point_model(box_origin.x_coordinate + drawer_box_material_thickness,
             box_origin.y_coordinate+drawer_under_base_thickness,
             box_origin.z_coordinate+drawer_box_material_thickness),
-       "" );
+         );
 
 
 
@@ -298,7 +299,7 @@ late bool inner_drawer;
       drawer_slide_height,
 
       Point_model(box_origin.x_coordinate-side_gap/2, box_origin.y_coordinate, box_origin.z_coordinate-0.1),
-  ""  );
+   );
 
     /// right side slider
     Piece_model drawer_right_slider = Piece_model(
@@ -314,7 +315,7 @@ late bool inner_drawer;
           box_origin.x_coordinate + box_width ,
           box_origin.y_coordinate,
           box_origin.z_coordinate-0.1),
-   "" );
+   );
 
 
 

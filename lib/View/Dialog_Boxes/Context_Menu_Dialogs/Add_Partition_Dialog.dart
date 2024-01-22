@@ -118,7 +118,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
 
           if (distance) {
 
-             draw_Controller.add_partition(final_left_distance, frontage_Gap, material,1,back_distance,help_partition);
+             draw_Controller.add_partition(final_left_distance, frontage_Gap, material,1,help_partition);
 
           } else if (proportional) {
             double left_Distence =
@@ -127,7 +127,7 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
                         .box_pieces[draw_Controller.hover_id].piece_width) -
                     material / 2;
 
-            draw_Controller.add_partition(left_Distence, frontage_Gap, material,1,back_distance,help_partition);
+            draw_Controller.add_partition(left_Distence, frontage_Gap, material,1,help_partition);
 
           }
         }
@@ -137,13 +137,13 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
               .box_pieces[draw_Controller.hover_id].piece_width /
               2 - material/ 2;
 
-          draw_Controller.add_partition(left_Distence, frontage_Gap, material,1,back_distance,help_partition);
+          draw_Controller.add_partition(left_Distence, frontage_Gap, material,1,help_partition);
 
         }
       }
       else{
         draw_Controller.add_partition(0, frontage_Gap, material,
-            double.parse(Quantity.text.toString()).toInt(),back_distance,help_partition);
+            double.parse(Quantity.text.toString()).toInt(),help_partition);
 
       }
     }
