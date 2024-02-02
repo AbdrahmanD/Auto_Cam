@@ -24,6 +24,8 @@ late  Box_model box_model;
 
     for(int i=0;i<box_model.box_pieces.length;i++){
       Piece_model p =box_model.box_pieces[i];
+      if(p.piece_name.contains("inner") || p.piece_thickness==0)
+continue;
       draw_piece(canvas, screen_size,p);
 
     }
@@ -211,19 +213,42 @@ late  Box_model box_model;
 
       Paint all_paint = Paint();
 
-      all_paint.style = PaintingStyle.stroke;
-      all_paint.strokeWidth=0.5;
-      all_paint.color=Colors.black;
+      all_paint.style = PaintingStyle.fill;
+      // all_paint.strokeWidth=0.5;
+      all_paint.color=Colors.grey;
       // all_paint.blendMode=BlendMode.colorBurn;
-      // all_paint.blendMode=BlendMode.values[];
+      all_paint.blendMode=BlendMode.darken;
 
 
-      canvas.drawPath(front_path,all_paint);
-      canvas.drawPath(back_path ,all_paint);
-      canvas.drawPath(right_path,all_paint);
-      canvas.drawPath(left_path ,all_paint);
-      canvas.drawPath(top_path  ,all_paint);
-      canvas.drawPath(base_path ,all_paint);
+
+      Paint selected_paint = Paint()
+      ..style = PaintingStyle.fill
+      ..strokeWidth=0.5
+      ..color=Colors.black;
+
+      int selected_face=1;
+      String selected_piece=piece_model.piece_name;
+
+
+
+      canvas.drawPath(front_path,
+          // (selected_face==1 && selected_piece=="left")?selected_paint:
+      all_paint);
+      canvas.drawPath(back_path ,
+          // (selected_face==2 && selected_piece=="left")?selected_paint:
+      all_paint);
+      canvas.drawPath(right_path,
+          // (selected_face==3 && selected_piece=="left")?selected_paint:
+      all_paint);
+      canvas.drawPath(left_path ,
+          // (selected_face==4 && selected_piece=="left")?selected_paint:
+      all_paint);
+      canvas.drawPath(top_path  ,
+          // (selected_face==5 && selected_piece=="left")?selected_paint:
+      all_paint);
+      canvas.drawPath(base_path ,
+          // (selected_face==6 && selected_piece=="left")?selected_paint:
+      all_paint);
     }
 
 

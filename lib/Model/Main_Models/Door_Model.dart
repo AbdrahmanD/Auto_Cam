@@ -13,6 +13,7 @@ class Door_Model{
 
   late String direction;
   late bool inner_door;
+  late bool fix_door;
 
   Door_Model(
       this.door_num,
@@ -25,7 +26,8 @@ class Door_Model{
       this.left_gap,
       this.center_gap,
       this.direction,
-      this.inner_door
+      this.inner_door,
+      this.fix_door
       );
 
 

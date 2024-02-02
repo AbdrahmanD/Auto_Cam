@@ -112,6 +112,45 @@ class _Box_TypeState extends State<Box_Type> {
                   ),
 
 
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "free panel",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 32,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            // Get.to(Project_Screen());
+                            draw_controller.box_type="free_panel";
+                            draw_controller.box_repository.box_model.value=Box_model
+                              ('box_name', "free_panel", 400, 600, 500,
+                                18, 'MDF', 5, 9, 18, 100, true, Point_model(0, 0, 0));
+                            Get.to(Cabinet_Editor(active));
+
+                          },
+                          child: Container(
+                              height: 200,
+                              // color: Colors.red,
+                              child: Image.asset(
+                                "lib/assets/images/panel.png",
+                              )),
+                        ),
+                        // Text(
+                        //   "normal cabinet",
+                        //   style: TextStyle(fontSize: 14),
+                        // ),
+                      ],
+                    ),
+                  ),
+
+
                   /// wall cabinet
                   Flexible(
                     flex: 1,

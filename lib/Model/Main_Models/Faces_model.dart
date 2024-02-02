@@ -33,6 +33,7 @@ class Faces_model{
 /// back   = 6
 
 
+
 class Single_Face {
 
   late int name;
@@ -86,6 +87,13 @@ class Single_Face {
 
 }
 
+class Selected_Face{
+  late String piece_id;
+  late int face_name;
+
+  Selected_Face(this.piece_id, this.face_name);
+
+}
 
 class Rectangle_model{
 late  List<Point_model> corners;

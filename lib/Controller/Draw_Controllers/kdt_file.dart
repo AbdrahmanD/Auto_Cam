@@ -110,6 +110,7 @@ class kdt_file {
             double dpth=b.groove_depth;
             double dw= b.groove_width;
 
+            if(dpth>0){
             kdt_file_content += "<CAD>\n";
             kdt_file_content += "<TypeNo>3</TypeNo>\n";
             kdt_file_content += "<TypeName>Vertical Line</TypeName>\n";
@@ -128,7 +129,7 @@ class kdt_file {
             kdt_file_content += "<EndZ>0</EndZ>\n";
             kdt_file_content += "</CAD>\n";
 
-          }
+          }}
 
         }
         else if(single_face.name==2){
@@ -201,7 +202,7 @@ class kdt_file {
 
             double dpth=b.groove_depth;
             double dw= b.groove_width;
-
+            if(dpth>0){
             kdt_file_content += "<CAD>\n";
             kdt_file_content += "<TypeNo>13</TypeNo>\n";
             kdt_file_content += "<TypeName>Back Vertical Line</TypeName>\n";
@@ -220,6 +221,7 @@ class kdt_file {
             kdt_file_content += "<EndZ>0</EndZ>\n";
             kdt_file_content += "</CAD>\n";
 
+          }
           }
 
 
@@ -353,7 +355,7 @@ class kdt_file {
 
             double dpth=b.groove_depth;
             double dw= b.groove_width;
-
+            if(dpth>0){
             kdt_file_content += "<CAD>\n";
             kdt_file_content += "<TypeNo>3</TypeNo>\n";
             kdt_file_content += "<TypeName>Vertical Line</TypeName>\n";
@@ -372,6 +374,7 @@ class kdt_file {
             kdt_file_content += "<EndZ>0</EndZ>\n";
             kdt_file_content += "</CAD>\n";
 
+          }
           }
 
 
@@ -416,7 +419,7 @@ class kdt_file {
 
             double dpth=b.groove_depth;
             double dw= b.groove_width;
-
+            if(dpth>0){
             kdt_file_content += "<CAD>\n";
             kdt_file_content += "<TypeNo>13</TypeNo>\n";
             kdt_file_content += "<TypeName>Back Vertical Line</TypeName>\n";
@@ -435,6 +438,7 @@ class kdt_file {
             kdt_file_content += "<EndZ>0</EndZ>\n";
             kdt_file_content += "</CAD>\n";
 
+          }
           }
 
 
@@ -598,7 +602,7 @@ class kdt_file {
 
             double dpth=b.groove_depth;
             double dw= b.groove_width;
-
+            if(dpth>0){
             kdt_file_content += "<CAD>\n";
             kdt_file_content += "<TypeNo>3</TypeNo>\n";
             kdt_file_content += "<TypeName>Vertical Line</TypeName>\n";
@@ -617,6 +621,7 @@ class kdt_file {
             kdt_file_content += "<EndZ>0</EndZ>\n";
             kdt_file_content += "</CAD>\n";
 
+          }
           }
 
 
@@ -690,7 +695,7 @@ class kdt_file {
 
             double dpth=b.groove_depth;
             double dw= b.groove_width;
-
+            if(dpth>0){
             kdt_file_content += "<CAD>\n";
             kdt_file_content += "<TypeNo>13</TypeNo>\n";
             kdt_file_content += "<TypeName>Back Vertical Line</TypeName>\n";
@@ -709,6 +714,7 @@ class kdt_file {
             kdt_file_content += "<EndZ>0</EndZ>\n";
             kdt_file_content += "</CAD>\n";
 
+          }
           }
 
 

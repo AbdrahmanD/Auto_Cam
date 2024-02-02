@@ -21,6 +21,7 @@ class Setting_Box_Size_Form extends StatefulWidget {
 }
 
 class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
+
   late Box_model box_model;
 
   bool is_back_panel = true;

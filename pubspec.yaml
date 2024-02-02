@@ -88,6 +88,9 @@ flutter:
     - lib/assets/images/sink_cabinet.png
     - lib/assets/images/unit.png
     - lib/assets/images/support.png
+    - lib/assets/images/panel.png
+    - lib/assets/images/full_cover_back_panel.png
+    - lib/assets/images/groove_back_panel.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

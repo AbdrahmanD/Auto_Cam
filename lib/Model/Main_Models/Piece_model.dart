@@ -15,6 +15,7 @@ class Piece_model{
   late double       piece_thickness;
   late Point_model  piece_origin;
   late Faces_model   piece_faces;
+  // late Piece_model       piece_inner;
 
 
   bool              is_changed=false;
@@ -135,4 +136,7 @@ class Piece_model{
     return data;
   }
 
+
+
 }
+

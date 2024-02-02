@@ -18,6 +18,20 @@ class AnalyzeJoins {
 
 
   AnalyzeJoins(this.project,this.collect_same_pieces) {
+
+
+
+    ///
+    // check_tow_face_intersected(
+    //     draw_controller.box_repository.box_model.value,
+    //     draw_controller.box_repository.box_model.value.box_pieces[5].piece_faces.faces[4],
+    //     draw_controller.box_repository.box_model.value.box_pieces[6].piece_faces.faces[5],
+    // );
+
+    // for(int i=0;i<draw_controller.box_repository.box_model.value.box_pieces.length;i++){
+    //   print("i:$i , piece name : ${draw_controller.box_repository.box_model.value.box_pieces[i].piece_name}");
+    // }
+    ///
 this.project=project;
 
     draw_controller.box_repository.cut_list_items = [];
@@ -29,13 +43,18 @@ project_model = draw_controller.box_repository.project_model;
         clean_faces(box_model);
         all_face_check(box_model);
      }
-    }else{
+    }
+    else{
       Box_model box_model = draw_controller.box_repository.box_model.value;
       clean_faces(box_model);
       all_face_check(box_model);
     }
 
     collect_all_same_pieces(collect_same_pieces);
+
+
+
+
    }
 
   clean_faces(Box_model box_model) {
@@ -57,7 +76,9 @@ project_model = draw_controller.box_repository.project_model;
 
       if (mpiece.piece_name.contains("inner")||
           mpiece.piece_name.contains("back_panel") ||
-          mpiece.piece_name.contains("base_panel")) {
+          mpiece.piece_thickness==0 ||
+          mpiece.piece_name.contains("base_panel")
+      ) {
         continue;
       }
 
@@ -69,6 +90,8 @@ project_model = draw_controller.box_repository.project_model;
           Piece_model spiece = box_model.box_pieces[sp];
 
           if (spiece.piece_id == mpiece.piece_id ||
+              mpiece.piece_thickness==0 ||
+
               spiece.piece_name.contains("inner")) {
             continue;
           }
@@ -110,6 +133,7 @@ project_model = draw_controller.box_repository.project_model;
             }
             else {
               line = check_tow_face_intersected(box_model,mface, sface);
+
             }
 
 
@@ -161,6 +185,22 @@ project_model = draw_controller.box_repository.project_model;
               else if (mpiece.piece_name.contains("DBF") || spiece.piece_name.contains("DBF")) {
                 join_line = Join_Line(line.start_point, line.end_point, "DBF",line.line_width);
               }
+
+              /// helper shelf
+              else if ( spiece.piece_name.contains("shelf") && !spiece.piece_name.contains("fixed"))
+              {
+
+                join_line = Join_Line(line.start_point, line.end_point, "Help",line.line_width);
+              }
+
+              /// helper partition
+              else if ( spiece.piece_name.contains("partition"))
+              {
+
+                join_line = Join_Line(line.start_point, line.end_point, "Help",line.line_width);
+              }
+
+
             }
 
             /// Drawer Face
@@ -704,43 +744,71 @@ project_model = draw_controller.box_repository.project_model;
   }
 
   Line check_tow_face_intersected(Box_model box_model,Single_Face face1, Single_Face face2) {
-    late Line line = Line(Point_model(0, 0, 0), Point_model(0, 0, 0),1);
+
+     Line line = Line(Point_model(0, 0, 0), Point_model(0, 0, 0),1);
 
     List<Point_model> intersection_rect = [];
 
     if (check_if_same_plane(face1, face2)) {
+
       for (int f1 = 0; f1 < extract_face_lines(face1).length; f1++) {
         Line l1 = extract_face_lines(face1)[f1];
+
+        // /// // / // / /  // /  / / / /
+        // print(f1);
+        //
+        //
+        // print("l1S: X=${l1.start_point.x_coordinate} ,Y=${l1.start_point.y_coordinate} , Z=:${l1.start_point.z_coordinate}");
+        // print("l1E: X=${l1.end_point.x_coordinate}   ,Y=${l1.end_point.y_coordinate}   , Z=:${l1.end_point.z_coordinate}");
+        // print("=========");
+        //
+        // Line l2 = extract_face_lines(face2)[f1];
+        //
+        // print("l2S: X=${l2.start_point.x_coordinate} ,Y=${l2.start_point.y_coordinate} , Z=:${l2.start_point.z_coordinate}");
+        // print("l2E: X=${l2.end_point.x_coordinate}   ,Y=${l2.end_point.y_coordinate}   , Z=:${l2.end_point.z_coordinate}");
+        // print("=========");
+        //
+        // /// // / // / /  // /  / / / /
 
         for (int f2 = 0; f2 < extract_face_lines(face2).length; f2++) {
           Line l2 = extract_face_lines(face2)[f2];
 
+
           if (discover_lines_intersect(l1, l2, face_plane(face1))) {
+
             late double x;
             late double y;
             late double z;
 
-            if (l1.start_point.x_coordinate == l1.end_point.x_coordinate) {
+            if (l1.start_point.x_coordinate == l1.end_point.x_coordinate)
+            {
               x = l1.start_point.x_coordinate;
-            } else if (l2.start_point.x_coordinate ==
-                l2.end_point.x_coordinate) {
+            }
+            else if (l2.start_point.x_coordinate == l2.end_point.x_coordinate)
+            {
               x = l2.start_point.x_coordinate;
-            } else {
+            }
+            else
+            {
               print(
                   "l1 x : ${l1.start_point.x_coordinate} , l1  eX:${l1.end_point.x_coordinate}");
             }
 
-            if (l1.start_point.y_coordinate == l1.end_point.y_coordinate) {
+            if (l1.start_point.y_coordinate == l1.end_point.y_coordinate)
+            {
               y = l1.start_point.y_coordinate;
-            } else if (l2.start_point.y_coordinate ==
-                l2.end_point.y_coordinate) {
+            }
+            else if (l2.start_point.y_coordinate == l2.end_point.y_coordinate)
+            {
               y = l2.start_point.y_coordinate;
             }
 
-            if (l1.start_point.z_coordinate == l1.end_point.z_coordinate) {
+            if (l1.start_point.z_coordinate == l1.end_point.z_coordinate)
+            {
               z = l1.start_point.z_coordinate;
-            } else if (l2.start_point.z_coordinate ==
-                l2.end_point.z_coordinate) {
+            }
+            else if (l2.start_point.z_coordinate == l2.end_point.z_coordinate)
+            {
               z = l2.start_point.z_coordinate;
             }
 
@@ -750,8 +818,7 @@ project_model = draw_controller.box_repository.project_model;
       }
 
       if (intersection_rect.length != 0) {
-        List<Point_model> other_corners =
-            extract_intersection_rect_corner(face1, face2);
+        List<Point_model> other_corners = extract_intersection_rect_corner(face1, face2);
         other_corners.forEach((element) {
           intersection_rect.add(element);
         });
@@ -760,8 +827,13 @@ project_model = draw_controller.box_repository.project_model;
         // print('intersection_rect :${intersection_rect.length}');
 
         line = extract_join_line(box_model,intersection_rect, face1);
+
+
+
       }
     }
+
+
 
     return line;
   }
@@ -971,7 +1043,10 @@ project_model = draw_controller.box_repository.project_model;
             //     9);
             // print(f);
             // print(groove_model.toJson());
-          } else {
+          }else if(join_line.join_type == "Help"){
+            continue;
+          }
+          else {
             transform_line_into_bores(line, p.piece_direction, face,
                 second_face, p.piece_name, join_line.join_type);
           }
@@ -1490,7 +1565,10 @@ if(collect)
 
         if (!compared.contains(m_piece.piece_id) &&
             !m_piece.piece_name.contains('Helper') &&
-            !m_piece.piece_name.contains('inner')) {
+            !m_piece.piece_name.contains('inner')&&
+            m_piece.piece_thickness!=0
+
+        ) {
           List<Piece_model> same_pices_item = [];
           same_pices_item.add(m_piece);
           compared.add(m_piece.piece_id);
@@ -1502,7 +1580,8 @@ if(collect)
 
             if (!compared.contains(s_piece.piece_id) &&
                 !s_piece.piece_name.contains('Helper') &&
-                !s_piece.piece_name.contains('inner')) {
+                !s_piece.piece_name.contains('inner')&&
+                m_piece.piece_thickness!=0) {
               if (tow_pieces_are_same(m_piece, s_piece)) {
                 same_pices_item.add(s_piece);
                 compared.add(s_piece.piece_id);
@@ -1552,7 +1631,8 @@ else
   for(int pi=0;pi<pices.length;pi++){
     if(
     !pices[pi].piece_name.contains("Helper") &&
-        !pices[pi].piece_name.contains("inner")
+        !pices[pi].piece_name.contains("inner") &&
+    pices[pi].piece_thickness!=0
 
     ){
 

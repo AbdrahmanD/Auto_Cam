@@ -34,6 +34,7 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
 
   bool right_door=true;
   bool left_door=false;
+  bool fix_door=false;
 
   double up_gap       =1;
   double down_gap    =1;
@@ -64,7 +65,7 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
   Widget build(BuildContext context) {
     return Container(
       width: 540,
-      height: 400,
+      height: 600,
       child: Row(
         children: [
           SizedBox(
@@ -292,6 +293,7 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                   height: 4,
                 ),
 
+                ///Single Door
                 Row(
                   children: [
                     Checkbox(value: single_door, onChanged: (_) {
@@ -316,6 +318,8 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                 SizedBox(
                   height: 4,
                 ),
+
+                ///Double Door
                 Row(
                   children: [
                     Checkbox(value: !single_door, onChanged: (_) {
@@ -334,10 +338,11 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                     ),
                   ],
                 ),
-
                 SizedBox(
                   height: 4,
                 ),
+
+                ///Left Door
                 Row(
                   children: [
                     Checkbox(value: left_door, onChanged: (_) {
@@ -353,10 +358,11 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                     ),
                   ],
                 ),
-
                 SizedBox(
                   height: 4,
                 ),
+
+                ///Right Door
                 Row(
                   children: [
                     Checkbox(value: right_door, onChanged: (_) {
@@ -373,7 +379,40 @@ class _Add_Door_DialogState extends State<Add_Door_Dialog> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 8,
+                ),
 
+                ///fix Door
+                Row(
+                  children: [
+                    Checkbox(value: fix_door, onChanged: (_) {
+                      if(fix_door){
+                        fix_door=false;
+                        up_gap_controller.text='1';
+                        right_gap_controller.text='1';
+                        down_gap_controller.text='1';
+                        left_gap_controller.text='1';
+                        center_gap_controller.text='1';
+                      }else{
+                        fix_door=true;
+                        up_gap_controller.text='0';
+                        right_gap_controller.text='0';
+                        down_gap_controller.text='0';
+                        left_gap_controller.text='0';
+                        center_gap_controller.text='0';
+                      }
+
+                      setState(() {
+
+                      });
+                    }),
+                    Text('Fix Door'),
+                    SizedBox(
+                      width: 4,
+                    ),
+                  ],
+                ),
 
                 //divider
                 Padding(
@@ -511,7 +550,8 @@ center_gap=double.parse(center_gap_controller.text.toString());
                            left_gap,
                            center_gap,
                          door_direction,
-                         inner_door
+                         inner_door,
+                         fix_door
                        );
                         draw_controller.add_door(door_model);
 

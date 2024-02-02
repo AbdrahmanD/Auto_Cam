@@ -28,7 +28,7 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
   bool quantity = true;
   bool shelf_center = false;
   bool help_shelf = false;
-  bool fixed_shelf = false;
+  bool fixed_shelf = true;
   bool distance = true;
   bool proportional = false;
   bool edit_enable = true;
@@ -84,11 +84,14 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
       String shelf_type;
       if(fixed_shelf){
         shelf_type='fixed_shelf';
-      }else if (help_shelf){
-        shelf_type='Helper';
-      }else{
+      }
+      else if (help_shelf){
+        shelf_type='Helper_shelf';
+      }
+      else{
         shelf_type='shelf';
       }
+
       if (quantity) {
         if (!shelf_center) {
 
@@ -128,8 +131,8 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
 
   shelf_center_change() {
     Quantity.text='1';
-    Material.text='${draw_Controller.box_repository.box_model.value.init_material_thickness}';
     Front_Gap.text='0';
+
     if (!shelf_center) {
       help_shelf=false;
       shelf_center = true;
@@ -138,30 +141,33 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
       edit_enable = false;
       Top_Distance.text = '0';
       Bottom_Distance.text = '0';
-    } else if (shelf_center) {
+    }
+    else if (shelf_center) {
 
       shelf_center = false;
       distance = true;
       proportional = false;
       edit_enable = true;
     }
+
     setState(() {});
   }
 
   helper_shelf_change() {
 
     if(help_shelf){
-      Quantity.text='1';
-      Material.text='${draw_Controller.box_repository.box_model.value.init_material_thickness}';
-      Front_Gap.text='0';
-      help_shelf=false;
-    }else{
-      Quantity.text='1';
-      Material.text='0';
-      Front_Gap.text='0';
-      help_shelf=true;
-      fixed_shelf=false;
+       Material.text='${draw_Controller.box_repository.box_model.value.init_material_thickness}';
+       help_shelf=false;
+       setState(() {
 
+       });
+    }
+    else{
+       Material.text='0';
+       help_shelf=true;
+ setState(() {
+
+ });
     }
 
 

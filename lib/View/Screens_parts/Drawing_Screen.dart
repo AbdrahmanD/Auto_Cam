@@ -98,10 +98,11 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
               onPanEnd: (v){
 
                 draw_controller.select_window.value=false;
-                draw_controller.select_piece_via_window();
+                draw_controller.select_face_via_window();
+
 
                   // if (shift_hold) {
-                  //   draw_controller.selected_id.value=[];
+                  //   draw_controller.select_piece_via_window();
                   // }
 
               },

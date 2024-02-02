@@ -45,6 +45,9 @@ class Box_model {
     if(box_type=="wall_cabinet")
     { wall_cabinet();}
 
+    if(box_type=="free_panel")
+    { free_panel();}
+
     else if(box_type=="base_cabinet")
     { base_cabinet();}
 
@@ -114,8 +117,7 @@ Map<String, dynamic> toJson() {
   }
 
 
-  standard_unit()
-  {
+  standard_unit() {
     Piece_model  top_piece = Piece_model(
         get_id("TOP"),
         'top',
@@ -230,6 +232,77 @@ Map<String, dynamic> toJson() {
     // //     ),""
     // // );
     // // box_pieces.add(inner);
+
+
+
+
+  }
+
+
+  free_panel() {
+    Piece_model  top_piece = Piece_model(
+        get_id("TOP"),
+        'top',
+        'H',
+        "helper",
+        box_depth,
+        box_width,
+        0,
+        Point_model(
+            correct_value(box_origin.x_coordinate),
+            correct_value(box_origin.y_coordinate + box_height ),
+            correct_value(box_origin.z_coordinate)
+        )
+    );
+    box_pieces.add(top_piece);
+
+    Piece_model  base_piece = Piece_model(
+        get_id("BASE"),
+        'base',
+        'H',
+        "helper",
+        box_depth,
+         box_width,
+         0,
+        Point_model(
+            correct_value( box_origin.x_coordinate),
+            correct_value( box_origin.y_coordinate ),
+            correct_value( box_origin.z_coordinate)
+        )
+    );
+    box_pieces.add(base_piece);
+
+    Piece_model  right_piece = Piece_model(
+        get_id("RIGHT"),
+        'right',
+        'V',
+        "helper",
+        box_depth,
+         box_height,
+         0,
+        Point_model(
+            correct_value(box_origin.x_coordinate+box_width),
+            correct_value(box_origin.y_coordinate) ,
+            correct_value(box_origin.z_coordinate)
+        )
+    );
+    box_pieces.add(right_piece);
+
+    Piece_model  left_piece = Piece_model(
+        get_id("LEFT"),
+        'left',
+        'V',
+        "helper",
+        box_depth,
+      box_height,
+      0,
+        Point_model(
+            correct_value( box_origin.x_coordinate),
+            correct_value( box_origin.y_coordinate ),
+            correct_value( box_origin.z_coordinate)
+        )
+    );
+    box_pieces.add(left_piece);
 
 
 
@@ -795,7 +868,7 @@ Map<String, dynamic> toJson() {
          Point_model origin_i=Point_model(
              box_pieces[inner].piece_origin.x_coordinate,
              box_pieces[inner].piece_origin.y_coordinate+distance,
-             box_pieces[inner].piece_origin.z_coordinate);
+             box_pieces[inner].piece_origin.z_coordinate+frontage_Gap);
 
          origins.add(origin_i);
          distance+=distance_0+shelf_material_thickness;
@@ -1063,7 +1136,13 @@ Map<String, dynamic> toJson() {
 
   add_door(Door_Model door_model) {
     if (door_model.door_num == 1) {
-      add_single_door_pattern(door_model);
+      if(door_model.fix_door){
+
+        add_fix_door_pattern(door_model);
+      }else{
+        add_single_door_pattern(door_model);
+
+      }
     }
     else {
       add_double_door_pattern(door_model);
@@ -1098,11 +1177,12 @@ Map<String, dynamic> toJson() {
         (door_inner.piece_origin.z_coordinate-door_model.material_thickness-2 ):
         (door_inner.piece_origin.z_coordinate)
     );
+
     String id=get_id("Door ${door_model.direction}");
 
     Piece_model door_piece = Piece_model(
       id,
-        (door_model.direction=="R")?('Door right'):('Door left'),
+        (door_model.direction=="R")?('Door r'):('Door l'),
         'F',
         door_model.material_name,
         door_width,
@@ -1110,9 +1190,11 @@ Map<String, dynamic> toJson() {
         door_model.material_thickness,
         door_origin,
          );
+    // door_piece.piece_inner=door_inner;
+
+    double hw=(correct_value((22.5-(init_material_thickness - door_model.right_gap))*2));
 
 
-    double hw=correct_value((22.5-(init_material_thickness - door_model.right_gap))*2);
     double hh=init_material_thickness;
     if(door_model.inner_door){
       hh=door_hight;
@@ -1120,7 +1202,6 @@ Map<String, dynamic> toJson() {
     else{
       if(door_model.up_gap > init_material_thickness)
       {
-
         hh=door_hight-init_material_thickness+door_model.down_gap-0.5;
       }
       else{
@@ -1141,22 +1222,18 @@ Map<String, dynamic> toJson() {
           ! (door_model.inner_door)?
           (door_inner.piece_origin.z_coordinate-2 ):
           (door_inner.piece_origin.z_coordinate+door_model.material_thickness)
-          
+
       );
-
-      String hid=get_id("Helper");
-
       Piece_model door_Hinges_Helper = Piece_model(
-        hid,
+        "${id}_h",
         'Door_Helper',
         'F',
-        door_model.material_name,
+        "inner",
         hw,
         hh,
         hth,
         door_helper_origin,
       );
-
       box_pieces.add(door_Hinges_Helper);
 
 
@@ -1171,13 +1248,12 @@ Map<String, dynamic> toJson() {
           (door_inner.piece_origin.z_coordinate)
       );
 
-      String hid=get_id("Helper");
 
       Piece_model door_Hinges_Helper = Piece_model(
-        hid,
+        "${id}_h",
         'Door_Helper',
         'F',
-        door_model.material_name,
+        "inner",
         hw,
         hh,
         hth,
@@ -1186,12 +1262,104 @@ Map<String, dynamic> toJson() {
 
       box_pieces.add(door_Hinges_Helper);
 
-
     }
 
+   if(door_model.inner_door){
+
+     if(door_model.direction=="R"){
+
+       Point_model door_helper_origin = Point_model(
+           door_inner.piece_origin.x_coordinate +door_inner.piece_width -door_model.right_gap-32.5,
+           door_inner.piece_origin.y_coordinate +door_model.down_gap,
+           door_inner.piece_origin.z_coordinate +door_model.material_thickness
+       );
+
+       Piece_model door_Hinges_Helper = Piece_model(
+         "${id}_h_door",
+         'Door_Helper',
+         'F',
+         "inner",
+         18,
+         door_hight,
+         30,
+         door_helper_origin,
+       );
+
+       box_pieces.add(door_Hinges_Helper);
+
+
+     }
+     else if(door_model.direction=="L"){
+
+       Point_model door_helper_origin = Point_model(
+           door_inner.piece_origin.x_coordinate +door_model.left_gap+22.5-9,
+           door_inner.piece_origin.y_coordinate +door_model.down_gap,
+           door_inner.piece_origin.z_coordinate +door_model.material_thickness
+       );
+
+
+       Piece_model door_Hinges_Helper = Piece_model(
+         "${id}_h_door",
+         'Door_Helper',
+         'F',
+         "inner",
+         18,
+         door_hight,
+         30,
+         door_helper_origin,
+       );
+
+       box_pieces.add(door_Hinges_Helper);
+
+     }
+
+   }
+    box_pieces.add(door_piece);
+
+  }
+
+
+  add_fix_door_pattern(Door_Model door_model) {
+
+    Piece_model door_inner = box_pieces[door_model.inner_id];
+
+    double right_thickness =(door_model.inner_door)? (-door_model.right_gap):(init_material_thickness - door_model.right_gap);
+    double left_thickness  =(door_model.inner_door)? (-door_model.left_gap):(init_material_thickness - door_model.left_gap);
+    double top_thickness   =(door_model.inner_door)? (-door_model.up_gap):(init_material_thickness - door_model.up_gap);
+    double base_thickness  =(door_model.inner_door)? (-door_model.down_gap):(init_material_thickness - door_model.down_gap);
+
+    double door_width = door_inner.piece_width +
+        right_thickness +
+        left_thickness ;
+
+    double door_hight = door_inner.piece_height +
+        top_thickness +
+        base_thickness ;
 
 
 
+    Point_model door_origin = Point_model(
+        door_inner.piece_origin.x_coordinate -
+            left_thickness ,
+        door_inner.piece_origin.y_coordinate -
+            base_thickness ,
+        (!door_model.inner_door)?
+        (door_inner.piece_origin.z_coordinate-door_model.material_thickness ):
+        (door_inner.piece_origin.z_coordinate)
+    );
+
+    String id=get_id("Door");
+
+    Piece_model door_piece = Piece_model(
+      id,
+        "fix",
+        'F',
+        door_model.material_name,
+        door_width,
+        door_hight,
+        door_model.material_thickness,
+        door_origin,
+         );
 
 
     box_pieces.add(door_piece);
@@ -1242,7 +1410,7 @@ Map<String, dynamic> toJson() {
     ///  ///////////////////////////////////////
 
 
-String id = get_id("Door Left");
+    String id = get_id("Door l");
     Piece_model door_piece_1 = Piece_model(
      id,
         'Door left',
@@ -1253,7 +1421,7 @@ String id = get_id("Door Left");
         door_model.material_thickness,
         door_origin_1,
          );
-    String id2 = get_id("Door Right");
+    String id2 = get_id("Door r");
     Piece_model door_piece_2 = Piece_model(
       id2,
       'Door right',
@@ -1282,10 +1450,10 @@ String id = get_id("Door Left");
       if(door_model.up_gap > init_material_thickness)
       {
 
-        hh=door_hight-init_material_thickness+door_model.down_gap-0.5;
+        hh=door_hight-init_material_thickness+door_model.down_gap;
       }
       else{
-       hh= door_inner.piece_height - 1;
+       hh= door_inner.piece_height -door_model.down_gap -door_model.up_gap;
       }
     }
 
@@ -1296,19 +1464,18 @@ String id = get_id("Door Left");
 
     Point_model rdoor_helper_origin = Point_model(
     door_inner.piece_origin.x_coordinate +door_inner.piece_width-hw ,
-    door_inner.piece_origin.y_coordinate+0.5 ,
+    door_inner.piece_origin.y_coordinate+door_model.down_gap ,
     (!door_model.inner_door)?
     (door_inner.piece_origin.z_coordinate-2 ):
-    (door_inner.piece_origin.z_coordinate)
+    (door_inner.piece_origin.z_coordinate+door_model.material_thickness)
     );
 
-    String rhid=get_id("Helper");
 
     Piece_model rdoor_Hinges_Helper = Piece_model(
-    rhid,
+    "{$id2}_h",
     'Door_Helper',
     'F',
-    door_model.material_name,
+      "inner",
     hw,
     hh,
     hth,
@@ -1319,21 +1486,23 @@ String id = get_id("Door Left");
     box_pieces.add(rdoor_Hinges_Helper);
 
 
+
+
+
     Point_model ldoor_helper_origin = Point_model(
     door_inner.piece_origin.x_coordinate  ,
-    door_inner.piece_origin.y_coordinate+0.5 ,
+    door_inner.piece_origin.y_coordinate+door_model.down_gap ,
     (!door_model.inner_door)?
     (door_inner.piece_origin.z_coordinate-2 ):
-    (door_inner.piece_origin.z_coordinate)
+    (door_inner.piece_origin.z_coordinate+door_model.material_thickness)
     );
 
-    String lhid=get_id("Helper");
 
     Piece_model ldoor_Hinges_Helper = Piece_model(
-    lhid,
+    "${id}_h",
     'Door_Helper',
     'F',
-    door_model.material_name,
+      "inner",
     hw,
     hh,
     hth,
@@ -1343,6 +1512,49 @@ String id = get_id("Door Left");
     box_pieces.add(ldoor_Hinges_Helper);
 
 
+
+    if (door_model.inner_door) {
+      Point_model r_door_helper_origin = Point_model(
+          door_inner.piece_origin.x_coordinate +door_inner.piece_width -door_model.right_gap-32.5,
+          door_inner.piece_origin.y_coordinate +door_model.down_gap,
+          door_inner.piece_origin.z_coordinate +door_model.material_thickness
+      );
+
+      Piece_model r_door_Hinges_Helper = Piece_model(
+        "${id}_h_door",
+        'Door_Helper',
+        'F',
+        "inner",
+        18,
+        door_hight,
+        30,
+        r_door_helper_origin,
+      );
+
+      box_pieces.add(r_door_Hinges_Helper);
+
+
+
+      Point_model l_door_helper_origin = Point_model(
+          door_inner.piece_origin.x_coordinate +door_model.left_gap+22.5-9,
+          door_inner.piece_origin.y_coordinate +door_model.down_gap,
+          door_inner.piece_origin.z_coordinate +door_model.material_thickness
+      );
+
+
+      Piece_model l_door_Hinges_Helper = Piece_model(
+        "${id}_h_door",
+        'Door_Helper',
+        'F',
+        "inner",
+        18,
+        door_hight,
+        30,
+        l_door_helper_origin,
+      );
+
+      box_pieces.add(l_door_Hinges_Helper);
+    }
 
 
 
@@ -1684,43 +1896,43 @@ String id = get_id("Door Left");
   }
 
 
-  add_back_panel(String inner_id,double back_panel_thickness,double groove_depth , bool over_all){
-
-     Piece_model  back_panel = Piece_model(
-        get_id("BP"),
-        'back_panel',
-        'F',
-        init_material_name,
-        correct_value(box_width-2*init_material_thickness+2*grove_value-1),
-        correct_value(box_height-2*init_material_thickness+2*grove_value-1),
-        correct_value(back_panel_thickness),
-        Point_model(
-            correct_value( box_origin.x_coordinate+init_material_thickness-grove_value+1),
-            correct_value( box_origin.y_coordinate+init_material_thickness-grove_value+1 ),
-            correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
-        ),
-    );
-
-    Piece_model  back_panel_Helper = Piece_model(
-        get_id("Helper"),
-        'back_panel_Helper',
-        'F',
-        init_material_name,
-        correct_value(box_width-2*init_material_thickness),
-        correct_value(box_height-2*init_material_thickness),
-        correct_value(back_panel_thickness),
-        Point_model(
-            correct_value( box_origin.x_coordinate+init_material_thickness),
-            correct_value( box_origin.y_coordinate+init_material_thickness ),
-            correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
-        ),
-    );
-
-    box_pieces.add(back_panel);
-    box_pieces.add(back_panel_Helper);
-
-
-
-  }
+  // add_back_panel(String inner_id,double back_panel_thickness,double groove_depth , bool over_all){
+  //
+  //    Piece_model  back_panel = Piece_model(
+  //       get_id("BP"),
+  //       'back_panel',
+  //       'F',
+  //       init_material_name,
+  //       correct_value(box_width-2*init_material_thickness+2*grove_value-1),
+  //       correct_value(box_height-2*init_material_thickness+2*grove_value-1),
+  //       correct_value(back_panel_thickness),
+  //       Point_model(
+  //           correct_value( box_origin.x_coordinate+init_material_thickness-grove_value+1),
+  //           correct_value( box_origin.y_coordinate+init_material_thickness-grove_value+1 ),
+  //           correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+  //       ),
+  //   );
+  //
+  //   Piece_model  back_panel_Helper = Piece_model(
+  //       get_id("Helper"),
+  //       'back_panel_Helper',
+  //       'F',
+  //       init_material_name,
+  //       correct_value(box_width-2*init_material_thickness),
+  //       correct_value(box_height-2*init_material_thickness),
+  //       correct_value(back_panel_thickness),
+  //       Point_model(
+  //           correct_value( box_origin.x_coordinate+init_material_thickness),
+  //           correct_value( box_origin.y_coordinate+init_material_thickness ),
+  //           correct_value( box_origin.z_coordinate+box_depth-bac_panel_distence-back_panel_thickness)
+  //       ),
+  //   );
+  //
+  //   box_pieces.add(back_panel);
+  //   box_pieces.add(back_panel_Helper);
+  //
+  //
+  //
+  // }
 
 }

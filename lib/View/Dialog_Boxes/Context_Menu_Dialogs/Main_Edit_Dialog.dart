@@ -1,4 +1,5 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
+import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/ADD_BOX.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Door_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Drawer_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Fix_Dialog.dart';
@@ -174,7 +175,30 @@ class Main_Edit_Dialog extends StatelessWidget {
           ),
         ),
 
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Divider(
+            height: 1,
+            color: Colors.blueGrey,
+          ),
+        ),
 
+
+        ///add box
+        InkWell(
+          onTap: () {
+            Navigator.of(Get.overlayContext!).pop();
+            Get.defaultDialog(
+                title: 'add BOX',
+                content: ADD_BOX()
+            );
+            // draw_controller.add_door(1.5);
+          },
+          child: Text(
+            'Add BOX',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
 
 
       ],

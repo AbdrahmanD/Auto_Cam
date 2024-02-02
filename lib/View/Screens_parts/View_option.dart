@@ -1,21 +1,32 @@
 import 'package:auto_cam/Controller/DecimalTextInputFormatter.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:dart_eval/dart_eval.dart';
 
-class View_option extends StatelessWidget {
+class View_option extends StatefulWidget {
 
+  @override
+  State<View_option> createState() => _View_optionState();
+}
+
+class _View_optionState extends State<View_option> {
   Draw_Controller draw_controller = Get.find();
 
   double text_size = 12;
+
   double selected_text_size = 14;
+
   double w0 = 50;
+
   double w1 = 70;
+
   double h0 = 32;
+
   double h1 = 50;
 
   double x_move_value = 0;
@@ -23,16 +34,18 @@ class View_option extends StatelessWidget {
   double y_move_value = 0;
 
   TextEditingController x_move = TextEditingController();
+
   TextEditingController y_move = TextEditingController();
 
   TextEditingController new_name = TextEditingController();
+
   TextEditingController new_width = TextEditingController();
+
   TextEditingController new_height = TextEditingController();
+
   TextEditingController new_thicknes = TextEditingController();
+
   TextEditingController new_material_name = TextEditingController();
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +58,8 @@ class View_option extends StatelessWidget {
     new_thicknes.text = '0';
     new_material_name.text = '0';
 
+
+
     return Scaffold(
       body: Container(
         color: Colors.grey[300],
@@ -53,7 +68,7 @@ class View_option extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: 24,
+              height: 12,
             ),
 
             /// choos 3d or 2d , right top front
@@ -279,177 +294,612 @@ class View_option extends StatelessWidget {
 
             /// divider
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(6.0),
               child: Divider(
                 height: 2,
               ),
             ),
 
-            /// box or piece table
+
+
+            /// move piece
+            // Obx(
+            //       () =>
+            //       (draw_controller.selected_faces.length == 0)?
+            //       ///selected piece
+            //       Column(
+            //         children: [
+            //
+            //           /// move the piece
+            //           Text('Move'),
+            //           SizedBox(
+            //             height: 8,
+            //           ),
+            //           Row(
+            //             mainAxisAlignment: MainAxisAlignment.center,
+            //             children: [
+            //               Text('X'),
+            //               SizedBox(
+            //                 width: 6,
+            //               ),
+            //               Container(
+            //                 width: 65,
+            //                 height: 24,
+            //                 child: TextFormField(
+            //                   style: TextStyle(fontSize: 12),
+            //                   enabled: true,
+            //                   keyboardType:
+            //                   TextInputType.numberWithOptions(
+            //                       decimal: true),
+            //                   controller: x_move,
+            //                   decoration: InputDecoration(
+            //                     border: OutlineInputBorder(
+            //                       borderRadius: BorderRadius.circular(4),
+            //                     ),
+            //                   ),
+            //                   validator: (d) {
+            //                     if (d!.isEmpty) {
+            //                       return 'add value please';
+            //                     }
+            //                   },
+            //                 ),
+            //               ),
+            //               SizedBox(
+            //                 width: 18,
+            //               ),
+            //               Text('Y'),
+            //               SizedBox(
+            //                 width: 6,
+            //               ),
+            //               Container(
+            //                 width: 65,
+            //                 height: 24,
+            //                 child: TextFormField(
+            //                   style: TextStyle(fontSize: 12),
+            //                   enabled: true,
+            //                   keyboardType:
+            //                   TextInputType.numberWithOptions(
+            //                       decimal: true),
+            //                   controller: y_move,
+            //                   decoration: InputDecoration(
+            //                     border: OutlineInputBorder(
+            //                       borderRadius: BorderRadius.circular(4),
+            //                     ),
+            //                   ),
+            //                   validator: (d) {
+            //                     if (d!.isEmpty) {
+            //                       return 'add value please';
+            //                     }
+            //                   },
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //
+            //           SizedBox(
+            //             height: 8,
+            //           ),
+            //           InkWell(
+            //             onTap: () {
+            //               x_move_value = double.parse(
+            //                   '${eval(x_move.text.toString())}');
+            //               y_move_value = double.parse(
+            //                   '${eval(y_move.text.toString())}');
+            //
+            //               draw_controller.move_piece(
+            //                   x_move_value, y_move_value);
+            //               x_move_value = 0;
+            //               y_move_value = 0;
+            //               x_move.text = '0';
+            //               y_move.text = '0';
+            //             },
+            //             child: Container(
+            //               width: 70,
+            //               height: 32,
+            //               decoration: BoxDecoration(
+            //                   color: Colors.teal[300],
+            //                   borderRadius: BorderRadius.circular(4)),
+            //               child: Center(child: Text('move')),
+            //             ),
+            //           ),
+            //
+            //           // /// flip
+            //           // SizedBox(
+            //           //   height: 8,
+            //           // ),
+            //           // InkWell(
+            //           //   onTap: () {
+            //           //     draw_controller.flip_piece();
+            //           //   },
+            //           //   child: Container(
+            //           //     width: 100,
+            //           //     height: 32,
+            //           //     decoration: BoxDecoration(
+            //           //         color: Colors.teal[300],
+            //           //         borderRadius: BorderRadius.circular(4)),
+            //           //     child: Center(child: Text('Flip piece')),
+            //           //   ),
+            //           // ),
+            //           //
+            //           // SizedBox(
+            //           //   height: 16,
+            //           // ),
+            //           //
+            //
+            //
+            //           SizedBox(
+            //             height: 12,
+            //           ),
+            //
+            //           /// save or cancel button
+            //           Row(
+            //             mainAxisAlignment: MainAxisAlignment.center,
+            //             children: [
+            //               InkWell(
+            //                 onTap: () {},
+            //                 child: Container(
+            //                   width: 70,
+            //                   height: 32,
+            //                   decoration: BoxDecoration(
+            //                       color: Colors.teal[300],
+            //                       borderRadius: BorderRadius.circular(4)),
+            //                   child: Center(child: Text('cancel')),
+            //                 ),
+            //               ),
+            //               SizedBox(
+            //                 width: 10,
+            //               ),
+            //               InkWell(
+            //                 onTap: () {
+            //                   for (int i = 0;
+            //                   i < draw_controller.selected_id.length;
+            //                   i++) {
+            //                     Piece_model p = draw_controller
+            //                         .box_repository
+            //                         .box_model
+            //                         .value
+            //                         .box_pieces[
+            //                     draw_controller.selected_id[i]];
+            //
+            //                     p.material_name =
+            //                         new_material_name.text.toString();
+            //                     p.piece_name = new_name.text.toString();
+            //                     p.piece_width = double.parse(
+            //                         '${eval(new_width.text.toString())}');
+            //                     p.piece_height = double.parse(
+            //                         '${eval(new_height.text.toString())}');
+            //                     p.piece_thickness = double.parse(
+            //                         '${eval(new_thicknes.text.toString())}');
+            //
+            //                     Piece_model np = Piece_model(
+            //                       p.piece_id,
+            //                       p.piece_name,
+            //                       p.piece_direction,
+            //                       p.material_name,
+            //                       p.piece_width,
+            //                       p.piece_height,
+            //                       p.piece_thickness,
+            //                       p.piece_origin,
+            //                     );
+            //
+            //                     draw_controller.box_repository.box_model
+            //                         .value.box_pieces
+            //                         .remove(p);
+            //
+            //                     if(p.piece_name.contains("Door")){
+            //                       draw_controller.add_door(Door_Model(1, p.piece_thickness, p.material_name, draw_controller.selected_id[i], 0, 0, 0, 0, 0, "R",false
+            //                       ));
+            //                     }else{
+            //                       draw_controller.box_repository.box_model
+            //                           .value.box_pieces
+            //                           .add(np);
+            //                     }
+            //
+            //                   }
+            //
+            //                   draw_controller.selected_id.value = [];
+            //                 },
+            //                 child: Container(
+            //                   width: 70,
+            //                   height: 32,
+            //                   decoration: BoxDecoration(
+            //                       color: Colors.teal[300],
+            //                       borderRadius: BorderRadius.circular(4)),
+            //                   child: Center(child: Text('Save')),
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //           SizedBox(
+            //             height: 12,
+            //           ),
+            //
+            //
+            //           ///delete the piece
+            //           InkWell(
+            //             onTap: () {
+            //               draw_controller.delete_piece();
+            //
+            //             },
+            //             child: Container(
+            //               width: 150,
+            //               height: 32,
+            //               decoration: BoxDecoration(
+            //                   color: Colors.red[300],
+            //                   borderRadius: BorderRadius.circular(4)),
+            //               child: Center(child: Text('Delete the piece')),
+            //             ),
+            //           ),
+            //
+            //
+            //           SizedBox(
+            //             height: 12,
+            //           ),
+            //
+            //           /// selected pieces listview builder
+            //           // Container(
+            //           //   height: 300,color: Colors.black12,
+            //           //   child:
+            //           //   ListView.builder(
+            //           //       itemCount: draw_controller.selected_id.length,
+            //           //       itemBuilder: (context, i) {
+            //           //         Piece_model p = draw_controller
+            //           //             .box_repository
+            //           //             .box_model
+            //           //             .value
+            //           //             .box_pieces[
+            //           //         draw_controller.selected_id[i]];
+            //           //
+            //           //         new_name.text = p.piece_name;
+            //           //         new_width.text = ' ${p.piece_width}';
+            //           //         new_height.text = ' ${p.piece_height}';
+            //           //         new_thicknes.text = ' ${p.piece_thickness}';
+            //           //         new_material_name.text = p.material_name;
+            //           //
+            //           //         return Padding(
+            //           //           padding: const EdgeInsets.all(8.0),
+            //           //           child: Column(
+            //           //             children: [
+            //           //               // Row(
+            //           //               //   children: [
+            //           //               //     Text(
+            //           //               //       'ID :',
+            //           //               //       style: TextStyle(
+            //           //               //           fontSize: text_size),
+            //           //               //     ),
+            //           //               //     Text(
+            //           //               //       '${p.piece_id}',
+            //           //               //       style: TextStyle(
+            //           //               //           fontSize: text_size),
+            //           //               //     ),
+            //           //               //   ],
+            //           //               // ),
+            //           //               // Container(
+            //           //               //   height: 0.5,
+            //           //               //   width: 100,
+            //           //               //   color: Colors.grey,
+            //           //               // ),
+            //           //               Row(
+            //           //                 children: [
+            //           //                   Text(
+            //           //                     'name :',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                   (draw_controller.selected_id.value
+            //           //                       .length <
+            //           //                       2)
+            //           //                       ? Container(
+            //           //                     width: 125,
+            //           //                     height: 22,
+            //           //                     child: TextFormField(
+            //           //                       style: TextStyle(
+            //           //                           fontSize: 12),
+            //           //                       enabled: true,
+            //           //                       keyboardType: TextInputType
+            //           //                           .numberWithOptions(
+            //           //                           decimal: true),
+            //           //                       controller: new_name,
+            //           //                       decoration:
+            //           //                       InputDecoration(
+            //           //                         border:
+            //           //                         OutlineInputBorder(
+            //           //                           borderRadius:
+            //           //                           BorderRadius
+            //           //                               .circular(
+            //           //                               4),
+            //           //                         ),
+            //           //                       ),
+            //           //                       validator: (d) {
+            //           //                         if (d!.isEmpty) {
+            //           //                           return 'add value please';
+            //           //                         }
+            //           //                       },
+            //           //                     ),
+            //           //                   )
+            //           //                       : Text(
+            //           //                     '${p.piece_name}',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                 ],
+            //           //               ),
+            //           //               Container(
+            //           //                 height: 0.5,
+            //           //                 width: 100,
+            //           //                 color: Colors.grey,
+            //           //               ),
+            //           //               Row(
+            //           //                 children: [
+            //           //                   Text(
+            //           //                     'width :',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                   (draw_controller.selected_id.value
+            //           //                       .length <
+            //           //                       2)
+            //           //                       ? Container(
+            //           //                     width: 120,
+            //           //                     height: 24,
+            //           //                     child: TextFormField(
+            //           //                       style: TextStyle(
+            //           //                           fontSize: 12),
+            //           //                       enabled: true,
+            //           //
+            //           //                       keyboardType: TextInputType
+            //           //                           .numberWithOptions(
+            //           //                           decimal: true),
+            //           //                       controller: new_width,
+            //           //                       decoration:
+            //           //                       InputDecoration(
+            //           //                         border:
+            //           //                         OutlineInputBorder(
+            //           //                           borderRadius:
+            //           //                           BorderRadius
+            //           //                               .circular(
+            //           //                               4),
+            //           //                         ),
+            //           //                       ),
+            //           //                       validator: (d) {
+            //           //                         if (d!.isEmpty) {
+            //           //                           return 'add value please';
+            //           //                         }
+            //           //                       },
+            //           //                     ),
+            //           //                   )
+            //           //                       : Text(
+            //           //                     '${p.piece_width}',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                 ],
+            //           //               ),
+            //           //               Container(
+            //           //                 height: 0.5,
+            //           //                 width: 100,
+            //           //                 color: Colors.grey,
+            //           //               ),
+            //           //               Row(
+            //           //                 children: [
+            //           //                   Text(
+            //           //                     'height :',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                   (draw_controller.selected_id.value
+            //           //                       .length <
+            //           //                       2)
+            //           //                       ? Container(
+            //           //                     width: 120,
+            //           //                     height: 24,
+            //           //                     child: TextFormField(
+            //           //                       style: TextStyle(
+            //           //                           fontSize: 12),
+            //           //                       enabled: true,
+            //           //
+            //           //                       keyboardType: TextInputType
+            //           //                           .numberWithOptions(
+            //           //                           decimal: true),
+            //           //                       controller: new_height,
+            //           //                       decoration:
+            //           //                       InputDecoration(
+            //           //                         border:
+            //           //                         OutlineInputBorder(
+            //           //                           borderRadius:
+            //           //                           BorderRadius
+            //           //                               .circular(
+            //           //                               4),
+            //           //                         ),
+            //           //                       ),
+            //           //                       validator: (d) {
+            //           //                         if (d!.isEmpty) {
+            //           //                           return 'add value please';
+            //           //                         }
+            //           //                       },
+            //           //                     ),
+            //           //                   )
+            //           //                       : Text(
+            //           //                     '${p.piece_height}',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                 ],
+            //           //               ),
+            //           //               Container(
+            //           //                 height: 0.5,
+            //           //                 width: 100,
+            //           //                 color: Colors.grey,
+            //           //               ),
+            //           //               Row(
+            //           //                 children: [
+            //           //                   Text(
+            //           //                     'thickness :',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                   (draw_controller.selected_id.value
+            //           //                       .length <
+            //           //                       2)
+            //           //                       ? Container(
+            //           //                     width: 100,
+            //           //                     height: 24,
+            //           //                     child: TextFormField(
+            //           //                       style: TextStyle(
+            //           //                           fontSize: 12),
+            //           //                       enabled: true,
+            //           //
+            //           //                       keyboardType: TextInputType
+            //           //                           .numberWithOptions(
+            //           //                           decimal: true),
+            //           //                       controller:
+            //           //                       new_thicknes,
+            //           //                       decoration:
+            //           //                       InputDecoration(
+            //           //                         border:
+            //           //                         OutlineInputBorder(
+            //           //                           borderRadius:
+            //           //                           BorderRadius
+            //           //                               .circular(
+            //           //                               4),
+            //           //                         ),
+            //           //                       ),
+            //           //                       validator: (d) {
+            //           //                         if (d!.isEmpty) {
+            //           //                           return 'add value please';
+            //           //                         }
+            //           //                       },
+            //           //                     ),
+            //           //                   )
+            //           //                       : Text(
+            //           //                     '${p.piece_thickness}',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                 ],
+            //           //               ),
+            //           //               Container(
+            //           //                 height: 0.5,
+            //           //                 width: 100,
+            //           //                 color: Colors.grey,
+            //           //               ),
+            //           //               Row(
+            //           //                 children: [
+            //           //                   Text(
+            //           //                     'material :',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                   (draw_controller.selected_id.value
+            //           //                       .length <
+            //           //                       2)
+            //           //                       ? Container(
+            //           //                     width: 100,
+            //           //                     height: 24,
+            //           //                     child: TextFormField(
+            //           //                       style: TextStyle(
+            //           //                           fontSize: 12),
+            //           //                       enabled: true,
+            //           //
+            //           //                       keyboardType: TextInputType
+            //           //                           .numberWithOptions(
+            //           //                           decimal: true),
+            //           //                       controller:
+            //           //                       new_material_name,
+            //           //                       decoration:
+            //           //                       InputDecoration(
+            //           //                         border:
+            //           //                         OutlineInputBorder(
+            //           //                           borderRadius:
+            //           //                           BorderRadius
+            //           //                               .circular(
+            //           //                               4),
+            //           //                         ),
+            //           //                       ),
+            //           //                       validator: (d) {
+            //           //                         if (d!.isEmpty) {
+            //           //                           return 'add value please';
+            //           //                         }
+            //           //                       },
+            //           //                     ),
+            //           //                   )
+            //           //                       : Text(
+            //           //                     '${p.material_name}',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                 ],
+            //           //               ),
+            //           //               SizedBox(
+            //           //                 height: 2,
+            //           //               ),
+            //           //
+            //           //               /// origin for test only
+            //           //               // Row(
+            //           //               //   children: [
+            //           //               //     Text(
+            //           //               //       'origin :',
+            //           //               //       style: TextStyle(
+            //           //               //           fontSize: text_size),
+            //           //               //     ),
+            //           //               //     Text(
+            //           //               //       'Y 2 :${p.piece_faces.faces[2].corners[0].y_coordinate} \n '
+            //           //               //       'Y 0 :${p.piece_faces.faces[0].corners[0].y_coordinate} \n'
+            //           //               //       'Y origin:${p.piece_origin.y_coordinate} \n'
+            //           //               //       ,
+            //           //               //       style: TextStyle(
+            //           //               //           fontSize: text_size),
+            //           //               //     ),
+            //           //               //   ],
+            //           //               // ),
+            //           //               // SizedBox(
+            //           //               //   height: 6,
+            //           //               // ),
+            //           //
+            //           //               /// unselect checkbox
+            //           //               Row(
+            //           //                 children: [
+            //           //                   Text(
+            //           //                     'unselect :',
+            //           //                     style: TextStyle(
+            //           //                         fontSize: text_size),
+            //           //                   ),
+            //           //                   Checkbox(
+            //           //                       value: true,
+            //           //                       onChanged: (v) {
+            //           //                         draw_controller.selected_id
+            //           //                             .removeAt(i);
+            //           //                       }),
+            //           //                 ],
+            //           //               ),
+            //           //               Divider(
+            //           //                 height: 1,
+            //           //                 color: Colors.black,
+            //           //               ),
+            //           //             ],
+            //           //           ),
+            //           //         );
+            //           //       }),
+            //           // ),
+            //
+            //
+            //         ],
+            //       ):SizedBox()
+            // ),
+
+            /// box pieces table
             Obx(
-              () => Container(
-                width: 200,
-                height: 596,
-                child: (draw_controller.selected_id.value.length == 0)
-                    ?
+                  () => Container(
+                  width: 200,
+                  // height: 596,
+                  child: Column(
+                    children: [
+                      /// selected piece
+                      (draw_controller.selected_id.value.length!= 0 && draw_controller.selected_faces.length == 0)
+                          ?
 
-                    /// list of all pieces
-                    ListView.builder(
-                        itemCount: draw_controller
-                            .box_repository.box_model.value.box_pieces.length,
-                        itemBuilder: (context, i) {
-                          if (
-                              // !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
-                              !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('Helper'))
-                              ) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'id :',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                      Text(
-                                        '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_id}',
-                                        style: TextStyle(
-                                            fontSize: text_size,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    height: 0.5,
-                                    width: 100,
-                                    color: Colors.grey,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'name :',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                      Text(
-                                        '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_name}',
-                                        style: TextStyle(
-                                            fontSize: text_size,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    height: 0.5,
-                                    width: 100,
-                                    color: Colors.grey,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'width :',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                      Text(
-                                        '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_width}',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    height: 0.5,
-                                    width: 100,
-                                    color: Colors.grey,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'height :',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                      Text(
-                                        '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_height}',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    height: 0.5,
-                                    width: 100,
-                                    color: Colors.grey,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'thickness :',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                      Text(
-                                        '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_thickness}',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    height: 0.5,
-                                    width: 100,
-                                    color: Colors.grey,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'material :',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                      Text(
-                                        '${draw_controller.box_repository.box_model.value.box_pieces[i].material_name}',
-                                        style: TextStyle(fontSize: text_size),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 6,
-                                  ),
-                                  Divider(
-                                    height: 2,
-                                    color: Colors.black,
-                                  ),
-
-                                  ///
-
-                                  // Row(
-                                  //   children: [
-                                  //     Text(
-                                  //       'X${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.x_coordinate} \n, '
-                                  //           'Y:${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate} \n, '
-                                  //           'Z:${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate} \n',
-                                  //       style: TextStyle(fontSize: text_size),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 6,
-                                  // ),
-                                  // Divider(
-                                  //   height: 2,
-                                  //   color: Colors.black,
-                                  // ),
-
-
-
-                                ],
-                              ),
-                            );
-                          } else {
-                            return SizedBox();
-                          }
-                        })
-                    :
-
-                    /// selected piece
-                    Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
+                        ///selected piece
+                        Column(
                           children: [
 
                             /// move the piece
@@ -471,8 +921,8 @@ class View_option extends StatelessWidget {
                                     style: TextStyle(fontSize: 12),
                                     enabled: true,
                                     keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
+                                    TextInputType.numberWithOptions(
+                                        decimal: true),
                                     controller: x_move,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -500,8 +950,8 @@ class View_option extends StatelessWidget {
                                     style: TextStyle(fontSize: 12),
                                     enabled: true,
                                     keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
+                                    TextInputType.numberWithOptions(
+                                        decimal: true),
                                     controller: y_move,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -570,7 +1020,7 @@ class View_option extends StatelessWidget {
 
 
                             SizedBox(
-                              height: 24,
+                              height: 12,
                             ),
 
                             /// save or cancel button
@@ -594,14 +1044,14 @@ class View_option extends StatelessWidget {
                                 InkWell(
                                   onTap: () {
                                     for (int i = 0;
-                                        i < draw_controller.selected_id.length;
-                                        i++) {
+                                    i < draw_controller.selected_id.length;
+                                    i++) {
                                       Piece_model p = draw_controller
-                                              .box_repository
-                                              .box_model
-                                              .value
-                                              .box_pieces[
-                                          draw_controller.selected_id[i]];
+                                          .box_repository
+                                          .box_model
+                                          .value
+                                          .box_pieces[
+                                      draw_controller.selected_id[i]];
 
                                       p.material_name =
                                           new_material_name.text.toString();
@@ -614,28 +1064,28 @@ class View_option extends StatelessWidget {
                                           '${eval(new_thicknes.text.toString())}');
 
                                       Piece_model np = Piece_model(
-                                          p.piece_id,
-                                          p.piece_name,
-                                          p.piece_direction,
-                                          p.material_name,
-                                          p.piece_width,
-                                          p.piece_height,
-                                          p.piece_thickness,
-                                          p.piece_origin,
-                                       );
+                                        p.piece_id,
+                                        p.piece_name,
+                                        p.piece_direction,
+                                        p.material_name,
+                                        p.piece_width,
+                                        p.piece_height,
+                                        p.piece_thickness,
+                                        p.piece_origin,
+                                      );
 
                                       draw_controller.box_repository.box_model
                                           .value.box_pieces
                                           .remove(p);
 
                                       if(p.piece_name.contains("Door")){
-                                        draw_controller.add_door(Door_Model(1, p.piece_thickness, p.material_name, draw_controller.selected_id[i], 0, 0, 0, 0, 0, "R",false
+                                        draw_controller.add_door(Door_Model(1, p.piece_thickness, p.material_name, draw_controller.selected_id[i], 0, 0, 0, 0, 0, "R",false,false
                                         ));
                                       }else{
-                                      draw_controller.box_repository.box_model
-                                          .value.box_pieces
-                                          .add(np);
-                                    }
+                                        draw_controller.box_repository.box_model
+                                            .value.box_pieces
+                                            .add(np);
+                                      }
 
                                     }
 
@@ -656,9 +1106,6 @@ class View_option extends StatelessWidget {
                               height: 12,
                             ),
 
-                            SizedBox(
-                              height: 12,
-                            ),
 
                             ///delete the piece
                             InkWell(
@@ -682,355 +1129,660 @@ class View_option extends StatelessWidget {
                             ),
 
                             /// selected pieces listview builder
-                            Container(
-                              height: 300,color: Colors.black12,
-                              child:
-                              ListView.builder(
-                                  itemCount: draw_controller.selected_id.length,
-                                  itemBuilder: (context, i) {
-                                    Piece_model p = draw_controller
-                                        .box_repository
-                                        .box_model
-                                        .value
-                                        .box_pieces[
-                                    draw_controller.selected_id[i]];
+                            // Container(
+                            //   height: 300,color: Colors.black12,
+                            //   child:
+                            //   ListView.builder(
+                            //       itemCount: draw_controller.selected_id.length,
+                            //       itemBuilder: (context, i) {
+                            //         Piece_model p = draw_controller
+                            //             .box_repository
+                            //             .box_model
+                            //             .value
+                            //             .box_pieces[
+                            //         draw_controller.selected_id[i]];
+                            //
+                            //         new_name.text = p.piece_name;
+                            //         new_width.text = ' ${p.piece_width}';
+                            //         new_height.text = ' ${p.piece_height}';
+                            //         new_thicknes.text = ' ${p.piece_thickness}';
+                            //         new_material_name.text = p.material_name;
+                            //
+                            //         return Padding(
+                            //           padding: const EdgeInsets.all(8.0),
+                            //           child: Column(
+                            //             children: [
+                            //               // Row(
+                            //               //   children: [
+                            //               //     Text(
+                            //               //       'ID :',
+                            //               //       style: TextStyle(
+                            //               //           fontSize: text_size),
+                            //               //     ),
+                            //               //     Text(
+                            //               //       '${p.piece_id}',
+                            //               //       style: TextStyle(
+                            //               //           fontSize: text_size),
+                            //               //     ),
+                            //               //   ],
+                            //               // ),
+                            //               // Container(
+                            //               //   height: 0.5,
+                            //               //   width: 100,
+                            //               //   color: Colors.grey,
+                            //               // ),
+                            //               Row(
+                            //                 children: [
+                            //                   Text(
+                            //                     'name :',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                   (draw_controller.selected_id.value
+                            //                       .length <
+                            //                       2)
+                            //                       ? Container(
+                            //                     width: 125,
+                            //                     height: 22,
+                            //                     child: TextFormField(
+                            //                       style: TextStyle(
+                            //                           fontSize: 12),
+                            //                       enabled: true,
+                            //                       keyboardType: TextInputType
+                            //                           .numberWithOptions(
+                            //                           decimal: true),
+                            //                       controller: new_name,
+                            //                       decoration:
+                            //                       InputDecoration(
+                            //                         border:
+                            //                         OutlineInputBorder(
+                            //                           borderRadius:
+                            //                           BorderRadius
+                            //                               .circular(
+                            //                               4),
+                            //                         ),
+                            //                       ),
+                            //                       validator: (d) {
+                            //                         if (d!.isEmpty) {
+                            //                           return 'add value please';
+                            //                         }
+                            //                       },
+                            //                     ),
+                            //                   )
+                            //                       : Text(
+                            //                     '${p.piece_name}',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //               Container(
+                            //                 height: 0.5,
+                            //                 width: 100,
+                            //                 color: Colors.grey,
+                            //               ),
+                            //               Row(
+                            //                 children: [
+                            //                   Text(
+                            //                     'width :',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                   (draw_controller.selected_id.value
+                            //                       .length <
+                            //                       2)
+                            //                       ? Container(
+                            //                     width: 120,
+                            //                     height: 24,
+                            //                     child: TextFormField(
+                            //                       style: TextStyle(
+                            //                           fontSize: 12),
+                            //                       enabled: true,
+                            //
+                            //                       keyboardType: TextInputType
+                            //                           .numberWithOptions(
+                            //                           decimal: true),
+                            //                       controller: new_width,
+                            //                       decoration:
+                            //                       InputDecoration(
+                            //                         border:
+                            //                         OutlineInputBorder(
+                            //                           borderRadius:
+                            //                           BorderRadius
+                            //                               .circular(
+                            //                               4),
+                            //                         ),
+                            //                       ),
+                            //                       validator: (d) {
+                            //                         if (d!.isEmpty) {
+                            //                           return 'add value please';
+                            //                         }
+                            //                       },
+                            //                     ),
+                            //                   )
+                            //                       : Text(
+                            //                     '${p.piece_width}',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //               Container(
+                            //                 height: 0.5,
+                            //                 width: 100,
+                            //                 color: Colors.grey,
+                            //               ),
+                            //               Row(
+                            //                 children: [
+                            //                   Text(
+                            //                     'height :',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                   (draw_controller.selected_id.value
+                            //                       .length <
+                            //                       2)
+                            //                       ? Container(
+                            //                     width: 120,
+                            //                     height: 24,
+                            //                     child: TextFormField(
+                            //                       style: TextStyle(
+                            //                           fontSize: 12),
+                            //                       enabled: true,
+                            //
+                            //                       keyboardType: TextInputType
+                            //                           .numberWithOptions(
+                            //                           decimal: true),
+                            //                       controller: new_height,
+                            //                       decoration:
+                            //                       InputDecoration(
+                            //                         border:
+                            //                         OutlineInputBorder(
+                            //                           borderRadius:
+                            //                           BorderRadius
+                            //                               .circular(
+                            //                               4),
+                            //                         ),
+                            //                       ),
+                            //                       validator: (d) {
+                            //                         if (d!.isEmpty) {
+                            //                           return 'add value please';
+                            //                         }
+                            //                       },
+                            //                     ),
+                            //                   )
+                            //                       : Text(
+                            //                     '${p.piece_height}',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //               Container(
+                            //                 height: 0.5,
+                            //                 width: 100,
+                            //                 color: Colors.grey,
+                            //               ),
+                            //               Row(
+                            //                 children: [
+                            //                   Text(
+                            //                     'thickness :',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                   (draw_controller.selected_id.value
+                            //                       .length <
+                            //                       2)
+                            //                       ? Container(
+                            //                     width: 100,
+                            //                     height: 24,
+                            //                     child: TextFormField(
+                            //                       style: TextStyle(
+                            //                           fontSize: 12),
+                            //                       enabled: true,
+                            //
+                            //                       keyboardType: TextInputType
+                            //                           .numberWithOptions(
+                            //                           decimal: true),
+                            //                       controller:
+                            //                       new_thicknes,
+                            //                       decoration:
+                            //                       InputDecoration(
+                            //                         border:
+                            //                         OutlineInputBorder(
+                            //                           borderRadius:
+                            //                           BorderRadius
+                            //                               .circular(
+                            //                               4),
+                            //                         ),
+                            //                       ),
+                            //                       validator: (d) {
+                            //                         if (d!.isEmpty) {
+                            //                           return 'add value please';
+                            //                         }
+                            //                       },
+                            //                     ),
+                            //                   )
+                            //                       : Text(
+                            //                     '${p.piece_thickness}',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //               Container(
+                            //                 height: 0.5,
+                            //                 width: 100,
+                            //                 color: Colors.grey,
+                            //               ),
+                            //               Row(
+                            //                 children: [
+                            //                   Text(
+                            //                     'material :',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                   (draw_controller.selected_id.value
+                            //                       .length <
+                            //                       2)
+                            //                       ? Container(
+                            //                     width: 100,
+                            //                     height: 24,
+                            //                     child: TextFormField(
+                            //                       style: TextStyle(
+                            //                           fontSize: 12),
+                            //                       enabled: true,
+                            //
+                            //                       keyboardType: TextInputType
+                            //                           .numberWithOptions(
+                            //                           decimal: true),
+                            //                       controller:
+                            //                       new_material_name,
+                            //                       decoration:
+                            //                       InputDecoration(
+                            //                         border:
+                            //                         OutlineInputBorder(
+                            //                           borderRadius:
+                            //                           BorderRadius
+                            //                               .circular(
+                            //                               4),
+                            //                         ),
+                            //                       ),
+                            //                       validator: (d) {
+                            //                         if (d!.isEmpty) {
+                            //                           return 'add value please';
+                            //                         }
+                            //                       },
+                            //                     ),
+                            //                   )
+                            //                       : Text(
+                            //                     '${p.material_name}',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //               SizedBox(
+                            //                 height: 2,
+                            //               ),
+                            //
+                            //               /// origin for test only
+                            //               // Row(
+                            //               //   children: [
+                            //               //     Text(
+                            //               //       'origin :',
+                            //               //       style: TextStyle(
+                            //               //           fontSize: text_size),
+                            //               //     ),
+                            //               //     Text(
+                            //               //       'Y 2 :${p.piece_faces.faces[2].corners[0].y_coordinate} \n '
+                            //               //       'Y 0 :${p.piece_faces.faces[0].corners[0].y_coordinate} \n'
+                            //               //       'Y origin:${p.piece_origin.y_coordinate} \n'
+                            //               //       ,
+                            //               //       style: TextStyle(
+                            //               //           fontSize: text_size),
+                            //               //     ),
+                            //               //   ],
+                            //               // ),
+                            //               // SizedBox(
+                            //               //   height: 6,
+                            //               // ),
+                            //
+                            //               /// unselect checkbox
+                            //               Row(
+                            //                 children: [
+                            //                   Text(
+                            //                     'unselect :',
+                            //                     style: TextStyle(
+                            //                         fontSize: text_size),
+                            //                   ),
+                            //                   Checkbox(
+                            //                       value: true,
+                            //                       onChanged: (v) {
+                            //                         draw_controller.selected_id
+                            //                             .removeAt(i);
+                            //                       }),
+                            //                 ],
+                            //               ),
+                            //               Divider(
+                            //                 height: 1,
+                            //                 color: Colors.black,
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         );
+                            //       }),
+                            // ),
 
-                                    new_name.text = p.piece_name;
-                                    new_width.text = ' ${p.piece_width}';
-                                    new_height.text = ' ${p.piece_height}';
-                                    new_thicknes.text = ' ${p.piece_thickness}';
-                                    new_material_name.text = p.material_name;
 
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
+                          ],
+                        ):SizedBox(),
+
+
+
+
+                      (draw_controller.selected_faces.length != 0)?
+                      ///selected face
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 16,
+                          ),
+
+                          /// move the face
+                          Text('Move the face'),
+                          SizedBox(
+                            height: 16,
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                              Container(
+                                width: 100,
+                                height: 50,
+                                child: TextFormField(
+                                  style: TextStyle(fontSize: 12),
+                                  enabled: true,
+                                  keyboardType:
+                                  TextInputType.numberWithOptions(
+                                      decimal: true),
+                                  controller: x_move,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                  validator: (d) {
+                                    if (d!.isEmpty) {
+                                      return 'add value please';
+                                    }
+                                  },
+                                ),
+                              ),
+
+
+                            ],
+                          ),
+
+                          SizedBox(
+                            height: 16,
+                          ),
+
+                          ///  move the face
+                          InkWell(
+                            onTap: () {
+                              x_move_value = double.parse('${eval(x_move.text.toString())}');
+
+                              draw_controller.move_face(x_move_value);
+
+                              x_move_value = 0;
+                              // x_move.text = '0';
+                            },
+
+                            child: Container(
+                              width: 100,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  color: Colors.teal[300],
+                                  borderRadius: BorderRadius.circular(4)),
+                              child: Center(child: Text('move')),
+                            ),
+                          ),
+
+                          Text("select piece :\n ${draw_controller.selected_faces[0].piece_id} "),
+                          Text("face_name :\n ${draw_controller.selected_faces[0].face_name} "),
+
+
+                        ],
+                      ):SizedBox(),
+
+                      /// list of all pieces
+                      Container(height: 400,
+                        child: ListView.builder(
+                            itemCount: draw_controller
+                                .box_repository.box_model.value.box_pieces.length,
+                            itemBuilder: (context, i) {
+                              bool selected_piece=false;
+                              if(draw_controller.selected_id.value.contains(i)){
+                                selected_piece=true;
+                              }
+                              if (
+                              !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
+                              !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('Helper')) &&
+                              (draw_controller.box_repository.box_model.value.box_pieces[i].piece_thickness!=0)
+                              ) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+
+                                      /// select the piece
+                                      Row(
                                         children: [
-                                          // Row(
-                                          //   children: [
-                                          //     Text(
-                                          //       'ID :',
-                                          //       style: TextStyle(
-                                          //           fontSize: text_size),
-                                          //     ),
-                                          //     Text(
-                                          //       '${p.piece_id}',
-                                          //       style: TextStyle(
-                                          //           fontSize: text_size),
-                                          //     ),
-                                          //   ],
-                                          // ),
-                                          // Container(
-                                          //   height: 0.5,
-                                          //   width: 100,
-                                          //   color: Colors.grey,
-                                          // ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'name :',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                              (draw_controller.selected_id.value
-                                                  .length <
-                                                  2)
-                                                  ? Container(
-                                                width: 125,
-                                                height: 22,
-                                                child: TextFormField(
-                                                  style: TextStyle(
-                                                      fontSize: 12),
-                                                  enabled: true,
-                                                  keyboardType: TextInputType
-                                                      .numberWithOptions(
-                                                      decimal: true),
-                                                  controller: new_name,
-                                                  decoration:
-                                                  InputDecoration(
-                                                    border:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          4),
-                                                    ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              )
-                                                  : Text(
-                                                '${p.piece_name}',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                            ],
+                                          Text(
+                                            'select :',
+                                            style: TextStyle(fontSize: text_size),
                                           ),
-                                          Container(
-                                            height: 0.5,
-                                            width: 100,
-                                            color: Colors.grey,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'width :',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                              (draw_controller.selected_id.value
-                                                  .length <
-                                                  2)
-                                                  ? Container(
-                                                width: 120,
-                                                height: 24,
-                                                child: TextFormField(
-                                                  style: TextStyle(
-                                                      fontSize: 12),
-                                                  enabled: true,
+                                          Container(width: 24,height: 24,
+                                            child: Checkbox(value: selected_piece,
 
-                                                  keyboardType: TextInputType
-                                                      .numberWithOptions(
-                                                      decimal: true),
-                                                  controller: new_width,
-                                                  decoration:
-                                                  InputDecoration(
-                                                    border:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          4),
-                                                    ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              )
-                                                  : Text(
-                                                '${p.piece_width}',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 0.5,
-                                            width: 100,
-                                            color: Colors.grey,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'height :',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                              (draw_controller.selected_id.value
-                                                  .length <
-                                                  2)
-                                                  ? Container(
-                                                width: 120,
-                                                height: 24,
-                                                child: TextFormField(
-                                                  style: TextStyle(
-                                                      fontSize: 12),
-                                                  enabled: true,
 
-                                                  keyboardType: TextInputType
-                                                      .numberWithOptions(
-                                                      decimal: true),
-                                                  controller: new_height,
-                                                  decoration:
-                                                  InputDecoration(
-                                                    border:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          4),
-                                                    ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              )
-                                                  : Text(
-                                                '${p.piece_height}',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 0.5,
-                                            width: 100,
-                                            color: Colors.grey,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'thickness :',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                              (draw_controller.selected_id.value
-                                                  .length <
-                                                  2)
-                                                  ? Container(
-                                                width: 100,
-                                                height: 24,
-                                                child: TextFormField(
-                                                  style: TextStyle(
-                                                      fontSize: 12),
-                                                  enabled: true,
+                                                 onChanged: (v){
 
-                                                  keyboardType: TextInputType
-                                                      .numberWithOptions(
-                                                      decimal: true),
-                                                  controller:
-                                                  new_thicknes,
-                                                  decoration:
-                                                  InputDecoration(
-                                                    border:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          4),
-                                                    ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              )
-                                                  : Text(
-                                                '${p.piece_thickness}',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 0.5,
-                                            width: 100,
-                                            color: Colors.grey,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'material :',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                              (draw_controller.selected_id.value
-                                                  .length <
-                                                  2)
-                                                  ? Container(
-                                                width: 100,
-                                                height: 24,
-                                                child: TextFormField(
-                                                  style: TextStyle(
-                                                      fontSize: 12),
-                                                  enabled: true,
+                                                   if(selected_piece){
+                                                     draw_controller.selected_id.value.remove(i);
+                                                   }
+                                                   else{
+                                                     draw_controller.selected_id.value.add(i);
 
-                                                  keyboardType: TextInputType
-                                                      .numberWithOptions(
-                                                      decimal: true),
-                                                  controller:
-                                                  new_material_name,
-                                                  decoration:
-                                                  InputDecoration(
-                                                    border:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          4),
-                                                    ),
-                                                  ),
-                                                  validator: (d) {
-                                                    if (d!.isEmpty) {
-                                                      return 'add value please';
-                                                    }
-                                                  },
-                                                ),
-                                              )
-                                                  : Text(
-                                                '${p.material_name}',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 2,
-                                          ),
+                                                   }
 
-                                          /// origin for test only
-                                          // Row(
-                                          //   children: [
-                                          //     Text(
-                                          //       'origin :',
-                                          //       style: TextStyle(
-                                          //           fontSize: text_size),
-                                          //     ),
-                                          //     Text(
-                                          //       'Y 2 :${p.piece_faces.faces[2].corners[0].y_coordinate} \n '
-                                          //       'Y 0 :${p.piece_faces.faces[0].corners[0].y_coordinate} \n'
-                                          //       'Y origin:${p.piece_origin.y_coordinate} \n'
-                                          //       ,
-                                          //       style: TextStyle(
-                                          //           fontSize: text_size),
-                                          //     ),
-                                          //   ],
-                                          // ),
-                                          // SizedBox(
-                                          //   height: 6,
-                                          // ),
 
-                                          /// unselect checkbox
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'unselect :',
-                                                style: TextStyle(
-                                                    fontSize: text_size),
-                                              ),
-                                              Checkbox(
-                                                  value: true,
-                                                  onChanged: (v) {
-                                                    draw_controller.selected_id
-                                                        .removeAt(i);
-                                                  }),
-                                            ],
+                                              setState(() {
+
+                                              });
+                                            }),
+                                          )
+                                        ],
+                                      ),
+                                      Container(
+                                        height: 0.5,
+                                        width: 100,
+                                        color: Colors.grey,
+                                      ),
+
+                                      ///id
+                                      // Row(
+                                      //   children: [
+                                      //     Text(
+                                      //       'id :',
+                                      //       style: TextStyle(fontSize: text_size),
+                                      //     ),
+                                      //     Text(
+                                      //       '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_id}',
+                                      //       style: TextStyle(
+                                      //           fontSize: text_size,
+                                      //           fontWeight: FontWeight.bold),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      // Container(
+                                      //   height: 0.5,
+                                      //   width: 100,
+                                      //   color: Colors.grey,
+                                      // ),
+
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'name :',
+                                            style: TextStyle(fontSize: text_size),
                                           ),
-                                          Divider(
-                                            height: 1,
-                                            color: Colors.black,
+                                          Text(
+                                            '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_name}',
+                                            style: TextStyle(
+                                                fontSize: text_size,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       ),
-                                    );
-                                  }),
-                            ),
-                          ],
-                        ),
-                      ),
-              ),
+                                      Container(
+                                        height: 0.5,
+                                        width: 100,
+                                        color: Colors.grey,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'width :',
+                                            style: TextStyle(fontSize: text_size),
+                                          ),
+                                          Text(
+                                            '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_width}',
+                                            style: TextStyle(fontSize: text_size),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        height: 0.5,
+                                        width: 100,
+                                        color: Colors.grey,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'height :',
+                                            style: TextStyle(fontSize: text_size),
+                                          ),
+                                          Text(
+                                            '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_height}',
+                                            style: TextStyle(fontSize: text_size),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        height: 0.5,
+                                        width: 100,
+                                        color: Colors.grey,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'thickness :',
+                                            style: TextStyle(fontSize: text_size),
+                                          ),
+                                          Text(
+                                            '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_thickness}',
+                                            style: TextStyle(fontSize: text_size),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        height: 0.5,
+                                        width: 100,
+                                        color: Colors.grey,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'material :',
+                                            style: TextStyle(fontSize: text_size),
+                                          ),
+                                          Text(
+                                            '${draw_controller.box_repository.box_model.value.box_pieces[i].material_name}',
+                                            style: TextStyle(fontSize: text_size),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+
+                                      // /// origin
+                                      // Row(
+                                      //   children: [
+                                      //     Text(
+                                      //       'origin :',
+                                      //       style: TextStyle(fontSize: text_size),
+                                      //     ),
+                                      //     Text(
+                                      //       'x=${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.x_coordinate}\n'
+                                      //           'y=${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate}\n'
+                                      //           'z=${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate}\n',
+                                      //       style: TextStyle(fontSize: text_size),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      // SizedBox(
+                                      //   height: 6,
+                                      // ),
+
+
+                                      Divider(
+                                        height: 2,
+                                        color: Colors.black,
+                                      ),
+
+                                      ///
+
+                                      // Row(
+                                      //   children: [
+                                      //     Text(
+                                      //       'X${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.x_coordinate} \n, '
+                                      //           'Y:${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate} \n, '
+                                      //           'Z:${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate} \n',
+                                      //       style: TextStyle(fontSize: text_size),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      // SizedBox(
+                                      //   height: 6,
+                                      // ),
+                                      // Divider(
+                                      //   height: 2,
+                                      //   color: Colors.black,
+                                      // ),
+
+
+
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                return SizedBox();
+                              }
+                            }),
+                      )
+                    ],
+
+
+
+
+              ),)
             ),
+
           ],
         ),
       ),

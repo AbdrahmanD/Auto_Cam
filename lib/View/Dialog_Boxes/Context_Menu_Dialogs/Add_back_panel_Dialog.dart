@@ -48,6 +48,8 @@ late double initial_material_thickness;
             /// foto back panel type Groove  OR full cover
             Row(
               children: [
+
+                /// groove
                 InkWell(
                     onTap: () {
                       groove_bp = true;
@@ -57,25 +59,21 @@ late double initial_material_thickness;
 
                       setState(() {});
                     },
-                    child: Column(
-                      children: [
+                    child:
                         Container(
-                          width: groove_bp ? 200 : 120,
-                          height: groove_bp ? 250 : 180,
-                          color: Colors.teal[200],
+                          width: groove_bp ? 230 : 110,
+                          height: groove_bp ? 260 : 160,
+                           child:                         Image.asset("lib/assets/images/groove_back_panel.png")
+                          ,
                         ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        Text(
-                          "Groove BackPanel",
-                          style: TextStyle(fontSize: groove_bp ? 24 : 12),
-                        )
-                      ],
-                    )),
+                ),
+
+
                 SizedBox(
                   width: 12,
                 ),
+
+                /// full cover
                 InkWell(
                     onTap: () {
                       groove_bp = false;
@@ -86,22 +84,12 @@ late double initial_material_thickness;
 
                       setState(() {});
                     },
-                    child: Column(
-                      children: [
-                        Container(
-                          width: !groove_bp ? 200 : 120,
-                          height: !groove_bp ? 250 : 180,
-                          color: Colors.teal[200],
+                    child:Container(
+                          width: !groove_bp ? 230 : 110,
+                          height: !groove_bp ? 260 : 160,
+                       child:  Image.asset("lib/assets/images/full_cover_back_panel.png"),
                         ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        Text(
-                          "full cover BackPanel",
-                          style: TextStyle(fontSize: !groove_bp ? 24 : 12),
-                        )
-                      ],
-                    )),
+                       ),
               ],
             ),
             SizedBox(
@@ -144,7 +132,7 @@ late double initial_material_thickness;
                 Container(
                   width: 250,
                   child: Text(
-                    'back panel thickness',
+                    'back panel thickness (TH) :',
                   ),
                 ),
                 Container(
@@ -176,7 +164,7 @@ late double initial_material_thickness;
                       Container(
                         width: 250,
                         child: Text(
-                          'back distance',
+                          'back panel Gap (B) :',
                         ),
                       ),
                       Container(
@@ -210,7 +198,7 @@ late double initial_material_thickness;
                       Container(
                         width: 250,
                         child: Text(
-                          'groove depth',
+                          'groove depth (D) :',
                         ),
                       ),
                       Container(
@@ -240,12 +228,9 @@ late double initial_material_thickness;
 
             InkWell(
               onTap: () {
-                double material_thickness =
-                    double.parse(back_panel_thickness.text.toString());
-                double back_distance =
-                    double.parse(back_panel_distance.text.toString());
-                double groove_depth =
-                    double.parse(back_panel_groove_depth.text.toString());
+                double material_thickness = double.parse(back_panel_thickness.text.toString());
+                double back_distance      = double.parse(back_panel_distance.text.toString());
+                double groove_depth       = double.parse(back_panel_groove_depth.text.toString());
 
                 String back_panel_material_name_value=back_panel_material_name.text.toString();
                 draw_controller.add_back_banel(back_panel_type,back_panel_material_name_value,

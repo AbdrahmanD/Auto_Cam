@@ -46,8 +46,15 @@ class _Add_Partition_DialogState extends State<Add_Partition_Dialog> {
     if (!help_partition) {
       help_partition=true;
       partation_material_thickness=0;
+      Material.text="0";
+      setState(() {
+
+      });
     }else{
       help_partition=false;
+      setState(() {
+
+      });
     }
 
     setState(() {

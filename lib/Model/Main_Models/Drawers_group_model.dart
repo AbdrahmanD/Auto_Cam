@@ -113,12 +113,12 @@ late bool inner_drawer;
           inner.piece_origin.x_coordinate - left_thickness + left_gape,
           y_distence,
           inner_drawer?(inner.piece_origin.z_coordinate+front_gape):
-          (inner.piece_origin.z_coordinate-drawer_face_material_thickness-1));
+          (inner.piece_origin.z_coordinate-drawer_face_material_thickness-2));
 
       Point_model drawer_box_origin =
       Point_model(inner.piece_origin.x_coordinate + side_gap/2, y_distence + deferent_between_face_Y_and_box_y,
           inner_drawer?(inner.piece_origin.z_coordinate+drawer_face_material_thickness+front_gape):
-          (inner.piece_origin.z_coordinate-1));
+          (inner.piece_origin.z_coordinate-2));
 
       double dx =  drawer_box_origin.x_coordinate-drawer_face_origin.x_coordinate ;
       double dy = deferent_between_face_Y_and_box_y;

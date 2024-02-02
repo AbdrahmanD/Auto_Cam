@@ -13,8 +13,7 @@ class CreateJoinholepatternDialog extends StatefulWidget {
       _CreateJoinholepatternDialogState();
 }
 
-class _CreateJoinholepatternDialogState
-    extends State<CreateJoinholepatternDialog> {
+class _CreateJoinholepatternDialogState extends State<CreateJoinholepatternDialog> {
   Draw_Controller draw_controller = Get.find();
 
   TextEditingController category_controller = TextEditingController();
