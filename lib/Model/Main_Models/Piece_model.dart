@@ -15,7 +15,8 @@ class Piece_model{
   late double       piece_thickness;
   late Point_model  piece_origin;
   late Faces_model   piece_faces;
-  // late Piece_model       piece_inner;
+
+  late double       back_distance;
 
 
   bool              is_changed=false;

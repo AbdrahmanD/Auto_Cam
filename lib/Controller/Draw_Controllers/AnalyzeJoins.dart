@@ -75,12 +75,13 @@ project_model = draw_controller.box_repository.project_model;
       Piece_model mpiece = box_model.box_pieces[mp];
 
       if (mpiece.piece_name.contains("inner")||
-          mpiece.piece_name.contains("back_panel") ||
+(          mpiece.piece_name.contains("back_panel") && !mpiece.piece_name.contains("full_back_panel")) ||
           mpiece.piece_thickness==0 ||
           mpiece.piece_name.contains("base_panel")
       ) {
         continue;
       }
+
 
       for (int mf = 0; mf < mpiece.piece_faces.faces.length; mf++)
       {
@@ -90,7 +91,7 @@ project_model = draw_controller.box_repository.project_model;
           Piece_model spiece = box_model.box_pieces[sp];
 
           if (spiece.piece_id == mpiece.piece_id ||
-              mpiece.piece_thickness==0 ||
+              spiece.piece_thickness==0 ||
 
               spiece.piece_name.contains("inner")) {
             continue;

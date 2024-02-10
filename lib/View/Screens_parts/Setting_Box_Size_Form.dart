@@ -750,7 +750,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
           SizedBox(height: 12,),
-          //review cut list
+          ///review cut list
           Container(
             child: Row(
               children: [

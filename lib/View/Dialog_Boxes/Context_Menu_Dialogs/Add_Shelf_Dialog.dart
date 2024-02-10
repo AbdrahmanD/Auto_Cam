@@ -340,8 +340,11 @@ class _Add_Shelf_DialogState extends State<Add_Shelf_Dialog> {
                         validator: (v) {
                           if (!v!.isEmpty) {
                             double dv = double.parse(v.toString());
-                            if (dv <= (draw_Controller.box_repository.box_model.value.box_depth-100-24)) {
-                            } else {
+                            if (dv <= (draw_Controller.box_repository.box_model.value.box_depth-100-24))
+                            {
+                            }
+                            else
+                            {
                               return 'the Gap big';
                             }
                           } else {

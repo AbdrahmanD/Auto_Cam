@@ -1569,7 +1569,7 @@ class _View_optionState extends State<View_option> {
                                 selected_piece=true;
                               }
                               if (
-                              !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
+                              // !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
                               !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('Helper')) &&
                               (draw_controller.box_repository.box_model.value.box_pieces[i].piece_thickness!=0)
                               ) {
@@ -1613,26 +1613,26 @@ class _View_optionState extends State<View_option> {
                                         color: Colors.grey,
                                       ),
 
-                                      ///id
-                                      // Row(
-                                      //   children: [
-                                      //     Text(
-                                      //       'id :',
-                                      //       style: TextStyle(fontSize: text_size),
-                                      //     ),
-                                      //     Text(
-                                      //       '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_id}',
-                                      //       style: TextStyle(
-                                      //           fontSize: text_size,
-                                      //           fontWeight: FontWeight.bold),
-                                      //     ),
-                                      //   ],
-                                      // ),
-                                      // Container(
-                                      //   height: 0.5,
-                                      //   width: 100,
-                                      //   color: Colors.grey,
-                                      // ),
+                                      ///thickness
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Z :',
+                                            style: TextStyle(fontSize: text_size),
+                                          ),
+                                          Text(
+                                            '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate}',
+                                            style: TextStyle(
+                                                fontSize: text_size,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        height: 0.5,
+                                        width: 100,
+                                        color: Colors.grey,
+                                      ),
 
                                       Row(
                                         children: [

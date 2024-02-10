@@ -19,7 +19,8 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
   TextEditingController under_base_thickness = TextEditingController();
   TextEditingController drawer_face_material_name = TextEditingController();
 
-  TextEditingController drawer_box_height = TextEditingController();
+  TextEditingController drawer_face_up_distace_controller   = TextEditingController();
+  TextEditingController drawer_face_down_distace_controller = TextEditingController();
 
   TextEditingController drawer_box_depth = TextEditingController();
 
@@ -46,7 +47,8 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
   inner_drawer_changed(){
     if(!inner_drawer){
       inner_drawer=true;
-
+      round_gape_controller.text="2";
+      front_gape_controller.text="2";
     }else{
       inner_drawer=false;
       All_base_gape_controller.text = '4';
@@ -65,7 +67,8 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
 
     drawer_box_material_thickness.text =
         '${draw_controller.box_repository.box_model.value.init_material_thickness}';
-    drawer_box_height.text = '${140}';
+    drawer_face_up_distace_controller  .text = '${30}';
+    drawer_face_down_distace_controller  .text = '${20}';
     drawer_box_depth.text = '${400}';
     drawer_quantity.text = '${1}';
     drawer_face_material_thickness.text = '18';
@@ -84,7 +87,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 600,
+      width: 1000,
       height: 450,
       child: Row(
         children: [
@@ -371,8 +374,6 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                 ),
               ),
 
-
-
               InkWell(
                 onTap: () {
                   if(inner_drawer){
@@ -409,8 +410,9 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                   double double_right_gape_controller =
                   double.parse(right_gape_controller.text.toString());
 
-                  double double_drawer_box_height =
-                  double.parse(drawer_box_height.text.toString());
+                  double double_drawer_face_up_distace  =   double.parse(drawer_face_up_distace_controller.text.toString());
+                  double double_drawer_face_down_distace  = double.parse(drawer_face_down_distace_controller.text.toString());
+
                   double double_drawer_box_depth =
                   double.parse(drawer_box_depth.text.toString());
                   int double_drawer_quantity =
@@ -436,8 +438,11 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                       double_drawer_box_material_thickness,
                       double_drawer_base_material_thickness,
                       double_under_base_thickness,
-                      double_drawer_box_height,
                       double_drawer_box_depth,
+
+                      double_drawer_face_up_distace  ,
+                      double_drawer_face_down_distace,
+
                       double_slide_side_gap,
                       front_gape
                   );
@@ -654,9 +659,13 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                   height: 6,
                 ),
 
+
+
+                ///ddrawer_face_up_distace_controller
+                ///
                 Row(
                   children: [
-                    Text('Drawer side height    '),
+                    Text('UP                      ',style: TextStyle(fontSize: 18),),
                     SizedBox(
                       width: 12,
                     ),
@@ -669,7 +678,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                         },
                         enabled: true,
 
-                        controller: drawer_box_height,
+                        controller: drawer_face_up_distace_controller,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
@@ -687,6 +696,42 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                 SizedBox(
                   height: 6,
                 ),
+
+                ///drawer_face_down_distace_controller
+                Row(
+                  children: [
+                    Text('DOWN                ',style: TextStyle(fontSize: 18),),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 80,
+                      height: 30,
+                      child: TextFormField(
+                        onChanged: (_) {
+                          // bottom_changed();
+                        },
+                        enabled: true,
+
+                        controller: drawer_face_down_distace_controller,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 6,
+                ),
+
 
 
 
@@ -794,6 +839,8 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
               ],
             ),
           ),
+
+          Container(width: 400,child: Image.asset("lib/assets/images/drawer.png"),)
         ],
       ),
     );

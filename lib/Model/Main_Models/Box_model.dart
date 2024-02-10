@@ -814,26 +814,26 @@ Map<String, dynamic> toJson() {
         origin.correct_cordinate()
          );
 
-
-
      box_pieces.add(new_piece);
 
   }
 
   add_Shelf(int inner,
-      double frontage_Gap,double back_distance, double shelf_material_thickness,
+      double frontage_Gap, double shelf_material_thickness,
       double top_Distence,int Quantity, String shelf_type,) {
 
     Piece_model inner_piece=box_pieces[inner];
-
-    // double back_distance =(is_back_panel)?(back_distance0+back_panel_thickness):0;
-    double shelf_width=box_depth-(frontage_Gap+back_distance);
+    double shelf_width=inner_piece.piece_thickness-(frontage_Gap);
     double shelf_height=inner_piece.piece_width;
 
 
 
+
+
+
     if (Quantity == 1) {
-      if (box_pieces[inner].piece_height > top_Distence && top_Distence >= 0) {
+      if (box_pieces[inner].piece_height > top_Distence && top_Distence >= 0)
+      {
         Point_model origin=Point_model(
             inner_piece.piece_origin.x_coordinate,
             inner_piece.piece_origin.y_coordinate+inner_piece.piece_height-top_Distence-shelf_material_thickness,
@@ -842,7 +842,9 @@ Map<String, dynamic> toJson() {
 
         add_Shelf_pattern(origin, shelf_width, shelf_height, shelf_material_thickness, shelf_type);
         Navigator.of(Get.overlayContext!).pop();
-      } else {
+      }
+      else
+      {
         Get.defaultDialog(
             title: 'Error',
             content: Text('you enter wrong value , please check again'));
@@ -917,16 +919,12 @@ Map<String, dynamic> toJson() {
   }
 
   add_Partition(int inner,
-      double frontage_Gap,double back_distance, double partition_material_thickness,
+      double frontage_Gap, double partition_material_thickness,
       double left_Distence,int Quantity, String partition_type,) {
 
     Piece_model inner_piece=box_pieces[inner];
-
-    // double back_distance =(is_back_panel)?(back_distance0+back_panel_thickness):0;
-    double partition_width=box_depth-(frontage_Gap+back_distance);
+    double partition_width=inner_piece.piece_thickness-(frontage_Gap);
     double partition_height=inner_piece.piece_height;
-
-
 
     if (Quantity == 1) {
       if (box_pieces[inner].piece_width > left_Distence && left_Distence >= 0) {
@@ -958,24 +956,25 @@ Map<String, dynamic> toJson() {
         );
 
         double distance =distance_0;
-        List<Point_model> origins=[];
+
+        double x = box_pieces[inner].piece_origin.x_coordinate;
+        double y = box_pieces[inner].piece_origin.y_coordinate;
+        double z = box_pieces[inner].piece_origin.z_coordinate+frontage_Gap;
 
         for (int i = 0; i < Quantity; i++) {
 
-          Point_model origin_i=Point_model(
-              box_pieces[inner].piece_origin.x_coordinate+distance,
-              box_pieces[inner].piece_origin.y_coordinate,
-              box_pieces[inner].piece_origin.z_coordinate);
+          Point_model origin=Point_model(
+              x+distance,
+              y,
+              z);
 
-          origins.add(origin_i);
-          distance+=distance_0+partition_material_thickness;
+           distance+=distance_0+partition_material_thickness;
+          add_Partition_pattern(origin, partition_width, partition_height,
+              partition_material_thickness, partition_type);
 
         }
 
-        for (int i = 0; i < Quantity; i++) {
 
-          add_Partition_pattern(origins[i], partition_width, partition_height, partition_material_thickness, partition_type);
-        }
 
         Navigator.of(Get.overlayContext!).pop();
 

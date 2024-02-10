@@ -23,8 +23,11 @@ late bool inner_drawer;
   late double drawer_box_material_thickness;
   late double drawer_base_material_thickness;
   late double drawer_under_base_thickness;
-  late double drawer_box_height;
   late double drawer_box_depth;
+
+  late double drawer_face_up_distace;
+  late double drawer_face_down_distace;
+
   late double side_gap;
   late  double drawer_slide_height;
   late  double front_gape;
@@ -47,8 +50,9 @@ late bool inner_drawer;
       this.drawer_box_material_thickness,
       this.drawer_base_material_thickness,
       this.drawer_under_base_thickness,
-      this.drawer_box_height,
       this.drawer_box_depth,
+      this.drawer_face_up_distace,
+      this.drawer_face_down_distace,
       this.side_gap,
       this.front_gape);
 
@@ -59,7 +63,7 @@ late bool inner_drawer;
 
     
 
-    double deferent_between_face_Y_and_box_y=25;
+    double deferent_between_face_Y_and_box_y=drawer_face_down_distace;
      drawer_slide_height=44;
 
     var inner =
@@ -79,14 +83,10 @@ late bool inner_drawer;
     double face_height = single_inner;
     double box_height;
 
-    if (drawer_box_height + 40 < face_height) {
-      box_height = drawer_box_height;
-    }
-    else {
-      box_height = double.parse((single_inner - 40).toStringAsFixed(1));
 
-    }
-    // print(box_height);
+      box_height = double.parse((face_height - drawer_face_up_distace-drawer_face_down_distace).toStringAsFixed(1));
+
+
 
     double face_width = double.parse((inner.piece_width +
         left_thickness +
@@ -116,7 +116,9 @@ late bool inner_drawer;
           (inner.piece_origin.z_coordinate-drawer_face_material_thickness-2));
 
       Point_model drawer_box_origin =
-      Point_model(inner.piece_origin.x_coordinate + side_gap/2, y_distence + deferent_between_face_Y_and_box_y,
+      Point_model(
+          inner.piece_origin.x_coordinate + side_gap/2,
+          y_distence + deferent_between_face_Y_and_box_y,
           inner_drawer?(inner.piece_origin.z_coordinate+drawer_face_material_thickness+front_gape):
           (inner.piece_origin.z_coordinate-2));
 

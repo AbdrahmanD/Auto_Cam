@@ -20,6 +20,7 @@ class _ADD_BOXState extends State<ADD_BOX> {
   TextEditingController width_controller = TextEditingController();
   TextEditingController hight_controller = TextEditingController();
   TextEditingController depth_controller = TextEditingController();
+  TextEditingController front_gap = TextEditingController();
 
   TextEditingController material_thickness_controller = TextEditingController();
   TextEditingController material_name_controller      = TextEditingController();
@@ -42,6 +43,7 @@ class _ADD_BOXState extends State<ADD_BOX> {
     hight_controller.text="${inner.piece_height}";
     depth_controller.text="${draw_Controller.box_repository.box_model.value.box_depth}";
     material_thickness_controller.text="18";
+    front_gap.text="0";
     material_name_controller.text="MDF";
     box_type_controller.text="full_top";
 
@@ -180,15 +182,55 @@ class _ADD_BOXState extends State<ADD_BOX> {
               height: 12,
             ),
 
+            ///front_gap
+            Row(
+              children: [
+                SizedBox(
+                  width: 18,
+                ),
+                Text(
+                  "front gap  : ",
+                  style: TextStyle(fontSize: 14),
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                Container(
+                    width: 100,
+                    height: 26,
+                    child: TextFormField(
+                      style: TextStyle(fontSize: 14),
+                      controller: front_gap,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      validator: (d) {
+                        if (d!.isEmpty) {
+                          return 'please add value';
+                        }
+                      },
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: TextInputType.number,
+                    )),
+                Text(
+                  "  mm",
+                  style: TextStyle(fontSize: 14),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 12,
+            ),
+
+
             //divider
             Container(
               height: 1,
               color: Colors.grey,
             ),
 
-            SizedBox(
-              height: 12,
-            ),
 
             SizedBox(
               width: 18,
@@ -336,7 +378,7 @@ class _ADD_BOXState extends State<ADD_BOX> {
             ),
 
 
-            ///Draw in the Screen button
+            /// ok button
             Padding(
               padding: const EdgeInsets.only(
                   left: 18.0, right: 52, top: 18, bottom: 18),
@@ -347,8 +389,9 @@ class _ADD_BOXState extends State<ADD_BOX> {
                     double.parse(width_controller.text.toString());
                     double hight_value =
                     double.parse(hight_controller.text.toString());
-                    double depth_value =
-                    double.parse(depth_controller.text.toString());
+                    double depth_value = double.parse(depth_controller.text.toString());
+                    double front_gap_value = double.parse(front_gap.text.toString());
+
                     double material_thickness_value = double.parse(
                         material_thickness_controller.text.toString());
                     String material_name_value =
@@ -364,6 +407,7 @@ class _ADD_BOXState extends State<ADD_BOX> {
                         width_value,
                         hight_value,
                         depth_value,
+                        front_gap_value,
                         material_thickness_value,
                         material_name_value,
                         box_type

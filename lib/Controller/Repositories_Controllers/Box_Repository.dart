@@ -26,7 +26,8 @@ class Box_Repository extends GetxController {
   Project_model project_model =
       Project_model("current project", 1, 1, 2023, "", "", []);
 
-  Map<String, List<JoinHolePattern>> join_patterns = {
+  Map<String, List<JoinHolePattern>> join_patterns =
+  {
     "Box_Fitting_DRILL": [],
     "Flexible_Shelves": [],
     "Drawer_Face": [],

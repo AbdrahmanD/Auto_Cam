@@ -19,6 +19,8 @@ class Box_Painter extends CustomPainter {
   late Offset start_select_window;
   late Offset end_select_window  ;
 
+  // List<Point_model> corners=[];
+
   Box_Painter(
       this.box_model,
       this.drawing_scale,
@@ -50,6 +52,10 @@ class Box_Painter extends CustomPainter {
      // for(Piece_model p in box_model.box_pieces){
      //   print("piece name = ${p.piece_name} , Z=${p.piece_origin.z_coordinate}");
      // }
+
+
+
+
   }
 
   @override
@@ -57,7 +63,16 @@ class Box_Painter extends CustomPainter {
     draw_box(canvas);
     draw_select_rect(canvas);
 
-
+    //
+    // for(Point_model poi in corners){
+    //
+    //   canvas.drawCircle(
+    //       Offset(
+    //           poi.x_coordinate* drawing_scale + box_model.box_origin.x_coordinate,
+    //           box_model.box_origin.y_coordinate-poi.y_coordinate* drawing_scale
+    //       ), 3, Paint());
+    //
+    // }
 
 
   }
@@ -115,10 +130,10 @@ class Box_Painter extends CustomPainter {
     Paint inners_filler = Paint()
       ..style = PaintingStyle.fill
       ..color = Colors.teal[200]!;
-
     Paint unselect_inner_filler = Paint()
       ..style = PaintingStyle.fill
-      ..color = Colors.grey[100]!;
+      ..color = Colors.grey[100]!
+    ..blendMode=BlendMode.darken;
 
 
     Paint doors_filler = Paint()
@@ -287,11 +302,11 @@ class Box_Painter extends CustomPainter {
 
       for(int s=0;s<selected_id.length;s++){
         if (i == selected_id[s]) {
-          if (piece_model.piece_name != 'inner' && piece_model.piece_name != 'Door') {
+          // if (piece_model.piece_name != 'inner' && piece_model.piece_name != 'Door') {
 
             canvas.drawPath(path, selected_pieces_filler);
             canvas.drawPath(path, line_painter);
-          }
+          // }
         }
       }
 
@@ -302,6 +317,14 @@ class Box_Painter extends CustomPainter {
       if(piece_model.piece_name.contains('inner')){
         canvas.drawPath(path, unselect_inner_filler);
         canvas.drawPath(path, thin_line_painter);
+
+        // canvas.drawCircle(
+        //     Offset(
+        //         piece_model.piece_origin.x_coordinate* drawing_scale + box_model.box_origin.x_coordinate,
+        //         box_model.box_origin.y_coordinate-piece_model.piece_origin.y_coordinate* drawing_scale
+        //     ), 3, Paint());
+        //
+
       }
       else {
         canvas.drawPath(path, line_painter);

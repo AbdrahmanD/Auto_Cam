@@ -233,6 +233,7 @@ late double initial_material_thickness;
                 double groove_depth       = double.parse(back_panel_groove_depth.text.toString());
 
                 String back_panel_material_name_value=back_panel_material_name.text.toString();
+
                 draw_controller.add_back_banel(back_panel_type,back_panel_material_name_value,
                     material_thickness, back_distance, groove_depth);
 

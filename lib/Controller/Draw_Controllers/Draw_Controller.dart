@@ -51,6 +51,7 @@ class Draw_Controller extends GetxController {
 
 
   List<Point_model> corners_points=[];
+  List<Point_model> start_corners_points=[];
 
 
   Draw_Controller() {
@@ -253,7 +254,8 @@ class Draw_Controller extends GetxController {
     if (hover_id != 100) {
       if (
       !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('inner') &&
-      !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('Helper')
+      !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('Helper') &&
+      !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('back_panel')
 
       )
       {
@@ -286,7 +288,7 @@ class Draw_Controller extends GetxController {
         view_port.value,
         start_select_window.value,
         end_select_window.value,
-        // corners_points
+        // start_corners_points
     );
     return boxPainter;
   }
@@ -318,8 +320,9 @@ class Draw_Controller extends GetxController {
       if (
       (p.piece_name.contains('back_panel')&&view_port=="F") ||
           p.piece_name.contains('Door') ||
-      p.piece_name.contains("full_back_support")
-      ||( p.piece_thickness==0 && p.piece_name!="inner")
+          p.piece_name.contains('back_panel_Helper') ||
+      (p.piece_name.contains("full_back_panel")&&view_port=="F")||
+      ( p.piece_thickness==0 && p.piece_name!="inner")
 
       )
       {
@@ -428,17 +431,10 @@ class Draw_Controller extends GetxController {
   add_shelf(double top_Distence, double frontage_Gap, double material_thickness,
       int quantity, String shelf_type) {
 
-    double back_panel_distance=0;
-    if(box_repository.back_panel_type=="groove"){
-      back_panel_distance= box_repository.box_model.value.bac_panel_distence +
-          box_repository.box_model.value.back_panel_thickness;
-    }else{
-      back_panel_distance=0;
-    }
+
     box_repository.box_model.value.add_Shelf(
         hover_id,
         frontage_Gap,
-      back_panel_distance,
         material_thickness,
       top_Distence,
       quantity,
@@ -458,13 +454,8 @@ class Draw_Controller extends GetxController {
       int quantity,
        bool helper) {
 
-    double back_panel_distance=0;
-    if(box_repository.back_panel_type=="groove"){
-      back_panel_distance= box_repository.box_model.value.bac_panel_distence +
-          box_repository.box_model.value.back_panel_thickness;
-    }
 
-    box_repository.box_model.value.add_Partition(hover_id,frontage_Gap,back_panel_distance,material_thickness,
+    box_repository.box_model.value.add_Partition(hover_id,frontage_Gap,material_thickness,
         left_Distence,
           quantity,  helper?"Helper_partition":"partition");
     anlyze_inners();
@@ -571,7 +562,7 @@ class Draw_Controller extends GetxController {
 
         Piece_model  back_panel = Piece_model(
             box_repository.box_model.value.get_id("BP"),
-            'support back',
+            'back_panel',
             'F',
             box_repository.box_model.value.init_material_name,
             correct_value(inner.piece_width ),
@@ -580,14 +571,18 @@ class Draw_Controller extends GetxController {
             Point_model(
                 correct_value(inner.piece_origin.x_coordinate ),
                 correct_value(inner.piece_origin.y_coordinate  ),
-                correct_value(inner.piece_origin.z_coordinate+box_repository.box_model.value.box_depth-back_distance-material_thickness)
+                correct_value(inner.piece_origin.z_coordinate+inner.piece_thickness-back_distance-material_thickness)
             )
         );
 
-        box_repository.box_model.value.box_pieces.add(back_panel);
-        box_repository.back_panel_type=back_panel_type;
+        box_repository.box_model.value.box_pieces[hover_id].piece_thickness-=(back_distance + material_thickness);
+        box_repository.box_model.value.box_pieces[hover_id].back_distance=(back_distance + material_thickness);
 
-      }else{
+        box_repository.box_model.value.box_pieces.add(back_panel);
+        // box_repository.back_panel_type=back_panel_type;
+
+      }
+      else{
         Piece_model  back_panel = Piece_model(
             box_repository.box_model.value.get_id("BP"),
             'back_panel',
@@ -599,9 +594,14 @@ class Draw_Controller extends GetxController {
             Point_model(
                 correct_value(inner.piece_origin.x_coordinate-groove_depth+0.5),
                 correct_value(inner.piece_origin.y_coordinate-groove_depth+0.5 ),
-                correct_value(inner.piece_origin.z_coordinate+box_repository.box_model.value.box_depth-back_distance-material_thickness)
+                correct_value(inner.piece_origin.z_coordinate+inner.piece_thickness-back_distance-material_thickness)
             )
         );
+
+
+        box_repository.box_model.value.box_pieces[hover_id].piece_thickness-=back_distance+material_thickness;
+        box_repository.box_model.value.box_pieces[hover_id].back_distance=(back_distance + material_thickness);
+
 
         Piece_model  back_panel_Helper = Piece_model(
             box_repository.box_model.value.get_id("BP"),
@@ -614,14 +614,14 @@ class Draw_Controller extends GetxController {
             Point_model(
                 correct_value(inner.piece_origin.x_coordinate),
                 correct_value(inner.piece_origin.y_coordinate ),
-                correct_value(inner.piece_origin.z_coordinate+box_repository.box_model.value.box_depth-back_distance-material_thickness)
+                correct_value(inner.piece_origin.z_coordinate+inner.piece_thickness-back_distance-material_thickness)
             )
         );
 
 
         box_repository.box_model.value.box_pieces.add(back_panel);
         box_repository.box_model.value.box_pieces.add(back_panel_Helper);
-        box_repository.back_panel_type=back_panel_type;
+        // box_repository.back_panel_type=back_panel_type;
 
       }
 
@@ -631,8 +631,8 @@ class Draw_Controller extends GetxController {
     else if(back_panel_type=="full_cover"){
       double side_thickness=(box_type=="free_panel")?(0):(box_repository.box_model.value.init_material_thickness);
       Piece_model back_panel=Piece_model(
-          box_repository.box_model.value.get_id("full_back_support"),
-          "full_back_support",
+          box_repository.box_model.value.get_id("full_back_panel"),
+          "full_back_panel",
           "F",
           back_panel_material_name,
           correct_value(inner.piece_width +2*side_thickness),
@@ -646,11 +646,11 @@ class Draw_Controller extends GetxController {
       );
 
       box_repository.box_model.value.box_pieces.add(back_panel);
-      box_repository.back_panel_type=back_panel_type;
+      // box_repository.back_panel_type=back_panel_type;
 
     }
 
-
+anlyze_inners();
 
   }
 
@@ -673,7 +673,7 @@ class Draw_Controller extends GetxController {
           Point_model(
               correct_value(box_origin.x_coordinate),
               correct_value(box_origin.y_coordinate + inner_box.height - inner_box.material_thickness),
-              correct_value(box_origin.z_coordinate)
+              correct_value(box_origin.z_coordinate+inner_box.front_gap)
           )
       );
 
@@ -688,7 +688,7 @@ class Draw_Controller extends GetxController {
           Point_model(
               correct_value(box_origin.x_coordinate+inner_box.material_thickness),
               correct_value(box_origin.y_coordinate),
-              correct_value(box_origin.z_coordinate)
+              correct_value(box_origin.z_coordinate+inner_box.front_gap)
           )
       );
 
@@ -703,7 +703,7 @@ class Draw_Controller extends GetxController {
           Point_model(
               correct_value(box_origin.x_coordinate + inner_box.width - inner_box.material_thickness),
               correct_value(box_origin.y_coordinate ),
-              correct_value(box_origin.z_coordinate)
+              correct_value(box_origin.z_coordinate+inner_box.front_gap)
           )
       );
 
@@ -718,7 +718,7 @@ class Draw_Controller extends GetxController {
           Point_model(
               correct_value(box_origin.x_coordinate ),
               correct_value(box_origin.y_coordinate ),
-              correct_value(box_origin.z_coordinate)
+              correct_value(box_origin.z_coordinate+inner_box.front_gap)
           )
       );
 
@@ -1333,6 +1333,48 @@ else if(face_name==2 || face_name==4){
   }
 
 
+
+  save_joinHolePattern_list(List<JoinHolePattern> joinHolePatterns,String category) async {
+
+    bool windows_platform=Platform.isWindows;
+    final directory = await getApplicationDocumentsDirectory();
+
+    final Directory oldDirectory = windows_platform?(Directory('${directory.path}\\Auto_Cam')):(Directory('${directory.path}/Auto_Cam'));
+    oldDirectory.createSync();
+
+    final Directory newDirectory = windows_platform?(Directory('${oldDirectory.path}\\Setting')):(Directory('${oldDirectory.path}/Setting'));
+    newDirectory.createSync();
+
+    final Directory finalDirectory0 = windows_platform?(Directory('${newDirectory.path}\\Join_Patterns')):(Directory('${newDirectory.path}/Join_Patterns'));
+    finalDirectory0.createSync();
+
+    final Directory finalDirectory =windows_platform?(        Directory('${finalDirectory0.path}\\${category}')
+    ):(        Directory('${finalDirectory0.path}/${category}')
+    );
+    finalDirectory.createSync();
+
+    for (var p = 0; p<joinHolePatterns.length; p++) {
+      JoinHolePattern joinHolePattern = joinHolePatterns[p];
+      final path = await finalDirectory.path;
+      String file_path = windows_platform?('$path\\${joinHolePattern.name}-pattern'):('$path/${joinHolePattern.name}-pattern');
+      // writeJsonToFile(joinHolePattern.toJson(),file_path);
+      File file = File(file_path);
+
+      try {
+        // Convert the data to a JSON string
+        String jsonData = jsonEncode(joinHolePattern.toJson());
+
+        // Write the JSON data to the file
+        file.writeAsStringSync(jsonData);
+
+        print('JSON data has been written to $file_path');
+      } catch (e) {
+        print('Error writing JSON data to the file: $e');
+      }
+    }
+  }
+
+
   delete_joinHolePattern(JoinHolePattern joinHolePattern,String category) async {
 
     bool windows_platform=Platform.isWindows;
@@ -1489,7 +1531,6 @@ else if(face_name==2 || face_name==4){
     }
 
 
-
   }
 
 
@@ -1602,36 +1643,73 @@ else if(face_name==2 || face_name==4){
 
   anlyze_inners(){
 
+    List<Piece_model> old_inners=[];
+
+    for(int ine=0;ine<box_repository.box_model.value.box_pieces.length;ine++){
+      Piece_model p = box_repository.box_model.value.box_pieces[ine];
+      if(p.piece_name.contains("inner")){
+        old_inners.add(p);
+      }
+    }
+    // print("old_inners = ${old_inners.length}");
+
+
     clear_inners_list();
     corners_points=detct_corners();
     List<Rectangle_model> rectangles=  draw_rectangles();
     List<Rectangle_model> correct_rectangles=  cancel_contained_rectangle_in_piece(rectangles);
 
     for(Rectangle_model rectangle in correct_rectangles){
-      Piece_model inner=Piece_model(box_repository.box_model.value.get_id("inner"),
+
+double inner_depth=box_repository.box_model.value.box_depth-rectangle.corners[0].z_coordinate;
+
+// print('box depth = ${box_repository.box_model.value.box_depth}');
+// print('corner  z = ${rectangle.corners[0].z_coordinate}');
+// print('inner depth = $inner_depth');
+
+double back_distance=0;
+
+for(int oi=0;oi<old_inners.length;oi++){
+  if(center_in_piece(old_inners[oi], rectangle_center(rectangle))){
+    inner_depth-=old_inners[oi].back_distance;
+
+    back_distance=old_inners[oi].back_distance;
+
+  }
+}
+
+      Piece_model inner=Piece_model(
+
+          box_repository.box_model.value.get_id("inner"),
           "inner",
           "F",
-          "no material",
+          "inner",
           rectangle.width,
           rectangle.height,
-          0,
+          inner_depth,
           origin_of_rectangle(rectangle)
+
        );
 
+inner.back_distance=back_distance;
+
       bool exist=false;
+
       for(Piece_model piece in box_repository.box_model.value.box_pieces){
         bool same_width = piece.piece_width==inner.piece_width;
         bool same_height = piece.piece_height==inner.piece_height;
         bool same_origin =
-            piece.piece_origin.x_coordinate    ==inner.piece_origin.x_coordinate &&
+                piece.piece_origin.x_coordinate==inner.piece_origin.x_coordinate &&
                 piece.piece_origin.y_coordinate==inner.piece_origin.y_coordinate &&
                 piece.piece_origin.z_coordinate==inner.piece_origin.z_coordinate ;
 
         exist=same_width && same_height && same_origin;
 
+
       }
       if(!exist){
-        box_repository.box_model.value.box_pieces.add(inner);
+          box_repository.box_model.value.box_pieces.add(inner);
+
       }
 
     }
@@ -1639,7 +1717,82 @@ else if(face_name==2 || face_name==4){
 
   }
 
+  /// detect if the inner intersected with piece
+
+  bool dont_cross_piece(Point_model p3,Point_model p1){
+
+
+    // print("p3 : (${p3.x_coordinate} , ${p3.y_coordinate}) - - p1 : (${p1.x_coordinate} , ${p1.y_coordinate})");
+    bool not_intersect=true;
+
+
+    for(int i=0;i<box_repository.box_model.value.box_pieces.length;i++){
+
+      Piece_model piece=box_repository.box_model.value.box_pieces[i];
+
+
+      if(
+          piece.piece_name.contains("back_panel")
+          ||
+          piece.piece_name.contains("Door")
+      ){
+        continue;
+      }
+
+      //
+      // if(piece.piece_name.contains("inner")){
+      //   continue;
+      // }
+
+      Point_model  piece_H_axis =Point_model(
+          piece.piece_faces.faces[4].corners[0].x_coordinate,
+          (piece.piece_faces.faces[4].corners[0].y_coordinate+piece.piece_faces.faces[4].corners[2].y_coordinate)/2,
+          piece.piece_faces.faces[4].corners[0].z_coordinate
+      );
+
+      Point_model  piece_V_axis =Point_model(
+          (piece.piece_faces.faces[4].corners[0].x_coordinate +piece.piece_faces.faces[4].corners[2].x_coordinate)/2,
+          piece.piece_faces.faces[4].corners[0].y_coordinate,
+          piece.piece_faces.faces[4].corners[0].z_coordinate
+      );
+
+
+      bool check_H = (
+          (p3.y_coordinate>piece_H_axis.y_coordinate && p1.y_coordinate<piece_H_axis.y_coordinate) &&
+
+          (   p3.x_coordinate>=piece.piece_faces.faces[4].corners[0].x_coordinate &&
+              p1.x_coordinate<=piece.piece_faces.faces[4].corners[2].x_coordinate)
+      );
+
+
+      bool check_V = (
+
+          (p3.x_coordinate<piece_V_axis.x_coordinate && p1.x_coordinate>piece_V_axis.x_coordinate) &&
+
+          (   p3.y_coordinate<=piece.piece_faces.faces[4].corners[2].y_coordinate &&
+              p1.y_coordinate>=piece.piece_faces.faces[4].corners[0].y_coordinate)
+      );
+
+
+
+      if(check_H || check_V ){
+        not_intersect=false;
+        break;
+      }
+    }
+
+    return not_intersect;
+  }
+
+
+
+  ///
+
+
+
+
   clear_inners_list(){
+
     List<Piece_model> box_pieces_without_inners=[];
     for(Piece_model piece_model in box_repository.box_model.value.box_pieces){
       if(piece_model.piece_name!="inner"){
@@ -1673,6 +1826,7 @@ else if(face_name==2 || face_name==4){
   }
 
   List<Point_model> detct_corners(){
+    start_corners_points=[];
     List<Point_model> corners=[];
     for(int i=0;i<box_repository.box_model.value.box_pieces.length;i++){
       Piece_model p = box_repository.box_model.value.box_pieces[i];
@@ -1690,11 +1844,15 @@ else if(face_name==2 || face_name==4){
       {
         Single_Face front_face=p.piece_faces.faces[4];
 
+
+        start_corners_points.add(p.piece_faces.faces[4].corners[0]);
+        start_corners_points.add(p.piece_faces.faces[4].corners[2]);
+
         for(Point_model poi in front_face.corners)
         {
-          if (!(poi.z_coordinate<0)) {
+          // if (!(poi.z_coordinate<0)) {
             corners.add(poi);
-          }
+          // }
         }
 
       }
@@ -1707,15 +1865,17 @@ else if(face_name==2 || face_name==4){
 
     List<Rectangle_model> rects=[];
 
-    for(Point_model p in  corners_points){
+    for(Point_model p in  start_corners_points){
+
       if(can_draw_rect_from_point(p)){
         Rectangle_model rectangle_model =   rect_from_point(p);
-
         if(rectangle_model.width!=0 && rectangle_model.height!=0){
             rects.add(rectangle_model);
 
         }
+
       }
+
     }
 
 
@@ -1743,14 +1903,15 @@ else if(face_name==2 || face_name==4){
 
     for(Piece_model piece in box_repository.box_model.value.box_pieces){
       if(
-      piece.piece_name.contains("back_panel")  ||
-      piece.piece_name.contains("Door")
+      !piece.piece_name.contains("back_panel")
+      && !piece.piece_name.contains("Door")
+      // && !piece.piece_name.contains("full_cover_panel")
       ){
-        continue;
+        if(center_in_piece(piece, rectangle_center(rect))){
+          contained=true;
+        }
       }
-      if(center_in_piece(piece, rectangle_center(rect))){
-        contained=true;
-      }
+
     }
 
 
@@ -1758,6 +1919,7 @@ else if(face_name==2 || face_name==4){
   }
 
   bool  can_draw_rect_from_point(Point_model p){
+
     bool can_draw=false;
 
     if(have_next_X(p)){
@@ -1765,8 +1927,11 @@ else if(face_name==2 || face_name==4){
       if(have_next_Y(p2)){
         List<Point_model> next_y_points =next_Y_list(p2);
         for(Point_model nyp in next_y_points){
-          if(have_previous_X(nyp, p)){
+          if(have_previous_X(nyp, p)
+              && dont_cross_piece(p, nyp)
+          ){
             can_draw=true;
+
           }
         }
 
@@ -1779,7 +1944,7 @@ else if(face_name==2 || face_name==4){
   Rectangle_model rect_from_point(Point_model p){
 
 
-    Point_model p1=Point_model(p.x_coordinate,p.y_coordinate,0);
+    Point_model p1=Point_model(p.x_coordinate,p.y_coordinate,p.z_coordinate);
     Point_model p2=next_x_point(p1);
     Point_model p3=next_y_point(p2,p1);
 
@@ -1842,7 +2007,7 @@ else if(face_name==2 || face_name==4){
         }
       }
     }
-    // next_x_points.sort((a, b) => a.x_coordinate.compareTo(b.x_coordinate));
+    next_x_points.sort((a, b) => b.x_coordinate.compareTo(a.x_coordinate));
 
     return next_x_points;
   }
@@ -1861,7 +2026,6 @@ else if(face_name==2 || face_name==4){
   }
 
 
-
   List<Point_model> next_Y_list(Point_model p ){
 
 
@@ -1873,6 +2037,7 @@ else if(face_name==2 || face_name==4){
           next_y_value.add(poi);
         }
       }
+
     }
 
 
@@ -1889,10 +2054,6 @@ else if(face_name==2 || face_name==4){
       }
     return next_y;
     }
-
-
-
-
 
   // Point_model previous_X(Point_model p ,Point_model origin){
   //
@@ -1947,11 +2108,8 @@ origin_of_rectangle(rectangle_model).y_coordinate+rectangle_model.height/2,
 
   }
 
-
-
   /// /###############################################
   /// /###############################################
-
 
 
 

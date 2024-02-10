@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 
 class JoinHolePattern {
-  // late String category;
   late String name;
   late double min_length;
   late double max_length;
