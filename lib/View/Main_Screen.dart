@@ -34,6 +34,7 @@ class _Main_ScreenState extends State<Main_Screen> {
     // TODO: implement initState
     super.initState();
   active=active_controller.active;
+  print("active = $active");
   setState(() {
 
   });
@@ -343,7 +344,9 @@ class _Main_ScreenState extends State<Main_Screen> {
                 children: [
                   InkWell(
                       onTap: () {
-                        Get.to(View_Active_port());
+                        Get.defaultDialog(title: "ACTIVE EDITOR" , content: Container(
+                          width: 600,height: 600,child: View_Active_port(),
+                        ));
                       },
                       child: Icon(
                         Icons.key,
@@ -354,7 +357,34 @@ class _Main_ScreenState extends State<Main_Screen> {
                 ],
               ),
             ),
-          ],
+
+            SizedBox(
+              height: 24,
+            ),
+
+
+            // Container(
+            //   width: w,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       InkWell(
+            //           onTap: () {
+            //             active_controller.clean_data();
+            //           },
+            //           child: Icon(
+            //             Icons.cancel,
+            //             size: 24,
+            //             color: Colors.red[500],
+            //           )),
+            //
+            //     ],
+            //   ),
+            // ),
+
+
+          ]
+          ,
         ),
       )
 
