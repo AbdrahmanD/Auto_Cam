@@ -851,6 +851,41 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 12,
           ),
 
+          ///save the box
+          Container(
+            child: Row(
+              children: [
+                InkWell(
+                    onTap: () {
+                      draw_Controller.undo();
+
+                    },
+                    child: Icon(
+                      Icons.undo,
+                      size: 36,
+                      color: Colors.teal,
+                    )),
+                SizedBox(
+                  width: 32,
+                ),
+                InkWell(
+                    onTap: () {
+                      draw_Controller.redo();
+
+                    },
+                    child: Icon(
+                      Icons.redo,
+                      size: 36,
+                      color: Colors.teal,
+                    )),
+              ],
+            ),
+          ),
+
+          SizedBox(
+            height: 12,
+          ),
+
           ///analyze
           // Container(
           //   child: Row(

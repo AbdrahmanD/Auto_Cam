@@ -318,6 +318,8 @@ class kdt_file {
         Single_Face single_face = piece_model.piece_faces.faces[f];
 
         if(single_face.name==2){
+          // print("side_bore_units from kdt bores = ${single_face.bores.length}");
+
           for(int h=0;h<single_face.bores.length;h++){
 
             Bore_model b=single_face.bores[h];

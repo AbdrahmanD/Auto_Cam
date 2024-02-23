@@ -26,6 +26,9 @@ import '../../View/Dialog_Boxes/Context_Menu_Dialogs/Out_Box_Menu.dart';
 class Draw_Controller extends GetxController {
 
 
+List<Box_model> box_history=[];
+List<Box_model> deleted_box_history=[];
+int cursor=0;
 
   RxDouble drawing_scale = (0.9).obs;
   Rx<Size> screen_size = Size(800, 600).obs;
@@ -276,6 +279,8 @@ class Draw_Controller extends GetxController {
 
     Box_model box_model = get_box();
 
+    print("box_model.box_pieces.length");
+    print(box_model.box_pieces.length);
      hover_id_find(box_model);
 
     Box_Painter boxPainter = Box_Painter(
@@ -575,7 +580,7 @@ class Draw_Controller extends GetxController {
             )
         );
 
-        box_repository.box_model.value.box_pieces[hover_id].piece_thickness-=(back_distance + material_thickness);
+        // box_repository.box_model.value.box_pieces[hover_id].piece_thickness-=(back_distance + material_thickness);
         box_repository.box_model.value.box_pieces[hover_id].back_distance=(back_distance + material_thickness);
 
         box_repository.box_model.value.box_pieces.add(back_panel);
@@ -599,7 +604,7 @@ class Draw_Controller extends GetxController {
         );
 
 
-        box_repository.box_model.value.box_pieces[hover_id].piece_thickness-=back_distance+material_thickness;
+        // box_repository.box_model.value.box_pieces[hover_id].piece_thickness-=back_distance+material_thickness;
         box_repository.box_model.value.box_pieces[hover_id].back_distance=(back_distance + material_thickness);
 
 
@@ -818,8 +823,9 @@ if(selected_id.length==1){
       dz = y_move_value;
     }
 
-    if (selected_id.length==1) {
-      Piece_model p = box_repository.box_model.value.box_pieces[selected_id[0]];
+    // if (selected_id.length==1) {
+    for (int i = 0; i < selected_id.length; i++) {
+      Piece_model p = box_repository.box_model.value.box_pieces[selected_id[i]];
 
       for (int i = 0; i < 4; i++) {
 
@@ -1234,6 +1240,8 @@ else if(face_name==2 || face_name==4){
   }
 
   save_Box() async {
+
+
     if (box_repository.box_have_been_saved) {
       String jsonData = jsonEncode(box_repository.box_model.value.toJson());
       File file = File(box_repository.box_file_path!);
@@ -1259,6 +1267,64 @@ else if(face_name==2 || face_name==4){
       } catch (e) {
         print('Error writing JSON data to the file: $e');
       }
+    }
+    add_box_to_history(box_repository.box_model.value);
+  }
+
+  add_box_to_history(Box_model b) {
+
+     box_history.add(b);
+    cursor = box_history.length - 1;
+     box_repository.box_model.value=b;
+
+     draw_Box();
+
+     print("box history = ${box_history.length}");
+     print("cursor = ${cursor}");
+    print("==================");
+
+
+
+  }
+
+  undo() {
+    if (cursor > 0) {
+      Box_model b=box_history[cursor-1];
+      Box_model deleted_b=box_history[cursor];
+
+      box_repository.box_model.value =b;
+
+      box_history.removeAt(cursor);
+      deleted_box_history.add(deleted_b);
+
+      cursor = box_history.length - 1;
+
+
+
+      print("undo");
+      print("box history = ${box_history.length}");
+      print("deleted history = ${deleted_box_history.length}");
+      print("cursor = ${cursor}");
+      print("==================");
+
+
+    }
+    draw_Box();
+  }
+
+  redo() {
+    if (deleted_box_history.length>0) {
+
+      Box_model b=deleted_box_history[deleted_box_history.length-1];
+      add_box_to_history(b);
+       deleted_box_history.removeAt(deleted_box_history.length-1);
+
+      print("redo");
+      print("box history = ${box_history.length}");
+      print("deleted history = ${deleted_box_history.length}");
+      print("cursor = ${cursor}");
+      print("==================");
+
     }
 
   }
@@ -1661,7 +1727,9 @@ else if(face_name==2 || face_name==4){
 
     for(Rectangle_model rectangle in correct_rectangles){
 
-double inner_depth=box_repository.box_model.value.box_depth-rectangle.corners[0].z_coordinate;
+double inner_depth=box_repository.box_model.value.box_depth
+    // -rectangle.corners[0].z_coordinate
+;
 
 // print('box depth = ${box_repository.box_model.value.box_depth}');
 // print('corner  z = ${rectangle.corners[0].z_coordinate}');
@@ -1806,7 +1874,8 @@ inner.back_distance=back_distance;
 
     double x=rectangle.corners[0].x_coordinate;
     double y=rectangle.corners[0].y_coordinate;
-    double z=rectangle.corners[0].z_coordinate;
+    // double z=rectangle.corners[0].z_coordinate;
+    double z=0;
 
     for(int poi=1;poi<3;poi++){
 

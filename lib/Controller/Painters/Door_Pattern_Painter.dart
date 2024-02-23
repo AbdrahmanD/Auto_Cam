@@ -79,32 +79,16 @@ class Door_Pattern_Painter extends CustomPainter {
       double pre_distence = door_bore_unit[i].pre_distence;
 
       Bore_model unit = door_bore_unit[i].face_bore;
-      bool center=door_bore_unit[i].center;
-
-      if(door_bore_unit[i].mirror){
-        // print(door_bore_unit[i].correct_num);
-        canvas.drawCircle(
-            Offset(
-                (pre_distence*scal+second_origin.dx +door_bore_unit[i].correct_x* scal),
-               -22.5*scal+ second_origin.dy -unit.origin.y_coordinate* scal),
-            unit.diameter * scal / 2, bore_painter);
+      double correct_x=door_bore_unit[i].correct_x;
+      double correct_y=door_bore_unit[i].correct_y;
 
         canvas.drawCircle(
             Offset(
-              ((widh-pre_distence)*scal+second_origin.dx+door_bore_unit[i].correct_x* scal),
-               - 22.5*scal+ second_origin.dy -unit.origin.y_coordinate* scal),
+                pre_distence*scal+second_origin.dx ,
+                -22.5*scal+ second_origin.dy - correct_y* scal),
             unit.diameter * scal / 2, bore_painter);
 
-
-      }
-      else{
-        canvas.drawCircle(
-            Offset(
-                center?(second_origin.dx +max_width/2* scal+door_bore_unit[i].correct_x*scal):(pre_distence*scal+second_origin.dx + unit.origin.x_coordinate * scal),
-                -22.5*scal+ second_origin.dy -unit.origin.y_coordinate* scal),
-            unit.diameter * scal / 2, bore_painter);
-
-      }
+      // }
 
       }
 

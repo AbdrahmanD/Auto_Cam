@@ -1087,6 +1087,8 @@ project_model = draw_controller.box_repository.project_model;
           face_direction, face.name, piece_direction, join_type);
     }
 
+
+
     towFaceBoring.H_bores.forEach((element) {
       face.bores.add(element);
     });
@@ -1096,6 +1098,10 @@ project_model = draw_controller.box_repository.project_model;
         second_face.bores.add(element);
       });
     }
+
+    // print("V_bores.length : ${towFaceBoring.V_bores.length}");
+    // print("H_bores.length : ${towFaceBoring.H_bores.length}");
+
   }
 
   int detect_second_face(Box_model box_model,
@@ -1329,94 +1335,151 @@ project_model = draw_controller.box_repository.project_model;
 
         JoinHolePattern new_pattern = pattern;
 
-        List<Bore_unit> bore_units =
-            new_pattern.apply_pattern(join_line_length);
 
-        for (int i = 0; i < bore_units.length; i++) {
-          Bore_unit n_bore_unit = bore_units[i];
-          Bore_model n_side_bore_model = n_bore_unit.side_bore;
-          Bore_model n_face_bore = n_bore_unit.face_bore;
+          if(join_type.contains("side_Hinges")){
+            List<Bore_unit> bore_units = new_pattern.apply_pattern_on_side(join_line_length);
 
-          if (face_direction == "H") {
-            Point_model new_origin = Point_model(
-                origin.x_coordinate,
-                origin.y_coordinate + n_bore_unit.pre_distence,
-                origin.z_coordinate);
+            for (int i = 0; i < bore_units.length; i++) {
+              Bore_unit n_bore_unit = bore_units[i];
+               Bore_model n_face_bore = n_bore_unit.face_bore;
 
-            Bore_model side_bore_model = Bore_model(new_origin,
-                n_side_bore_model.diameter, n_side_bore_model.depth);
-            H_bores.add(side_bore_model);
 
-            /// add face bore
-            if (n_bore_unit.have_nut_bore) {
-              Bore_model face_bore_model = n_bore_unit.nut_bore;
 
-              late double x_cordinate;
-              late double y_cordinate;
-              late double z_cordinate;
+                Point_model new_origin = Point_model(
+                    origin.x_coordinate,
+                    origin.y_coordinate + n_bore_unit.pre_distence,
+                    origin.z_coordinate);
 
-              if (piece_direction == "F") {
-                if (face_name == 2) {
-                  x_cordinate = origin.x_coordinate - n_bore_unit.nut_bore_distence;
-                  y_cordinate = origin.y_coordinate + n_bore_unit.pre_distence;
-                  z_cordinate = origin.z_coordinate;
-                } else if (face_name == 4) {
-                  x_cordinate =
-                      origin.x_coordinate + n_bore_unit.nut_bore_distence;
-                  y_cordinate = origin.y_coordinate + n_bore_unit.pre_distence;
-                  z_cordinate = origin.z_coordinate;
-                }
-              } else if (piece_direction == "V") {
-                if (face_name == 5) {
-                  x_cordinate = origin.x_coordinate;
-                  y_cordinate = origin.y_coordinate + n_bore_unit.pre_distence;
-                  z_cordinate =
-                      origin.z_coordinate + n_bore_unit.nut_bore_distence;
-                } else if (face_name == 6) {
-                  x_cordinate = origin.x_coordinate;
-                  y_cordinate = origin.y_coordinate + n_bore_unit.pre_distence;
-                  z_cordinate =
-                      origin.z_coordinate - n_bore_unit.nut_bore_distence;
-                }
-              }
+                Bore_model side_bore_model = Bore_model(new_origin, n_face_bore.diameter, n_face_bore.depth);
+              H_bores.add(side_bore_model);
 
-              Point_model new_face_origin =
-                  Point_model(x_cordinate, y_cordinate, z_cordinate);
-              Bore_model new_face_bore = Bore_model(new_face_origin,
-                  face_bore_model.diameter, face_bore_model.depth);
-              V_bores.add(new_face_bore);
             }
+            }
+
+
+          else if(join_type.contains("Door_Hinges")){
+
+            List<Bore_unit> bore_units = new_pattern.apply_pattern_on_door(join_line_length);
+
+
+            for (int i = 0; i < bore_units.length; i++) {
+
+              Bore_unit n_bore_unit = bore_units[i];
+              Bore_model n_face_bore = n_bore_unit.face_bore;
+
+                double correct_value= 0;
+
+                 if(Piece_name.contains("left")){
+                    correct_value=n_bore_unit.correct_x;
+                  }
+                  else if(Piece_name.contains("right")){
+                    correct_value=-n_bore_unit.correct_x;
+                  }
+
+
+                Point_model new_origin = Point_model(
+                    origin.x_coordinate+correct_value,
+                    origin.y_coordinate + n_bore_unit.pre_distence,
+                    origin.z_coordinate);
+
+                Bore_model side_bore_model = Bore_model(new_origin, n_face_bore.diameter, n_face_bore.depth);
+              V_bores.add(side_bore_model);
+
+
+            }
+
           }
 
-          else if (face_direction == "V" || face_direction == "B") {
+        else
+        {
+          List<Bore_unit> bore_units =
+              new_pattern.apply_pattern(join_line_length);
 
-            double correct_value=0;
-            double z_correct_value=0;
+          for (int i = 0; i < bore_units.length; i++) {
+            Bore_unit n_bore_unit = bore_units[i];
+            Bore_model n_side_bore_model = n_bore_unit.side_bore;
+            Bore_model n_face_bore = n_bore_unit.face_bore;
 
+            if (face_direction == "H") {
+              Point_model new_origin = Point_model(
+                  origin.x_coordinate,
+                  origin.y_coordinate + n_bore_unit.pre_distence,
+                  origin.z_coordinate);
 
-            if (Piece_name.contains("Door")) {
-              if(Piece_name.contains("left")){
-                correct_value=n_bore_unit.correct_y;
+              Bore_model side_bore_model = Bore_model(new_origin,
+                  n_side_bore_model.diameter, n_side_bore_model.depth);
+              H_bores.add(side_bore_model);
+
+              /// add face bore
+              if (n_bore_unit.have_nut_bore) {
+                Bore_model face_bore_model = n_bore_unit.nut_bore;
+
+                late double x_cordinate;
+                late double y_cordinate;
+                late double z_cordinate;
+
+                if (piece_direction == "F") {
+                  if (face_name == 2) {
+                    x_cordinate =
+                        origin.x_coordinate - n_bore_unit.nut_bore_distence;
+                    y_cordinate =
+                        origin.y_coordinate + n_bore_unit.pre_distence;
+                    z_cordinate = origin.z_coordinate;
+                  } else if (face_name == 4) {
+                    x_cordinate =
+                        origin.x_coordinate + n_bore_unit.nut_bore_distence;
+                    y_cordinate =
+                        origin.y_coordinate + n_bore_unit.pre_distence;
+                    z_cordinate = origin.z_coordinate;
+                  }
+                } else if (piece_direction == "V") {
+                  if (face_name == 5) {
+                    x_cordinate = origin.x_coordinate;
+                    y_cordinate =
+                        origin.y_coordinate + n_bore_unit.pre_distence;
+                    z_cordinate =
+                        origin.z_coordinate + n_bore_unit.nut_bore_distence;
+                  } else if (face_name == 6) {
+                    x_cordinate = origin.x_coordinate;
+                    y_cordinate =
+                        origin.y_coordinate + n_bore_unit.pre_distence;
+                    z_cordinate =
+                        origin.z_coordinate - n_bore_unit.nut_bore_distence;
+                  }
+                }
+
+                Point_model new_face_origin =
+                    Point_model(x_cordinate, y_cordinate, z_cordinate);
+                Bore_model new_face_bore = Bore_model(new_face_origin,
+                    face_bore_model.diameter, face_bore_model.depth);
+                V_bores.add(new_face_bore);
               }
-              else if(Piece_name.contains("right")){
-                correct_value=-n_bore_unit.correct_y;
+            } else if (face_direction == "V" || face_direction == "B") {
+              double correct_value = 0;
+              double z_correct_value = 0;
+
+              if (Piece_name.contains("Door")) {
+                if (Piece_name.contains("left")) {
+                  correct_value = n_bore_unit.correct_y;
+                } else if (Piece_name.contains("right")) {
+                  correct_value = -n_bore_unit.correct_y;
+                }
+              } else {
+                z_correct_value = n_bore_unit.correct_y;
               }
+
+              // print("correct_value = ${correct_value}");
+              // print("z_correct_value = ${z_correct_value}");
+
+              Point_model new_origin = Point_model(
+                  origin.x_coordinate + correct_value,
+                  origin.y_coordinate + n_bore_unit.pre_distence,
+                  origin.z_coordinate - z_correct_value);
+
+              Bore_model side_bore_model = Bore_model(
+                  new_origin, n_face_bore.diameter, n_face_bore.depth);
+              H_bores.add(side_bore_model);
             }
-            else {
-                z_correct_value=n_bore_unit.correct_y;
-            }
-
-
-            // print("correct_value = ${correct_value}");
-            // print("z_correct_value = ${z_correct_value}");
-
-            Point_model new_origin = Point_model(
-                origin.x_coordinate+correct_value,
-                origin.y_coordinate + n_bore_unit.pre_distence,
-                origin.z_coordinate-z_correct_value);
-
-            Bore_model side_bore_model = Bore_model(new_origin, n_face_bore.diameter, n_face_bore.depth);
-            H_bores.add(side_bore_model);
           }
         }
 

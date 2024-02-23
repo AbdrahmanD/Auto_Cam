@@ -1181,7 +1181,7 @@ Map<String, dynamic> toJson() {
 
     Piece_model door_piece = Piece_model(
       id,
-        (door_model.direction=="R")?('Door r'):('Door l'),
+        (door_model.direction=="R")?('Door right'):('Door left'),
         'F',
         door_model.material_name,
         door_width,

@@ -344,6 +344,13 @@ class _Main_ScreenState extends State<Main_Screen> {
                 children: [
                   InkWell(
                       onTap: () {
+                        // active_controller.generate_limit_convert_code("39818322075280202480");
+
+                       // draw_controller.add_box_to_history();
+// print("box history :${draw_controller.box_history.length}");
+//
+// draw_controller.box_repository.box_model.value=draw_controller.box_history[0];
+// draw_controller.get_box();
                         Get.defaultDialog(title: "ACTIVE EDITOR" , content: Container(
                           width: 600,height: 600,child: View_Active_port(),
                         ));
@@ -370,7 +377,46 @@ class _Main_ScreenState extends State<Main_Screen> {
             //     children: [
             //       InkWell(
             //           onTap: () {
-            //             active_controller.clean_data();
+            //
+            //
+            //             String name="aabbccqvvhuuiiyytacd";
+            //
+            //             if (name!=null) {
+            //
+            //               List<String> name_as_list=name.split("");
+            //
+            //               bool found=false;
+            //               for(int i=0;i<name_as_list.length;i++){
+            //
+            //                 bool reppiet=false;
+            //                 for(int i2=0;i2<name_as_list.length;i2++){
+            //
+            //                   if(i==i2){
+            //                     continue;
+            //                   }
+            //                   if(name_as_list[i]==name_as_list[i2]){
+            //                     reppiet=true;
+            //                     continue;
+            //                   }
+            //                 }
+            //                 if(!reppiet){
+            //                   print(name_as_list[i]);
+            //                   print(i);
+            //                   found=true;
+            //                   break;
+            //                 }
+            //               }
+            //               if(!found){
+            //                 print(-1);
+            //               }
+            //
+            //             }
+            //
+            //
+            //
+            //
+            //
+            //
             //           },
             //           child: Icon(
             //             Icons.cancel,

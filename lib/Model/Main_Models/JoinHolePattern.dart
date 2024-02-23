@@ -6,10 +6,18 @@ class JoinHolePattern {
   late String name;
   late double min_length;
   late double max_length;
+
+
+  late int quantity;
+  late double main_pre_distance;
+
+
   late List<Bore_unit> bores;
   late bool pattern_enable ;
 
-  JoinHolePattern( this.name, this.min_length, this.max_length, this.bores,this.pattern_enable);
+
+  JoinHolePattern(this.name, this.min_length, this.max_length,
+      this.quantity, this.main_pre_distance,  this.bores, this.pattern_enable);
 
   List<Bore_unit> apply_pattern(double length) {
 
@@ -68,11 +76,285 @@ class JoinHolePattern {
     return applied_bores;
   }
 
+  List<Bore_unit> apply_pattern_on_door(double length) {
+
+    List<Bore_unit> applied_bores = [];
+
+    double distance=(length-(2*main_pre_distance))/(quantity-1);
+
+    double pre_distance=main_pre_distance;
+
+
+    for (int i=0;i<quantity/2;i++) {
+
+
+      Bore_unit bore_unit_main = Bore_unit(
+          pre_distance,bores[0].correct_x,bores[0].correct_y,
+          bores[0].side_bore,
+          bores[0].have_nut_bore,
+          bores[0].nut_bore_distence,
+          bores[0].nut_bore,
+          bores[0].face_bore,
+          bores[0].center,
+          bores[0].mirror
+      );
+
+      Bore_unit bore_unit_support_1 = Bore_unit(
+          pre_distance+bores[1].correct_y,
+          bores[1].correct_x,
+          bores[1].correct_y,
+          bores[1].side_bore,
+          bores[1].have_nut_bore,
+          bores[1].nut_bore_distence,
+          bores[1].nut_bore,
+          bores[1].face_bore,
+          bores[1].center,
+          bores[1].mirror
+      );
+
+      Bore_unit bore_unit_support_2 = Bore_unit(
+          pre_distance-bores[2].correct_y,
+          bores[2].correct_x,
+          bores[2].correct_y,
+          bores[2].side_bore,
+          bores[2].have_nut_bore,
+          bores[2].nut_bore_distence,
+          bores[2].nut_bore,
+          bores[2].face_bore,
+          bores[2].center,
+          bores[2].mirror
+      );
+
+
+      applied_bores.add(bore_unit_main);
+      applied_bores.add(bore_unit_support_1);
+      applied_bores.add(bore_unit_support_2);
+
+
+      Bore_unit m_bore_unit_main = Bore_unit(
+          length- pre_distance,bores[0].correct_x,bores[0].correct_y,
+          bores[0].side_bore,
+          bores[0].have_nut_bore,
+          bores[0].nut_bore_distence,
+          bores[0].nut_bore,
+          bores[0].face_bore,
+          bores[0].center,
+          bores[0].mirror
+      );
+
+      Bore_unit m_bore_unit_support_1 = Bore_unit(
+          length-(pre_distance+bores[1].correct_y),
+          bores[1].correct_x,
+          bores[1].correct_y,
+          bores[1].side_bore,
+          bores[1].have_nut_bore,
+          bores[1].nut_bore_distence,
+          bores[1].nut_bore,
+          bores[1].face_bore,
+          bores[1].center,
+          bores[1].mirror
+      );
+
+      Bore_unit m_bore_unit_support_2 = Bore_unit(
+          length-(pre_distance-bores[2].correct_y),
+          bores[2].correct_x,
+          bores[2].correct_y,
+          bores[2].side_bore,
+          bores[2].have_nut_bore,
+          bores[2].nut_bore_distence,
+          bores[2].nut_bore,
+          bores[2].face_bore,
+          bores[2].center,
+          bores[2].mirror
+      );
+
+
+      applied_bores.add(m_bore_unit_main);
+      applied_bores.add(m_bore_unit_support_1);
+      applied_bores.add(m_bore_unit_support_2);
+
+      if(quantity%2!=0){
+
+        Bore_unit c_bore_unit_main = Bore_unit(
+            length/2,bores[0].correct_x,bores[0].correct_y,
+            bores[0].side_bore,
+            bores[0].have_nut_bore,
+            bores[0].nut_bore_distence,
+            bores[0].nut_bore,
+            bores[0].face_bore,
+            bores[0].center,
+            bores[0].mirror
+        );
+
+        Bore_unit c_bore_unit_support_1 = Bore_unit(
+            length/2+bores[1].correct_y,
+            bores[1].correct_x,
+            bores[1].correct_y,
+            bores[1].side_bore,
+            bores[1].have_nut_bore,
+            bores[1].nut_bore_distence,
+            bores[1].nut_bore,
+            bores[1].face_bore,
+            bores[1].center,
+            bores[1].mirror
+        );
+
+        Bore_unit c_bore_unit_support_2 = Bore_unit(
+            length/2-bores[2].correct_y,
+            bores[2].correct_x,
+            bores[2].correct_y,
+            bores[2].side_bore,
+            bores[2].have_nut_bore,
+            bores[2].nut_bore_distence,
+            bores[2].nut_bore,
+            bores[2].face_bore,
+            bores[2].center,
+            bores[2].mirror
+        );
+
+
+        applied_bores.add(c_bore_unit_main);
+        applied_bores.add(c_bore_unit_support_1);
+        applied_bores.add(c_bore_unit_support_2);
+
+      }
+
+
+      pre_distance+=distance;
+    }
+
+
+
+    return applied_bores;
+  }
+  List<Bore_unit> apply_pattern_on_side(double length) {
+
+    List<Bore_unit> applied_bores = [];
+
+    double distance=(length-(2*main_pre_distance))/(quantity-1);
+
+    double pre_distance=main_pre_distance;
+
+    for (int i=0;i<quantity/2;i++) {
+
+      Bore_unit bore_unit_support_1 = Bore_unit(
+          pre_distance-bores[0].correct_y,
+          bores[0].correct_x,
+          bores[0].correct_y,
+          bores[0].side_bore,
+          bores[0].have_nut_bore,
+          bores[0].nut_bore_distence,
+          bores[0].nut_bore,
+          bores[0].face_bore,
+          bores[0].center,
+          bores[0].mirror
+      );
+
+      Bore_unit bore_unit_support_2 = Bore_unit(
+          pre_distance+bores[1].correct_y,
+          bores[1].correct_x,
+          bores[1].correct_y,
+          bores[1].side_bore,
+          bores[1].have_nut_bore,
+          bores[1].nut_bore_distence,
+          bores[1].nut_bore,
+          bores[1].face_bore,
+          bores[1].center,
+          bores[1].mirror
+      );
+
+      applied_bores.add(bore_unit_support_1);
+      applied_bores.add(bore_unit_support_2);
+
+
+      Bore_unit m_bore_unit_support_1 = Bore_unit(
+          length-pre_distance+bores[0].correct_y,
+          bores[0].correct_x,
+          bores[0].correct_y,
+          bores[0].side_bore,
+          bores[0].have_nut_bore,
+          bores[0].nut_bore_distence,
+          bores[0].nut_bore,
+          bores[0].face_bore,
+          bores[0].center,
+          bores[0].mirror
+      );
+
+      Bore_unit m_bore_unit_support_2 = Bore_unit(
+          length-pre_distance-bores[1].correct_y,
+          bores[1].correct_x,
+          bores[1].correct_y,
+          bores[1].side_bore,
+          bores[1].have_nut_bore,
+          bores[1].nut_bore_distence,
+          bores[1].nut_bore,
+          bores[1].face_bore,
+          bores[1].center,
+          bores[1].mirror
+      );
+
+      applied_bores.add(m_bore_unit_support_1);
+      applied_bores.add(m_bore_unit_support_2);
+
+
+
+      if(quantity%2!=0){
+
+        Bore_unit c_bore_unit_support_1 = Bore_unit(
+            length/2+bores[0].correct_y,
+            bores[0].correct_x,
+            bores[0].correct_y,
+            bores[0].side_bore,
+            bores[0].have_nut_bore,
+            bores[0].nut_bore_distence,
+            bores[0].nut_bore,
+            bores[0].face_bore,
+            bores[0].center,
+            bores[0].mirror
+        );
+
+        Bore_unit c_bore_unit_support_2 = Bore_unit(
+            length/2-bores[1].correct_y,
+            bores[1].correct_x,
+            bores[1].correct_y,
+            bores[1].side_bore,
+            bores[1].have_nut_bore,
+            bores[1].nut_bore_distence,
+            bores[1].nut_bore,
+            bores[1].face_bore,
+            bores[1].center,
+            bores[1].mirror
+        );
+
+        applied_bores.add(c_bore_unit_support_1);
+        applied_bores.add(c_bore_unit_support_2);
+
+
+
+      }
+
+      // print("side_bore_units from model = ${applied_bores.length}");
+
+
+      pre_distance+=distance;
+
+
+
+    }
+
+    return applied_bores;
+  }
+
+
+
   JoinHolePattern.fromJson(Map<String, dynamic> json) {
     // category = json['category'];
     name = json['name'];
     min_length = json['min_length'];
     max_length = json['max_length'];
+    quantity = json['quantity'];
+    main_pre_distance = json['main_pre_distance'];
+
     if (json['bores'] != null) {
       bores = <Bore_unit>[];
       json['bores'].forEach((v) {
@@ -88,6 +370,9 @@ class JoinHolePattern {
     data["name"] = this.name;
     data["min_length"] = this.min_length;
     data["max_length"] = this.max_length;
+    data["quantity"] = this.quantity;
+    data["main_pre_distance"] = this.main_pre_distance;
+
     if (this.bores != null) {
       data["bores"] = this.bores!.map((v) => v.toJson()).toList();
     }
@@ -97,6 +382,7 @@ class JoinHolePattern {
   }
 
 }
+
 
 class Bore_unit {
 

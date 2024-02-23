@@ -147,6 +147,27 @@ String un_limit_convert_code(String code){
 
 }
 
+   generate_limit_convert_code(String code){
+
+    List<String> code_list=code.split("");
+    List<String> genertated_code_list=[];
+    for(String l in code_list){
+      if(l=="0"){genertated_code_list.add("90");}
+      else  if(l=="1"){genertated_code_list.add("81");}
+      else  if(l=="2"){genertated_code_list.add("72");}
+      else  if(l=="3"){genertated_code_list.add("63");}
+      else  if(l=="4"){genertated_code_list.add("54");}
+      else  if(l=="5"){genertated_code_list.add("45");}
+      else  if(l=="6"){genertated_code_list.add("36");}
+      else  if(l=="7"){genertated_code_list.add("27");}
+      else  if(l=="8"){genertated_code_list.add("18");}
+      else  if(l=="9"){genertated_code_list.add("09");}
+
+    }
+    String resault=genertated_code_list.join();
+
+    print(resault) ;
+  }
 
 
 

@@ -33,7 +33,7 @@ class _Setting_PageState extends State<Setting_Page> {
   bool Doors = false;
 
   JoinHolePattern corrent_join_pattern =
-      JoinHolePattern('name', 150, 300, [], true);
+  JoinHolePattern('name', 150, 300,0,0, [], true);
 
   int corrent_join_pattern_id = 0;
 
@@ -86,11 +86,7 @@ class _Setting_PageState extends State<Setting_Page> {
   TextEditingController J_depth_controller = TextEditingController();
   TextEditingController J_controller = TextEditingController();
 
-  TextEditingController correct_1_controller = TextEditingController();
-  TextEditingController correct_2_controller = TextEditingController();
-
-  double correct_1 = 0;
-  double correct_2 = 0;
+  TextEditingController door_quantity_controller = TextEditingController();
 
   bool have_nut = false;
   bool have_mirror = true;
@@ -113,11 +109,11 @@ class _Setting_PageState extends State<Setting_Page> {
   TextEditingController Flexible_Shelf_B_controller = TextEditingController();
   TextEditingController Flexible_Shelf_C_controller = TextEditingController();
   TextEditingController Flexible_Shelf_Depth_controller =
-      TextEditingController();
+  TextEditingController();
   TextEditingController Flexible_Shelf_Diameter_controller =
-      TextEditingController();
+  TextEditingController();
   TextEditingController Flexible_Shelf_Quantity_controller =
-      TextEditingController();
+  TextEditingController();
 
   List<Bore_unit> Flexible_Shelf_units = [];
 
@@ -139,8 +135,12 @@ class _Setting_PageState extends State<Setting_Page> {
     category_controller.text = corrent_category;
 
     if (category_controller.text.toString() == "Doors") {
-     door_bore_units=list_Door_Hinges[selected_pattern].bores;
-     side_bore_units=list_side_Hinges[selected_pattern].bores;
+
+
+      if (!add_new_door) {
+        door_bore_units=list_Door_Hinges[selected_pattern].bores;
+        side_bore_units=list_side_Hinges[selected_pattern].bores;
+      }
 
     }
     if (category_controller.text.toString() == "Flexible_Shelves") {
@@ -191,16 +191,16 @@ class _Setting_PageState extends State<Setting_Page> {
     double pre_distance = double.parse(pre_distence_controller.text.toString());
     double diameter = double.parse(diameter_controller.text.toString());
     double face_diameter =
-        double.parse(face_diameter_controller.text.toString());
+    double.parse(face_diameter_controller.text.toString());
     double depth = double.parse(depth_controller.text.toString());
     double face_depth = double.parse(face_depth_controller.text.toString());
 
     double nut_destance =
-        have_nut ? double.parse(nut_distence_controller.text.toString()) : 0;
+    have_nut ? double.parse(nut_distence_controller.text.toString()) : 0;
     double nut_diameter =
-        have_nut ? double.parse(nut_diameter_controller.text.toString()) : 0;
+    have_nut ? double.parse(nut_diameter_controller.text.toString()) : 0;
     double nut_depth =
-        have_nut ? double.parse(nut_depth_controller.text.toString()) : 0;
+    have_nut ? double.parse(nut_depth_controller.text.toString()) : 0;
 
     // double min_length=double.parse(mini_distence_controller.text.toString());
     // double max_length=double.parse(max_distence_controller.text.toString());
@@ -226,19 +226,30 @@ class _Setting_PageState extends State<Setting_Page> {
     double mini_length = double.parse(mini_distence_controller.text.toString());
     double max_length = double.parse(max_distence_controller.text.toString());
 
+    int    quantity        =double.parse(door_quantity_controller.text.toString()).toInt();
+    double Pre_distance = double.parse(pre_distence_controller.text.toString());
+
+
     if (category_controller.text.toString() == "Doors") {
       JoinHolePattern door_joinHolePattern = JoinHolePattern(
           name_controller.text.toString(),
           mini_length,
           max_length,
+          quantity,
+          Pre_distance,
           door_bore_units,
           true);
       JoinHolePattern side_joinHolePattern = JoinHolePattern(
           name_controller.text.toString(),
           mini_length,
           max_length,
+          quantity,
+          Pre_distance,
           side_bore_units,
           true);
+
+
+      // print("side_bore_units from settig = ${side_bore_units.length}");
 
       await draw_controller.save_joinHolePattern(
           door_joinHolePattern, "Door_Hinges");
@@ -251,17 +262,21 @@ class _Setting_PageState extends State<Setting_Page> {
       add_new_door = false;
       setState(() {});
     }
+
+
+
+
     else if (category_controller.text.toString() == "Drawer_Slides") {
       JoinHolePattern drawer_joinHolePattern = JoinHolePattern(
           name_controller.text.toString(),
           mini_length,
-          max_length,
+          max_length,0,0,
           drawr_slide_units,
           true);
       JoinHolePattern box_joinHolePattern = JoinHolePattern(
           name_controller.text.toString(),
           mini_length,
-          max_length,
+          max_length,0,0,
           box_slide_units,
           true);
 
@@ -279,7 +294,7 @@ class _Setting_PageState extends State<Setting_Page> {
       JoinHolePattern drawer_joinHolePattern = JoinHolePattern(
           name_controller.text.toString(),
           mini_length,
-          max_length,
+          max_length,0,0,
           Flexible_Shelf_units,
           true);
 
@@ -294,7 +309,7 @@ class _Setting_PageState extends State<Setting_Page> {
       JoinHolePattern joinHolePattern = JoinHolePattern(
           name_controller.text.toString(),
           mini_length,
-          max_length,
+          max_length,0,0,
           bore_units,
           true);
 
@@ -302,7 +317,7 @@ class _Setting_PageState extends State<Setting_Page> {
           joinHolePattern, category_controller.text.toString());
     }
 
-read_patterns();
+    read_patterns();
   }
 
   delete_pattern() async {
@@ -334,7 +349,7 @@ read_patterns();
       await  draw_controller.delete_joinHolePattern(list_box_slide[selected_pattern], "Drawer_Rail_Box" );
 
       list_drawr_slide.removeAt((selected_pattern==0)?selected_pattern:selected_pattern-1);
-        list_box_slide.removeAt((selected_pattern==0)?selected_pattern:selected_pattern-1);
+      list_box_slide.removeAt((selected_pattern==0)?selected_pattern:selected_pattern-1);
 
       setState(() {});
 
@@ -364,9 +379,9 @@ read_patterns();
       // list_Drawer_face[selected_pattern].category = corrent_category;
       // deleted_patterns.add(list_Drawer_face[selected_pattern]);
 
-     await draw_controller.delete_joinHolePattern(
+      await draw_controller.delete_joinHolePattern(
           list_Drawer_face[selected_pattern],"Drawer_Face");
-     list_Drawer_face.removeAt((selected_pattern==0)?selected_pattern:selected_pattern-1);
+      list_Drawer_face.removeAt((selected_pattern==0)?selected_pattern:selected_pattern-1);
 
 
 
@@ -377,7 +392,7 @@ read_patterns();
     // corrent_join_pattern_id = 0;
     selected_pattern=0;
 
-read_patterns();
+    read_patterns();
   }
 
   Widget painters() {
@@ -422,7 +437,8 @@ read_patterns();
           ),
         ],
       );
-    } else if (corrent_category == "Flexible_Shelves") {
+    }
+    else if (corrent_category == "Flexible_Shelves") {
       widget = Column(
         children: [
           ///photo
@@ -459,7 +475,8 @@ read_patterns();
           ),
         ],
       );
-    } else if (corrent_category == "Drawer_Face") {
+    }
+    else if (corrent_category == "Drawer_Face") {
       // List<Bore_unit> secondary_min_bore_units =detect_drawer_secondary_bore(corrent_join_pattern.min_length);
       // List<Bore_unit> secondary_max_bore_units =detect_drawer_secondary_bore(corrent_join_pattern.max_length);
 
@@ -502,7 +519,8 @@ read_patterns();
           ),
         ],
       );
-    } else if (corrent_category == "Drawer_Slides") {
+    }
+    else if (corrent_category == "Drawer_Slides") {
       widget = Column(
         children: [
           Container(
@@ -526,7 +544,8 @@ read_patterns();
           ),
         ],
       );
-    } else if (corrent_category == "Doors") {
+    }
+    else if (corrent_category == "Doors") {
       widget = Column(
         children: [
           Container(
@@ -536,8 +555,7 @@ read_patterns();
               painter: Door_Pattern_Painter(
                   door_bore_units,
                   side_bore_units,
-                  draw_controller
-                      .box_repository.box_model.value.init_material_thickness,
+                  draw_controller.box_repository.box_model.value.init_material_thickness,
                   max_length,
                   400,
                   max_length,
@@ -566,7 +584,8 @@ read_patterns();
           // ),
         ],
       );
-    } else {
+    }
+    else {
       widget = Container();
     }
 
@@ -589,48 +608,51 @@ read_patterns();
     double J_value = double.parse(J_controller.text.toString());
 
     Bore_model main_hole =
-        Bore_model(Point_model(0, 22.5 - B_value, 0), A_value, A_depth_value);
+    Bore_model(Point_model(0, 22.5 - B_value, 0), A_value, A_depth_value);
     Bore_model main_hole_support_1 = Bore_model(
         Point_model(0, C_value - B_value, 0), H_value, H_depth_value);
     Bore_model main_hole_support_2 = Bore_model(
         Point_model(0, C_value - B_value, 0), H_value, H_depth_value);
 
     Bore_model side_hole_1 =
-        Bore_model(Point_model(0, E_value, 0), J_value, J_depth_value);
+    Bore_model(Point_model(0, E_value, 0), J_value, J_depth_value);
     Bore_model side_hole_2 =
-        Bore_model(Point_model(0, E_value, 0), J_value, J_depth_value);
+    Bore_model(Point_model(0, E_value, 0), J_value, J_depth_value);
 
     Bore_model emety_bore = Bore_model(Point_model(0, 22, 0), 0, 0);
 
     Bore_unit Door_unit_1 = Bore_unit(Pre_distance, 0, 0, emety_bore, false, 0,
-        emety_bore, main_hole, center, have_mirror);
+        emety_bore, main_hole, center, false);
+
     Bore_unit Door_unit_2 = Bore_unit(
-        Pre_distance,
+        Pre_distance,C_value - B_value,
         D_value / 2,
-        C_value - B_value,
+
         emety_bore,
         false,
         0,
         emety_bore,
         main_hole_support_1,
         center,
-        have_mirror);
+        false);
+
     Bore_unit Door_unit_3 = Bore_unit(
-        Pre_distance,
-        -D_value / 2,
-        C_value - B_value,
+        Pre_distance,(C_value - B_value),
+        D_value / 2,
+
         emety_bore,
         false,
         0,
         emety_bore,
         main_hole_support_2,
         center,
-        have_mirror);
+        false);
 
-    Bore_unit side_unit_1 = Bore_unit(Pre_distance, F_value / 2, 37 - E_value,
-        emety_bore, false, 0, emety_bore, side_hole_1, center, have_mirror);
-    Bore_unit side_unit_2 = Bore_unit(Pre_distance, -F_value / 2, 37 - E_value,
-        emety_bore, false, 0, emety_bore, side_hole_2, center, have_mirror);
+    Bore_unit side_unit_1 = Bore_unit(Pre_distance,37 - E_value, F_value / 2,
+        emety_bore, false, 0, emety_bore, side_hole_1, center, false);
+
+    Bore_unit side_unit_2 = Bore_unit(Pre_distance, 37 - E_value, F_value / 2,
+        emety_bore, false, 0, emety_bore, side_hole_2, center, false);
 
     door_bore_units.add(Door_unit_1);
     door_bore_units.add(Door_unit_2);
@@ -638,6 +660,53 @@ read_patterns();
 
     side_bore_units.add(side_unit_1);
     side_bore_units.add(side_unit_2);
+
+
+    ///
+    if (add_new_door) {
+      int    quantity        =double.parse(door_quantity_controller.text.toString()).toInt();
+      double Pre_distance = double.parse(pre_distence_controller.text.toString());
+
+
+
+      JoinHolePattern doorJoinHolePattern=JoinHolePattern(
+            name_controller.text.toString(),
+            min_length,
+            max_length,
+             quantity,Pre_distance,
+            [
+              Door_unit_1,
+              Door_unit_2,
+              Door_unit_3
+            ],
+            true);
+
+      JoinHolePattern sideJoinHolePattern=JoinHolePattern(
+            name_controller.text.toString(),
+            min_length,
+            max_length,
+          quantity,Pre_distance,
+
+            [
+              side_unit_1,
+              side_unit_2
+            ],
+            true);
+
+
+      door_bore_units=doorJoinHolePattern.apply_pattern_on_door(max_length);
+        side_bore_units=sideJoinHolePattern.apply_pattern_on_side(max_length);
+
+
+    }
+
+setState(() {
+
+});
+
+    ///
+
+
 
     // selected_door_pattern=draw_controller.box_repository.join_patterns["Door_Hinges"]!.length+1;
 
@@ -647,12 +716,12 @@ read_patterns();
 
   add_slide_unit() {
     double value_drawer_pre_distance =
-        double.parse(drawer_pre_distance.text.toString());
+    double.parse(drawer_pre_distance.text.toString());
     double value_drawer_diameter =
-        double.parse(drawer_diameter.text.toString());
+    double.parse(drawer_diameter.text.toString());
     double value_drawer_depth = double.parse(drawer_depth.text.toString());
     double value_box_pre_distance =
-        double.parse(box_pre_distance.text.toString());
+    double.parse(box_pre_distance.text.toString());
     double value_box_diameter = double.parse(box_diameter.text.toString());
     double value_box_depth = double.parse(box_depth.text.toString());
 
@@ -661,7 +730,7 @@ read_patterns();
     Bore_model drawer_bore = Bore_model(
         Point_model(0, 0, 0), value_drawer_diameter, value_drawer_depth);
     Bore_model box_bore =
-        Bore_model(Point_model(0, 0, 0), value_box_diameter, value_box_depth);
+    Bore_model(Point_model(0, 0, 0), value_box_diameter, value_box_depth);
 
     Bore_unit drawer_unit = Bore_unit(value_drawer_pre_distance, 0, 0,
         emety_bore, false, 0, emety_bore, drawer_bore, false, false);
@@ -685,11 +754,11 @@ read_patterns();
             2;
     double Shelf_C = double.parse(Flexible_Shelf_C_controller.text.toString());
     double Depth =
-        double.parse(Flexible_Shelf_Depth_controller.text.toString());
+    double.parse(Flexible_Shelf_Depth_controller.text.toString());
     double Diameter =
-        double.parse(Flexible_Shelf_Diameter_controller.text.toString());
+    double.parse(Flexible_Shelf_Diameter_controller.text.toString());
     double Quantity =
-        double.parse(Flexible_Shelf_Quantity_controller.text.toString());
+    double.parse(Flexible_Shelf_Quantity_controller.text.toString());
 
     Bore_model bore_model = Bore_model(Point_model(0, 0, 0), Diameter, Depth);
     Bore_model emety_bore = Bore_model(Point_model(0, 0, 0), 0, 0);
@@ -1176,7 +1245,7 @@ read_patterns();
                           if (!center) {
                             have_mirror = false;
                             pre_distence_controller.text =
-                                "${double.parse(mini_distence_controller.text.toString()) / 2}";
+                            "${double.parse(mini_distence_controller.text.toString()) / 2}";
                           }
                           center = !center;
 
@@ -1213,132 +1282,132 @@ read_patterns();
                 /// nut Distance
                 have_nut
                     ? Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 35,
-                            child: Center(
-                              child: Text(
-                                'nut Distance',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Container(
-                            width: 75,
-                            height: 25,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [DecimalTextInputFormatter(2)],
-                              controller: nut_distence_controller,
-                              onChanged: (_) {},
-                              validator: (d) {
-                                if (d!.isEmpty) {
-                                  return 'add value please';
-                                }
-                              },
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        height: 35,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'nut Distance',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: nut_distence_controller,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                    : SizedBox(
+                  height: 35,
+                ),
 
                 ///
                 /// nut Diameter
                 have_nut
                     ? Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 35,
-                            child: Center(
-                              child: Text(
-                                'nut Diameter',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Container(
-                            width: 75,
-                            height: 25,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [DecimalTextInputFormatter(2)],
-                              controller: nut_diameter_controller,
-                              onChanged: (_) {},
-                              validator: (d) {
-                                if (d!.isEmpty) {
-                                  return 'add value please';
-                                }
-                              },
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        height: 35,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'nut Diameter',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: nut_diameter_controller,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                    : SizedBox(
+                  height: 35,
+                ),
 
                 /// nut Depth
                 have_nut
                     ? Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 35,
-                            child: Center(
-                              child: Text(
-                                'nut Depth',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Container(
-                            width: 75,
-                            height: 25,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [DecimalTextInputFormatter(2)],
-                              controller: nut_depth_controller,
-                              onChanged: (_) {},
-                              validator: (d) {
-                                if (d!.isEmpty) {
-                                  return 'add value please';
-                                }
-                              },
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        height: 35,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'nut Depth',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: nut_depth_controller,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                    : SizedBox(
+                  height: 35,
+                ),
 
                 SizedBox(
                   height: 12,
@@ -1362,15 +1431,15 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Text(
-                            'ADD TO PATTERN',
-                            style: TextStyle(fontSize: 12),
-                          )),
+                                'ADD TO PATTERN',
+                                style: TextStyle(fontSize: 12),
+                              )),
                         ),
                       ),
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
+                      const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
                       child: InkWell(
                         onTap: () {
                           if (corrent_join_pattern.bores.length != 0) {
@@ -1387,9 +1456,9 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Icon(
-                            Icons.undo,
-                            color: Colors.white,
-                          )),
+                                Icons.undo,
+                                color: Colors.white,
+                              )),
                         ),
                       ),
                     ),
@@ -1415,9 +1484,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'save pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'save pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -1441,9 +1510,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'delete pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'delete pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -1454,7 +1523,7 @@ read_patterns();
               ],
             )),
       );
-    } 
+    }
     else if (corrent_category == "Flexible_Shelves") {
       widget = Padding(
         padding: const EdgeInsets.only(left: 12.0),
@@ -1982,7 +2051,7 @@ read_patterns();
                           if (!center) {
                             have_mirror = false;
                             pre_distence_controller.text =
-                                "${double.parse(mini_distence_controller.text.toString()) / 2}";
+                            "${double.parse(mini_distence_controller.text.toString()) / 2}";
                           }
                           center = !center;
 
@@ -2013,15 +2082,15 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Text(
-                            'ADD TO PATTERN',
-                            style: TextStyle(fontSize: 12),
-                          )),
+                                'ADD TO PATTERN',
+                                style: TextStyle(fontSize: 12),
+                              )),
                         ),
                       ),
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
+                      const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
                       child: InkWell(
                         onTap: () {
                           if (Flexible_Shelf_units.length != 0) {
@@ -2038,9 +2107,9 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Icon(
-                            Icons.undo,
-                            color: Colors.white,
-                          )),
+                                Icons.undo,
+                                color: Colors.white,
+                              )),
                         ),
                       ),
                     ),
@@ -2066,9 +2135,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'save pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'save pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -2092,9 +2161,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'delete pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'delete pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -2105,7 +2174,7 @@ read_patterns();
               ],
             )),
       );
-    } 
+    }
     else if (corrent_category == "Drawer_Face") {
       widget = Padding(
         padding: const EdgeInsets.only(left: 12.0),
@@ -2551,7 +2620,7 @@ read_patterns();
                           if (!center) {
                             have_mirror = false;
                             pre_distence_controller.text =
-                                "${double.parse(mini_distence_controller.text.toString()) / 2}";
+                            "${double.parse(mini_distence_controller.text.toString()) / 2}";
                           }
                           center = !center;
 
@@ -2588,132 +2657,132 @@ read_patterns();
                 /// nut Distance
                 have_nut
                     ? Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 35,
-                            child: Center(
-                              child: Text(
-                                'nut Distance',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Container(
-                            width: 75,
-                            height: 25,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [DecimalTextInputFormatter(2)],
-                              controller: nut_distence_controller,
-                              onChanged: (_) {},
-                              validator: (d) {
-                                if (d!.isEmpty) {
-                                  return 'add value please';
-                                }
-                              },
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        height: 35,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'nut Distance',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: nut_distence_controller,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                    : SizedBox(
+                  height: 35,
+                ),
 
                 ///
                 /// nut Diameter
                 have_nut
                     ? Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 35,
-                            child: Center(
-                              child: Text(
-                                'nut Diameter',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Container(
-                            width: 75,
-                            height: 25,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [DecimalTextInputFormatter(2)],
-                              controller: nut_diameter_controller,
-                              onChanged: (_) {},
-                              validator: (d) {
-                                if (d!.isEmpty) {
-                                  return 'add value please';
-                                }
-                              },
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        height: 35,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'nut Diameter',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: nut_diameter_controller,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                    : SizedBox(
+                  height: 35,
+                ),
 
                 /// nut Depth
                 have_nut
                     ? Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 35,
-                            child: Center(
-                              child: Text(
-                                'nut Depth',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Container(
-                            width: 75,
-                            height: 25,
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [DecimalTextInputFormatter(2)],
-                              controller: nut_depth_controller,
-                              onChanged: (_) {},
-                              validator: (d) {
-                                if (d!.isEmpty) {
-                                  return 'add value please';
-                                }
-                              },
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        height: 35,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          'nut Depth',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 75,
+                      height: 25,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: nut_depth_controller,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                    : SizedBox(
+                  height: 35,
+                ),
 
                 SizedBox(
                   height: 12,
@@ -2737,15 +2806,15 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Text(
-                            'ADD TO PATTERN',
-                            style: TextStyle(fontSize: 12),
-                          )),
+                                'ADD TO PATTERN',
+                                style: TextStyle(fontSize: 12),
+                              )),
                         ),
                       ),
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
+                      const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
                       child: InkWell(
                         onTap: () {
                           if (corrent_join_pattern.bores.length != 0) {
@@ -2762,9 +2831,9 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Icon(
-                            Icons.undo,
-                            color: Colors.white,
-                          )),
+                                Icons.undo,
+                                color: Colors.white,
+                              )),
                         ),
                       ),
                     ),
@@ -2790,9 +2859,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'save pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'save pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -2816,9 +2885,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'delete pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'delete pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -2829,7 +2898,7 @@ read_patterns();
               ],
             )),
       );
-    } 
+    }
     else if (corrent_category == "Drawer_Slides") {
       widget = Padding(
         padding: const EdgeInsets.only(left: 12.0),
@@ -3033,7 +3102,7 @@ read_patterns();
                 SizedBox(
                   height: 12,
                 ),
-                
+
                 ///Box side setting
                 Text("Box side setting"),
                 SizedBox(
@@ -3326,15 +3395,15 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Text(
-                            'ADD TO PATTERN',
-                            style: TextStyle(fontSize: 12),
-                          )),
+                                'ADD TO PATTERN',
+                                style: TextStyle(fontSize: 12),
+                              )),
                         ),
                       ),
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
+                      const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
                       child: InkWell(
                         onTap: () {
                           if (drawr_slide_units.length != 0) {
@@ -3353,9 +3422,9 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Icon(
-                            Icons.undo,
-                            color: Colors.white,
-                          )),
+                                Icons.undo,
+                                color: Colors.white,
+                              )),
                         ),
                       ),
                     ),
@@ -3381,9 +3450,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'save pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'save pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -3407,9 +3476,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'delete pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'delete pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -3420,7 +3489,7 @@ read_patterns();
               ],
             )),
       );
-    } 
+    }
     else if (corrent_category == "Doors") {
       widget = Padding(
         padding: const EdgeInsets.only(left: 12.0),
@@ -4138,6 +4207,51 @@ read_patterns();
                       child: Center(
                         child: Center(
                           child: Text(
+                            'quantity',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [DecimalTextInputFormatter(2)],
+                        controller: door_quantity_controller,
+                        onChanged: (_) {},
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 8,
+                ),
+
+                ///pre distance
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 35,
+                      child: Center(
+                        child: Center(
+                          child: Text(
                             'pre distance',
                             style: TextStyle(fontSize: 12),
                           ),
@@ -4169,60 +4283,7 @@ read_patterns();
                     ),
                   ],
                 ),
-
-                /// have mirror
-                Row(
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 35,
-                      child: Center(
-                        child: Text(
-                          'have mirror??',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Checkbox(
-                        value: have_mirror,
-                        onChanged: (v) {
-                          have_mirror = !have_mirror;
-
-                          setState(() {});
-                        }),
-                  ],
-                ),
-
-                /// center
-                Row(
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 35,
-                      child: Center(
-                        child: Text(
-                          'Center??',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Checkbox(
-                        value: center,
-                        onChanged: (v) {
-                          center = !center;
-
-                          pre_distence_controller.text = "${min_length / 2}";
-
-                          setState(() {});
-                        }),
-                  ],
-                ),
+              
 
                 ///correction
                 // center?  Row(
@@ -4323,15 +4384,15 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Text(
-                            'ADD TO PATTERN',
-                            style: TextStyle(fontSize: 12),
-                          )),
+                                'ADD TO PATTERN',
+                                style: TextStyle(fontSize: 12),
+                              )),
                         ),
                       ),
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
+                      const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
                       child: InkWell(
                         onTap: () {
                           if (door_bore_units.length > 0) {
@@ -4351,9 +4412,9 @@ read_patterns();
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Icon(
-                            Icons.undo,
-                            color: Colors.white,
-                          )),
+                                Icons.undo,
+                                color: Colors.white,
+                              )),
                         ),
                       ),
                     ),
@@ -4379,9 +4440,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'save pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'save pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -4405,9 +4466,9 @@ read_patterns();
                           borderRadius: BorderRadius.circular(8)),
                       child: Center(
                           child: Text(
-                        'delete pattern',
-                        style: TextStyle(fontSize: 12),
-                      )),
+                            'delete pattern',
+                            style: TextStyle(fontSize: 12),
+                          )),
                     ),
                   ),
                 ),
@@ -4418,7 +4479,7 @@ read_patterns();
               ],
             )),
       );
-    } 
+    }
     else {
       widget = Container();
     }
@@ -4430,7 +4491,7 @@ read_patterns();
     List<Bore_unit> secondary_bore_units = [];
 
     List<JoinHolePattern>? my_patterns =
-        draw_controller.box_repository.join_patterns[corrent_category];
+    draw_controller.box_repository.join_patterns[corrent_category];
 
     for (JoinHolePattern pattern in my_patterns!) {
       if (d > pattern.min_length && d <= pattern.max_length) {
@@ -4482,7 +4543,7 @@ read_patterns();
 
     selected_door_pattern = 1000;
 
-    corrent_join_pattern = JoinHolePattern('name', 150, 300, [], true);
+    corrent_join_pattern = JoinHolePattern('name', 150, 300,0,0, [], true);
     add_new_door = true;
     // initState();
     // refresh();
@@ -4519,27 +4580,27 @@ read_patterns();
   enable_or_diable_pattern() {
     if (corrent_category == "Doors") {
       list_Door_Hinges[selected_pattern].pattern_enable =
-          !list_Door_Hinges[selected_pattern].pattern_enable;
+      !list_Door_Hinges[selected_pattern].pattern_enable;
       list_side_Hinges[selected_pattern].pattern_enable =
-          !list_side_Hinges[selected_pattern].pattern_enable;
+      !list_side_Hinges[selected_pattern].pattern_enable;
 
       setState(() {});
     } else if (corrent_category == "Drawer_Slides") {
       list_drawr_slide[selected_pattern].pattern_enable =
-          !list_drawr_slide[selected_pattern].pattern_enable;
+      !list_drawr_slide[selected_pattern].pattern_enable;
       list_box_slide[selected_pattern].pattern_enable =
-          !list_box_slide[selected_pattern].pattern_enable;
+      !list_box_slide[selected_pattern].pattern_enable;
 
       setState(() {});
     } else if (corrent_category == "Box_Fitting_DRILL") {
       list_boxes_fitting[selected_pattern].pattern_enable =
-          !list_boxes_fitting[selected_pattern].pattern_enable;
+      !list_boxes_fitting[selected_pattern].pattern_enable;
     } else if (corrent_category == "Flexible_Shelves") {
       list_Flexible_Shelves[selected_pattern].pattern_enable =
-          !list_Flexible_Shelves[selected_pattern].pattern_enable;
+      !list_Flexible_Shelves[selected_pattern].pattern_enable;
     } else if (corrent_category == "Drawer_Face") {
       list_Drawer_face[selected_pattern].pattern_enable =
-          !list_Drawer_face[selected_pattern].pattern_enable;
+      !list_Drawer_face[selected_pattern].pattern_enable;
     }
 
     refresh();
@@ -4653,6 +4714,7 @@ read_patterns();
     nut_distence_controller.text = '0';
     nut_diameter_controller.text = '0';
     nut_depth_controller.text = '0';
+    door_quantity_controller.text = '2';
 
     /// hinges
     A_controller.text = "35";
@@ -4794,7 +4856,7 @@ read_patterns();
                         width: boxes_fitting ? 150 : 100,
                         height: boxes_fitting ? 65 : 45,
                         color:
-                            boxes_fitting ? Colors.teal[300] : Colors.grey[200],
+                        boxes_fitting ? Colors.teal[300] : Colors.grey[200],
                         child: Center(
                           child: Text(
                             'box fitting',
@@ -4834,7 +4896,7 @@ read_patterns();
                           child: Text(
                             'Flexible Shelves',
                             style:
-                                TextStyle(fontSize: Flexible_Shelves ? 18 : 14),
+                            TextStyle(fontSize: Flexible_Shelves ? 18 : 14),
                           ),
                         ),
                       ),
@@ -4863,7 +4925,7 @@ read_patterns();
                         width: Drawer_face ? 150 : 100,
                         height: Drawer_face ? 65 : 45,
                         color:
-                            Drawer_face ? Colors.teal[300] : Colors.grey[200],
+                        Drawer_face ? Colors.teal[300] : Colors.grey[200],
                         child: Center(
                           child: Text(
                             'Drawer face',
@@ -4896,7 +4958,7 @@ read_patterns();
                         width: Drawer_slide ? 150 : 100,
                         height: Drawer_slide ? 65 : 45,
                         color:
-                            Drawer_slide ? Colors.teal[300] : Colors.grey[200],
+                        Drawer_slide ? Colors.teal[300] : Colors.grey[200],
                         child: Center(
                           child: Text(
                             'Drawer Slides',
@@ -4974,7 +5036,7 @@ read_patterns();
                                         value: enable_pattern,
                                         onChanged: (v) {
                                           corrent_join_pattern =
-                                              corrent_paterns_list[i];
+                                          corrent_paterns_list[i];
                                           corrent_join_pattern_id = i;
                                           selected_pattern = i;
                                           setState(() {});
@@ -4986,7 +5048,7 @@ read_patterns();
                                     InkWell(
                                       onTap: () {
                                         corrent_join_pattern =
-                                            corrent_paterns_list[i];
+                                        corrent_paterns_list[i];
                                         corrent_join_pattern_id = i;
                                         min_length =
                                             corrent_join_pattern.min_length;
@@ -4996,9 +5058,9 @@ read_patterns();
                                         name_controller.text =
                                             corrent_join_pattern.name;
                                         mini_distence_controller.text =
-                                            '$min_length';
+                                        '$min_length';
                                         max_distence_controller.text =
-                                            '$max_length';
+                                        '$max_length';
                                         selected_door_pattern = i;
                                         selected_pattern = i;
                                         door_bore_units = [];
