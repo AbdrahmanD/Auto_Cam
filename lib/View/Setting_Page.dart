@@ -6,8 +6,10 @@ import 'package:auto_cam/Controller/Painters/Flexible_Shelf_Pattern_Painter.dart
 import 'package:auto_cam/Controller/Painters/Pattern_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/View/Main_Screen.dart';
+import 'package:auto_cam/View/Screens_parts/Box_Fitting_Setting.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 
 class Setting_Page extends StatefulWidget {
   const Setting_Page({Key? key}) : super(key: key);
@@ -741,8 +743,8 @@ setState(() {
     box_slide_units.add(box_unit);
 
     setState(() {});
-    print("drawr_slide_units.length = ${drawr_slide_units.length}");
-    print("box_slide_units.length = ${box_slide_units.length}");
+    // print("drawr_slide_units.length = ${drawr_slide_units.length}");
+    // print("box_slide_units.length = ${box_slide_units.length}");
 
     refresh();
   }
@@ -4838,19 +4840,28 @@ setState(() {
                     padding: const EdgeInsets.all(16.0),
                     child: InkWell(
                       onTap: () {
-                        corrent_setting = "Box fitting";
+                        // corrent_setting = "Box fitting";
+                        //
+                        // boxes_fitting = true;
+                        // Flexible_Shelves = false;
+                        // Drawer_face = false;
+                        // Drawer_slide = false;
+                        // Doors = false;
+                        // corrent_paterns_list = list_boxes_fitting;
+                        // corrent_join_pattern_id = 0;
+                        //
+                        // corrent_category = "Box_Fitting_DRILL";
+                        // refresh();
+                        // setState(() {});
 
-                        boxes_fitting = true;
-                        Flexible_Shelves = false;
-                        Drawer_face = false;
-                        Drawer_slide = false;
-                        Doors = false;
-                        corrent_paterns_list = list_boxes_fitting;
-                        corrent_join_pattern_id = 0;
 
-                        corrent_category = "Box_Fitting_DRILL";
-                        refresh();
-                        setState(() {});
+                        Get.defaultDialog(
+                          title: "box fitting fitting",
+                          content: Container(width: 1000,height: 600,child: Box_Fitting_Setting())
+
+                        );
+
+
                       },
                       child: Container(
                         width: boxes_fitting ? 150 : 100,

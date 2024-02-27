@@ -1,3 +1,4 @@
+import 'package:auto_cam/Controller/Painters/three_D_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
  import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
@@ -18,8 +19,9 @@ class Box_Painter extends CustomPainter {
 
   late Offset start_select_window;
   late Offset end_select_window  ;
+  late Point_model drawing_origin;
 
-  // List<Point_model> corners=[];
+  List<Point_model> corners=[];
 
   Box_Painter(
       this.box_model,
@@ -31,17 +33,20 @@ class Box_Painter extends CustomPainter {
       this.view_port,
       this.start_select_window,
       this.end_select_window,
-      // this.corners
+      this.drawing_origin,
+
+      this.corners
       ){
 
     this.box_model = box_model;
 
     this.hover_id = hover_id;
 
-    box_model.box_origin.x_coordinate =
-        screen_Size.width / 2 - box_model.box_width * drawing_scale / 2;
-    box_model.box_origin.y_coordinate =
-        screen_Size.height / 2 + box_model.box_height * drawing_scale / 2;
+
+
+    box_model.box_origin.x_coordinate = drawing_origin.x_coordinate;
+    box_model.box_origin.y_coordinate = drawing_origin.y_coordinate;
+    box_model.box_origin.z_coordinate = drawing_origin.z_coordinate;
 
     // Selected_Face selected_face = selected_faces.value.first;
     // print("selected face from box painter : ${selected_face.piece_id} / ${selected_face.face_name}");
@@ -63,7 +68,7 @@ class Box_Painter extends CustomPainter {
     draw_box(canvas);
     draw_select_rect(canvas);
 
-    //
+
     // for(Point_model poi in corners){
     //
     //   canvas.drawCircle(
@@ -227,36 +232,36 @@ class Box_Painter extends CustomPainter {
       else if(view_port=='R'){
 
         canvas.drawLine(
-            Offset( p2.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale ),
-            Offset( p6.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p6.y_coordinate * drawing_scale ),
+            Offset( p2.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale ),
+            Offset( p6.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p6.y_coordinate * drawing_scale ),
             (piece_model.piece_id==selected_face.piece_id &&selected_face.face_name==3)?selected_faces_filler: line_painter
         );
 
         canvas.drawLine(
-            Offset( p6.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p6.y_coordinate * drawing_scale ),
-            Offset( p7.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p7.y_coordinate * drawing_scale ),
+            Offset( p6.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p6.y_coordinate * drawing_scale ),
+            Offset( p7.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p7.y_coordinate * drawing_scale ),
             (piece_model.piece_id==selected_face.piece_id &&selected_face.face_name==6)?selected_faces_filler: line_painter
         );
 
         canvas.drawLine(
-            Offset( p7.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p7.y_coordinate * drawing_scale ),
-            Offset( p3.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p3.y_coordinate * drawing_scale ),
+            Offset( p7.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p7.y_coordinate * drawing_scale ),
+            Offset( p3.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p3.y_coordinate * drawing_scale ),
             (piece_model.piece_id==selected_face.piece_id &&selected_face.face_name==1)?selected_faces_filler: line_painter
         );
 
         canvas.drawLine(
-            Offset( p3.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p3.y_coordinate * drawing_scale ),
-            Offset( p1.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p1.y_coordinate * drawing_scale ),
+            Offset( p3.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p3.y_coordinate * drawing_scale ),
+            Offset( p1.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p1.y_coordinate * drawing_scale ),
             (piece_model.piece_id==selected_face.piece_id &&selected_face.face_name==5)?selected_faces_filler: line_painter
         );
 
 
 
-        path.moveTo( p2.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale);
-        path.lineTo( p6.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p6.y_coordinate * drawing_scale);
-        path.lineTo( p7.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p7.y_coordinate * drawing_scale);
-        path.lineTo( p3.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p3.y_coordinate * drawing_scale);
-        path.lineTo( p2.z_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale);
+        path.moveTo( p2.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale);
+        path.lineTo( p6.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p6.y_coordinate * drawing_scale);
+        path.lineTo( p7.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p7.y_coordinate * drawing_scale);
+        path.lineTo( p3.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p3.y_coordinate * drawing_scale);
+        path.lineTo( p2.z_coordinate * drawing_scale + box_model.box_origin.z_coordinate, box_model.box_origin.y_coordinate - p2.y_coordinate * drawing_scale);
 
 
       }
@@ -264,36 +269,36 @@ class Box_Painter extends CustomPainter {
 
 
         canvas.drawLine(
-            Offset( p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p1.z_coordinate * drawing_scale ),
-            Offset( p2.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p2.z_coordinate * drawing_scale ),
+            Offset( p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p1.z_coordinate * drawing_scale ),
+            Offset( p2.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p2.z_coordinate * drawing_scale ),
             (piece_model.piece_id==selected_face.piece_id &&selected_face.face_name==5)?selected_faces_filler: line_painter
         );
 
         canvas.drawLine(
-            Offset( p2.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p2.z_coordinate * drawing_scale),
-            Offset( p6.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p6.z_coordinate * drawing_scale),
+            Offset( p2.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p2.z_coordinate * drawing_scale),
+            Offset( p6.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p6.z_coordinate * drawing_scale),
             (piece_model.piece_id==selected_face.piece_id &&selected_face.face_name==2)?selected_faces_filler: line_painter
         );
 
         canvas.drawLine(
-            Offset( p6.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p6.z_coordinate * drawing_scale ),
-            Offset( p5.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p5.z_coordinate * drawing_scale ),
+            Offset( p6.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p6.z_coordinate * drawing_scale ),
+            Offset( p5.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p5.z_coordinate * drawing_scale ),
             (piece_model.piece_id==selected_face.piece_id &&selected_face.face_name==6)?selected_faces_filler: line_painter
         );
 
         canvas.drawLine(
-            Offset( p5.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p5.z_coordinate * drawing_scale),
-            Offset( p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p1.z_coordinate * drawing_scale),
+            Offset( p5.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p5.z_coordinate * drawing_scale),
+            Offset( p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p1.z_coordinate * drawing_scale),
             (piece_model.piece_id==selected_face.piece_id &&selected_face.face_name==4)?selected_faces_filler: line_painter
         );
 
 
 
-        path.moveTo(p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p1.z_coordinate * drawing_scale);
-        path.lineTo(p2.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p2.z_coordinate * drawing_scale);
-        path.lineTo(p6.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p6.z_coordinate * drawing_scale);
-        path.lineTo(p5.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p5.z_coordinate * drawing_scale);
-        path.lineTo(p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.y_coordinate - p1.z_coordinate * drawing_scale);
+        path.moveTo(p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p1.z_coordinate * drawing_scale);
+        path.lineTo(p2.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p2.z_coordinate * drawing_scale);
+        path.lineTo(p6.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p6.z_coordinate * drawing_scale);
+        path.lineTo(p5.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p5.z_coordinate * drawing_scale);
+        path.lineTo(p1.x_coordinate * drawing_scale + box_model.box_origin.x_coordinate, box_model.box_origin.z_coordinate - p1.z_coordinate * drawing_scale);
 
       }
 

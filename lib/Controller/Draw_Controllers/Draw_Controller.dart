@@ -1,5 +1,5 @@
 import 'dart:convert';
-  import 'dart:io';
+    import 'dart:io';
 
  import 'dart:math';
 
@@ -9,8 +9,7 @@ import 'package:auto_cam/Controller/Painters/Box_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
-import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
-import 'package:auto_cam/Model/Main_Models/Inner_Box.dart';
+ import 'package:auto_cam/Model/Main_Models/Inner_Box.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
@@ -53,6 +52,8 @@ int cursor=0;
   Rx<Offset> box_move_offset = Offset(0, 0).obs;
 
 
+  Point_model drawing_origin=Point_model(0, 0, 0);
+
   List<Point_model> corners_points=[];
   List<Point_model> start_corners_points=[];
 
@@ -60,8 +61,20 @@ int cursor=0;
   Draw_Controller() {
     read_pattern_files();
 
+    drawing_origin.x_coordinate = screen_size.value.width / 2  - box_repository.box_model.value.box_width * drawing_scale.value / 2;
+    drawing_origin.y_coordinate = screen_size.value.height / 2 + box_repository.box_model.value.box_height * drawing_scale.value / 2;
+
+
   }
 
+  zoom_all(){
+
+    drawing_scale.value =0.3;
+    drawing_origin.x_coordinate = screen_size.value.width / 2  - box_repository.box_model.value.box_width * drawing_scale.value / 2;
+    drawing_origin.y_coordinate = screen_size.value.height / 2 + box_repository.box_model.value.box_height * drawing_scale.value / 2;
+
+draw_Box();
+  }
 
 
 
@@ -278,9 +291,9 @@ int cursor=0;
   Box_Painter draw_Box() {
 
     Box_model box_model = get_box();
-
-    print("box_model.box_pieces.length");
-    print(box_model.box_pieces.length);
+    //
+    // print("box_model.box_pieces.length");
+    // print(box_model.box_pieces.length);
      hover_id_find(box_model);
 
     Box_Painter boxPainter = Box_Painter(
@@ -293,7 +306,8 @@ int cursor=0;
         view_port.value,
         start_select_window.value,
         end_select_window.value,
-        // start_corners_points
+        drawing_origin,
+        start_corners_points
     );
     return boxPainter;
   }
@@ -1188,15 +1202,41 @@ else if(face_name==2 || face_name==4){
   }
 
   /// move_box
-  move_box(double dx,double dy)
+  move_box(double x_move_value, double y_move_value)
   {
 
-    Box_model b = box_repository.box_model.value;
 
-  for(int pi=0;pi<b.box_pieces.length;pi++){
-    selected_id.value.add(pi);
-  }
-  move_piece(dx*drawing_scale.value/40, dy*drawing_scale.value/40);
+    ///
+
+    double dx = 0;
+    double dy = 0;
+    double dz = 0;
+
+    if (view_port == 'F') {
+      /// move X
+      dx = x_move_value;
+
+      /// move Y
+      dy = -y_move_value;
+    } else if (view_port == 'R') {
+      /// move Y
+      dy = -y_move_value;
+
+      /// move Z
+      dz = x_move_value;
+    } else if (view_port == 'T') {
+      /// move X
+      dx = x_move_value;
+
+      /// move Z
+      dz = -y_move_value;
+    }
+
+drawing_origin.x_coordinate+=dx;
+drawing_origin.y_coordinate+=dy;
+drawing_origin.z_coordinate+=dz;
+
+    draw_Box();
 
 
   }
@@ -1263,7 +1303,7 @@ else if(face_name==2 || face_name==4){
 
 
 
-        print("file file $file");
+        // print("file file $file");
       } catch (e) {
         print('Error writing JSON data to the file: $e');
       }
@@ -1279,9 +1319,9 @@ else if(face_name==2 || face_name==4){
 
      draw_Box();
 
-     print("box history = ${box_history.length}");
-     print("cursor = ${cursor}");
-    print("==================");
+    //  print("box history = ${box_history.length}");
+    //  print("cursor = ${cursor}");
+    // print("==================");
 
 
 
@@ -1301,11 +1341,11 @@ else if(face_name==2 || face_name==4){
 
 
 
-      print("undo");
-      print("box history = ${box_history.length}");
-      print("deleted history = ${deleted_box_history.length}");
-      print("cursor = ${cursor}");
-      print("==================");
+      // print("undo");
+      // print("box history = ${box_history.length}");
+      // print("deleted history = ${deleted_box_history.length}");
+      // print("cursor = ${cursor}");
+      // print("==================");
 
 
     }
@@ -1319,11 +1359,11 @@ else if(face_name==2 || face_name==4){
       add_box_to_history(b);
        deleted_box_history.removeAt(deleted_box_history.length-1);
 
-      print("redo");
-      print("box history = ${box_history.length}");
-      print("deleted history = ${deleted_box_history.length}");
-      print("cursor = ${cursor}");
-      print("==================");
+      // print("redo");
+      // print("box history = ${box_history.length}");
+      // print("deleted history = ${deleted_box_history.length}");
+      // print("cursor = ${cursor}");
+      // print("==================");
 
     }
 
@@ -1632,8 +1672,8 @@ else if(face_name==2 || face_name==4){
       // box_repository.box_model.value.box_pieces[i].piece_faces.left_face .face_item.forEach((element) {print('left  : $element');});
       // print('---------');
       // print('(# Y #) = ${box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate}');
-      print('-----------------------------------');
-      print('-----------------------------------');
+      // print('-----------------------------------');
+      // print('-----------------------------------');
     }
   }
 

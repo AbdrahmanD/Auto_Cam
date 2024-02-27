@@ -53,12 +53,14 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
         child: Listener(
           onPointerSignal: (PointerSignalEvent event) {
             if (event is PointerScrollEvent) {
-              f += (event.scrollDelta.direction).toInt() / 3;
+              // f += (event.scrollDelta.direction).toInt() / 3;
+              // if (f >3 && f <= 25) {
+              if (draw_controller.drawing_scale.value >0.2 ) {
 
-              if (f >3 && f < 15) {
                 draw_controller.drawing_scale.value += (event.scrollDelta.direction).toInt() / 10;
-                f += (event.scrollDelta.direction).toInt() / 3;
-                // print(f);
+               //   // print(f);
+              }else{
+                draw_controller.drawing_scale.value=0.3;
               }
             }
           },
@@ -79,7 +81,7 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
               onPanUpdate: (v) {
                 if (shift_hold) {
                   draw_controller.move_box( v.delta.dx, -v.delta.dy) ;
-                  setState(() {});
+                  // setState(() {});
                 } else {
                   // if (!draw_controller.select_window.value) {
                   //   draw_controller.select_window_method(v.delta);

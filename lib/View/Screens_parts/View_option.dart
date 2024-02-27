@@ -264,10 +264,11 @@ class _View_optionState extends State<View_option> {
 
                   SizedBox(height: 12,),
 
-                  /// change view to : front
+                  /// zoom all
                   InkWell(
                     onTap: () {
-                      draw_controller.drawing_scale.value =0.3;
+
+                      draw_controller.zoom_all();
                     },
                     child: Container(
                       width: 112,
@@ -280,12 +281,15 @@ class _View_optionState extends State<View_option> {
                         color:Colors.grey[400],
                       ),
                       child: Center(
-                          child: Text(
-                            'Zoom All',
-                            style: TextStyle(
-                              fontSize:14,
-                            ),
-                          )),
+                        child: Text(
+                                "ZOOM ALL",
+                                style: TextStyle(
+                                  fontSize:14,
+                                ),
+                              ),
+                      )
+
+
                     ),
                   ),
                 ],
@@ -1569,7 +1573,7 @@ class _View_optionState extends State<View_option> {
                                 selected_piece=true;
                               }
                               if (
-                              // !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
+                              !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
                               !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('Helper')) &&
                               (draw_controller.box_repository.box_model.value.box_pieces[i].piece_thickness!=0)
                               ) {
@@ -1578,14 +1582,10 @@ class _View_optionState extends State<View_option> {
                                   child: Column(
                                     children: [
 
-                                      /// select the piece
+                                      /// name and select the piece and material name
                                       Row(
                                         children: [
-                                          Text(
-                                            'select :',
-                                            style: TextStyle(fontSize: text_size),
-                                          ),
-                                          Container(width: 24,height: 24,
+                                          Container(width: 12,height: 12,
                                             child: Checkbox(value: selected_piece,
 
 
@@ -1604,47 +1604,17 @@ class _View_optionState extends State<View_option> {
 
                                               });
                                             }),
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        height: 0.5,
-                                        width: 100,
-                                        color: Colors.grey,
-                                      ),
-
-                                      ///thickness
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Z :',
-                                            style: TextStyle(fontSize: text_size),
                                           ),
-                                          Text(
-                                            '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate}',
-                                            style: TextStyle(
-                                                fontSize: text_size,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                      Container(
-                                        height: 0.5,
-                                        width: 100,
-                                        color: Colors.grey,
-                                      ),
-
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'name :',
-                                            style: TextStyle(fontSize: text_size),
-                                          ),
+                                          SizedBox(width: 8,),
                                           Text(
                                             '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_name}',
                                             style: TextStyle(
-                                                fontSize: text_size,
+                                                fontSize: text_size*1.24,
                                                 fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            ' / ${draw_controller.box_repository.box_model.value.box_pieces[i].material_name}',
+                                            style: TextStyle(fontSize: text_size),
                                           ),
                                         ],
                                       ),
@@ -1653,69 +1623,91 @@ class _View_optionState extends State<View_option> {
                                         width: 100,
                                         color: Colors.grey,
                                       ),
+
+                                      ///x y z
+                                      // Row(
+                                      //   children: [
+                                      //     Text(
+                                      //       'X :',
+                                      //       style: TextStyle(fontSize: text_size),
+                                      //     ),
+                                      //     Text(
+                                      //       '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.x_coordinate}',
+                                      //       style: TextStyle(
+                                      //           fontSize: text_size,
+                                      //           fontWeight: FontWeight.bold),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      // Row(
+                                      //   children: [
+                                      //     Text(
+                                      //       'Y :',
+                                      //       style: TextStyle(fontSize: text_size),
+                                      //     ),
+                                      //     Text(
+                                      //       '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate}',
+                                      //       style: TextStyle(
+                                      //           fontSize: text_size,
+                                      //           fontWeight: FontWeight.bold),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      // Row(
+                                      //   children: [
+                                      //     Text(
+                                      //       'Z :',
+                                      //       style: TextStyle(fontSize: text_size),
+                                      //     ),
+                                      //     Text(
+                                      //       '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate}',
+                                      //       style: TextStyle(
+                                      //           fontSize: text_size,
+                                      //           fontWeight: FontWeight.bold),
+                                      //     ),
+                                      //   ],
+                                      // ),
+
+
+
+                                      Container(
+                                        height: 0.5,
+                                        width: 100,
+                                        color: Colors.grey,
+                                      ),
                                       Row(
                                         children: [
                                           Text(
-                                            'width :',
+                                            'W :',
                                             style: TextStyle(fontSize: text_size),
                                           ),
                                           Text(
                                             '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_width}',
                                             style: TextStyle(fontSize: text_size),
                                           ),
-                                        ],
-                                      ),
-                                      Container(
-                                        height: 0.5,
-                                        width: 100,
-                                        color: Colors.grey,
-                                      ),
-                                      Row(
-                                        children: [
+
                                           Text(
-                                            'height :',
+                                            ' / H :',
                                             style: TextStyle(fontSize: text_size),
                                           ),
                                           Text(
                                             '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_height}',
                                             style: TextStyle(fontSize: text_size),
                                           ),
-                                        ],
-                                      ),
-                                      Container(
-                                        height: 0.5,
-                                        width: 100,
-                                        color: Colors.grey,
-                                      ),
-                                      Row(
-                                        children: [
                                           Text(
-                                            'thickness :',
+                                            ' / TH :',
                                             style: TextStyle(fontSize: text_size),
                                           ),
                                           Text(
                                             '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_thickness}',
                                             style: TextStyle(fontSize: text_size),
                                           ),
+
+
+
                                         ],
                                       ),
-                                      Container(
-                                        height: 0.5,
-                                        width: 100,
-                                        color: Colors.grey,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'material :',
-                                            style: TextStyle(fontSize: text_size),
-                                          ),
-                                          Text(
-                                            '${draw_controller.box_repository.box_model.value.box_pieces[i].material_name}',
-                                            style: TextStyle(fontSize: text_size),
-                                          ),
-                                        ],
-                                      ),
+
                                       SizedBox(
                                         height: 6,
                                       ),

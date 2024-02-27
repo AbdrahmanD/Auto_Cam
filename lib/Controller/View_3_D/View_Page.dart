@@ -82,9 +82,13 @@ class _View_PageState extends State<View_Page> {
                 }
               }
             },
+            // onPointerHover: (v){
+            //   print(v.position);
+            // },
 //
 
             child: GestureDetector(
+
 
               onPanUpdate: (v) {
 
