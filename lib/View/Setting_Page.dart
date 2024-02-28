@@ -5,8 +5,7 @@ import 'package:auto_cam/Controller/Painters/Drawer_Pattern_Painter.dart';
 import 'package:auto_cam/Controller/Painters/Flexible_Shelf_Pattern_Painter.dart';
 import 'package:auto_cam/Controller/Painters/Pattern_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
-import 'package:auto_cam/View/Main_Screen.dart';
-import 'package:auto_cam/View/Screens_parts/Box_Fitting_Setting.dart';
+ import 'package:auto_cam/View/Screens_parts/Box_Fitting_Setting.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -4854,12 +4853,8 @@ setState(() {
                         // refresh();
                         // setState(() {});
 
+Get.to(Box_Fitting_Setting());
 
-                        Get.defaultDialog(
-                          title: "box fitting fitting",
-                          content: Container(width: 1000,height: 600,child: Box_Fitting_Setting())
-
-                        );
 
 
                       },

@@ -95,6 +95,10 @@ flutter:
     - lib/assets/images/box_slide.png
     - lib/assets/images/drawer_slide.png
     - lib/assets/images/drawer.png
+    - lib/assets/images/dowel.png
+    - lib/assets/images/nut.png
+    - lib/assets/images/face_nut.png
+    - lib/assets/images/screw.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
