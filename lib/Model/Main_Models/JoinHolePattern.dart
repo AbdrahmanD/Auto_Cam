@@ -400,6 +400,7 @@ class Bore_unit {
 
 
   Bore_unit(
+
       this.pre_distence,
       this.correct_x,
       this.correct_y,
@@ -409,7 +410,9 @@ class Bore_unit {
       this.nut_bore,
       this.face_bore,
       this.center,
-      this.mirror);
+      this.mirror
+
+      );
 
   Bore_unit.fromJson(Map<String, dynamic> json) {
     pre_distence = json['pre_distence'];
