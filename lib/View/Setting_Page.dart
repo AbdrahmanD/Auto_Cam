@@ -6,6 +6,9 @@ import 'package:auto_cam/Controller/Painters/Flexible_Shelf_Pattern_Painter.dart
 import 'package:auto_cam/Controller/Painters/Pattern_Painter.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
  import 'package:auto_cam/View/Screens_parts/Box_Fitting_Setting.dart';
+import 'package:auto_cam/View/Screens_parts/Door_pattern_Setting.dart';
+import 'package:auto_cam/View/Screens_parts/Drawer_Slide_Setting.dart';
+import 'package:auto_cam/View/Screens_parts/Flixable_Shelf_Editor.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -608,12 +611,9 @@ class _Setting_PageState extends State<Setting_Page> {
     double J_depth_value = double.parse(J_depth_controller.text.toString());
     double J_value = double.parse(J_controller.text.toString());
 
-    Bore_model main_hole =
-    Bore_model(Point_model(0, 22.5 - B_value, 0), A_value, A_depth_value);
-    Bore_model main_hole_support_1 = Bore_model(
-        Point_model(0, C_value - B_value, 0), H_value, H_depth_value);
-    Bore_model main_hole_support_2 = Bore_model(
-        Point_model(0, C_value - B_value, 0), H_value, H_depth_value);
+    Bore_model main_hole           = Bore_model(Point_model(0,    22.5 - B_value, 0), A_value, A_depth_value);
+    Bore_model main_hole_support_1 = Bore_model(Point_model(0, C_value - B_value, 0), H_value, H_depth_value);
+    Bore_model main_hole_support_2 = Bore_model(Point_model(0, C_value - B_value, 0), H_value, H_depth_value);
 
     Bore_model side_hole_1 =
     Bore_model(Point_model(0, E_value, 0), J_value, J_depth_value);
@@ -749,6 +749,9 @@ setState(() {
   }
 
   add_to_Flexible_shelf_pattern() {
+
+    List<Bore_unit> Flexible_Shelf_units = [];
+
     double Shelf_A = double.parse(Flexible_Shelf_A_controller.text.toString());
     double Shelf_B = double.parse(Flexible_Shelf_B_controller.text.toString()) +
         draw_controller.box_repository.box_model.value.init_material_thickness /
@@ -2173,7 +2176,8 @@ setState(() {
                   height: 32,
                 ),
               ],
-            )),
+            )
+        ),
       );
     }
     else if (corrent_category == "Drawer_Face") {
@@ -4878,6 +4882,7 @@ Get.to(Box_Fitting_Setting());
                     padding: const EdgeInsets.all(16.0),
                     child: InkWell(
                       onTap: () {
+                        Get.to(Flixable_Shelf_Editor());
                         corrent_setting = " Flexible Shelves";
 
                         boxes_fitting = false;
@@ -4958,6 +4963,7 @@ Get.to(Box_Fitting_Setting());
                         corrent_category = "Drawer_Slides";
                         refresh();
 
+                        Get.to(Drawer_Slide_Setting());
                         setState(() {});
                       },
                       child: Container(
@@ -4980,6 +4986,7 @@ Get.to(Box_Fitting_Setting());
                     padding: const EdgeInsets.all(16.0),
                     child: InkWell(
                       onTap: () {
+                        Get.to(Door_pattern_Setting());
                         corrent_setting = "Doors";
                         boxes_fitting = false;
                         Flexible_Shelves = false;
@@ -5095,7 +5102,9 @@ Get.to(Box_Fitting_Setting());
                               ),
                             );
                           }),
-                    )),
+                    )
+
+                ),
 
                 SizedBox(
                   height: 32,

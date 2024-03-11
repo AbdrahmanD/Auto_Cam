@@ -30,6 +30,7 @@ bool init_state=true;
     if(pattern_name==pattern.name){
       init_state=false;
     }
+
     List<Widget> list_text_editor() {
       double scale = 1.5;
 

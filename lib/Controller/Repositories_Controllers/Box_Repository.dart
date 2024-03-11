@@ -4,6 +4,7 @@ import 'package:auto_cam/Controller/nesting/Nesting_Pieces.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/CNC_Tool.dart';
 import 'package:auto_cam/Model/Main_Models/Cut_List_Item.dart';
+import 'package:auto_cam/Model/Main_Models/Drawer_Rail_Brand.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/project/Project_model.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,7 @@ class Box_Repository extends GetxController {
     "Groove": [],
   };
 
+  List<Drawer_Rail_Brand> brands =[];
 
 
 

@@ -19,19 +19,6 @@ class AnalyzeJoins {
 
   AnalyzeJoins(this.project,this.collect_same_pieces) {
 
-
-
-    ///
-    // check_tow_face_intersected(
-    //     draw_controller.box_repository.box_model.value,
-    //     draw_controller.box_repository.box_model.value.box_pieces[5].piece_faces.faces[4],
-    //     draw_controller.box_repository.box_model.value.box_pieces[6].piece_faces.faces[5],
-    // );
-
-    // for(int i=0;i<draw_controller.box_repository.box_model.value.box_pieces.length;i++){
-    //   print("i:$i , piece name : ${draw_controller.box_repository.box_model.value.box_pieces[i].piece_name}");
-    // }
-    ///
 this.project=project;
 
     draw_controller.box_repository.cut_list_items = [];

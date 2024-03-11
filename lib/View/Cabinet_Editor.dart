@@ -58,7 +58,7 @@ class Cabinet_Editor extends StatelessWidget {
               top: 0,
               right: 0,
               child: Container(
-                  width: 200,
+                  width: 250,
                   height: screen_size.height,
                   color: Colors.grey[300],
                   child: View_option())),

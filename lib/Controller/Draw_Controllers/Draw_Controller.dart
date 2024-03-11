@@ -8,6 +8,7 @@ import 'package:auto_cam/Controller/Painters/Box_Painter.dart';
  import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
+import 'package:auto_cam/Model/Main_Models/Drawer_Rail_Brand.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
  import 'package:auto_cam/Model/Main_Models/Inner_Box.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
@@ -60,6 +61,8 @@ int cursor=0;
 
   Draw_Controller() {
     read_pattern_files();
+    read_brands();
+
 
     drawing_origin.x_coordinate = screen_size.value.width / 2  - box_repository.box_model.value.box_width * drawing_scale.value / 2;
     drawing_origin.y_coordinate = screen_size.value.height / 2 + box_repository.box_model.value.box_height * drawing_scale.value / 2;
@@ -1575,8 +1578,8 @@ drawing_origin.z_coordinate+=dz;
     box_repository.join_patterns["Box_Fitting_DRILL"]!.clear();
     box_repository.join_patterns["Flexible_Shelves"]!.clear();
     box_repository.join_patterns["Drawer_Face"]!.clear();
-    box_repository.join_patterns["Drawer_Rail_Box"]!.clear();
-    box_repository.join_patterns["Drawer_Rail_Side"]!.clear();
+    // box_repository.join_patterns["Drawer_Rail_Box"]!.clear();
+    // box_repository.join_patterns["Drawer_Rail_Side"]!.clear();
     box_repository.join_patterns["Door_Hinges"]!.clear();
     box_repository.join_patterns["side_Hinges"]!.clear();
     box_repository.join_patterns["Groove"]!.clear();
@@ -1640,7 +1643,107 @@ drawing_origin.z_coordinate+=dz;
   }
 
 
-  /// this only debug mode method to get information off the box pieces
+  read_brands() async{
+
+    box_repository.brands=[];
+
+   bool windows_platform=Platform.isWindows;
+
+   final rootdirectory = await getApplicationDocumentsDirectory();
+
+   final Directory directory0 =windows_platform?
+   (        Directory('${rootdirectory.path}\\Auto_Cam\\Setting\\Join_Patterns')
+
+   ):(
+       Directory('${rootdirectory.path}/Auto_Cam/Setting/Join_Patterns')
+   )
+   ;
+   directory0.createSync();
+
+
+
+     final Directory directory =windows_platform?
+     (Directory('${directory0.path}\\Drawer_Rail_Brands')):(Directory('${directory0.path}/Drawer_Rail_Brands'));
+     directory.createSync();
+
+     if (directory.existsSync()) {
+       List<FileSystemEntity> files = directory.listSync();
+
+       // Filter the list to include only files
+       List<File> fileList = [];
+       for (var fileEntity in files) {
+         if (fileEntity is File) {
+           fileList.add(fileEntity as File);
+         }
+       }
+
+       // Now, fileList contains a list of File objects from the directory.
+       for (var file in fileList) {
+         if (file.existsSync()) {
+           File f = File(file.path);
+
+           if (f.path.contains('brand')) {
+             String content = await f.readAsString();
+
+             Drawer_Rail_Brand brand =
+             Drawer_Rail_Brand.fromJson(json.decode(content));
+
+             box_repository.brands.add(brand);
+
+           }
+         } else {
+           print('Directory does not exist: $directory');
+         }
+       }
+     }
+
+
+
+ }
+
+ save_brand(Drawer_Rail_Brand brand)async {
+
+   bool windows_platform=Platform.isWindows;
+   final directory = await getApplicationDocumentsDirectory();
+
+   final Directory oldDirectory = windows_platform?(Directory('${directory.path}\\Auto_Cam')):
+   (Directory('${directory.path}/Auto_Cam'));
+   oldDirectory.createSync();
+
+   final Directory newDirectory = windows_platform?(Directory('${oldDirectory.path}\\Setting')):
+   (Directory('${oldDirectory.path}/Setting'));
+   newDirectory.createSync();
+
+   final Directory finalDirectory0 = windows_platform?(Directory('${newDirectory.path}\\Join_Patterns')):
+   (Directory('${newDirectory.path}/Join_Patterns'));
+   finalDirectory0.createSync();
+
+   final Directory finalDirectory =windows_platform?(        Directory('${finalDirectory0.path}\\Drawer_Rail_Brands}')
+   ):(        Directory('${finalDirectory0.path}/Drawer_Rail_Brands')
+   );
+   finalDirectory.createSync();
+
+   final path = await finalDirectory.path;
+   String file_path = windows_platform?('$path\\${brand.brand_name}-brand'):('$path/${brand.brand_name}-brand');
+   // writeJsonToFile(joinHolePattern.toJson(),file_path);
+   File file = File(file_path);
+
+   try {
+     // Convert the data to a JSON string
+     String jsonData = jsonEncode(brand.toJson());
+
+     // Write the JSON data to the file
+     file.writeAsStringSync(jsonData);
+
+     print('JSON data has been written to $file_path');
+   } catch (e) {
+     print('Error writing JSON data to the file: $e');
+   }
+ }
+
+
+
+/// this only debug mode method to get information off the box pieces
   print_pieces_coordinate() {
     for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
       print(
@@ -1700,9 +1803,6 @@ drawing_origin.z_coordinate+=dz;
 
 
   /// /// / / / PROJECT /////////////
-
-
-/// String tools
 
   String first_chart_every_word(String name){
 

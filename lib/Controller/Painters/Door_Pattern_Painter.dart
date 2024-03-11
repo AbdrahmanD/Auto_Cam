@@ -20,7 +20,7 @@ class Door_Pattern_Painter extends CustomPainter {
     if (max_width > screen_width) {
       scal = screen_width / max_width;
     } else {
-      scal = 0.5;
+      scal = 1;
     }
 
     double pw = widh;
@@ -50,21 +50,21 @@ class Door_Pattern_Painter extends CustomPainter {
 
     Path second_piece_face = Path();
 
-    Offset main_origin = Offset(50, 145);
+    Offset main_origin = Offset(50, 445);
 
-    Offset second_origin = Offset(50, 125);
+    Offset second_origin = Offset(50, 425);
 
-    main_piece_face.moveTo(main_origin.dx, main_origin.dy + 6 * th * scal);
+    main_piece_face.moveTo(main_origin.dx, main_origin.dy + 24 * th * scal);
     main_piece_face.lineTo(main_origin.dx, main_origin.dy);
     main_piece_face.lineTo(main_origin.dx + w * scal, main_origin.dy);
-    main_piece_face.lineTo(main_origin.dx + w * scal, main_origin.dy + 6 * th * scal);
+    main_piece_face.lineTo(main_origin.dx + w * scal, main_origin.dy + 24 * th * scal);
+    main_piece_face.lineTo(main_origin.dx, main_origin.dy + 24 * th * scal);
 
-
-    second_piece_face.moveTo(second_origin.dx , second_origin.dy - 3 * th * scal);
+    second_piece_face.moveTo(second_origin.dx , second_origin.dy - 24 * th * scal);
     second_piece_face.lineTo(second_origin.dx, second_origin.dy);
     second_piece_face.lineTo(second_origin.dx + w * scal, second_origin.dy);
-    second_piece_face.lineTo(second_origin.dx + w * scal , second_origin.dy - 3 * th * scal);
-
+    second_piece_face.lineTo(second_origin.dx + w * scal , second_origin.dy - 24 * th * scal);
+    second_piece_face.lineTo(second_origin.dx , second_origin.dy - 24 * th * scal);
 
      canvas.drawPath(main_piece_face, piece_painter);
     canvas.drawPath(second_piece_face, piece_painter);
@@ -107,7 +107,7 @@ class Door_Pattern_Painter extends CustomPainter {
             Offset(
                (pre_distence*scal+ main_origin.dx+unit.correct_x*scal ),
                 main_origin.dy +face_bore.origin.y_coordinate*scal ),
-            face_bore.diameter * scal / 2,
+            face_bore.diameter * scal ,
 
             bore_painter);
 
@@ -115,7 +115,7 @@ class Door_Pattern_Painter extends CustomPainter {
             Offset(
                 ((widh-pre_distence)*scal+ main_origin.dx+unit.correct_x*scal),
                 main_origin.dy +face_bore.origin.y_coordinate*scal ),
-            face_bore.diameter * scal / 2,
+            face_bore.diameter * scal ,
 
             bore_painter);
 
@@ -126,7 +126,7 @@ class Door_Pattern_Painter extends CustomPainter {
             Offset(
                 center?(main_origin.dx +max_width/2* scal+unit.correct_x*scal):(pre_distence*scal+ main_origin.dx + face_bore.origin.x_coordinate*scal),
                 main_origin.dy +face_bore.origin.y_coordinate*scal ),
-            face_bore.diameter * scal / 2,
+            face_bore.diameter * scal ,
 
             bore_painter);
       }
@@ -137,8 +137,12 @@ class Door_Pattern_Painter extends CustomPainter {
 
 
 
-    draw_text(canvas, "Box", Offset(second_origin.dx+10, second_origin.dy + 50), 2, 12);
-    draw_text(canvas, "Door", Offset(main_origin.dx+10, main_origin.dy - 100), 2, 12);
+    canvas.rotate(-3.14/2);
+    draw_text(canvas, "Side", Offset(second_origin.dx-650, second_origin.dy+200 ), 3, 12);
+
+    // canvas.rotate(1);
+
+    draw_text(canvas, "Door", Offset(second_origin.dx-400, second_origin.dy +200), 3, 12);
 
 
 
@@ -153,7 +157,6 @@ class Door_Pattern_Painter extends CustomPainter {
         style: TextStyle(fontSize: t_size * my_text_size, color: Colors.black));
     TextPainter tp = TextPainter(text: ts, textDirection: TextDirection.ltr);
     tp.layout();
-
     tp.paint(c, offset);
   }
 }

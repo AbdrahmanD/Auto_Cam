@@ -216,7 +216,8 @@ continue;
       all_paint.style = PaintingStyle.fill;
       // all_paint.strokeWidth=0.5;
       all_paint.color=Colors.grey;
-      // all_paint.blendMode=BlendMode.colorBurn;
+      // all_paint.maskFilter=MaskFilter.blur( BlurStyle.inner, 100);
+
       all_paint.blendMode=BlendMode.darken;
 
 

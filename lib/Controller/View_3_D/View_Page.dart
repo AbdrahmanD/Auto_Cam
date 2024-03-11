@@ -122,6 +122,16 @@ class _View_PageState extends State<View_Page> {
 
 
               },
+              onSecondaryTapUp: (v) {
+                double box_X=screen_size.width/2;
+                double box_Y=screen_size.height/2;
+
+                Get.defaultDialog(
+                    radius: 12,
+                    title: "offset",
+                    content: Text("X:${v.localPosition.dx-box_X} , Y:${v.localPosition.dy-box_Y}")
+                );
+              },
 
               child: Obx(()=> CustomPaint(
                   painter: transfomer.camera_cordinate_draw(screen_size),
