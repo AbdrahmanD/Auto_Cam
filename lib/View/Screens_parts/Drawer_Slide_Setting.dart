@@ -41,27 +41,23 @@ class _Drawer_Slide_SettingState extends State<Drawer_Slide_Setting> {
   TextEditingController Q_controller = TextEditingController();
 
 
-List<Drawer_Rail_Brand> brands=[];
+List brands=[];
 
 int corrent_brand_index=0;
 bool corrent_brand_enable=false;
 
   Drawer_Rail_Brand corrent_brand=Drawer_Rail_Brand("null", false, [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], 3, 3);
 
-  read_patterns()async{
+  read_brands()async{
 
  await     draw_controller.read_brands();
 
  brands=draw_controller.box_repository.brands;
 
-  corrent_brand=brands[corrent_brand_index];
-
- refresh();
 
 
-setState(() {
+refresh();
 
-});
 
   }
 
@@ -121,12 +117,22 @@ Drawer_Rail_Brand corrent_brand=Drawer_Rail_Brand(brand_name, brand_enable, dist
 
 
 draw_controller.save_brand(corrent_brand);
-
+read_brands();
 
   }
 
   delete_category(){
-    print(draw_controller.box_repository.brands.length);
+
+    draw_controller.delete_brand(corrent_brand);
+    read_brands();
+    corrent_brand_index=0;
+    refresh();
+
+
+    Get.defaultDialog(
+      title: "delete",
+      content: Text("the brand has deleted with all its  belonging patterns "),
+    );
 
   }
 
@@ -160,7 +166,9 @@ corrent_brand=brands[corrent_brand_index];
     P_controller.text="${corrent_brand.distances[15]}";
     Q_controller.text="${corrent_brand.distances[16]}";
 
+setState(() {
 
+});
 
   }
 
@@ -169,7 +177,7 @@ corrent_brand=brands[corrent_brand_index];
   @override
   void initState() {
 
-    read_patterns();
+    read_brands();
 
     super.initState();
   }
@@ -185,8 +193,7 @@ corrent_brand=brands[corrent_brand_index];
 
 
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
+       body: Container(
         width: w,height: h,
         child:
         Row(
@@ -302,6 +309,13 @@ setState(() {
                       child: InkWell(
                         onTap: () {
                           save_changed();
+
+                          Get.defaultDialog(
+                            title: "save",
+                            content: Text("All changes have saved successfully"),
+                          );
+
+
                         },
                         child: Container(
                           width: 100,
@@ -327,7 +341,9 @@ setState(() {
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                         onTap: () {
+
                           delete_category();
+
                         },
                         child: Container(
                           width: 100,
@@ -1213,7 +1229,9 @@ setState(() {
               ),
             ),),
             Container(
-       color: Colors.white,       width: w-650,child:
+       color: Colors.white,
+              width: w-800,
+              child:
             SingleChildScrollView(child: Image.asset("lib/assets/images/drawer_rail.png")),
             )
           ],
@@ -1221,4 +1239,6 @@ setState(() {
       ),
     );
   }
+
+
 }

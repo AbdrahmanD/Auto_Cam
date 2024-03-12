@@ -1578,8 +1578,6 @@ drawing_origin.z_coordinate+=dz;
     box_repository.join_patterns["Box_Fitting_DRILL"]!.clear();
     box_repository.join_patterns["Flexible_Shelves"]!.clear();
     box_repository.join_patterns["Drawer_Face"]!.clear();
-    // box_repository.join_patterns["Drawer_Rail_Box"]!.clear();
-    // box_repository.join_patterns["Drawer_Rail_Side"]!.clear();
     box_repository.join_patterns["Door_Hinges"]!.clear();
     box_repository.join_patterns["side_Hinges"]!.clear();
     box_repository.join_patterns["Groove"]!.clear();
@@ -1689,7 +1687,6 @@ drawing_origin.z_coordinate+=dz;
              Drawer_Rail_Brand.fromJson(json.decode(content));
 
              box_repository.brands.add(brand);
-
            }
          } else {
            print('Directory does not exist: $directory');
@@ -1739,6 +1736,41 @@ drawing_origin.z_coordinate+=dz;
    } catch (e) {
      print('Error writing JSON data to the file: $e');
    }
+
+   // read_brands();
+ }
+
+
+ delete_brand(Drawer_Rail_Brand brand)async {
+
+   bool windows_platform=Platform.isWindows;
+
+   final directory = await getApplicationDocumentsDirectory();
+
+   final Directory oldDirectory = windows_platform?(Directory('${directory.path}\\Auto_Cam')):(Directory('${directory.path}/Auto_Cam'));
+   oldDirectory.createSync();
+
+   final Directory newDirectory = windows_platform?(Directory('${oldDirectory.path}\\Setting')):(Directory('${oldDirectory.path}/Setting'));
+   newDirectory.createSync();
+
+   final Directory finalDirectory0 = windows_platform?(Directory('${newDirectory.path}\\Join_Patterns')):(Directory('${newDirectory.path}/Join_Patterns'));
+   finalDirectory0.createSync();
+
+   final Directory finalDirectory =windows_platform?(        Directory('${finalDirectory0.path}\\Drawer_Rail_Brands')
+   ):(        Directory('${finalDirectory0.path}/Drawer_Rail_Brands')
+   );
+   finalDirectory.createSync();
+
+   final path = await finalDirectory.path;
+   String file_path = windows_platform?('$path\\${brand.brand_name}-brand'):('$path/${brand.brand_name}-brand');
+
+   final dir = Directory(file_path);
+   dir.deleteSync(recursive: true);
+
+   // await read_brands();
+
+
+
  }
 
 

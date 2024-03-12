@@ -39,7 +39,7 @@ class Box_Repository extends GetxController {
     "Groove": [],
   };
 
-  List<Drawer_Rail_Brand> brands =[];
+  List brands =[].obs();
 
 
 

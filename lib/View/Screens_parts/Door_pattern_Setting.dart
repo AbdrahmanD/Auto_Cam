@@ -374,8 +374,7 @@ selected_door_pattern=0;
 
 
     return Scaffold(
-      appBar: AppBar(),
-      body: Row(
+       body: Row(
         children: [
 
           /// list of patterns
@@ -1408,7 +1407,7 @@ selected_door_pattern=0;
             child: Container(
               child: Column(
                 children: [
-                  Container(width: h,
+                  Container(width: h-250,
                     height: 500,
                     child: CustomPaint(
                       painter: Door_Pattern_Painter(
@@ -1416,7 +1415,7 @@ selected_door_pattern=0;
                           side_bore_units,
                           draw_controller.box_repository.box_model.value.init_material_thickness,
                           max_length,
-                          h-100,
+                          h-300,
                           max_length,
                           "Doors"),
                       child: Container(),

@@ -960,8 +960,7 @@ class _Box_Fitting_SettingState extends State<Box_Fitting_Setting> {
       corrent_join_pattern = JoinHolePattern('name', 150, 500, 0, 0, [], true);
     }
     return Scaffold(
-      appBar: AppBar(title: Text(corrent_setting)),
-      body: Row(
+       body: Row(
         children: [
           Container(
             child: Row(
@@ -1088,7 +1087,7 @@ class _Box_Fitting_SettingState extends State<Box_Fitting_Setting> {
                       ],
                     )),
                 Container(
-                    width: w - 250,
+                    width: w - 500,
                     height: h,
                     child: Column(
                       children: [

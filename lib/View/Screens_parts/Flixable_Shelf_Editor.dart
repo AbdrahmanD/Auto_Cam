@@ -209,7 +209,6 @@ setState(() {
 
 
     return Scaffold(
-      appBar: AppBar(),
 
       body: Row(
         children: [
