@@ -273,7 +273,7 @@ draw_Box();
     if (hover_id != 100) {
       if (
       !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('inner') &&
-      !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('Helper') &&
+      // !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('Helper') &&
       !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('back_panel')
 
       )

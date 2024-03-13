@@ -20,6 +20,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
 
   TextEditingController drawer_face_up_distace_controller   = TextEditingController();
   TextEditingController drawer_face_down_distace_controller = TextEditingController();
+  TextEditingController drawer_slide_height_controller = TextEditingController();
 
   TextEditingController drawer_box_depth = TextEditingController();
 
@@ -68,6 +69,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
         '${draw_controller.box_repository.box_model.value.init_material_thickness}';
     drawer_face_up_distace_controller  .text = '${30}';
     drawer_face_down_distace_controller  .text = '${20}';
+    drawer_slide_height_controller  .text = '${20}';
     drawer_box_depth.text = '${400}';
     drawer_quantity.text = '${1}';
     drawer_face_material_thickness.text = '18';
@@ -411,6 +413,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
 
                   double double_drawer_face_up_distace  =   double.parse(drawer_face_up_distace_controller.text.toString());
                   double double_drawer_face_down_distace  = double.parse(drawer_face_down_distace_controller.text.toString());
+                  double double_drawer_slide_height   = double.parse(drawer_slide_height_controller.text.toString());
 
                   double double_drawer_box_depth =
                   double.parse(drawer_box_depth.text.toString());
@@ -443,6 +446,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                       double_drawer_face_down_distace,
 
                       double_slide_side_gap,
+                      double_drawer_slide_height,
                       front_gape
                   );
 
@@ -648,8 +652,41 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                       ),
                     ),
                   ],
+                ), SizedBox(
+                  height: 6,
                 ),
-                SizedBox(
+
+                ///drawer_slide_height
+                Row(
+                  children: [
+                    Text('slide height from down'),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Container(
+                      width: 80,
+                      height: 30,
+                      child: TextFormField(
+                        onChanged: (_) {
+                          // bottom_changed();
+                        },
+                        enabled: true,
+
+                        controller: drawer_slide_height_controller,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        validator: (d) {
+                          if (d!.isEmpty) {
+                            return 'add value please';
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ), SizedBox(
                   height: 6,
                 ),
 

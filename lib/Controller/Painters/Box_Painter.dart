@@ -153,9 +153,9 @@ class Box_Painter extends CustomPainter {
 
       Piece_model piece_model = box_model.box_pieces[i];
 
-      if(piece_model.piece_name.contains("Helper")){
-        continue;
-      }
+      // if(piece_model.piece_name.contains("Helper")){
+      //   continue;
+      // }
       Selected_Face selected_face=Selected_Face("100", 5);
       if (selected_faces.value.length>0) {
          selected_face = selected_faces.value.first;

@@ -136,7 +136,7 @@ class _Setting_PageState extends State<Setting_Page> {
                         setState(() {});
                       },
                       child: Container(
-                        width: Flexible_Shelves ? 150 : 100,
+                        width: Flexible_Shelves ? 150 : 150,
                         height: Flexible_Shelves ? 65 : 45,
                         color: Flexible_Shelves
                             ? Colors.teal[300]

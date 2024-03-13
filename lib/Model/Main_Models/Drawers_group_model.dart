@@ -54,6 +54,7 @@ late bool inner_drawer;
       this.drawer_face_up_distace,
       this.drawer_face_down_distace,
       this.side_gap,
+      this.drawer_slide_height,
       this.front_gape);
 
   add_drawer()
@@ -64,7 +65,6 @@ late bool inner_drawer;
     
 
     double deferent_between_face_Y_and_box_y=drawer_face_down_distace;
-     drawer_slide_height=44;
 
     var inner =
     draw_controller.box_repository.box_model.value.box_pieces[inner_id];
@@ -298,9 +298,10 @@ late bool inner_drawer;
       "Helper",
       drawer_box_depth,
       side_gap/2,
-      drawer_slide_height,
+      44,
 
-      Point_model(box_origin.x_coordinate-side_gap/2, box_origin.y_coordinate, box_origin.z_coordinate-0.1),
+      Point_model(box_origin.x_coordinate-side_gap/2,drawer_slide_height+ box_origin.y_coordinate-22,
+          box_origin.z_coordinate-0.1),
    );
 
     /// right side slider
@@ -311,11 +312,11 @@ late bool inner_drawer;
       "Helper",
       drawer_box_depth,
       side_gap/2,
-      drawer_slide_height,
+      44,
 
       Point_model(
           box_origin.x_coordinate + box_width ,
-          box_origin.y_coordinate,
+          drawer_slide_height+  box_origin.y_coordinate-22,
           box_origin.z_coordinate-0.1),
    );
 
