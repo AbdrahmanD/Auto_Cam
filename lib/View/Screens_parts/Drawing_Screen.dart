@@ -66,7 +66,7 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
           },
           onPointerDown: (v) {
             if(shift_hold){
-              draw_controller.selected_id.value=[];
+              draw_controller.selected_pieces.value=[];
 
             }else{
               draw_controller.select_piece(v.localPosition);

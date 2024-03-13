@@ -310,7 +310,7 @@ class _View_optionState extends State<View_option> {
                   child: Column(
                     children: [
                       /// selected piece
-                      (draw_controller.selected_id.value.length!= 0 && draw_controller.selected_faces.length == 0)
+                      (draw_controller.selected_pieces.value.length!= 0 && draw_controller.selected_faces.length == 0)
                           ?
 
                         ///selected piece
@@ -459,14 +459,9 @@ class _View_optionState extends State<View_option> {
                                 InkWell(
                                   onTap: () {
                                     for (int i = 0;
-                                    i < draw_controller.selected_id.length;
+                                    i < draw_controller.selected_pieces.length;
                                     i++) {
-                                      Piece_model p = draw_controller
-                                          .box_repository
-                                          .box_model
-                                          .value
-                                          .box_pieces[
-                                      draw_controller.selected_id[i]];
+                                      Piece_model p =  draw_controller.selected_pieces[i] ;
 
                                       p.material_name =
                                           new_material_name.text.toString();
@@ -494,7 +489,8 @@ class _View_optionState extends State<View_option> {
                                           .remove(p);
 
                                       if(p.piece_name.contains("Door")){
-                                        draw_controller.add_door(Door_Model(1, p.piece_thickness, p.material_name, draw_controller.selected_id[i], 0, 0, 0, 0, 0, "R",false,false
+                                        draw_controller.add_door(Door_Model(1, p.piece_thickness,
+                                            p.material_name, draw_controller.selected_pieces[i], 0, 0, 0, 0, 0, "R",false,false
                                         ));
                                       }else{
                                         draw_controller.box_repository.box_model
@@ -504,7 +500,7 @@ class _View_optionState extends State<View_option> {
 
                                     }
 
-                                    draw_controller.selected_id.value = [];
+                                    draw_controller.selected_pieces.value = [];
                                   },
                                   child: Container(
                                     width: 70,
@@ -980,7 +976,8 @@ class _View_optionState extends State<View_option> {
                                 .box_repository.box_model.value.box_pieces.length,
                             itemBuilder: (context, i) {
                               bool selected_piece=false;
-                              if(draw_controller.selected_id.value.contains(i)){
+                              if(draw_controller.selected_pieces.value.contains(draw_controller
+                                  .box_repository.box_model.value.box_pieces[i])){
                                 selected_piece=true;
                               }
                               if (
@@ -1003,10 +1000,16 @@ class _View_optionState extends State<View_option> {
                                                  onChanged: (v){
 
                                                    if(selected_piece){
-                                                     draw_controller.selected_id.value.remove(i);
+                                                     draw_controller.selected_pieces.value.remove(
+                                                         draw_controller
+                                                             .box_repository.box_model.value.box_pieces[i]
+                                                     );
                                                    }
                                                    else{
-                                                     draw_controller.selected_id.value.add(i);
+                                                     draw_controller.selected_pieces.value.add(
+                                                         draw_controller
+                                                             .box_repository.box_model.value.box_pieces[i]
+                                                     );
 
                                                    }
 

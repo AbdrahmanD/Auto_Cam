@@ -1,5 +1,6 @@
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
+import 'package:auto_cam/Model/Main_Models/Group_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:get/get.dart';
@@ -287,6 +288,8 @@ late bool inner_drawer;
             box_origin.z_coordinate+drawer_box_material_thickness),
          );
 
+    Group_model drawer_base_panel=Group_model([drawer_box_base_panel,drawer_box_base_panel_Helper]);
+    draw_controller.box_repository.box_model.value.box_groups.add(drawer_base_panel);
 
 
 
@@ -321,7 +324,9 @@ late bool inner_drawer;
    );
 
 
+    Group_model drawer_sildes=Group_model([drawer_right_slider,drawer_left_slider]);
 
+    draw_controller.box_repository.box_model.value.box_groups.add(drawer_sildes);
 
     drawer_box.add(drawer_box_left);
     drawer_box.add(drawer_box_right);

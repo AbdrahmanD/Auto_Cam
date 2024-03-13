@@ -12,7 +12,7 @@ class Box_Painter extends CustomPainter {
   late double drawing_scale;
   late Size screen_Size;
   late int hover_id;
-  late RxList selected_id;
+  late RxList selected_pieces;
   late RxList selected_faces;
 
   late String view_port;
@@ -28,7 +28,7 @@ class Box_Painter extends CustomPainter {
       this.drawing_scale,
       this.screen_Size,
       this.hover_id,
-      this.selected_id,
+      this.selected_pieces,
       this.selected_faces,
       this.view_port,
       this.start_select_window,
@@ -305,8 +305,8 @@ class Box_Painter extends CustomPainter {
 
 
 
-      for(int s=0;s<selected_id.length;s++){
-        if (i == selected_id[s]) {
+      for(int s=0;s<selected_pieces.length;s++){
+        if (piece_model == selected_pieces[s]) {
           // if (piece_model.piece_name != 'inner' && piece_model.piece_name != 'Door') {
 
             canvas.drawPath(path, selected_pieces_filler);

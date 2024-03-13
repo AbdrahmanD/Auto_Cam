@@ -1,7 +1,7 @@
 import 'dart:math';
 
  import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
- import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
+import 'package:auto_cam/Model/Main_Models/Group_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
  import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +22,7 @@ class Box_model {
  late bool   is_back_panel;
  late Point_model box_origin;
    List<Piece_model> box_pieces=[];
+   List<Group_model> box_groups=[];
    List<Piece_model> box_deleted_pieces=[];
    int piece_id=0;
 
