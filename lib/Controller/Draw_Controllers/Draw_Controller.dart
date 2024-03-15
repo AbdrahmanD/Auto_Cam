@@ -1076,7 +1076,10 @@ class Draw_Controller extends GetxController {
     drawing_origin.x_coordinate += dx;
     drawing_origin.y_coordinate += dy;
     drawing_origin.z_coordinate += dz;
-
+for(Piece_model p in box_repository.box_model.value.box_pieces){
+  selected_pieces.add(p);
+}
+    move_piece(x_move_value/100, y_move_value/100);
     draw_Box();
 
   }

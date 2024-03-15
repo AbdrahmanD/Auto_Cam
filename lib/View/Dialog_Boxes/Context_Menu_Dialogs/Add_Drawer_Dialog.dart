@@ -43,6 +43,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
   TextEditingController front_gape_controller    = TextEditingController();
 
   bool inner_drawer = false;
+  bool double_face = true;
 
   inner_drawer_changed(){
     if(!inner_drawer){
@@ -89,7 +90,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
   Widget build(BuildContext context) {
     return Container(
       width: 1000,
-      height: 450,
+      height: 550,
       child: Row(
         children: [
           SizedBox(width: 16,),
@@ -447,6 +448,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
 
                       double_slide_side_gap,
                       double_drawer_slide_height,
+                      double_face,
                       front_gape
                   );
 
@@ -480,7 +482,7 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
 
           Container(
             width: 282,
-            height: 500,
+            height: 600,
             child: Column(
               children: [
                 Row(
@@ -622,6 +624,12 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                   height: 6,
                 ),
 
+
+                Divider(height: 4,color: Colors.black,),
+                SizedBox(
+                  height: 6,
+                ),
+
                 /// under base  thickness
                 Row(
                   children: [
@@ -690,7 +698,6 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                   height: 6,
                 ),
 
-                Divider(height: 4,color: Colors.black,),
                 SizedBox(
                   height: 6,
                 ),
@@ -769,6 +776,29 @@ class _Add_Drawer_DialogState extends State<Add_Drawer_Dialog> {
                 ),
 
 
+
+                ///  double face ?
+                Container(width: 200,height: 50,
+                  child: Row(
+                    children: [
+                      Text("double face"),
+                      SizedBox(width: 12,),
+                      Checkbox(value: double_face, onChanged: (v){
+
+double_face=!double_face;                        setState(() {
+
+                        });
+                      }),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 12,),
+
+
+                Divider(height: 4,color: Colors.black,),
+                SizedBox(
+                  height: 6,
+                ),
 
 
 

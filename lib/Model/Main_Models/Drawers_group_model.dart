@@ -31,6 +31,7 @@ late bool inner_drawer;
 
   late double side_gap;
   late  double drawer_slide_height;
+  late bool double_face ;
   late  double front_gape;
 
 
@@ -56,6 +57,7 @@ late bool inner_drawer;
       this.drawer_face_down_distace,
       this.side_gap,
       this.drawer_slide_height,
+      this.double_face,
       this.front_gape);
 
   add_drawer()
@@ -266,11 +268,17 @@ late bool inner_drawer;
         'H',
         "MDF",
 
-        drawer_box_depth-20,drawer_box_front.piece_width + 20,
+double_face?
+(drawer_box_depth-drawer_box_material_thickness+2*grove_depth-1):
+(drawer_box_depth-2*drawer_box_material_thickness+2*grove_depth-1),
+
+      drawer_box_front.piece_width +2*grove_depth+1,
         drawer_base_material_thickness,
-        Point_model(box_origin.x_coordinate + drawer_box_material_thickness-10,
+        Point_model(box_origin.x_coordinate + drawer_box_material_thickness- drawer_box_material_thickness+ grove_depth+0.5,
             box_origin.y_coordinate+drawer_under_base_thickness,
-            box_origin.z_coordinate+drawer_box_material_thickness-grove_depth),
+           double_face?(box_origin.z_coordinate+drawer_box_material_thickness-grove_depth+0.5):
+           (box_origin.z_coordinate-2-grove_depth+0.5)
+        ),
          );
 
 
@@ -280,12 +288,13 @@ late bool inner_drawer;
         'H',
         "MDF",
 
-        drawer_box_depth-2*drawer_box_material_thickness ,
+        double_face?(drawer_box_depth-2*drawer_box_material_thickness ):(drawer_box_depth-drawer_box_material_thickness ),
       drawer_box_front.piece_width  ,
         drawer_base_material_thickness,
         Point_model(box_origin.x_coordinate + drawer_box_material_thickness,
             box_origin.y_coordinate+drawer_under_base_thickness,
-            box_origin.z_coordinate+drawer_box_material_thickness),
+        double_face?(box_origin.z_coordinate+drawer_box_material_thickness):(box_origin.z_coordinate-2)
+        ),
          );
 
     Group_model drawer_base_panel=Group_model([drawer_box_base_panel,drawer_box_base_panel_Helper]);
@@ -330,7 +339,9 @@ late bool inner_drawer;
 
     drawer_box.add(drawer_box_left);
     drawer_box.add(drawer_box_right);
-    drawer_box.add(drawer_box_front);
+    if (double_face) {
+      drawer_box.add(drawer_box_front);
+    }
     drawer_box.add(drawer_box_back);
 
     drawer_box.add(drawer_box_base_panel);

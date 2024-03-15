@@ -1151,6 +1151,7 @@ Map<String, dynamic> toJson() {
 
   add_single_door_pattern(Door_Model door_model) {
 
+   late Piece_model door_Hinges_Helper;
     Piece_model door_inner = box_pieces[door_model.inner_id];
 
     double right_thickness =(door_model.inner_door)? (-door_model.right_gap):(init_material_thickness - door_model.right_gap);
@@ -1224,18 +1225,17 @@ Map<String, dynamic> toJson() {
           (door_inner.piece_origin.z_coordinate+door_model.material_thickness)
 
       );
-      Piece_model door_Hinges_Helper = Piece_model(
+        door_Hinges_Helper = Piece_model(
         "${id}_h",
         'Door_Helper',
         'F',
-        "inner",
+        "Helper",
         hw,
         hh,
         hth,
         door_helper_origin,
       );
       box_pieces.add(door_Hinges_Helper);
-
 
     }
    else if(door_model.direction=="L"){
@@ -1249,11 +1249,11 @@ Map<String, dynamic> toJson() {
       );
 
 
-      Piece_model door_Hinges_Helper = Piece_model(
+        door_Hinges_Helper = Piece_model(
         "${id}_h",
         'Door_Helper',
         'F',
-        "inner",
+        "Helper",
         hw,
         hh,
         hth,
@@ -1274,11 +1274,11 @@ Map<String, dynamic> toJson() {
            door_inner.piece_origin.z_coordinate +door_model.material_thickness
        );
 
-       Piece_model door_Hinges_Helper = Piece_model(
+         door_Hinges_Helper = Piece_model(
          "${id}_h_door",
          'Door_Helper',
          'F',
-         "inner",
+         "Helper",
          18,
          door_hight,
          30,
@@ -1298,11 +1298,11 @@ Map<String, dynamic> toJson() {
        );
 
 
-       Piece_model door_Hinges_Helper = Piece_model(
+         door_Hinges_Helper = Piece_model(
          "${id}_h_door",
          'Door_Helper',
          'F',
-         "inner",
+         "Helper",
          18,
          door_hight,
          30,
@@ -1311,10 +1311,16 @@ Map<String, dynamic> toJson() {
 
        box_pieces.add(door_Hinges_Helper);
 
+
      }
 
    }
-    box_pieces.add(door_piece);
+   box_pieces.add(door_piece);
+
+    Group_model door_grope=Group_model([door_piece,door_Hinges_Helper]);
+    box_groups.add(door_grope);
+
+
 
   }
 
@@ -1475,7 +1481,7 @@ Map<String, dynamic> toJson() {
     "{$id2}_h",
     'Door_Helper',
     'F',
-      "inner",
+      "Helper",
     hw,
     hh,
     hth,
@@ -1502,7 +1508,7 @@ Map<String, dynamic> toJson() {
     "${id}_h",
     'Door_Helper',
     'F',
-      "inner",
+      "Helper",
     hw,
     hh,
     hth,
@@ -1514,6 +1520,7 @@ Map<String, dynamic> toJson() {
 
 
     if (door_model.inner_door) {
+
       Point_model r_door_helper_origin = Point_model(
           door_inner.piece_origin.x_coordinate +door_inner.piece_width -door_model.right_gap-32.5,
           door_inner.piece_origin.y_coordinate +door_model.down_gap,
@@ -1524,7 +1531,7 @@ Map<String, dynamic> toJson() {
         "${id}_h_door",
         'Door_Helper',
         'F',
-        "inner",
+        "Helper",
         18,
         door_hight,
         30,
@@ -1546,7 +1553,7 @@ Map<String, dynamic> toJson() {
         "${id}_h_door",
         'Door_Helper',
         'F',
-        "inner",
+        "Helper",
         18,
         door_hight,
         30,
@@ -1554,6 +1561,15 @@ Map<String, dynamic> toJson() {
       );
 
       box_pieces.add(l_door_Hinges_Helper);
+
+
+      Group_model l_door_grope=Group_model([door_piece_1,l_door_Hinges_Helper]);
+      box_groups.add(l_door_grope);
+
+      Group_model r_door_grope=Group_model([door_piece_2,r_door_Hinges_Helper]);
+      box_groups.add(r_door_grope);
+
+
     }
 
 
