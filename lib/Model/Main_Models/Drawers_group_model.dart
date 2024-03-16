@@ -269,22 +269,22 @@ late bool inner_drawer;
         "MDF",
 
 double_face?
-(drawer_box_depth-drawer_box_material_thickness+2*grove_depth-1):
-(drawer_box_depth-2*drawer_box_material_thickness+2*grove_depth-1),
+(drawer_box_depth-2*drawer_box_material_thickness+2*grove_depth-1):
+(drawer_box_depth-drawer_box_material_thickness+2*grove_depth-1),
 
       drawer_box_front.piece_width +2*grove_depth+1,
         drawer_base_material_thickness,
-        Point_model(box_origin.x_coordinate + drawer_box_material_thickness- drawer_box_material_thickness+ grove_depth+0.5,
+        Point_model(box_origin.x_coordinate + drawer_box_material_thickness-  grove_depth+0.5,
             box_origin.y_coordinate+drawer_under_base_thickness,
            double_face?(box_origin.z_coordinate+drawer_box_material_thickness-grove_depth+0.5):
-           (box_origin.z_coordinate-2-grove_depth+0.5)
+           (box_origin.z_coordinate-grove_depth+0.5)
         ),
          );
 
 
     Piece_model drawer_box_base_panel_Helper = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("Helper"),
-        'drawer ${drawer_id} back_panel_Helper',
+        'drawer back_panel_Helper',
         'H',
         "MDF",
 
@@ -293,7 +293,7 @@ double_face?
         drawer_base_material_thickness,
         Point_model(box_origin.x_coordinate + drawer_box_material_thickness,
             box_origin.y_coordinate+drawer_under_base_thickness,
-        double_face?(box_origin.z_coordinate+drawer_box_material_thickness):(box_origin.z_coordinate-2)
+        double_face?(box_origin.z_coordinate+drawer_box_material_thickness):(box_origin.z_coordinate)
         ),
          );
 

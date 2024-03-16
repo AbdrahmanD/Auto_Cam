@@ -83,6 +83,11 @@ class Box_model {
     box_pieces = <Piece_model>[];
   json['box_pieces'].forEach((v) { box_pieces!.add(new Piece_model.fromJson(v)); });
   }
+  if (json['box_groups'] != null) {
+    box_groups = <Group_model>[];
+  json['box_groups'].forEach((v) { box_groups!.add( Group_model.from_json(v)); });
+
+  }
     piece_id = json['piece_id'];
 }
 
@@ -105,6 +110,9 @@ Map<String, dynamic> toJson() {
   }
   if (this.box_pieces != null) {
     data['box_pieces'] = this.box_pieces!.map((v) => v.toJson()).toList();
+  }
+  if (this.box_groups != null) {
+    data['box_groups'] = this.box_groups!.map((v) => v.toJson()).toList();
   }
   data['piece_id'] = this.piece_id;
   return data;

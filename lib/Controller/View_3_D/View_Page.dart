@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/View_3_D/transform_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,10 @@ class _View_PageState extends State<View_Page> {
   late Size screen_size;
 
   late transform_controller transfomer = transform_controller(screen_size);
+  Draw_Controller draw_controller = Get.find();
 
+  double x_move=0;
+  double y_move=0;
 
   bool shift_hold = false;
   bool alt_hold = false;
@@ -74,9 +78,9 @@ class _View_PageState extends State<View_Page> {
 
               if (event is PointerScrollEvent) {
 
-                if ((transfomer.scale + event.scrollDelta.dy / 1000) > 0.5 &&
-                    (transfomer.scale + event.scrollDelta.dy / 1000) < 100) {
-                  transfomer.scale += event.scrollDelta.dy / 500;
+                if ((draw_controller.drawing_scale.value + event.scrollDelta.dy / 1000) > 0.5 &&
+                    (draw_controller.drawing_scale.value + event.scrollDelta.dy / 1000) < 100) {
+                  draw_controller.drawing_scale.value+= event.scrollDelta.dy / 500;
 
                   setState(() {});
                 }
@@ -94,6 +98,10 @@ class _View_PageState extends State<View_Page> {
 
                 if (!shift_hold && !alt_hold) {
                   if(plane=='X_Y'){
+
+                    x_move+=v.delta.dx/draw_controller.drawing_scale.value;
+                    y_move+=v.delta.dy/draw_controller.drawing_scale.value;
+
                     transfomer.move(-v.delta.dx , v.delta.dy, 0);
                     setState(() {});
                   }
@@ -129,7 +137,9 @@ class _View_PageState extends State<View_Page> {
                 Get.defaultDialog(
                     radius: 12,
                     title: "offset",
-                    content: Text("X:${v.localPosition.dx-box_X} , Y:${v.localPosition.dy-box_Y}")
+                    content: Text(""
+                        "  X:${(v.localPosition.dx-box_X)/draw_controller.drawing_scale.value-x_move} "
+                        ", Y:${(box_Y-v.localPosition.dy)/draw_controller.drawing_scale.value+y_move}")
                 );
               },
 

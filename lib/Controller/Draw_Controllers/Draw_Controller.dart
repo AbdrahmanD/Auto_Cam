@@ -25,11 +25,11 @@ import 'package:path_provider/path_provider.dart';
 import '../../View/Dialog_Boxes/Context_Menu_Dialogs/Out_Box_Menu.dart';
 
 class Draw_Controller extends GetxController {
-  List<Box_model> box_history = [];
-  List<Box_model> deleted_box_history = [];
-  int cursor = 0;
 
-  RxDouble drawing_scale = (0.9).obs;
+
+  RxDouble drawing_scale = (1.0).obs;
+
+
   Rx<Size> screen_size = Size(800, 600).obs;
   Rx<Offset> mouse_position = Offset(0, 0).obs;
 
@@ -104,7 +104,8 @@ class Draw_Controller extends GetxController {
       start_select_window.value = Offset(sx, sy);
 
       end_select_window.value = Offset(ex, ey);
-    } else {
+    }
+    else {
       start_select_window.value = Offset(0, 0);
       end_select_window.value = Offset(0, 0);
     }
@@ -268,29 +269,28 @@ class Draw_Controller extends GetxController {
   ///
 
   select_piece(Offset offset) {
-
     bool piece_in_group = false;
 
     Group_model group_model = Group_model([]);
 
     if (hover_id != 100) {
+      Piece_model hovered_piece =
+          box_repository.box_model.value.box_pieces[hover_id];
 
-      Piece_model hovered_piece = box_repository.box_model.value.box_pieces[hover_id];
-
-
-      if (
-          !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('inner') &&
+      if (!box_repository.box_model.value.box_pieces[hover_id].piece_name
+              .contains('inner') &&
           // !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('Helper') &&
-          !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('back_panel')
-      ) {
-
+          !box_repository.box_model.value.box_pieces[hover_id].piece_name
+              .contains('back_panel')) {
         if (!selected_pieces.contains(hovered_piece)) {
-
-
-          for (int g = 0; g < box_repository.box_model.value.box_groups.length; g++) {
-            for (int p = 0; p < box_repository.box_model.value.box_groups[g].pieces.length; p++) {
-              Piece_model piece = box_repository.box_model.value.box_groups[g].pieces[p];
-
+          for (int g = 0;
+              g < box_repository.box_model.value.box_groups.length;
+              g++) {
+            for (int p = 0;
+                p < box_repository.box_model.value.box_groups[g].pieces.length;
+                p++) {
+              Piece_model piece =
+                  box_repository.box_model.value.box_groups[g].pieces[p];
 
               if (piece.piece_id == hovered_piece.piece_id) {
                 piece_in_group = true;
@@ -305,19 +305,15 @@ class Draw_Controller extends GetxController {
               Piece_model piece = group_model.pieces[fp];
               selected_pieces.add(piece);
             }
-          }
-          else {
+          } else {
             selected_pieces.add(hovered_piece);
           }
-
-
         }
       }
-    }
-    else {
+    } else {
       selected_pieces.value = [];
+      selected_faces.value = [];
     }
-
   }
 
   Box_model get_box() {
@@ -326,9 +322,7 @@ class Draw_Controller extends GetxController {
 
   Box_Painter draw_Box() {
     Box_model box_model = get_box();
-    //
-    // print("box_model.box_pieces.length");
-    // print(box_model.box_pieces.length);
+
     hover_id_find(box_model);
 
     Box_Painter boxPainter = Box_Painter(
@@ -343,6 +337,7 @@ class Draw_Controller extends GetxController {
         end_select_window.value,
         drawing_origin,
         start_corners_points);
+
     return boxPainter;
   }
 
@@ -829,13 +824,11 @@ class Draw_Controller extends GetxController {
       dz = y_move_value;
     }
 
-
     // if (selected_id.length==1) {
     for (int i = 0; i < selected_pieces.length; i++) {
       Piece_model p = selected_pieces[i];
 
       for (int i = 0; i < 4; i++) {
-
         p.piece_faces.faces[4].corners[i].x_coordinate += dx;
         p.piece_faces.faces[4].corners[i].y_coordinate += dy;
         p.piece_faces.faces[4].corners[i].z_coordinate += dz;
@@ -848,18 +841,12 @@ class Draw_Controller extends GetxController {
       p.piece_origin.y_coordinate += dy;
       p.piece_origin.z_coordinate += dz;
 
-
-
-
       box_repository.add_box_to_repo(b);
 
       anlyze_inners();
 
       draw_Box();
     }
-
-
-
   }
 
   ///move_face
@@ -1049,7 +1036,7 @@ class Draw_Controller extends GetxController {
   /// move_box
   move_box(double x_move_value, double y_move_value) {
     ///
-     double dx = 0;
+    double dx = 0;
     double dy = 0;
     double dz = 0;
 
@@ -1076,12 +1063,11 @@ class Draw_Controller extends GetxController {
     drawing_origin.x_coordinate += dx;
     drawing_origin.y_coordinate += dy;
     drawing_origin.z_coordinate += dz;
-for(Piece_model p in box_repository.box_model.value.box_pieces){
-  selected_pieces.add(p);
-}
-    move_piece(x_move_value/100, y_move_value/100);
+    for (Piece_model p in box_repository.box_model.value.box_pieces) {
+      selected_pieces.add(p);
+    }
+    move_piece(x_move_value / 100, y_move_value / 100);
     draw_Box();
-
   }
 
   /// extract executable files with xml extension  to use in this case with kdt drilling machine
@@ -1143,55 +1129,30 @@ for(Piece_model p in box_repository.box_model.value.box_pieces){
         print('Error writing JSON data to the file: $e');
       }
     }
-    add_box_to_history(box_repository.box_model.value);
   }
 
-  add_box_to_history(Box_model b) {
-    box_history.add(b);
-    cursor = box_history.length - 1;
-    box_repository.box_model.value = b;
+  // /// history - undo - redo
+  //
+  // List<Piece_model> deleted_box_history = [];
+  //
+  //
+  //
+  //
+  // undo() {
+  //
+  //     deleted_box_history.add(box_repository.box_model.value.box_pieces.removeAt(box_repository.box_model.
+  //     value.box_pieces.length-1));
+  //
+  //    box_repository.box_model.value.box_pieces.removeAt(box_repository.box_model.value.box_pieces.length-1);
+  //
+  //   draw_Box();
+  // }
+  // redo() {
+  //
+  //
+  // }
 
-    draw_Box();
-
-    //  print("box history = ${box_history.length}");
-    //  print("cursor = ${cursor}");
-    // print("==================");
-  }
-
-  undo() {
-    if (cursor > 0) {
-      Box_model b = box_history[cursor - 1];
-      Box_model deleted_b = box_history[cursor];
-
-      box_repository.box_model.value = b;
-
-      box_history.removeAt(cursor);
-      deleted_box_history.add(deleted_b);
-
-      cursor = box_history.length - 1;
-
-      // print("undo");
-      // print("box history = ${box_history.length}");
-      // print("deleted history = ${deleted_box_history.length}");
-      // print("cursor = ${cursor}");
-      // print("==================");
-    }
-    draw_Box();
-  }
-
-  redo() {
-    if (deleted_box_history.length > 0) {
-      Box_model b = deleted_box_history[deleted_box_history.length - 1];
-      add_box_to_history(b);
-      deleted_box_history.removeAt(deleted_box_history.length - 1);
-
-      // print("redo");
-      // print("box history = ${box_history.length}");
-      // print("deleted history = ${deleted_box_history.length}");
-      // print("cursor = ${cursor}");
-      // print("==================");
-    }
-  }
+  ///   //////////////////////
 
   Future<String> open_File() async {
     String repo_path;
@@ -1696,10 +1657,11 @@ for(Piece_model p in box_repository.box_model.value.box_pieces){
   /// automatic detect inners
 
   anlyze_inners() {
-
     List<Piece_model> old_inners = [];
 
-    for (int ine = 0; ine < box_repository.box_model.value.box_pieces.length; ine++) {
+    for (int ine = 0;
+        ine < box_repository.box_model.value.box_pieces.length;
+        ine++) {
       Piece_model p = box_repository.box_model.value.box_pieces[ine];
       if (p.piece_name.contains("inner")) {
         old_inners.add(p);

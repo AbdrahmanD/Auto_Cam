@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui';
+import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
 import 'package:auto_cam/Controller/View_3_D/CameraTransformer.dart';
 import 'package:auto_cam/Controller/Painters/three_D_Painter.dart';
@@ -11,11 +12,11 @@ import 'package:get/get.dart';
 
 class transform_controller {
 
-  double scale = 0.7;
+  Draw_Controller draw_controller = Get.find();
+  late double scale;
 
   late Point_model camera_position;
 
-  Box_Repository box_repository = Get.find();
 
   double a1=math.pi/24;
   double a2=-math.pi/6;
@@ -25,7 +26,8 @@ class transform_controller {
   late Size screen_size;
 
   transform_controller(this.screen_size ){
-     camera_position=Point_model(screen_size.width/2, screen_size.height/2, 0);
+     camera_position=Point_model(0, 0, 0);
+     // camera_position=Point_model(screen_size.width/2, screen_size.height/2, 0);
   }
 
 
@@ -35,7 +37,10 @@ class transform_controller {
 
 
 
-  three_D_Painter camera_cordinate_draw(Size screen_size  ){
+  three_D_Painter camera_cordinate_draw(Size screen_size ){
+
+    scale=draw_controller.drawing_scale.value;
+
 
     cameraTransformer = CameraTransformer(
         camera_position.x_coordinate, camera_position.y_coordinate, camera_position.z_coordinate,
@@ -48,7 +53,7 @@ class transform_controller {
     // print(a3);
     // print("###########");
 
-    Box_model b=box_repository.box_model.value;
+    Box_model b=draw_controller.box_repository.box_model.value;
 
     Box_model box_model=Box_model(b.box_name, b.box_type, b.box_width, b.box_height, b.box_depth,
         b.init_material_thickness, b.init_material_name, b.back_panel_thickness,

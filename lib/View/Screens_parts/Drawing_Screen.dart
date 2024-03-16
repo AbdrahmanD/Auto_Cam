@@ -20,6 +20,7 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
   Draw_Controller draw_controller = Get.find();
 
   bool shift_hold = false;
+  bool ctr_hold = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +40,17 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
             if (event.isKeyPressed(LogicalKeyboardKey.shiftLeft) ||
                 event.isKeyPressed(LogicalKeyboardKey.shiftRight)) {
               shift_hold = true;
-              // setState(() {});
-            }
-          } else if (event is RawKeyUpEvent) {
-            if (event.isKeyPressed(LogicalKeyboardKey.controlLeft) == false &&
-                event.isKeyPressed(LogicalKeyboardKey.controlRight) == false) {
+              ctr_hold = false;
+               }
+          else  if (event.isKeyPressed(LogicalKeyboardKey.controlLeft) ||
+                event.isKeyPressed(LogicalKeyboardKey.controlRight) ) {
+              ctr_hold = true;
               shift_hold = false;
 
-              // setState(() {});
             }
+
           }
-        },
+         },
         child: Listener(
           onPointerSignal: (PointerSignalEvent event) {
             if (event is PointerScrollEvent) {
@@ -81,16 +82,9 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
               onPanUpdate: (v) {
                 if (shift_hold) {
                   draw_controller.move_box( v.delta.dx, -v.delta.dy) ;
-                  // setState(() {});
-                } else {
-                  // if (!draw_controller.select_window.value) {
-                  //   draw_controller.select_window_method(v.delta);
-                  //   setState(() {
-                  //
-                  //   });
-                  // }
+                }
+                else {
                   draw_controller.select_window_method(v.localPosition,draw_controller.select_window.value);
-
                   setState(() {});
                 }
               },
@@ -100,12 +94,12 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
               onPanEnd: (v){
 
                 draw_controller.select_window.value=false;
-                draw_controller.select_face_via_window();
 
-
-                  // if (shift_hold) {
-                  //   draw_controller.select_piece_via_window();
-                  // }
+                  if (!ctr_hold) {
+                    draw_controller.select_piece_via_window();
+                  }else{
+                    draw_controller.select_face_via_window();
+                  }
 
               },
               onSecondaryTapUp: (v) {

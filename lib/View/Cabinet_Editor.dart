@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Cabinet_Editor extends StatelessWidget {
+
   Draw_Controller draw_controller = Get.find();
 
   late bool active;

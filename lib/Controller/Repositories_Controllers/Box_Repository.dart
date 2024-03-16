@@ -16,9 +16,12 @@ class Box_Repository extends GetxController {
   double pack_panel_grove_depth = 9;
   double pack_panel_distence = 18;
 
+
   Rx<Box_model> box_model = Box_model('box_name', "wall_cabinet", 400, 600, 500,
           18, 'MDF', 5, 9, 18, 100, true, Point_model(0, 0, 0))
       .obs;
+
+
 
   String back_panel_type = "full_cover";
 
@@ -60,6 +63,9 @@ class Box_Repository extends GetxController {
   String project_file_path = '';
 
   List<My_Sheet> repo_sheerts = [];
+
+
+
 
   Box_Repository();
 
