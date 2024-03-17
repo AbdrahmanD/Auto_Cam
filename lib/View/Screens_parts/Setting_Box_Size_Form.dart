@@ -141,26 +141,30 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
               SizedBox(
                 width: 12,
               ),
-              Container(
-                width: 140,
-                height: 50,
-                child: TextFormField(
-                  style: TextStyle(fontSize: 14),
-                  controller: box_name_controller,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (d) {
-                    if (d!.isEmpty) {
-                      return 'please add value';
-                    }
-                  },
-                ),
-              ),
             ],
           ),
+          SizedBox(
+            height: 12,
+          ),
+          Container(
+            width: 140,
+            height: 50,
+            child: TextFormField(
+              style: TextStyle(fontSize: 14),
+              controller: box_name_controller,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              validator: (d) {
+                if (d!.isEmpty) {
+                  return 'please add value';
+                }
+              },
+            ),
+          ),
+
           SizedBox(
             height: 12,
           ),
@@ -405,183 +409,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 6,
           ),
 
-          ///back Panel thickness form field
-          // Row(
-          //   children: [
-          //     SizedBox(
-          //       width: 18,
-          //     ),
-          //     Text(
-          //       "Back Panel :",
-          //       style: TextStyle(fontSize: 14),
-          //     ),
-          //     SizedBox(
-          //       width: 12,
-          //     ),
-          //     Container(
-          //       width: 100,
-          //       height: 26,
-          //       child: TextFormField(
-          //         style: TextStyle(fontSize: 14),
-          //         controller: back_panel_thickness_controller,
-          //         decoration: InputDecoration(
-          //           border: OutlineInputBorder(
-          //             borderRadius: BorderRadius.circular(8),
-          //           ),
-          //         ),
-          //         validator: (d) {
-          //           if (d!.isEmpty) {
-          //             return 'please add value';
-          //           }
-          //         },
-          //         inputFormatters: [DecimalTextInputFormatter(2)],
-          //         keyboardType: TextInputType.numberWithOptions(decimal: true),
-          //       ),
-          //     ),
-          //     Text(
-          //       "  mm",
-          //       style: TextStyle(fontSize: 14),
-          //     ),
-          //   ],
-          // ),
-          // SizedBox(
-          //   height: 6,
-          // ),
-          //
-          // ///pack_panel_grove_depth  form field
-          // Row(
-          //   children: [
-          //     SizedBox(
-          //       width: 18,
-          //     ),
-          //     Text(
-          //       "grove depth:",
-          //       style: TextStyle(fontSize: 14),
-          //     ),
-          //     SizedBox(
-          //       width: 12,
-          //     ),
-          //     Container(
-          //       width: 100,
-          //       height: 26,
-          //       child: TextFormField(
-          //         style: TextStyle(fontSize: 14),
-          //         controller: pack_panel_grove_depth_controller,
-          //         decoration: InputDecoration(
-          //           border: OutlineInputBorder(
-          //             borderRadius: BorderRadius.circular(8),
-          //           ),
-          //         ),
-          //         validator: (d) {
-          //           if (d!.isEmpty) {
-          //             return 'please add value';
-          //           }
-          //         },
-          //         inputFormatters: [DecimalTextInputFormatter(2)],
-          //         keyboardType: TextInputType.numberWithOptions(decimal: true),
-          //       ),
-          //     ),
-          //     Text(
-          //       "  mm",
-          //       style: TextStyle(fontSize: 14),
-          //     ),
-          //   ],
-          // ),
-          // SizedBox(
-          //   height: 6,
-          // ),
-          //
-          // ///pack_panel_distence_controller form field
-          // Row(
-          //   children: [
-          //     SizedBox(
-          //       width: 18,
-          //     ),
-          //     Text(
-          //       "Back distence :",
-          //       style: TextStyle(fontSize: 14),
-          //     ),
-          //     SizedBox(
-          //       width: 12,
-          //     ),
-          //     Container(
-          //       width: 100,
-          //       height: 26,
-          //       child: TextFormField(
-          //         style: TextStyle(fontSize: 14),
-          //         controller: pack_panel_distence_controller,
-          //         decoration: InputDecoration(
-          //           border: OutlineInputBorder(
-          //             borderRadius: BorderRadius.circular(8),
-          //           ),
-          //         ),
-          //         validator: (d) {
-          //           if (d!.isEmpty) {
-          //             return 'please add value';
-          //           }
-          //         },
-          //         inputFormatters: [DecimalTextInputFormatter(2)],
-          //         keyboardType: TextInputType.numberWithOptions(decimal: true),
-          //       ),
-          //     ),
-          //     Text(
-          //       "  mm",
-          //       style: TextStyle(fontSize: 14),
-          //     ),
-          //   ],
-          // ),
-          // SizedBox(
-          //   height: 6,
-          // ),
-          //
-          // ///top_base_piece_width_controller form field
-          // Row(
-          //   children: [
-          //     SizedBox(
-          //       width: 18,
-          //     ),
-          //     Text(
-          //       "filler width :",
-          //       style: TextStyle(fontSize: 14),
-          //     ),
-          //     SizedBox(
-          //       width: 12,
-          //     ),
-          //     Container(
-          //       width: 100,
-          //       height: 26,
-          //       child: TextFormField(
-          //         style: TextStyle(fontSize: 14),
-          //         controller: top_base_piece_width_controller,
-          //         decoration: InputDecoration(
-          //           border: OutlineInputBorder(
-          //             borderRadius: BorderRadius.circular(8),
-          //           ),
-          //         ),
-          //         validator: (d) {
-          //           if (d!.isEmpty) {
-          //             return 'please add value';
-          //           }
-          //         },
-          //         inputFormatters: [DecimalTextInputFormatter(2)],
-          //         keyboardType: TextInputType.numberWithOptions(decimal: true),
-          //       ),
-          //     ),
-          //     Text(
-          //       "  mm",
-          //       style: TextStyle(fontSize: 14),
-          //     ),
-          //   ],
-          // ),
-          // SizedBox(
-          //   height: 6,
-          // ),
-          //
-          // SizedBox(
-          //   height: 12,
-          // ),
 
-          //divider
           Container(
             height: 1,
             color: Colors.grey,
@@ -594,79 +422,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 6,
           ),
 
-          ///chose or Edit fitting type
-          // Container(
-          //   child: Row(
-          //     children: [
-          //       SizedBox(width: 18),
-          //       Container(
-          //           width: 180,
-          //           child: Text('chose or Edit fitting type',
-          //               style: TextStyle(
-          //                 fontSize: 14,
-          //               ))),
-          //       SizedBox(
-          //         width: 18,
-          //       ),
-          //       InkWell(
-          //           onTap: () {},
-          //           child: Icon(
-          //             Icons.draw,
-          //             size: 36,
-          //             color: Colors.teal,
-          //           )),
-          //     ],
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: 6,
-          // ),
-          //
-          // ///divider
-          // Container(
-          //   height: 1,
-          //   color: Colors.grey,
-          // ),
 
-          ///////////////////////
-          // SizedBox(
-          //   height: 6,
-          // ),
-          //
-          //
-          // ///chose is there back panel or not
-          // Container(
-          //   child: Row(
-          //     children: [
-          //       SizedBox(width: 18),
-          //       Container(
-          //           width: 180,
-          //           child: Text('               with back panel ',
-          //               style: TextStyle(
-          //                 fontSize: 14,
-          //               ))),
-          //       SizedBox(
-          //         width: 18,
-          //       ),
-          //       Checkbox(
-          //           value: is_back_panel,
-          //           onChanged: (v) {
-          //             is_back_panel = !is_back_panel;
-          //             setState(() {});
-          //           })
-          //     ],
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: 6,
-          // ),
-
-          //divider
-          // Container(
-          //   height: 1,
-          //   color: Colors.grey,
-          // ),
-          ///////////////////////
           ///Draw in the Screen button
           Padding(
             padding: const EdgeInsets.only(
@@ -758,7 +514,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                   width: 18,
                 ),
                 Container(
-                    width: 180,
+                    width: 120,
                     child: Text('Review cut list  ',
                         style: TextStyle(
                           fontSize: 14,
@@ -782,38 +538,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           ),
 
 
-          ///preview Nesting sheets
-          // Container(
-          //   child: Row(
-          //     children: [
-          //       SizedBox(
-          //         width: 18,
-          //       ),
-          //       Container(
-          //           width: 180,
-          //           child: Text('preview Nesting sheets',
-          //               style: TextStyle(
-          //                 fontSize: 14,
-          //               ))),
-          //       SizedBox(
-          //         width: 18,
-          //       ),
-          //       InkWell(
-          //           onTap: () {
-          //
-          //             nesting_controller.nesting_initilize();
-          //             Get.to(Nesting_View());
-          //
-          //           },
-          //           child: Icon(
-          //             Icons.margin_outlined,
-          //             size: 36,
-          //             color: Colors.teal,
-          //           )),
-          //     ],
-          //   ),
-          // ),
-
           SizedBox(
             height: 12,
           ),
@@ -826,7 +550,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
                   width: 18,
                 ),
                 Container(
-                    width: 180,
+                    width: 120,
                     child: Text('Save cabinet',
                         style: TextStyle(
                           fontSize: 14,
@@ -851,41 +575,6 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 12,
           ),
 
-//           ///undo redo
-//           Container(
-//             child: Row(mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 InkWell(
-//                     onTap: () {
-//                       draw_Controller.undo();
-//                       setState(() {
-//
-//                       });
-//
-//                     },
-//                     child: Icon(
-//                       Icons.undo,
-//                       size: 36,
-//                       color: Colors.teal,
-//                     )),
-//                 SizedBox(
-//                   width: 32,
-//                 ),
-//                 InkWell(
-//                     onTap: () {
-//                       draw_Controller.redo();
-// setState(() {
-//
-// });
-//                     },
-//                     child: Icon(
-//                       Icons.redo,
-//                       size: 36,
-//                       color: Colors.teal,
-//                     )),
-//               ],
-//             ),
-//           ),
 
           SizedBox(
             height: 12,

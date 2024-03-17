@@ -36,11 +36,14 @@ class _View_PageState extends State<View_Page> {
   @override
   Widget build(BuildContext context) {
 
+    double box_X=screen_size.width/2;
+    double box_Y=screen_size.height/2;
+
     return Scaffold(
       body: Container(
         height: screen_size.height,
         width: screen_size.width,
-        color: Colors.grey[200],
+        color: Colors.grey[100],
         child: RawKeyboardListener(
 
           focusNode: FocusNode(),
@@ -91,60 +94,87 @@ class _View_PageState extends State<View_Page> {
             // },
 //
 
-            child: GestureDetector(
+            child: MouseRegion(
 
+              onHover: (v) {
+                double scale=draw_controller.drawing_scale.value;
+                draw_controller.mouse_position.value=
+                    Offset(
+                          (v.localPosition.dx-box_X)/scale-x_move,
+                          -(box_Y-v.localPosition.dy)/scale-y_move,
+                    );
+                draw_controller.hover_id_find();
+                setState(() {
 
-              onPanUpdate: (v) {
+                });
+               },
+              child: GestureDetector(
 
-                if (!shift_hold && !alt_hold) {
-                  if(plane=='X_Y'){
+                onPanUpdate: (v) {
 
-                    x_move+=v.delta.dx/draw_controller.drawing_scale.value;
-                    y_move+=v.delta.dy/draw_controller.drawing_scale.value;
+                  if (!shift_hold && !alt_hold) {
+                    if(plane=='X_Y'){
 
-                    transfomer.move(-v.delta.dx , v.delta.dy, 0);
+                      x_move+=v.delta.dx/draw_controller.drawing_scale.value;
+                      y_move+=v.delta.dy/draw_controller.drawing_scale.value;
+
+                      transfomer.move(-v.delta.dx , v.delta.dy, 0);
+                      setState(() {});
+                    }
+                    else if(plane=='X_Z'){
+                      transfomer.move(-v.delta.dx , 0, v.delta.dy);
+                      setState(() {});
+                    }
+                    else if(plane=='Y_Z'){
+                      transfomer.move( 0,v.delta.dy , -v.delta.dx);
+                      setState(() {});
+                    }
+
+                  }
+                  else if (shift_hold && !alt_hold) {
+                    transfomer.a3 += v.delta.dy / 500;
                     setState(() {});
                   }
-                  else if(plane=='X_Z'){
-                    transfomer.move(-v.delta.dx , 0, v.delta.dy);
+                 else if (alt_hold && !shift_hold) {
+                    transfomer.a2 += v.delta.dx / 500;
                     setState(() {});
                   }
-                  else if(plane=='Y_Z'){
-                    transfomer.move( 0,v.delta.dy , -v.delta.dx);
+                  else if (alt_hold && shift_hold) {
+                    transfomer.a1 += v.delta.dy / 500;
                     setState(() {});
                   }
 
-                }
-                else if (shift_hold && !alt_hold) {
-                  transfomer.a3 += v.delta.dy / 500;
-                  setState(() {});
-                }
-               else if (alt_hold && !shift_hold) {
-                  transfomer.a2 += v.delta.dx / 500;
-                  setState(() {});
-                }
-                else if (alt_hold && shift_hold) {
-                  transfomer.a1 += v.delta.dy / 500;
-                  setState(() {});
-                }
 
+                },
+                onSecondaryTapUp: (v) {
 
-              },
-              onSecondaryTapUp: (v) {
-                double box_X=screen_size.width/2;
-                double box_Y=screen_size.height/2;
+                  // Get.defaultDialog(
+                  //     radius: 12,
+                  //     title: draw_controller.general_list(),
+                  //     content: draw_controller.Context_list());
 
-                Get.defaultDialog(
-                    radius: 12,
-                    title: "offset",
-                    content: Text(""
-                        "  X:${(v.localPosition.dx-box_X)/draw_controller.drawing_scale.value-x_move} "
-                        ", Y:${(box_Y-v.localPosition.dy)/draw_controller.drawing_scale.value+y_move}")
-                );
-              },
+                  Get.defaultDialog(
+                      radius: 12,
+                      title: "hover piece",
 
-              child: Obx(()=> CustomPaint(
-                  painter: transfomer.camera_cordinate_draw(screen_size),
+                      content: Text(""
+                          "   X:${draw_controller.box_repository.box_model.value.box_origin.x_coordinate} "
+                          ",  Y:${draw_controller.box_repository.box_model.value.box_origin.y_coordinate} "
+                          "\n"
+                          // "draw mouse position X=${draw_controller.mouse_position.value.dx} \n"
+                          // "draw mouse position Y=${draw_controller.mouse_position.value.dy} \n"
+                      //     "inner X : ${draw_controller.box_repository.box_model.value.box_pieces[4].piece_origin.x_coordinate}"
+                      //     "inner Y : ${draw_controller.box_repository.box_model.value.box_pieces[4].piece_origin.y_coordinate}"
+                          "hover id = ${draw_controller.hover_id}")
+                  );
+
+                },
+
+                child: Obx(()=> CustomPaint(
+                    painter: transfomer.camera_cordinate_draw(screen_size),
+                  // painter: draw_controller.draw_3_D_painter(),
+
+                ),
                 ),
               ),
             ),

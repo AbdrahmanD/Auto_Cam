@@ -25,7 +25,7 @@ class Cabinet_Editor extends StatelessWidget {
         children: [
           Obx(() => Positioned(
                 top: 0,
-                left: !draw_controller.draw_3_D.value ? 300 : 0,
+                left: 250,
                 child: Container(
                   height: screen_size.height,
                   color: Colors.white54,
@@ -45,15 +45,14 @@ class Cabinet_Editor extends StatelessWidget {
           Positioned(
               top: 0,
               left: 0,
-              child: Obx(
-                () => Container(
-                  width: !draw_controller.draw_3_D.value ? 300 : 0,
+              child: Container(
+                  width: 250 ,
                   height: screen_size.height,
                   color: Colors.grey[300],
-                  child: !draw_controller.draw_3_D.value
-                      ? Setting_Box_Size_Form()
-                      : SizedBox(),
-                ),
+                  child: Setting_Box_Size_Form()
+                // !draw_controller.draw_3_D.value
+                //     ? Setting_Box_Size_Form()
+                //     : View_option(),
               )),
           Positioned(
               top: 0,
@@ -62,7 +61,9 @@ class Cabinet_Editor extends StatelessWidget {
                   width: 250,
                   height: screen_size.height,
                   color: Colors.grey[300],
-                  child: View_option())),
+                  child:View_option(),
+              )
+          ),
         ],
       ),
     );

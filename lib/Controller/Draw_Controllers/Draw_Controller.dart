@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:auto_cam/Controller/Draw_Controllers/AnalyzeJoins.dart';
 import 'package:auto_cam/Controller/Painters/Box_Painter.dart';
+import 'package:auto_cam/Controller/Painters/three_D_Painter.dart';
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/Door_Model.dart';
@@ -60,18 +61,18 @@ class Draw_Controller extends GetxController {
     read_pattern_files();
     read_brands();
 
-    drawing_origin.x_coordinate = screen_size.value.width / 2 -
-        box_repository.box_model.value.box_width * drawing_scale.value / 2;
-    drawing_origin.y_coordinate = screen_size.value.height / 2 +
-        box_repository.box_model.value.box_height * drawing_scale.value / 2;
+    // drawing_origin.x_coordinate = screen_size.value.width / 2 -
+    //     box_repository.box_model.value.box_width * drawing_scale.value / 2;
+    // drawing_origin.y_coordinate = screen_size.value.height / 2 +
+    //     box_repository.box_model.value.box_height * drawing_scale.value / 2;
   }
 
   zoom_all() {
-    drawing_scale.value = 0.3;
-    drawing_origin.x_coordinate = screen_size.value.width / 2 -
-        box_repository.box_model.value.box_width * drawing_scale.value / 2;
-    drawing_origin.y_coordinate = screen_size.value.height / 2 +
-        box_repository.box_model.value.box_height * drawing_scale.value / 2;
+    drawing_scale.value = 1;
+    // drawing_origin.x_coordinate = screen_size.value.width / 2 -
+    //     box_repository.box_model.value.box_width * drawing_scale.value / 2;
+    // drawing_origin.y_coordinate = screen_size.value.height / 2 +
+    //     box_repository.box_model.value.box_height * drawing_scale.value / 2;
 
     draw_Box();
   }
@@ -323,7 +324,7 @@ class Draw_Controller extends GetxController {
   Box_Painter draw_Box() {
     Box_model box_model = get_box();
 
-    hover_id_find(box_model);
+    hover_id_find();
 
     Box_Painter boxPainter = Box_Painter(
         box_model,
@@ -340,6 +341,9 @@ class Draw_Controller extends GetxController {
 
     return boxPainter;
   }
+
+
+
 
   add_Box(Box_model box_model) {
     // box_repository.box_model.value = box_model;
@@ -358,7 +362,9 @@ class Draw_Controller extends GetxController {
 
   /// the first one :
 
-  hover_id_find(Box_model box_model) {
+  int hover_id_find() {
+
+    Box_model box_model=box_repository.box_model.value;
     Point_model my_origin = box_model.box_origin;
     List<Piece_model> box_pieces = box_model.box_pieces;
 
@@ -368,19 +374,23 @@ class Draw_Controller extends GetxController {
       if ((p.piece_name.contains('back_panel') && view_port == "F") ||
           p.piece_name.contains('Door') ||
           p.piece_name.contains('back_panel_Helper') ||
-          (p.piece_name.contains("full_back_panel") && view_port == "F") ||
-          (p.piece_thickness == 0 && p.piece_name != "inner")) {
+          (p.piece_name.contains("full_back_panel") && view_port == "F")
+      ) {
         continue;
-      } else if (check_position(p, my_origin)) {
+      }
+      else if (check_position(p, my_origin)) {
         hover_id = i;
       }
     }
+    return hover_id;
   }
 
   ///the second one :
   bool check_position(Piece_model p, Point_model my_origin) {
     bool is_hover = false;
 
+    // double local_scal_value=drawing_scale.value;
+    double local_scal_value=1.0;
     late double left_down_point_x;
     late double left_down_point_y;
     late double right_up_point_x;
@@ -388,13 +398,13 @@ class Draw_Controller extends GetxController {
 
     if (view_port == 'F') {
       left_down_point_x = (my_origin.x_coordinate +
-          p.piece_faces.faces[4].corners[0].x_coordinate * drawing_scale.value);
+          p.piece_faces.faces[4].corners[0].x_coordinate * local_scal_value);
       left_down_point_y = (my_origin.y_coordinate -
-          p.piece_faces.faces[4].corners[0].y_coordinate * drawing_scale.value);
+          p.piece_faces.faces[4].corners[0].y_coordinate *local_scal_value);
       right_up_point_x = (my_origin.x_coordinate +
-          p.piece_faces.faces[4].corners[2].x_coordinate * drawing_scale.value);
+          p.piece_faces.faces[4].corners[2].x_coordinate * local_scal_value);
       right_up_point_y = (my_origin.y_coordinate -
-          p.piece_faces.faces[4].corners[2].y_coordinate * drawing_scale.value);
+          p.piece_faces.faces[4].corners[2].y_coordinate * local_scal_value);
     } else if (view_port == 'R') {
       left_down_point_x = (my_origin.x_coordinate +
           p.piece_faces.faces[1].corners[0].z_coordinate * drawing_scale.value);

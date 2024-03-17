@@ -266,7 +266,11 @@ class _View_optionState extends State<View_option> {
                   InkWell(
                     onTap: () {
 
+                      draw_controller.draw_3_D.value ?(draw_controller.drawing_scale.value = 1):
                       draw_controller.zoom_all();
+                      setState(() {
+
+                      });
                     },
                     child: Container(
                       width: 112,

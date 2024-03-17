@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
-import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,9 +12,11 @@ late  Box_model box_model;
   late List<LineWithType> lines_with_type;
   late Size screen_size;
   late double scale;
+  late int hover_id;
+  late Offset mouse_position;
 
 
-  three_D_Painter(this.box_model,this.lines_with_type, this.screen_size, this.scale);
+  three_D_Painter(this.box_model,this.lines_with_type, this.screen_size, this.scale,this.hover_id,this.mouse_position);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -24,14 +25,21 @@ late  Box_model box_model;
 
     for(int i=0;i<box_model.box_pieces.length;i++){
       Piece_model p =box_model.box_pieces[i];
-      if(p.piece_name.contains("inner") || p.piece_thickness==0)
-continue;
-      draw_piece(canvas, screen_size,p);
+      if(i==hover_id){
+        draw_hover_piece(canvas, screen_size, p);
 
+      }else {
+        draw_piece(canvas, screen_size, p);
+      }
     }
 
     draw_web(canvas, screen_size);
-
+    draw_text(canvas,
+            "X:${double.parse("${mouse_position.dx*scale}").toStringAsFixed(2)}\n"
+            "Y:${double.parse("${mouse_position.dy*scale}").toStringAsFixed(2)}\n"
+        "scale:${double.parse("${ scale                 }").toStringAsFixed(2)}",
+        Offset(50,50),
+        8,18,Colors.grey);
 
     ///
 
@@ -176,47 +184,38 @@ continue;
     right_path.lineTo(w + p2.x_coordinate * scale, h - p2.y_coordinate * scale);
 
 
+    bool inner=piece_model.piece_name.contains('inner');
+    bool Helper=piece_model.piece_name.contains('Helper');
 
-    Paint front_path_paint = Paint();
-    Paint back_path__paint  = Paint();
-    Paint right_path_paint = Paint();
-    Paint left_path__paint  = Paint();
-    Paint top_path___paint   = Paint();
-    Paint base_path__paint  = Paint();
-
-
-    front_path_paint.style = PaintingStyle.stroke;
-    back_path__paint.style = PaintingStyle.stroke;
-    right_path_paint.style = PaintingStyle.stroke;
-    left_path__paint.style = PaintingStyle.stroke;
-    top_path___paint.style = PaintingStyle.stroke;
-    base_path__paint.style = PaintingStyle.stroke;
+    Paint main_paint = Paint();
+    main_paint.style = PaintingStyle.stroke;
+    main_paint.strokeWidth=1;
 
 
-    front_path_paint.strokeWidth=2;
-    back_path__paint.strokeWidth=2;
-    right_path_paint.strokeWidth=2;
-    left_path__paint.strokeWidth=2;
-    top_path___paint.strokeWidth=2;
-    base_path__paint.strokeWidth=2;
 
-
-    if(piece_model.piece_name.contains('inner') || piece_model.piece_name.contains('Helper')){}
-    else{
-      canvas.drawPath(front_path, front_path_paint);
-      canvas.drawPath(back_path , back_path__paint);
-      canvas.drawPath(right_path, right_path_paint);
-      canvas.drawPath(left_path , left_path__paint);
-      canvas.drawPath(top_path  , top_path___paint);
-      canvas.drawPath(base_path , base_path__paint);
+      canvas.drawPath(front_path, main_paint);
+      canvas.drawPath(back_path , main_paint);
+      canvas.drawPath(right_path, main_paint);
+      canvas.drawPath(left_path , main_paint);
+      canvas.drawPath(top_path  , main_paint);
+      canvas.drawPath(base_path , main_paint);
 
 
       Paint all_paint = Paint();
 
-      all_paint.style = PaintingStyle.fill;
-      // all_paint.strokeWidth=0.5;
-      all_paint.color=Colors.grey;
-      // all_paint.maskFilter=MaskFilter.blur( BlurStyle.inner, 100);
+
+      if(inner){
+        all_paint.color=Colors.blue[100]!;
+
+      }
+      else if(Helper){
+        all_paint.color=Colors.grey;
+
+      }
+      else{
+        all_paint.color=Colors.grey[200]!;
+
+      }
 
       all_paint.blendMode=BlendMode.darken;
 
@@ -232,25 +231,132 @@ continue;
 
 
 
-      canvas.drawPath(front_path,
-          // (selected_face==1 && selected_piece=="left")?selected_paint:
-      all_paint);
-      canvas.drawPath(back_path ,
-          // (selected_face==2 && selected_piece=="left")?selected_paint:
-      all_paint);
-      canvas.drawPath(right_path,
-          // (selected_face==3 && selected_piece=="left")?selected_paint:
-      all_paint);
-      canvas.drawPath(left_path ,
-          // (selected_face==4 && selected_piece=="left")?selected_paint:
-      all_paint);
-      canvas.drawPath(top_path  ,
-          // (selected_face==5 && selected_piece=="left")?selected_paint:
-      all_paint);
-      canvas.drawPath(base_path ,
-          // (selected_face==6 && selected_piece=="left")?selected_paint:
-      all_paint);
-    }
+      canvas.drawPath(front_path, all_paint);
+      canvas.drawPath(back_path ,all_paint);
+      canvas.drawPath(right_path,all_paint);
+      canvas.drawPath(left_path ,all_paint);
+      canvas.drawPath(top_path  , all_paint);
+      canvas.drawPath(base_path , all_paint);
+
+
+
+
+
+  }
+
+draw_hover_piece(Canvas canvas , Size screen_size , Piece_model piece_model ){
+
+    double w = screen_size.width / 2;
+    double h = screen_size.height / 2;
+
+
+    ///
+    Point_model p1 = piece_model.piece_faces.faces[4].corners[0];
+    Point_model p2 = piece_model.piece_faces.faces[4].corners[1];
+    Point_model p3 = piece_model.piece_faces.faces[4].corners[2];
+    Point_model p4 = piece_model.piece_faces.faces[4].corners[3];
+    Point_model p5 = piece_model.piece_faces.faces[5].corners[0];
+    Point_model p6 = piece_model.piece_faces.faces[5].corners[1];
+    Point_model p7 = piece_model.piece_faces.faces[5].corners[2];
+    Point_model p8 = piece_model.piece_faces.faces[5].corners[3];
+
+    Path front_path = Path();
+    Path back_path  = Path();
+    Path right_path = Path();
+    Path left_path  = Path();
+    Path top_path   = Path();
+    Path base_path  = Path();
+
+    front_path.moveTo(w + p1.x_coordinate * scale, h - p1.y_coordinate * scale);
+    front_path.lineTo(w + p2.x_coordinate * scale, h - p2.y_coordinate * scale);
+    front_path.lineTo(w + p3.x_coordinate * scale, h - p3.y_coordinate * scale);
+    front_path.lineTo(w + p4.x_coordinate * scale, h - p4.y_coordinate * scale);
+    front_path.lineTo(w + p1.x_coordinate * scale, h - p1.y_coordinate * scale);
+
+    back_path.moveTo(w + p5.x_coordinate * scale, h - p5.y_coordinate * scale);
+    back_path.lineTo(w + p6.x_coordinate * scale, h - p6.y_coordinate * scale);
+    back_path.lineTo(w + p7.x_coordinate * scale, h - p7.y_coordinate * scale);
+    back_path.lineTo(w + p8.x_coordinate * scale, h - p8.y_coordinate * scale);
+    back_path.lineTo(w + p5.x_coordinate * scale, h - p5.y_coordinate * scale);
+
+    base_path.moveTo(w + p1.x_coordinate * scale, h - p1.y_coordinate * scale);
+    base_path.lineTo(w + p2.x_coordinate * scale, h - p2.y_coordinate * scale);
+    base_path.lineTo(w + p6.x_coordinate * scale, h - p6.y_coordinate * scale);
+    base_path.lineTo(w + p5.x_coordinate * scale, h - p5.y_coordinate * scale);
+    base_path.lineTo(w + p1.x_coordinate * scale, h - p1.y_coordinate * scale);
+
+    top_path.moveTo(w + p4.x_coordinate * scale, h - p4.y_coordinate * scale);
+    top_path.lineTo(w + p3.x_coordinate * scale, h - p3.y_coordinate * scale);
+    top_path.lineTo(w + p7.x_coordinate * scale, h - p7.y_coordinate * scale);
+    top_path.lineTo(w + p8.x_coordinate * scale, h - p8.y_coordinate * scale);
+    top_path.lineTo(w + p4.x_coordinate * scale, h - p4.y_coordinate * scale);
+
+    left_path.moveTo(w + p1.x_coordinate * scale, h - p1.y_coordinate * scale);
+    left_path.lineTo(w + p5.x_coordinate * scale, h - p5.y_coordinate * scale);
+    left_path.lineTo(w + p8.x_coordinate * scale, h - p8.y_coordinate * scale);
+    left_path.lineTo(w + p4.x_coordinate * scale, h - p4.y_coordinate * scale);
+    left_path.lineTo(w + p1.x_coordinate * scale, h - p1.y_coordinate * scale);
+
+    right_path.moveTo(w + p2.x_coordinate * scale, h - p2.y_coordinate * scale);
+    right_path.lineTo(w + p6.x_coordinate * scale, h - p6.y_coordinate * scale);
+    right_path.lineTo(w + p7.x_coordinate * scale, h - p7.y_coordinate * scale);
+    right_path.lineTo(w + p3.x_coordinate * scale, h - p3.y_coordinate * scale);
+    right_path.lineTo(w + p2.x_coordinate * scale, h - p2.y_coordinate * scale);
+
+
+    bool inner=piece_model.piece_name.contains('inner');
+    bool Helper=piece_model.piece_name.contains('Helper');
+
+    Paint main_paint = Paint();
+    main_paint.style = PaintingStyle.stroke;
+    main_paint.strokeWidth=1.5;
+
+
+
+      canvas.drawPath(front_path, main_paint);
+      canvas.drawPath(back_path , main_paint);
+      canvas.drawPath(right_path, main_paint);
+      canvas.drawPath(left_path , main_paint);
+      canvas.drawPath(top_path  , main_paint);
+      canvas.drawPath(base_path , main_paint);
+
+
+      Paint all_paint = Paint();
+
+
+      if(inner){
+        all_paint.color=Colors.teal[100]!;
+
+      }
+      else if(Helper){
+        all_paint.color=Colors.grey;
+
+      }
+      else{
+        all_paint.color=Colors.grey[300]!;
+
+      }
+
+      all_paint.blendMode=BlendMode.darken;
+
+
+
+      Paint selected_paint = Paint()
+      ..style = PaintingStyle.fill
+      ..strokeWidth=0.5
+      ..color=Colors.black;
+
+      int selected_face=1;
+      String selected_piece=piece_model.piece_name;
+
+
+
+      canvas.drawPath(front_path, all_paint);
+      canvas.drawPath(back_path ,all_paint);
+      canvas.drawPath(right_path,all_paint);
+      canvas.drawPath(left_path ,all_paint);
+      canvas.drawPath(top_path  , all_paint);
+      canvas.drawPath(base_path , all_paint);
 
 
 

@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 class transform_controller {
 
   Draw_Controller draw_controller = Get.find();
-  late double scale;
 
   late Point_model camera_position;
 
@@ -37,9 +36,8 @@ class transform_controller {
 
 
 
-  three_D_Painter camera_cordinate_draw(Size screen_size ){
+  three_D_Painter camera_cordinate_draw(Size screen_size  ){
 
-    scale=draw_controller.drawing_scale.value;
 
 
     cameraTransformer = CameraTransformer(
@@ -105,7 +103,8 @@ class transform_controller {
       NLineWithType.add(LineWithType(new_lines, old_line.type, old_line.color));
 
     }
-    three_D_Painter camera_painter=three_D_Painter(box_model,NLineWithType, screen_size, scale);
+    three_D_Painter camera_painter=
+    three_D_Painter(box_model,NLineWithType, screen_size, draw_controller.drawing_scale.value,draw_controller.hover_id,draw_controller.mouse_position.value);
 
 
     return camera_painter;
@@ -165,9 +164,9 @@ class transform_controller {
 
   move(double dx, double dy, double dz){
 
-    camera_position.x_coordinate+=dx/scale;
-    camera_position.y_coordinate+=dy/scale;
-    camera_position.z_coordinate+=dz/scale;
+    camera_position.x_coordinate+=dx/draw_controller.drawing_scale.value;
+    camera_position.y_coordinate+=dy/draw_controller.drawing_scale.value;
+    camera_position.z_coordinate+=dz/draw_controller.drawing_scale.value;
 
   }
 
