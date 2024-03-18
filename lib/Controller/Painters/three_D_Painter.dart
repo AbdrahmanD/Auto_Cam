@@ -25,6 +25,9 @@ late  Box_model box_model;
 
     for(int i=0;i<box_model.box_pieces.length;i++){
       Piece_model p =box_model.box_pieces[i];
+      if(p.piece_name.contains("Helper")){
+        continue;
+      }
       if(i==hover_id){
         draw_hover_piece(canvas, screen_size, p);
 
@@ -209,7 +212,8 @@ late  Box_model box_model;
 
       }
       else if(Helper){
-        all_paint.color=Colors.white70;
+        // all_paint.color=Colors.white70;
+        all_paint.color=Colors.white!;
 
       }
       else{

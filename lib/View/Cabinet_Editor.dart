@@ -54,16 +54,16 @@ class Cabinet_Editor extends StatelessWidget {
                 //     ? Setting_Box_Size_Form()
                 //     : View_option(),
               )),
-          Positioned(
-              top: 0,
-              right: 0,
-              child: Container(
-                  width: 250,
-                  height: screen_size.height,
-                  color: Colors.grey[300],
-                  child:View_option(),
-              )
-          ),
+          // Positioned(
+          //     top: 0,
+          //     right: 0,
+          //     child: Container(
+          //         width: 250,
+          //         height: screen_size.height,
+          //         color: Colors.grey[300],
+          //         child:View_option(),
+          //     )
+          // ),
         ],
       ),
     );

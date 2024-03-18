@@ -47,7 +47,7 @@ class Draw_Controller extends GetxController {
 
   String box_type = "wall_cabinet";
 
-  RxBool draw_3_D = false.obs;
+  RxBool draw_3_D = true.obs;
 
   RxString view_port = 'F'.obs;
 

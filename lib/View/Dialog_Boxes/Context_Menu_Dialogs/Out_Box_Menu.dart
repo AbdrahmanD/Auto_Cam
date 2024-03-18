@@ -1,3 +1,4 @@
+import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/ADD_BOX.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Filler_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Add_Fix_Dialog.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,21 @@ class _Out_Box_MenuState extends State<Out_Box_Menu> {
           ),
         ),
 
-
+        ///add box
+        InkWell(
+          onTap: () {
+            Navigator.of(Get.overlayContext!).pop();
+            Get.defaultDialog(
+                title: 'add BOX',
+                content: ADD_BOX()
+            );
+            // draw_controller.add_door(1.5);
+          },
+          child: Text(
+            'Add BOX',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
 
 
       ],

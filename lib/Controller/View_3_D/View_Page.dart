@@ -289,6 +289,25 @@ class _View_PageState extends State<View_Page> {
               ),
             ),
           ),
+
+
+          InkWell(
+            onTap: () {
+             draw_controller.zoom_all();
+
+              setState(() {});
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Container(
+                width: 50,
+                height: 50,
+                // color: Colors.blueGrey,
+                child: Center(
+                    child: Icon(Icons.zoom_in,size: 36,color: Colors.black,)),
+              ),
+            ),
+          ),
         ],
       ),
     );

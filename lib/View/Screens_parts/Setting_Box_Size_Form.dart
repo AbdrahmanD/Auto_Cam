@@ -22,6 +22,8 @@ class Setting_Box_Size_Form extends StatefulWidget {
 
 class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
 
+  Draw_Controller draw_controller = Get.find();
+
   late Box_model box_model;
 
   bool is_back_panel = true;
@@ -50,6 +52,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
   TextEditingController top_base_piece_width_controller =
       TextEditingController();
 
+
   @override
   void initState() {
     // TODO: implement initState
@@ -73,6 +76,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
         '${draw_Controller.box_repository.top_base_piece_width}';
     is_back_panel=box_model.is_back_panel;
    }
+  int text_size =12;
 
 
   @override
@@ -580,42 +584,218 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
             height: 12,
           ),
 
-          ///analyze
-          // Container(
-          //   child: Row(
-          //     children: [
-          //       SizedBox(
-          //         width: 18,
-          //       ),
-          //       Container(
-          //           width: 180,
-          //           child: Text('analyze',
-          //               style: TextStyle(
-          //                 fontSize: 14,
-          //               ))),
-          //       SizedBox(
-          //         width: 18,
-          //       ),
-          //       InkWell(
-          //           onTap: () {
-          //             draw_Controller.anlyze_inners();
-          //             setState(() {
-          //
-          //             });
-          //           },
-          //           child: Icon(
-          //             Icons.ac_unit,
-          //             size: 36,
-          //             color: Colors.teal,
-          //           )),
-          //     ],
-          //   ),
-          // ),
+          /// list of all pieces
+          Container(height: 400,
+            child: ListView.builder(
+                itemCount: draw_controller
+                    .box_repository.box_model.value.box_pieces.length,
+                itemBuilder: (context, i) {
+                  bool selected_piece=false;
+                  if(draw_controller.selected_pieces.value.contains(draw_controller
+                      .box_repository.box_model.value.box_pieces[i])){
+                    selected_piece=true;
+                  }
+                  if (
+                  !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('inner') ) &&
+                      !(draw_controller.box_repository.box_model.value.box_pieces[i].piece_name.contains('Helper')) &&
+                      (draw_controller.box_repository.box_model.value.box_pieces[i].piece_thickness!=0)
+                  ) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+
+                          /// name and select the piece and material name
+                          Row(
+                            children: [
+                              Container(width: 12,height: 12,
+                                child: Checkbox(value: selected_piece,
 
 
-          SizedBox(
-            height: 24,
-          ),
+                                    onChanged: (v){
+
+                                      if(selected_piece){
+                                        draw_controller.selected_pieces.value.remove(
+                                            draw_controller
+                                                .box_repository.box_model.value.box_pieces[i]
+                                        );
+                                      }
+                                      else{
+                                        draw_controller.selected_pieces.value.add(
+                                            draw_controller
+                                                .box_repository.box_model.value.box_pieces[i]
+                                        );
+
+                                      }
+
+
+                                      setState(() {
+
+                                      });
+                                    }),
+                              ),
+                              SizedBox(width: 8,),
+                              Text(
+                                '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_name}',
+                                style: TextStyle(
+                                    fontSize: text_size*1.24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                ' / ${draw_controller.box_repository.box_model.value.box_pieces[i].material_name}',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 0.5,
+                            width: 100,
+                            color: Colors.grey,
+                          ),
+
+                          ///x y z
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       'X :',
+                          //       style: TextStyle(fontSize: text_size),
+                          //     ),
+                          //     Text(
+                          //       '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.x_coordinate}',
+                          //       style: TextStyle(
+                          //           fontSize: text_size,
+                          //           fontWeight: FontWeight.bold),
+                          //     ),
+                          //   ],
+                          // ),
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       'Y :',
+                          //       style: TextStyle(fontSize: text_size),
+                          //     ),
+                          //     Text(
+                          //       '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate}',
+                          //       style: TextStyle(
+                          //           fontSize: text_size,
+                          //           fontWeight: FontWeight.bold),
+                          //     ),
+                          //   ],
+                          // ),
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       'Z :',
+                          //       style: TextStyle(fontSize: text_size),
+                          //     ),
+                          //     Text(
+                          //       '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate}',
+                          //       style: TextStyle(
+                          //           fontSize: text_size,
+                          //           fontWeight: FontWeight.bold),
+                          //     ),
+                          //   ],
+                          // ),
+
+
+
+                          Container(
+                            height: 0.5,
+                            width: 100,
+                            color: Colors.grey,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'W :',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_width}',
+                                style: TextStyle(fontSize: 12),
+                              ),
+
+                              Text(
+                                ' / H :',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_height}',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                ' / TH :',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                '${draw_controller.box_repository.box_model.value.box_pieces[i].piece_thickness}',
+                                style: TextStyle(fontSize: 12),
+                              ),
+
+
+
+                            ],
+                          ),
+
+                          SizedBox(
+                            height: 6,
+                          ),
+
+                          // /// origin
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       'origin :',
+                          //       style: TextStyle(fontSize: text_size),
+                          //     ),
+                          //     Text(
+                          //       'x=${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.x_coordinate}\n'
+                          //           'y=${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate}\n'
+                          //           'z=${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate}\n',
+                          //       style: TextStyle(fontSize: text_size),
+                          //     ),
+                          //   ],
+                          // ),
+                          // SizedBox(
+                          //   height: 6,
+                          // ),
+
+
+                          Divider(
+                            height: 2,
+                            color: Colors.black,
+                          ),
+
+                          ///
+
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       'X${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.x_coordinate} \n, '
+                          //           'Y:${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.y_coordinate} \n, '
+                          //           'Z:${draw_controller.box_repository.box_model.value.box_pieces[i].piece_origin.z_coordinate} \n',
+                          //       style: TextStyle(fontSize: text_size),
+                          //     ),
+                          //   ],
+                          // ),
+                          // SizedBox(
+                          //   height: 6,
+                          // ),
+                          // Divider(
+                          //   height: 2,
+                          //   color: Colors.black,
+                          // ),
+
+
+
+                        ],
+                      ),
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+                }),
+          )
 
         ],
       ),
