@@ -205,15 +205,15 @@ late  Box_model box_model;
 
 
       if(inner){
-        all_paint.color=Colors.blue[100]!;
+        all_paint.color=Colors.white!;
 
       }
       else if(Helper){
-        all_paint.color=Colors.grey;
+        all_paint.color=Colors.white70;
 
       }
       else{
-        all_paint.color=Colors.grey[200]!;
+        all_paint.color=Colors.grey[300]!;
 
       }
 
@@ -329,11 +329,11 @@ draw_hover_piece(Canvas canvas , Size screen_size , Piece_model piece_model ){
 
       }
       else if(Helper){
-        all_paint.color=Colors.grey;
+        all_paint.color=Colors.blue[100]!;
 
       }
       else{
-        all_paint.color=Colors.grey[300]!;
+        all_paint.color=Colors.blue[200]!;
 
       }
 

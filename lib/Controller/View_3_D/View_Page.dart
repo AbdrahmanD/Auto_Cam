@@ -122,10 +122,14 @@ class _View_PageState extends State<View_Page> {
                       setState(() {});
                     }
                     else if(plane=='X_Z'){
+                      x_move+=v.delta.dx/draw_controller.drawing_scale.value;
+
                       transfomer.move(-v.delta.dx , 0, v.delta.dy);
                       setState(() {});
                     }
                     else if(plane=='Y_Z'){
+                      y_move+=v.delta.dy/draw_controller.drawing_scale.value;
+
                       transfomer.move( 0,v.delta.dy , -v.delta.dx);
                       setState(() {});
                     }
@@ -148,25 +152,27 @@ class _View_PageState extends State<View_Page> {
                 },
                 onSecondaryTapUp: (v) {
 
-                  // Get.defaultDialog(
-                  //     radius: 12,
-                  //     title: draw_controller.general_list(),
-                  //     content: draw_controller.Context_list());
-
                   Get.defaultDialog(
                       radius: 12,
-                      title: "hover piece",
+                      title: draw_controller.general_list(),
+                      content: draw_controller.Context_list());
 
-                      content: Text(""
-                          "   X:${draw_controller.box_repository.box_model.value.box_origin.x_coordinate} "
-                          ",  Y:${draw_controller.box_repository.box_model.value.box_origin.y_coordinate} "
-                          "\n"
-                          // "draw mouse position X=${draw_controller.mouse_position.value.dx} \n"
-                          // "draw mouse position Y=${draw_controller.mouse_position.value.dy} \n"
-                      //     "inner X : ${draw_controller.box_repository.box_model.value.box_pieces[4].piece_origin.x_coordinate}"
-                      //     "inner Y : ${draw_controller.box_repository.box_model.value.box_pieces[4].piece_origin.y_coordinate}"
-                          "hover id = ${draw_controller.hover_id}")
-                  );
+
+                  //
+                  // Get.defaultDialog(
+                  //     radius: 12,
+                  //     title: "hover piece",
+                  //
+                  //     content: Text(""
+                  //         "   X:${draw_controller.box_repository.box_model.value.box_origin.x_coordinate} "
+                  //         ",  Y:${draw_controller.box_repository.box_model.value.box_origin.y_coordinate} "
+                  //         "\n"
+                  //         // "draw mouse position X=${draw_controller.mouse_position.value.dx} \n"
+                  //         // "draw mouse position Y=${draw_controller.mouse_position.value.dy} \n"
+                  //     //     "inner X : ${draw_controller.box_repository.box_model.value.box_pieces[4].piece_origin.x_coordinate}"
+                  //     //     "inner Y : ${draw_controller.box_repository.box_model.value.box_pieces[4].piece_origin.y_coordinate}"
+                  //         "hover id = ${draw_controller.hover_id}")
+                  // );
 
                 },
 
@@ -244,6 +250,7 @@ class _View_PageState extends State<View_Page> {
               transfomer.a3 =0;//y
               transfomer.a2 =0;//x
               plane='X_Y';
+
               setState(() {});
             },
             child: Padding(

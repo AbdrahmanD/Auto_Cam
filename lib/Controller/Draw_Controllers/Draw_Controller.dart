@@ -17,6 +17,7 @@ import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/kdt_file.dart';
 import 'package:auto_cam/Model/Main_Models/Support_Filler.dart';
+import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Edit_Piece_Dialog.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Main_Edit_Dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ import '../../View/Dialog_Boxes/Context_Menu_Dialogs/Out_Box_Menu.dart';
 class Draw_Controller extends GetxController {
 
 
-  RxDouble drawing_scale = (1.0).obs;
+  RxDouble drawing_scale = (0.5).obs;
 
 
   Rx<Size> screen_size = Size(800, 600).obs;
@@ -68,7 +69,7 @@ class Draw_Controller extends GetxController {
   }
 
   zoom_all() {
-    drawing_scale.value = 1;
+    drawing_scale.value = 0.5;
     // drawing_origin.x_coordinate = screen_size.value.width / 2 -
     //     box_repository.box_model.value.box_width * drawing_scale.value / 2;
     // drawing_origin.y_coordinate = screen_size.value.height / 2 +
@@ -470,7 +471,7 @@ class Draw_Controller extends GetxController {
         my_widget = Main_Edit_Dialog();
       } else {
         my_widget = Container(
-          child: Text('pieces menu'),
+          child: Edit_Piece_Dialog(),
         );
       }
     } else {

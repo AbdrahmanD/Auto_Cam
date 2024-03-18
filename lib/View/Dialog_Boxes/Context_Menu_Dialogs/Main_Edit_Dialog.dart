@@ -13,7 +13,12 @@ import 'package:get/get.dart';
 
 class Main_Edit_Dialog extends StatelessWidget {
 
+
   Draw_Controller draw_controller=Get.find();
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
