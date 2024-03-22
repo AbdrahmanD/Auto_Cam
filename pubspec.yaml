@@ -102,6 +102,8 @@ flutter:
     - lib/assets/images/hole.png
     - lib/assets/images/mini_fix_setting.png
     - lib/assets/images/drawer_rail.png
+    - lib/assets/images/red_arrow.png
+    - lib/assets/images/blue_arrow.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

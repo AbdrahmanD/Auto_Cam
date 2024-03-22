@@ -103,8 +103,15 @@ class transform_controller {
       NLineWithType.add(LineWithType(new_lines, old_line.type, old_line.color));
 
     }
+    List selected_pieces=draw_controller.selected_pieces.value;
     three_D_Painter camera_painter=
-    three_D_Painter(box_model,NLineWithType, screen_size, draw_controller.drawing_scale.value,draw_controller.hover_id,draw_controller.mouse_position.value);
+    three_D_Painter(box_model,NLineWithType, screen_size, draw_controller.drawing_scale.value,
+        draw_controller.hover_id,draw_controller.mouse_position.value,selected_pieces,draw_controller.selected_faces,
+    draw_controller.start_select_window.value,draw_controller.end_select_window.value,
+      draw_controller.select_window.value,
+      draw_controller.x_move,
+      draw_controller.y_move,
+    );
 
 
     return camera_painter;

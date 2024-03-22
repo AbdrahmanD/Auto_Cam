@@ -1,9 +1,7 @@
 import 'package:auto_cam/Controller/DecimalTextInputFormatter.dart';
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
-import 'package:auto_cam/Controller/Painters/Filler_View_Painter.dart';
-import 'package:auto_cam/Controller/Painters/Fix_panel_Painter.dart';
-import 'package:auto_cam/Model/Main_Models/Filler_model.dart';
-import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
+ import 'package:auto_cam/Controller/Painters/Fix_panel_Painter.dart';
+ import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

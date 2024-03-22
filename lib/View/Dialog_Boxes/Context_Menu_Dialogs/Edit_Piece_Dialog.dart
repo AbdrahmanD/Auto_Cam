@@ -140,6 +140,12 @@ class _Edit_Piece_DialogState extends State<Edit_Piece_Dialog> {
               y_move_value = 0;
               x_move.text = '0';
               y_move.text = '0';
+              
+              setState(() {
+
+              });
+              Get.back();
+
             },
             child: Container(
               width: 70,
@@ -232,29 +238,6 @@ class _Edit_Piece_DialogState extends State<Edit_Piece_Dialog> {
               ),
             ],
           ),
-          SizedBox(
-            height: 12,
-          ),
-
-
-          ///delete the piece
-          InkWell(
-            onTap: () {
-              draw_controller.delete_piece();
-              Get.back();
-
-            },
-            child: Container(
-              width: 150,
-              height: 32,
-              decoration: BoxDecoration(
-                  color: Colors.red[300],
-                  borderRadius: BorderRadius.circular(4)),
-              child: Center(child: Text('Delete the piece')),
-            ),
-          ),
-
-
           SizedBox(
             height: 12,
           ),

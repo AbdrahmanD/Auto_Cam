@@ -70,8 +70,10 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
               draw_controller.selected_pieces.value=[];
 
             }else{
-              draw_controller.select_piece(v.localPosition);
+              draw_controller.select_piece();
+              setState(() {
 
+              });
             }
           },
           child: MouseRegion(
@@ -94,12 +96,12 @@ class _Drawing_ScreenState extends State<Drawing_Screen> {
               onPanEnd: (v){
 
                 draw_controller.select_window.value=false;
-
-                  if (!ctr_hold) {
-                    draw_controller.select_piece_via_window();
-                  }else{
-                    draw_controller.select_face_via_window();
-                  }
+                  //
+                  // if (!ctr_hold) {
+                  //   draw_controller.select_piece_via_window();
+                  // }else{
+                  //   draw_controller.select_face_via_window();
+                  // }
 
               },
               onSecondaryTapUp: (v) {

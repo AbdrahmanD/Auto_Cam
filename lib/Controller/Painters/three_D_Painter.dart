@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
+import 'package:auto_cam/Model/Main_Models/Faces_model.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,41 +15,88 @@ late  Box_model box_model;
   late double scale;
   late int hover_id;
   late Offset mouse_position;
+  late List  selected_pieces;
+  late List  selected_faces;
 
+late Offset start_select_window;
+late Offset end_select_window  ;
+late bool select_window;
 
-  three_D_Painter(this.box_model,this.lines_with_type, this.screen_size, this.scale,this.hover_id,this.mouse_position);
+late double X_move;
+late double Y_move;
+
+  three_D_Painter(this.box_model,this.lines_with_type, this.screen_size,
+      this.scale,this.hover_id,this.mouse_position,this.selected_pieces,this.selected_faces,this.start_select_window,this
+.end_select_window,this.select_window,this.X_move,this.Y_move);
 
   @override
   void paint(Canvas canvas, Size size) {
     size = screen_size;
 
-
-    for(int i=0;i<box_model.box_pieces.length;i++){
-      Piece_model p =box_model.box_pieces[i];
-      if(p.piece_name.contains("Helper")){
+    for (int i = 0; i < box_model.box_pieces.length; i++) {
+      Piece_model p = box_model.box_pieces[i];
+      if (p.piece_name.contains("Helper")) {
         continue;
       }
-      if(i==hover_id){
+      if (i == hover_id) {
         draw_hover_piece(canvas, screen_size, p);
-
-      }else {
+      } else {
         draw_piece(canvas, screen_size, p);
       }
     }
 
+
     draw_web(canvas, screen_size);
+
     draw_text(canvas,
-            "X:${double.parse("${mouse_position.dx*scale}").toStringAsFixed(2)}\n"
-            "Y:${double.parse("${mouse_position.dy*scale}").toStringAsFixed(2)}\n"
-        "scale:${double.parse("${ scale                 }").toStringAsFixed(2)}",
-        Offset(50,50),
-        8,18,Colors.grey);
+        "X:${double.parse("${mouse_position.dx}").toStringAsFixed(2)}",
+        Offset(400, screen_size.height - 50),
+        8, 18, Colors.grey);
+
+    draw_text(
+        canvas, "Y:${double.parse("${mouse_position.dy}").toStringAsFixed(2)}",
+        Offset(500, screen_size.height - 50),
+        8, 18, Colors.grey);
+
+    draw_text(canvas, "scale:${double.parse("${ scale}").toStringAsFixed(2)}",
+        Offset(600, screen_size.height - 50),
+        8, 18, Colors.grey);
 
     ///
 
+    if (select_window) {
+      draw_select_rect(canvas, screen_size);
+    }
+
+    draw_selected_face(canvas,scale,screen_size,X_move,Y_move);
+
   }
 
+draw_selected_face(Canvas canvas , double scal,Size screen_size , double x_move,double y_move){
+    for(int i=0;i<selected_faces.length;i++){
 
+      Selected_Face face = selected_faces[i];
+      Piece_model p = box_model.box_pieces.firstWhere((element) => element.piece_id==face.piece_id);
+
+      Point_model s=p.piece_faces.faces.firstWhere((element) => element.name==face.face_name).corners[0];
+      Point_model e=p.piece_faces.faces.firstWhere((element) => element.name==face.face_name).corners[2];
+
+      Paint paint=Paint();
+      paint.style=PaintingStyle.stroke;
+      paint.color=Colors.red;
+      paint.strokeWidth=2;
+
+
+
+      canvas.drawLine(
+          Offset(s.x_coordinate*scale+screen_size.width/2+x_move*scale,
+                - s.y_coordinate*scale+screen_size.height/2+y_move*scale),
+          Offset(e.x_coordinate*scale+screen_size.width/2+x_move*scale,
+                - e.y_coordinate*scale+screen_size.height/2+y_move*scale),
+          paint);
+
+    }
+}
 
 
   draw_web  (Canvas canvas , Size screen_size){
@@ -113,6 +161,7 @@ late  Box_model box_model;
                   h-lines[l].end_point .y_coordinate*scale
               ),
               paint);
+
 
 
 
@@ -196,12 +245,6 @@ late  Box_model box_model;
 
 
 
-      canvas.drawPath(front_path, main_paint);
-      canvas.drawPath(back_path , main_paint);
-      canvas.drawPath(right_path, main_paint);
-      canvas.drawPath(left_path , main_paint);
-      canvas.drawPath(top_path  , main_paint);
-      canvas.drawPath(base_path , main_paint);
 
 
       Paint all_paint = Paint();
@@ -227,28 +270,39 @@ late  Box_model box_model;
 
       Paint selected_paint = Paint()
       ..style = PaintingStyle.fill
-      ..strokeWidth=0.5
-      ..color=Colors.black;
+      // ..strokeWidth=1.5
+      ..color=Colors.blue[300]!;
 
       int selected_face=1;
-      String selected_piece=piece_model.piece_name;
+      bool selected_piece=false;
+
+      for(Piece_model  p in selected_pieces){
+        if(p.piece_id==piece_model.piece_id){
+          selected_piece=true;
+        }
+      }
 
 
+      canvas.drawPath(front_path, selected_piece?selected_paint:all_paint);
+      canvas.drawPath(back_path , selected_piece?selected_paint:all_paint);
+      canvas.drawPath(right_path, selected_piece?selected_paint:all_paint);
+      canvas.drawPath(left_path , selected_piece?selected_paint:all_paint);
+      canvas.drawPath(top_path  , selected_piece?selected_paint:all_paint);
+      canvas.drawPath(base_path , selected_piece?selected_paint:all_paint);
 
-      canvas.drawPath(front_path, all_paint);
-      canvas.drawPath(back_path ,all_paint);
-      canvas.drawPath(right_path,all_paint);
-      canvas.drawPath(left_path ,all_paint);
-      canvas.drawPath(top_path  , all_paint);
-      canvas.drawPath(base_path , all_paint);
 
-
+    canvas.drawPath(front_path, main_paint);
+    canvas.drawPath(back_path , main_paint);
+    canvas.drawPath(right_path, main_paint);
+    canvas.drawPath(left_path , main_paint);
+    canvas.drawPath(top_path  , main_paint);
+    canvas.drawPath(base_path , main_paint);
 
 
 
   }
 
-draw_hover_piece(Canvas canvas , Size screen_size , Piece_model piece_model ){
+  draw_hover_piece(Canvas canvas , Size screen_size , Piece_model piece_model ){
 
     double w = screen_size.width / 2;
     double h = screen_size.height / 2;
@@ -368,7 +422,8 @@ draw_hover_piece(Canvas canvas , Size screen_size , Piece_model piece_model ){
 
   }
 
-draw_text(Canvas c, String text, Offset offset, double t_size , int my_text_size , Color color) {
+
+  draw_text(Canvas c, String text, Offset offset, double t_size , int my_text_size , Color color) {
   TextSpan ts = TextSpan(
       text: text, style: TextStyle(fontSize: t_size/10*my_text_size, color: color,fontWeight: FontWeight.bold));
   TextPainter tp = TextPainter(text: ts, textDirection: TextDirection.ltr);
@@ -376,6 +431,34 @@ draw_text(Canvas c, String text, Offset offset, double t_size , int my_text_size
 
   tp.paint(c, offset);
 }
+
+
+draw_select_rect(Canvas canvas ,Size screen_size){
+
+
+  Rect r =Rect.fromPoints(
+     Offset(start_select_window.dx*scale+screen_size.width/2 +X_move*scale,Y_move*scale+screen_size.height/2+ start_select_window.dy*scale) ,
+     Offset(end_select_window.dx  *scale+screen_size.width/2 +X_move*scale,Y_move*scale+screen_size.height/2+  end_select_window.dy *scale)
+     //
+     //  Offset(start_select_window.dx  , start_select_window.dy ) ,
+     //  Offset(end_select_window.dx    ,  end_select_window.dy  )
+  );
+  Paint p = Paint();
+
+
+  p.style =PaintingStyle.fill;
+  p.color=Colors.blueGrey[100]!;
+  p.blendMode=BlendMode.darken;
+  canvas.drawRect(r, p);
+
+
+  p.style =PaintingStyle.stroke;
+  p.strokeWidth=0.5;
+  p.color=Colors.black;
+  canvas.drawRect(r, p);
+
+}
+
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {

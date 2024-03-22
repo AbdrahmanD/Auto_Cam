@@ -139,7 +139,7 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           Row(
             children: [
               SizedBox(
-                width: 16,
+                width: 6,
               ),
               Text(' Box name  :'),
               SizedBox(
@@ -177,14 +177,14 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           Row(
             children: [
               SizedBox(
-                width: 16,
+                width: 6,
               ),
-              Text(' Box Width  :'),
+              Text('Width  :'),
               SizedBox(
                 width: 12,
               ),
               Container(
-                width: 100,
+                width: 132,
                 height: 26,
                 child: TextFormField(
                   style: TextStyle(fontSize: 14),
@@ -217,17 +217,17 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           Row(
             children: [
               SizedBox(
-                width: 18,
+                width: 6,
               ),
               Text(
-                "Box Height :",
+                "Height :",
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(
                 width: 12,
               ),
               Container(
-                width: 100,
+                width: 132,
                 height: 26,
                 child: TextFormField(
                   style: TextStyle(fontSize: 14),
@@ -260,17 +260,17 @@ class _Setting_Box_Size_FormState extends State<Setting_Box_Size_Form> {
           Row(
             children: [
               SizedBox(
-                width: 18,
+                width: 6,
               ),
               Text(
-                "Box depth  : ",
+                "Depth  :",
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(
                 width: 12,
               ),
               Container(
-                  width: 100,
+                  width: 132,
                   height: 26,
                   child: TextFormField(
                     style: TextStyle(fontSize: 14),
