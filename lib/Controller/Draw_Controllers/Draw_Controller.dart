@@ -893,34 +893,14 @@ if(select_window.value){
 
   /// delete piece
   delete_piece() {
+
     Box_model b = box_repository.box_model.value;
+    //
+    // Piece_model p = selected_pieces[0];
+    // if (selected_pieces.length == 1)
+    for(Piece_model p in selected_pieces)
+    {
 
-    Piece_model p = selected_pieces[0];
-    if (selected_pieces.length == 1) {
-      //
-      // ///
-
-      //
-      // if (!(
-      // b.box_pieces[selected_id[0]].piece_name.contains("left") ||
-      // b.box_pieces[selected_id[0]].piece_name.contains("right") ||
-      // b.box_pieces[selected_id[0]].piece_name.contains("top") ||
-      // b.box_pieces[selected_id[0]].piece_name.contains("base")
-      //
-      // )){
-      //
-      //   String inner_1="${b.box_pieces[selected_id[0]].enner_name}_1";
-      //   String inner_2="${b.box_pieces[selected_id[0]].enner_name}_2";
-      //   Piece_model old_inner=b.box_deleted_pieces.
-      //   where((element) => element.piece_name==b.box_pieces[selected_id[0]].enner_name).first;
-      //
-      //   b.box_pieces.removeWhere((element) => element.piece_name==inner_1);
-      //   b.box_pieces.removeWhere((element) => element.piece_name==inner_2);
-      //
-      //
-      //   b.box_pieces .add(old_inner);
-      //
-      // }
 
       box_repository.box_model.value.box_pieces.remove(p);
 
@@ -932,6 +912,7 @@ if(select_window.value){
     selected_pieces.value=[];
     gumball.value=false;
     anlyze_inners();
+
   }
 
 
