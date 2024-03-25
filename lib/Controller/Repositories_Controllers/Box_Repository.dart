@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:auto_cam/Controller/nesting/Nesting_Pieces.dart';
+import 'package:auto_cam/Model/Main_Models/Box_Pieces_Arrang.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
 import 'package:auto_cam/Model/Main_Models/CNC_Tool.dart';
 import 'package:auto_cam/Model/Main_Models/Cut_List_Item.dart';
@@ -12,9 +13,9 @@ import 'package:get/get.dart';
 class Box_Repository extends GetxController {
   double top_base_piece_width = 100;
 
-  double pack_panel_thickness = 5;
+  double pack_panel_thickness = 0;
   double pack_panel_grove_depth = 9;
-  double pack_panel_distence = 18;
+  double pack_panel_distence = 0;
 
 
   Rx<Box_model> box_model = Box_model('box_name', "wall_cabinet", 400, 600, 500,
@@ -79,4 +80,12 @@ class Box_Repository extends GetxController {
   add_box_to_project(Box_model box_model) {
     project_model.boxes.add(box_model);
   }
+
+
+  Box_Pieces_Arrang arrange_box(){
+    Box_Pieces_Arrang box_pieces_arrang =Box_Pieces_Arrang(box_model.value);
+
+    return box_pieces_arrang;
+  }
+
 }

@@ -2,8 +2,10 @@ import 'dart:math' as math;
 
 import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/View_3_D/transform_controller.dart';
+import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/View/Dialog_Boxes/Context_Menu_Dialogs/Gumball.dart';
+import 'package:auto_cam/View/Screens_parts/Box_Pieces_List.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,6 +63,10 @@ class _View_PageState extends State<View_Page> {
           Stack(
             children: [
 
+              /// list of box content
+              Positioned(
+                  left: 0,top: 100,
+                  child: Box_Pieces_List()),
 
 
               /// main drawing canvas
@@ -70,7 +76,7 @@ class _View_PageState extends State<View_Page> {
                 child: Container(
                 height: screen_size.height,
                 width: screen_size.width,
-                color: Colors.grey[100],
+                // color: Colors.grey[100],
                 child: RawKeyboardListener(
                   focusNode: FocusNode(),
                   autofocus: true,
@@ -201,29 +207,30 @@ class _View_PageState extends State<View_Page> {
                           {
 
                           if (plane == 'X_Y') {
-                            draw_controller.x_move +=
-                                v.delta.dx / draw_controller.drawing_scale.value;
-                            draw_controller.y_move +=
-                                v.delta.dy / draw_controller.drawing_scale.value;
+                            draw_controller.x_move += v.delta.dx / draw_controller.drawing_scale.value;
+                            draw_controller.y_move += v.delta.dy / draw_controller.drawing_scale.value;
 
                             transfomer.move(-v.delta.dx, v.delta.dy, 0);
 
                             setState(() {});
                           }
                           else if (plane == 'X_Z') {
-                            draw_controller.  x_move +=
-                                v.delta.dx / draw_controller.drawing_scale.value;
+
+                            draw_controller.x_move += v.delta.dx / draw_controller.drawing_scale.value;
+                            draw_controller.y_move += v.delta.dy / draw_controller.drawing_scale.value;
 
                             transfomer.move(-v.delta.dx, 0, v.delta.dy);
                             setState(() {});
                           }
                           else if (plane == 'Y_Z') {
-                            draw_controller.y_move +=
-                                v.delta.dy / draw_controller.drawing_scale.value;
+                            draw_controller.x_move += v.delta.dx / draw_controller.drawing_scale.value;
+                            draw_controller.y_move += v.delta.dy / draw_controller.drawing_scale.value;
 
                             transfomer.move(0, v.delta.dy, -v.delta.dx);
                             setState(() {});
                           }
+
+
                           }
                         },
 
@@ -327,6 +334,11 @@ class _View_PageState extends State<View_Page> {
                       transfomer.a3 = -math.pi / 2; //x
                       transfomer.a2 = math.pi; //y
                       plane = 'X_Z';
+                      draw_controller.view_port.value="T";
+
+                      transfomer.camera_position=Point_model(0, 0, 0);
+                      draw_controller.x_move=0;
+                      draw_controller.y_move=0;
 
                       setState(() {}); //         setState(() {});
                     },
@@ -355,7 +367,10 @@ class _View_PageState extends State<View_Page> {
                       transfomer.a2 = -math.pi / 2; //y
                       transfomer.a3 = 0; //x
                       plane = 'Y_Z';
-
+                      draw_controller.view_port.value="R";
+                      transfomer.camera_position=Point_model(0, 0, 0);
+                      draw_controller.x_move=0;
+                      draw_controller.y_move=0;
                       setState(() {});
                     },
                     child: Padding(
@@ -385,6 +400,11 @@ class _View_PageState extends State<View_Page> {
                       plane = 'X_Y';
 
                       draw_controller.view_port.value="F";
+
+                      transfomer.camera_position=Point_model(0, 0, 0);
+                      draw_controller.x_move=0;
+                      draw_controller.y_move=0;
+
                       setState(() {});
                     },
                     child: Padding(
@@ -412,6 +432,7 @@ class _View_PageState extends State<View_Page> {
                       transfomer.a2 = -math.pi / 6;
                       transfomer.a3 = math.pi / 12;
                       plane = 'X_Y';
+                      draw_controller.view_port.value="P";
 
                       setState(() {});
                     },
@@ -460,6 +481,8 @@ class _View_PageState extends State<View_Page> {
                   ),
                 ],
               ),),
+
+
 
 
 

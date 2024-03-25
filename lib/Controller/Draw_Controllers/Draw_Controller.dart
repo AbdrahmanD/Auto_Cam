@@ -201,7 +201,6 @@ class Draw_Controller extends GetxController {
 
   select_piece_via_window() {
 
-    // selected_pieces.value = [];
 
 if(select_window.value){
 
@@ -227,34 +226,18 @@ if(select_window.value){
       right_up_point_x =  ( p.piece_faces.faces[4].corners[2].x_coordinate );
       right_up_point_y =  (- p.piece_faces.faces[4].corners[2].y_coordinate );
     }
-    // else if (view_port == 'R') {
-    //   left_down_point_x = (my_origin.x_coordinate +
-    //       p.piece_faces.faces[1].corners[0].z_coordinate *
-    //           drawing_scale.value);
-    //   left_down_point_y = (my_origin.y_coordinate -
-    //       p.piece_faces.faces[1].corners[0].y_coordinate *
-    //           drawing_scale.value);
-    //   right_up_point_x = (my_origin.x_coordinate +
-    //       p.piece_faces.faces[1].corners[2].z_coordinate *
-    //           drawing_scale.value);
-    //   right_up_point_y = (my_origin.y_coordinate -
-    //       p.piece_faces.faces[1].corners[2].y_coordinate *
-    //           drawing_scale.value);
-    // }
-    // else if (view_port == 'T') {
-    //   left_down_point_x = (my_origin.x_coordinate +
-    //       p.piece_faces.faces[0].corners[0].x_coordinate *
-    //           drawing_scale.value);
-    //   left_down_point_y = (my_origin.y_coordinate -
-    //       p.piece_faces.faces[0].corners[0].z_coordinate *
-    //           drawing_scale.value);
-    //   right_up_point_x = (my_origin.x_coordinate +
-    //       p.piece_faces.faces[0].corners[2].x_coordinate *
-    //           drawing_scale.value);
-    //   right_up_point_y = (my_origin.y_coordinate -
-    //       p.piece_faces.faces[0].corners[2].z_coordinate *
-    //           drawing_scale.value);
-    // }
+    else if (view_port == 'R') {
+      left_down_point_x = ( p.piece_faces.faces[1].corners[0].z_coordinate  );
+      left_down_point_y = (- p.piece_faces.faces[1].corners[0].y_coordinate );
+      right_up_point_x  = ( p.piece_faces.faces[1].corners[2].z_coordinate  );
+      right_up_point_y  = (- p.piece_faces.faces[1].corners[2].y_coordinate );
+    }
+    else if (view_port == 'T') {
+      left_down_point_x = (  p.piece_faces.faces[0].corners[0].x_coordinate   );
+      left_down_point_y = ( - p.piece_faces.faces[0].corners[0].z_coordinate  );
+      right_up_point_x  = (  p.piece_faces.faces[0].corners[2].x_coordinate   );
+      right_up_point_y  = ( - p.piece_faces.faces[0].corners[2].z_coordinate  );
+    }
 
     bool x_compare = right_up_point_x < ssx && left_down_point_x > esx;
     bool y_compare = right_up_point_y > ssy && left_down_point_y < esy;
@@ -296,31 +279,6 @@ if(select_window.value){
     late double right_up_point_x;
     late double right_up_point_y;
 
-    ///
-
-    //
-    // Piece_model p = box_repository.box_model.value.box_pieces[0];
-    //
-    //    Single_Face sface = p.piece_faces.faces[0];
-    //
-    //     left_down_point_x = (p.piece_faces.faces[0].corners[0].x_coordinate );
-    //     left_down_point_y = (p.piece_faces.faces[0].corners[0].y_coordinate );
-    //     right_up_point_x  = (p.piece_faces.faces[0].corners[2].x_coordinate );
-    //     right_up_point_y  = (p.piece_faces.faces[0].corners[2].y_coordinate );
-    //
-    //
-    //     print("= = = = =");
-    //     print("window sx : ${ssx} , sy : ${ssy}");
-    //     print("window ex : ${esx} , ey : ${esy}");
-    //     print(". . . . . . . . .");
-    //     print("sface corner 0 x : ${left_down_point_x} , y : ${left_down_point_y}");
-    //     print("sface corner 2 x : ${right_up_point_x} ,  y : ${right_up_point_y}");
-    //     print("= = = = =");
-
-
-    ///
-
-
     for (int i = 0; i < box_repository.box_model.value.box_pieces.length; i++) {
       Piece_model p = box_repository.box_model.value.box_pieces[i];
 
@@ -328,50 +286,41 @@ if(select_window.value){
         Single_Face sface = p.piece_faces.faces[f];
 
         if (view_port == 'F') {
+
           left_down_point_x = (p.piece_faces.faces[f].corners[0].x_coordinate );
           left_down_point_y = ( p.piece_faces.faces[f].corners[0].y_coordinate );
           right_up_point_x = (p.piece_faces.faces[f].corners[2].x_coordinate );
           right_up_point_y = (p.piece_faces.faces[f].corners[2].y_coordinate );
-          // );
+
+
+
+
         }
-        // else if (view_port == 'R') {
-        //   left_down_point_x = (my_origin.x_coordinate +
-        //       p.piece_faces.faces[f].corners[0].z_coordinate *
-        //           drawing_scale.value);
-        //   left_down_point_y = (my_origin.y_coordinate -
-        //       p.piece_faces.faces[f].corners[0].y_coordinate *
-        //           drawing_scale.value);
-        //   right_up_point_x = (my_origin.x_coordinate +
-        //       p.piece_faces.faces[f].corners[2].z_coordinate *
-        //           drawing_scale.value);
-        //   right_up_point_y = (my_origin.y_coordinate -
-        //       p.piece_faces.faces[f].corners[2].y_coordinate *
-        //           drawing_scale.value);
-        // }
-        // else if (view_port == 'T') {
-        //   left_down_point_x = (my_origin.x_coordinate +
-        //       p.piece_faces.faces[f].corners[0].x_coordinate *
-        //           drawing_scale.value);
-        //   left_down_point_y = (my_origin.y_coordinate -
-        //       p.piece_faces.faces[f].corners[0].z_coordinate *
-        //           drawing_scale.value);
-        //   right_up_point_x = (my_origin.x_coordinate +
-        //       p.piece_faces.faces[f].corners[2].x_coordinate *
-        //           drawing_scale.value);
-        //   right_up_point_y = (my_origin.y_coordinate -
-        //       p.piece_faces.faces[f].corners[2].z_coordinate *
-        //           drawing_scale.value);
-        // }
+        else if (view_port == 'R') {
+          left_down_point_x = (  p.piece_faces.faces[f].corners[0].z_coordinate  );
+          left_down_point_y = (  p.piece_faces.faces[f].corners[0].y_coordinate );
+          right_up_point_x =  (  p.piece_faces.faces[f].corners[2].z_coordinate  );
+          right_up_point_y =  (  p.piece_faces.faces[f].corners[2].y_coordinate );
+        }
+        else if (view_port == 'T') {
+          left_down_point_x = (  p.piece_faces.faces[f].corners[0].x_coordinate  );
+          left_down_point_y = (  p.piece_faces.faces[f].corners[0].z_coordinate );
+          right_up_point_x =  (  p.piece_faces.faces[f].corners[2].x_coordinate  );
+          right_up_point_y =  (  p.piece_faces.faces[f].corners[2].z_coordinate );
+        }
 
         bool x_compare = right_up_point_x < ssx && left_down_point_x > esx;
         bool y_compare = right_up_point_y < ssy && left_down_point_y > esy;
 
-        if (x_compare && y_compare && !p.piece_name.contains('inner')
+        if (x_compare && y_compare &&
+            !p.piece_name.contains('inner')
             // &&
             // !p.piece_name.contains('back_panel') &&
             // !p.piece_name.contains('Helper')
             ) {
           selected_faces.add(Selected_Face(p.piece_id, sface.name));
+
+          print("piece : ${p.piece_name} , face : ${sface.name}");
 
           gumball.value=true;
 
@@ -396,9 +345,11 @@ if(select_window.value){
       Piece_model hovered_piece =
           box_repository.box_model.value.box_pieces[hover_id];
 
-      if (!box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('inner') &&
+      if (!box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('inner')
+      // &&
           // !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('Helper') &&
-          !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('back_panel'))
+          // !box_repository.box_model.value.box_pieces[hover_id].piece_name.contains('back_panel')
+      )
       {
 
         if (!selected_pieces.contains(hovered_piece)) {
@@ -504,7 +455,7 @@ if(select_window.value){
       ) {
         continue;
       }
-      else if (check_position(p, my_origin)) {
+      else if (check_position(p)) {
         hover_id = i;
       }
     }
@@ -512,7 +463,7 @@ if(select_window.value){
   }
 
   ///the second one :
-  bool check_position(Piece_model p, Point_model my_origin) {
+  bool check_position(Piece_model p) {
     bool is_hover = false;
 
     // double local_scal_value=drawing_scale.value;
@@ -522,33 +473,23 @@ if(select_window.value){
     late double right_up_point_x;
     late double right_up_point_y;
 
-    if (view_port == 'F') {
-      left_down_point_x = (my_origin.x_coordinate +
-          p.piece_faces.faces[4].corners[0].x_coordinate * local_scal_value);
-      left_down_point_y = (my_origin.y_coordinate -
-          p.piece_faces.faces[4].corners[0].y_coordinate *local_scal_value);
-      right_up_point_x = (my_origin.x_coordinate +
-          p.piece_faces.faces[4].corners[2].x_coordinate * local_scal_value);
-      right_up_point_y = (my_origin.y_coordinate -
-          p.piece_faces.faces[4].corners[2].y_coordinate * local_scal_value);
-    } else if (view_port == 'R') {
-      left_down_point_x = (my_origin.x_coordinate +
-          p.piece_faces.faces[1].corners[0].z_coordinate * drawing_scale.value);
-      left_down_point_y = (my_origin.y_coordinate -
-          p.piece_faces.faces[1].corners[0].y_coordinate * drawing_scale.value);
-      right_up_point_x = (my_origin.x_coordinate +
-          p.piece_faces.faces[1].corners[2].z_coordinate * drawing_scale.value);
-      right_up_point_y = (my_origin.y_coordinate -
-          p.piece_faces.faces[1].corners[2].y_coordinate * drawing_scale.value);
-    } else if (view_port == 'T') {
-      left_down_point_x = (my_origin.x_coordinate +
-          p.piece_faces.faces[0].corners[0].x_coordinate * drawing_scale.value);
-      left_down_point_y = (my_origin.y_coordinate -
-          p.piece_faces.faces[0].corners[0].z_coordinate * drawing_scale.value);
-      right_up_point_x = (my_origin.x_coordinate +
-          p.piece_faces.faces[0].corners[2].x_coordinate * drawing_scale.value);
-      right_up_point_y = (my_origin.y_coordinate -
-          p.piece_faces.faces[0].corners[2].z_coordinate * drawing_scale.value);
+    if (view_port == 'F' || view_port == 'P') {
+      left_down_point_x = (  p.piece_faces.faces[4].corners[0].x_coordinate * local_scal_value);
+      left_down_point_y = (  - p.piece_faces.faces[4].corners[0].y_coordinate *local_scal_value);
+      right_up_point_x = (  p.piece_faces.faces[4].corners[2].x_coordinate * local_scal_value);
+      right_up_point_y = (  - p.piece_faces.faces[4].corners[2].y_coordinate * local_scal_value);
+    }
+    else if (view_port == 'R') {
+      left_down_point_x = (  p.piece_faces.faces[1].corners[0].z_coordinate   * local_scal_value);
+      left_down_point_y = (  - p.piece_faces.faces[1].corners[0].y_coordinate * local_scal_value);
+      right_up_point_x = (  p.piece_faces.faces[1].corners[2].z_coordinate    * local_scal_value);
+      right_up_point_y = (  - p.piece_faces.faces[1].corners[2].y_coordinate  * local_scal_value);
+    }
+    else if (view_port == 'T') {
+      left_down_point_x = (  p.piece_faces.faces[0].corners[0].x_coordinate  * local_scal_value);
+      left_down_point_y = (  -p.piece_faces.faces[0].corners[0].z_coordinate * local_scal_value);
+      right_up_point_x = ( p.piece_faces.faces[0].corners[2].x_coordinate    * local_scal_value);
+      right_up_point_y =  (-p.piece_faces.faces[0].corners[2].z_coordinate   * local_scal_value);
     }
 
     double mouse_position_x = mouse_position.value.dx;
@@ -742,13 +683,14 @@ if(select_window.value){
                     back_distance -
                     material_thickness)));
 
-        // box_repository.box_model.value.box_pieces[hover_id].piece_thickness-=(back_distance + material_thickness);
+        double old_back_distance=box_repository.box_model.value.box_pieces[hover_id].back_distance;
         box_repository.box_model.value.box_pieces[hover_id].back_distance =
-            (back_distance + material_thickness);
+            (old_back_distance);
 
         box_repository.box_model.value.box_pieces.add(back_panel);
         // box_repository.back_panel_type=back_panel_type;
-      } else {
+      }
+      else {
         Piece_model back_panel = Piece_model(
             box_repository.box_model.value.get_id("BP"),
             'back_panel',
@@ -767,9 +709,6 @@ if(select_window.value){
                     back_distance -
                     material_thickness)));
 
-        // box_repository.box_model.value.box_pieces[hover_id].piece_thickness-=back_distance+material_thickness;
-        box_repository.box_model.value.box_pieces[hover_id].back_distance =
-            (back_distance + material_thickness);
 
         Piece_model back_panel_Helper = Piece_model(
             box_repository.box_model.value.get_id("BP"),
@@ -789,9 +728,16 @@ if(select_window.value){
 
         box_repository.box_model.value.box_pieces.add(back_panel);
         box_repository.box_model.value.box_pieces.add(back_panel_Helper);
-        // box_repository.back_panel_type=back_panel_type;
+
+        Group_model group_model = Group_model([back_panel,back_panel_Helper]);
+        box_repository.box_model.value.box_groups.add(group_model);
+
+       inner.back_distance+=back_distance+material_thickness;
+
+
       }
-    } else if (back_panel_type == "full_cover") {
+    }
+    else if (back_panel_type == "full_cover") {
       double side_thickness = (box_type == "free_panel")
           ? (0)
           : (box_repository.box_model.value.init_material_thickness);
@@ -918,27 +864,78 @@ if(select_window.value){
 
   move(double double_move_value, String moving_axis){
 
-    if(selected_pieces.length>0){
-      if(moving_axis=="X"){
-        move_piece( double_move_value,  0);
 
+
+      if(selected_pieces.length>0){
+
+        Piece_model p=selected_pieces.value[0];
+
+
+        if(p.piece_name.contains("back_panel")){
+
+          for(int i=0;i<box_repository.box_model.value.box_pieces.length;i++){
+            Piece_model ep = box_repository.box_model.value.box_pieces[i];
+
+            if(ep.piece_name.contains("inner")){
+
+
+              double px_0=p.piece_faces.faces[4].corners[0].x_coordinate;
+              double py_0=p.piece_faces.faces[4].corners[0].y_coordinate;
+              double pz_0=p.piece_faces.faces[4].corners[0].z_coordinate;
+
+              double px_2=p.piece_faces.faces[4].corners[2].x_coordinate;
+              double py_2=p.piece_faces.faces[4].corners[2].y_coordinate;
+
+              double epx_0=ep.piece_faces.faces[5].corners[0].x_coordinate;
+              double epy_0=ep.piece_faces.faces[5].corners[0].y_coordinate;
+              double epz_0=ep.piece_faces.faces[5].corners[0].z_coordinate;
+
+              double epx_2=ep.piece_faces.faces[5].corners[2].x_coordinate;
+              double epy_2=ep.piece_faces.faces[5].corners[2].y_coordinate;
+
+
+              bool comare_x=(px_0<epx_0)&&(px_2>epx_2);
+              bool comare_y=(py_0<epy_0)&&(py_2>epy_2);
+              bool comare_z=pz_0==epz_0;
+
+              if(comare_x && comare_y && comare_z){
+
+                ep.back_distance-=double_move_value;
+
+
+              }
+
+
+            }
+
+          }
+
+        }
+
+
+        if(moving_axis=="X"){
+          move_piece( double_move_value,  0);
+
+        }
+        else if(moving_axis=="Y"){
+          move_piece( 0,  double_move_value);
+
+        }
+
+      }else {
+        move_face(double_move_value);
       }
-      else if(moving_axis=="Y"){
-        move_piece( 0,  double_move_value);
 
-      }
-
-    }else {
-      move_face(double_move_value);
-
-    }
 
     selected_pieces.value=[];
     selected_faces.value=[];
 
+    anlyze_inners();
 
+    draw_Box();
 
   }
+
   move_piece(double x_move_value, double y_move_value) {
     Box_model b = box_repository.box_model.value;
 
@@ -987,9 +984,7 @@ if(select_window.value){
 
       box_repository.add_box_to_repo(b);
 
-      anlyze_inners();
 
-      draw_Box();
     }
 
   }
@@ -1055,9 +1050,6 @@ if(select_window.value){
 
       box_repository.add_box_to_repo(b);
 
-      anlyze_inners();
-
-      draw_Box();
     }
   }
 

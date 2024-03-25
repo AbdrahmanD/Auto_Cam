@@ -24,10 +24,12 @@ late bool select_window;
 
 late double X_move;
 late double Y_move;
+late String view_Port;
+
 
   three_D_Painter(this.box_model,this.lines_with_type, this.screen_size,
       this.scale,this.hover_id,this.mouse_position,this.selected_pieces,this.selected_faces,this.start_select_window,this
-.end_select_window,this.select_window,this.X_move,this.Y_move);
+.end_select_window,this.select_window,this.X_move,this.Y_move,this.view_Port);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -35,12 +37,15 @@ late double Y_move;
 
     for (int i = 0; i < box_model.box_pieces.length; i++) {
       Piece_model p = box_model.box_pieces[i];
-      if (p.piece_name.contains("Helper")) {
-        continue;
-      }
+      // if (
+      // p.piece_name.contains("Helper")
+      // ) {
+      //   continue;
+      // }
       if (i == hover_id) {
         draw_hover_piece(canvas, screen_size, p);
-      } else {
+      }
+      else {
         draw_piece(canvas, screen_size, p);
       }
     }
@@ -48,19 +53,17 @@ late double Y_move;
 
     draw_web(canvas, screen_size);
 
-    draw_text(canvas,
-        "X:${double.parse("${mouse_position.dx}").toStringAsFixed(2)}",
-        Offset(400, screen_size.height - 50),
-        8, 18, Colors.grey);
+    draw_text(canvas, "X:${double.parse("${mouse_position.dx}").toStringAsFixed(2)}", Offset(400, screen_size.height - 50), 8, 18, Colors.grey);
+    draw_text(canvas, "Y:${double.parse("${-mouse_position.dy}").toStringAsFixed(2)}", Offset(500, screen_size.height - 50), 8, 18, Colors.grey);
+    draw_text(canvas, "scale:${double.parse("${ scale}").toStringAsFixed(2)}", Offset(600, screen_size.height - 50), 8, 18, Colors.grey);
 
-    draw_text(
-        canvas, "Y:${double.parse("${mouse_position.dy}").toStringAsFixed(2)}",
-        Offset(500, screen_size.height - 50),
-        8, 18, Colors.grey);
+   String view_p="";
+       if(view_Port=="F"){view_p="FRONT";}
+  else if(view_Port=="P"){view_p="PERSPECTIVE";}
+  else if(view_Port=="R"){view_p="RIGHT";}
+  else if(view_Port=="T"){view_p="TOP";}
 
-    draw_text(canvas, "scale:${double.parse("${ scale}").toStringAsFixed(2)}",
-        Offset(600, screen_size.height - 50),
-        8, 18, Colors.grey);
+    draw_text(canvas, "view port  : ${view_p}", Offset(700, screen_size.height - 50), 8, 18, Colors.grey);
 
     ///
 
@@ -68,36 +71,7 @@ late double Y_move;
       draw_select_rect(canvas, screen_size);
     }
 
-    draw_selected_face(canvas,scale,screen_size,X_move,Y_move);
-
   }
-
-draw_selected_face(Canvas canvas , double scal,Size screen_size , double x_move,double y_move){
-    for(int i=0;i<selected_faces.length;i++){
-
-      Selected_Face face = selected_faces[i];
-      Piece_model p = box_model.box_pieces.firstWhere((element) => element.piece_id==face.piece_id);
-
-      Point_model s=p.piece_faces.faces.firstWhere((element) => element.name==face.face_name).corners[0];
-      Point_model e=p.piece_faces.faces.firstWhere((element) => element.name==face.face_name).corners[2];
-
-      Paint paint=Paint();
-      paint.style=PaintingStyle.stroke;
-      paint.color=Colors.red;
-      paint.strokeWidth=2;
-
-
-
-      canvas.drawLine(
-          Offset(s.x_coordinate*scale+screen_size.width/2+x_move*scale,
-                - s.y_coordinate*scale+screen_size.height/2+y_move*scale),
-          Offset(e.x_coordinate*scale+screen_size.width/2+x_move*scale,
-                - e.y_coordinate*scale+screen_size.height/2+y_move*scale),
-          paint);
-
-    }
-}
-
 
   draw_web  (Canvas canvas , Size screen_size){
 
@@ -237,7 +211,11 @@ draw_selected_face(Canvas canvas , double scal,Size screen_size , double x_move,
 
 
     bool inner=piece_model.piece_name.contains('inner');
-    bool Helper=piece_model.piece_name.contains('Helper');
+    bool Helper= piece_model.piece_name.contains('Helper');
+
+
+
+
 
     Paint main_paint = Paint();
     main_paint.style = PaintingStyle.stroke;
@@ -251,20 +229,24 @@ draw_selected_face(Canvas canvas , double scal,Size screen_size , double x_move,
 
 
       if(inner){
-        all_paint.color=Colors.white!;
+
+        all_paint.color=Color.fromARGB(0, 0, 0, 0);
+        main_paint.color=Color.fromARGB(0, 0, 0, 0);
 
       }
       else if(Helper){
         // all_paint.color=Colors.white70;
-        all_paint.color=Colors.white!;
+        all_paint.color=Color.fromARGB(0, 0, 0, 0);
+        main_paint.color=Color.fromARGB(0, 0, 0, 0);
 
       }
+
       else{
         all_paint.color=Colors.grey[300]!;
+        all_paint.blendMode=BlendMode.darken;
 
       }
 
-      all_paint.blendMode=BlendMode.darken;
 
 
 
@@ -273,7 +255,7 @@ draw_selected_face(Canvas canvas , double scal,Size screen_size , double x_move,
       // ..strokeWidth=1.5
       ..color=Colors.blue[300]!;
 
-      int selected_face=1;
+
       bool selected_piece=false;
 
       for(Piece_model  p in selected_pieces){
@@ -283,21 +265,48 @@ draw_selected_face(Canvas canvas , double scal,Size screen_size , double x_move,
       }
 
 
-      canvas.drawPath(front_path, selected_piece?selected_paint:all_paint);
-      canvas.drawPath(back_path , selected_piece?selected_paint:all_paint);
-      canvas.drawPath(right_path, selected_piece?selected_paint:all_paint);
-      canvas.drawPath(left_path , selected_piece?selected_paint:all_paint);
-      canvas.drawPath(top_path  , selected_piece?selected_paint:all_paint);
-      canvas.drawPath(base_path , selected_piece?selected_paint:all_paint);
+
+      /// selected faces
+    Paint selected_face_paint = Paint()
+      ..style = PaintingStyle.stroke
+    ..strokeWidth=2.5
+      ..color=Colors.red;
 
 
-    canvas.drawPath(front_path, main_paint);
-    canvas.drawPath(back_path , main_paint);
-    canvas.drawPath(right_path, main_paint);
-    canvas.drawPath(left_path , main_paint);
-    canvas.drawPath(top_path  , main_paint);
-    canvas.drawPath(base_path , main_paint);
+    int face_name=100;
 
+    for(Selected_Face  f in selected_faces){
+      if(f.piece_id==piece_model.piece_id){
+        face_name=f.face_name;
+      }
+    }
+
+      canvas.drawPath(front_path, (selected_piece)?selected_paint:all_paint);
+      canvas.drawPath(back_path , (selected_piece)?selected_paint:all_paint);
+      canvas.drawPath(right_path, (selected_piece)?selected_paint:all_paint);
+      canvas.drawPath(left_path , (selected_piece)?selected_paint:all_paint);
+      canvas.drawPath(top_path  , (selected_piece)?selected_paint:all_paint);
+      canvas.drawPath(base_path , (selected_piece)?selected_paint:all_paint);
+
+      List<Path> selected_faces_list=[];
+      List<Path> un_selected_faces_list=[];
+
+    if(face_name==1){selected_faces_list.add(top_path);}else{un_selected_faces_list.add(top_path);}
+    if(face_name==2){selected_faces_list.add(right_path);}else{un_selected_faces_list.add(right_path);}
+    if(face_name==3){selected_faces_list.add(base_path);}else{un_selected_faces_list.add(base_path);}
+    if(face_name==4){selected_faces_list.add(left_path);}else{un_selected_faces_list.add(left_path);}
+    if(face_name==5){selected_faces_list.add(front_path);}else{un_selected_faces_list.add(front_path);}
+    if(face_name==6){selected_faces_list.add(back_path);}else{un_selected_faces_list.add(back_path);}
+
+
+
+    for(Path p in un_selected_faces_list){
+      canvas.drawPath(p,main_paint);
+    }
+
+    for(Path p in selected_faces_list){
+      canvas.drawPath(p,selected_face_paint);
+    }
 
 
   }

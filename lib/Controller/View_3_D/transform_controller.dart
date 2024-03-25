@@ -24,6 +24,7 @@ class transform_controller {
  late  CameraTransformer cameraTransformer ;
   late Size screen_size;
 
+
   transform_controller(this.screen_size ){
      camera_position=Point_model(0, 0, 0);
      // camera_position=Point_model(screen_size.width/2, screen_size.height/2, 0);
@@ -111,6 +112,7 @@ class transform_controller {
       draw_controller.select_window.value,
       draw_controller.x_move,
       draw_controller.y_move,
+      draw_controller.view_port.value
     );
 
 

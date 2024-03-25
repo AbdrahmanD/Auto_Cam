@@ -374,6 +374,7 @@ project_model = draw_controller.box_repository.project_model;
     return face_center;
   }
 
+
   /// if the center of face in the second face
   bool check_face_in_face(Single_Face mface, Single_Face sface) {
     bool in_face = false;
@@ -396,7 +397,8 @@ project_model = draw_controller.box_repository.project_model;
         if (compare_X && compare_Y) {
           in_face = true;
         }
-      } else if (face_plane(mface) == 'XZ') {
+      }
+      else if (face_plane(mface) == 'XZ') {
         bool compare_X = (mp0.x_coordinate <= sp0.x_coordinate) &&
             (mp2.x_coordinate >= sp2.x_coordinate);
         bool compare_Y = (mp0.y_coordinate <= sp0.y_coordinate) &&
@@ -407,7 +409,8 @@ project_model = draw_controller.box_repository.project_model;
         if (compare_X && compare_Z) {
           in_face = true;
         }
-      } else if (face_plane(mface) == 'YZ') {
+      }
+      else if (face_plane(mface) == 'YZ') {
         bool compare_X = (mp0.x_coordinate <= sp0.x_coordinate) &&
             (mp2.x_coordinate >= sp2.x_coordinate);
 
@@ -420,6 +423,7 @@ project_model = draw_controller.box_repository.project_model;
           in_face = true;
         }
       }
+
     }
 
     return in_face;
