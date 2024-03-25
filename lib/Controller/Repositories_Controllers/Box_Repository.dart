@@ -82,7 +82,8 @@ class Box_Repository extends GetxController {
   }
 
 
-  Box_Pieces_Arrang arrange_box(){
+  Box_Pieces_Arrang arrange_box(Box_model b){
+
     Box_Pieces_Arrang box_pieces_arrang =Box_Pieces_Arrang(box_model.value);
 
     return box_pieces_arrang;

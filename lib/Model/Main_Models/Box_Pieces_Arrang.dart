@@ -13,6 +13,7 @@ class Box_Pieces_Arrang {
   List<Piece_model> doors=[];
   List<Piece_model> drawers=[];
   List<Piece_model> supports=[];
+  List<Piece_model> back_panels=[];
 
 
   Box_Pieces_Arrang(this.box_model){
@@ -20,11 +21,12 @@ class Box_Pieces_Arrang {
 
       /// body
       if(
-          p.piece_name.contains("top") ||
+          (p.piece_name.contains("top") ||
           p.piece_name.contains("base") ||
           p.piece_name.contains("right") ||
-          p.piece_name.contains("left")  ||
-         ( p.piece_name.contains("back_panel") && !p.piece_name.contains("drawer") )
+          p.piece_name.contains("left")
+
+          )
       )
       {
         body.add(p);
@@ -70,6 +72,14 @@ class Box_Pieces_Arrang {
         drawers.add(p);
       }
 
+
+      /// back_panels
+      else if(
+      p.piece_name.contains("back_panel")
+      )
+      {
+        back_panels.add(p);
+      }
 
     }
   }

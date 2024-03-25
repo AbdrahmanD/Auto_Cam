@@ -46,7 +46,9 @@ late String view_Port;
         draw_hover_piece(canvas, screen_size, p);
       }
       else {
-        draw_piece(canvas, screen_size, p);
+        if(p.piece_inable){
+          draw_piece(canvas, screen_size, p);
+        }
       }
     }
 

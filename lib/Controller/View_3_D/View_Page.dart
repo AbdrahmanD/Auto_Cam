@@ -63,11 +63,6 @@ class _View_PageState extends State<View_Page> {
           Stack(
             children: [
 
-              /// list of box content
-              Positioned(
-                  left: 0,top: 100,
-                  child: Box_Pieces_List()),
-
 
               /// main drawing canvas
               Positioned(
@@ -481,6 +476,13 @@ class _View_PageState extends State<View_Page> {
                   ),
                 ],
               ),),
+
+
+              /// list of box content
+              Positioned(
+                  left: 0,top: 100,
+                  child: Box_Pieces_List(draw_controller.box_repository.box_model.value)
+              ),
 
 
 
