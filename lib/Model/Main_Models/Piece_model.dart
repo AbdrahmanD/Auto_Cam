@@ -19,11 +19,11 @@ class Piece_model{
   late double       back_distance;
 
 
-  bool              is_changed=false;
   bool              piece_inable=true;
-  bool              nested=false;
 
   List<Point_model> cutting_boarder=[];
+
+
 
   Piece_model(
 
@@ -113,8 +113,7 @@ class Piece_model{
     piece_thickness = json['piece_thickness'];
     piece_origin = Point_model.fromJson(json['piece_origin']) ;
     piece_faces =Faces_model.fromJson(json['piece_faces']);
-    is_changed = json['is_changed'];
-    piece_inable = json['piece_inable'];
+     piece_inable = json['piece_inable'];
   }
 
   Map<String, dynamic> toJson() {
@@ -132,8 +131,7 @@ class Piece_model{
     if (this.piece_faces != null) {
       data['piece_faces'] = this.piece_faces!.toJson();
     }
-    data['is_changed'] = this.is_changed;
-    data['piece_inable'] = this.piece_inable;
+     data['piece_inable'] = this.piece_inable;
     return data;
   }
 

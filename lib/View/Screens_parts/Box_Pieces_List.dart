@@ -1,6 +1,7 @@
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
 import 'package:auto_cam/Model/Main_Models/Box_Pieces_Arrang.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
+import 'package:auto_cam/Model/Main_Models/Group_model.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,7 +32,7 @@ _Box_Pieces_ListState(this.b);
   List<Piece_model> shelves=[];
   List<Piece_model> partitions=[];
   List<Piece_model> doors=[];
-  List<Piece_model> drawers=[];
+  List<List<Group_model>> drawers=[];
   List<Piece_model> supports=[];
   List<Piece_model> back_panels=[];
 
@@ -94,8 +95,6 @@ _Box_Pieces_ListState(this.b);
   }
 
 
-
-
   my_initState() {
 
     box_pieces_arrang = box_repository.arrange_box(b);
@@ -119,8 +118,6 @@ _Box_Pieces_ListState(this.b);
     refresh();
 
   }
-
-
 
 
   @override
@@ -229,8 +226,7 @@ ListView(
                             child: Checkbox(value: body[i].piece_inable,
                                 onChanged: (v){
                               body[i].piece_inable=!body[i].piece_inable;
-
-                              box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==body[i].piece_id).piece_inable= body[i].piece_inable;
+                              box_repository.enable_Piece(body[i], body[i].piece_inable);
 
                               setState(() {
 
@@ -268,7 +264,7 @@ ListView(
     ):SizedBox(),
 
     /// box shelves
-    expand_box? Column(
+    (expand_box && shelves.length>0)? Column(
       children: [
 
         /// shelves
@@ -329,9 +325,10 @@ ListView(
                             Container(height: 24,
                               child: Checkbox(value: shelves[i].piece_inable,
                                   onChanged: (v){
-                                    shelves[i].piece_inable=!body[i].piece_inable;
 
-                                    box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==shelves[i].piece_id).piece_inable= shelves[i].piece_inable;
+                                    shelves[i].piece_inable=!shelves[i].piece_inable;
+
+                                    box_repository.enable_Piece(shelves[i], shelves[i].piece_inable);
 
                                     setState(() {
 
@@ -370,7 +367,7 @@ ListView(
 
 
     /// box partitions
-    expand_box? Column(
+    (expand_box&& partitions.length>0)? Column(
       children: [
 
         /// partitions
@@ -431,6 +428,7 @@ ListView(
                               child: Checkbox(value: partitions[i].piece_inable,
                                   onChanged: (v){
                                     partitions[i].piece_inable=!partitions[i].piece_inable;
+                                    box_repository.enable_Piece(partitions[i], partitions[i].piece_inable);
 
                                     box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==partitions[i].piece_id).piece_inable= partitions[i].piece_inable;
 
@@ -471,7 +469,7 @@ ListView(
     ):SizedBox(),
 
     /// box doors
-    expand_box? Column(
+    (expand_box&& doors.length>0)? Column(
       children: [
 
         /// Doors
@@ -532,6 +530,7 @@ ListView(
                               child: Checkbox(value: doors[i].piece_inable,
                                   onChanged: (v){
                                     doors[i].piece_inable=!doors[i].piece_inable;
+                                    box_repository.enable_Piece(doors[i], doors[i].piece_inable);
 
                                     box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==doors[i].piece_id).piece_inable= doors[i].piece_inable;
 
@@ -574,7 +573,7 @@ ListView(
 
 
     /// box drawers
-    expand_box? Column(
+    (expand_box&& drawers.length>0)? Column(
       children: [
 
         /// Drawers
@@ -629,14 +628,16 @@ ListView(
                             ),
                             SizedBox(width: 6,),
 
-                            Text(drawers[i].piece_name),
+                            Text("Drawer gorup : ${i+1}"),
 
                             Container(height: 24,
-                              child: Checkbox(value: drawers[i].piece_inable,
+                              child: Checkbox(
+                                  value: drawers[i][0].group_enable,
                                   onChanged: (v){
-                                    drawers[i].piece_inable=!drawers[i].piece_inable;
-
-                                    box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==drawers[i].piece_id).piece_inable= drawers[i].piece_inable;
+                                    drawers[i][0].group_enable=!drawers[i][0].group_enable;
+                                    int group_id=double.parse("1").toInt();
+                                    // box_repository.box_model.value.box_groups[group_id].pieces[i].piece_inable=drawers[i].group_enable;
+                                    print("group_id : $group_id / drawer :${i}");
 
                                     setState(() {
 
@@ -647,14 +648,13 @@ ListView(
                           ],mainAxisAlignment: MainAxisAlignment.start,
                         ),
 
-                        Container(width: 163,
+                        Container(width: 196,
                           height: expand_item?96:0,
                           child: expand_item?Column(
                             children: [
-                              Row(children: [SizedBox(width: 64,),Container(height: 24,width: 58,child: Text("width ",style: TextStyle(fontSize: 12),)),Text(style: TextStyle(fontSize: 12),"${drawers[i].piece_width}")],),
-                              Row(children: [SizedBox(width: 64,),Container(height: 24,width: 58,child: Text("height ",style: TextStyle(fontSize: 12),)),Text(style: TextStyle(fontSize: 12),"${drawers[i].piece_height}")],),
-                              Row(children: [SizedBox(width: 64,),Container(height: 24,width: 58,child: Text("thickness",style: TextStyle(fontSize: 12),)),Text(style: TextStyle(fontSize: 12),"${drawers[i].piece_thickness}")],),
-                              Row(children: [SizedBox(width: 64,),Container(height: 24,width: 58,child: Text("material ",style: TextStyle(fontSize: 12),)),Text(style: TextStyle(fontSize: 12),"${drawers[i].material_name}")],),
+                              Row(children: [SizedBox(width: 64,),Container(height: 24,width: 70,child: Text(style: TextStyle(fontSize: 12),"${drawers[i][0].group_name}"))],),
+                              // Row(children: [SizedBox(width: 64,),Container(height: 24,width: 48,child: Text("face ",style: TextStyle(fontSize: 12),)),Text(style: TextStyle(fontSize: 12),"${drawers[i].pieces[0].material_name}")],),
+                              // Row(children: [SizedBox(width: 64,),Container(height: 24,width: 48,child: Text("box ",style: TextStyle(fontSize: 12),)),Text(style: TextStyle(fontSize: 12),"${drawers[i].pieces[1].material_name}")],),
                             ],
                           ):SizedBox(),
                         )
@@ -675,7 +675,7 @@ ListView(
     ):SizedBox(),
 
     /// box supports
-    expand_box? Column(
+    (expand_box&& supports.length>0)? Column(
       children: [
 
         /// supports
@@ -736,6 +736,7 @@ ListView(
                               child: Checkbox(value: supports[i].piece_inable,
                                   onChanged: (v){
                                     supports[i].piece_inable=!supports[i].piece_inable;
+                                    box_repository.enable_Piece(supports[i], supports[i].piece_inable);
 
                                     box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==supports[i].piece_id).piece_inable= supports[i].piece_inable;
 
@@ -776,7 +777,7 @@ ListView(
     ):SizedBox(),
 
     /// box back_panels
-    expand_box? Column(
+    (expand_box&& back_panels.length>0)? Column(
       children: [
 
         /// back_panels
@@ -837,6 +838,7 @@ ListView(
                               child: Checkbox(value: back_panels[i].piece_inable,
                                   onChanged: (v){
                                     back_panels[i].piece_inable=!back_panels[i].piece_inable;
+                                    box_repository.enable_Piece(back_panels[i], back_panels[i].piece_inable);
 
                                     box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==back_panels[i].piece_id).piece_inable= back_panels[i].piece_inable;
 
@@ -883,5 +885,6 @@ ListView(
 
       );
   }
+
 }
 

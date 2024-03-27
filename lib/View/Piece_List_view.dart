@@ -238,8 +238,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                   if (pieces[i].piece_name.contains("inner") ||
                                    pieces[i].piece_thickness==0||
                                       pieces[i].piece_name.contains('Helper') ||
-                                      (pieces[i].is_changed &&
-                                          pieces[i]
+                                      (pieces[i]
                                               .piece_name
                                               .contains('drawer'))) {
                                     return SizedBox();
@@ -271,8 +270,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                                       pieces[i].piece_thickness==0||
 
                                       pieces[i].piece_name.contains('Helper') ||
-                                      (pieces[i].is_changed &&
-                                          pieces[i]
+                                      ( pieces[i]
                                               .piece_name
                                               .contains('drawer'))) {
                                     return SizedBox();
@@ -375,34 +373,6 @@ class _Piece_List_viewState extends State<Piece_List_view> {
                   ),
 
 
-
-
-                  ///Export Details sheets as PDF
-                  // Container(
-                  //   child: Row(
-                  //     children: [
-                  //       SizedBox(
-                  //         width: 18,
-                  //       ),
-                  //       Container(
-                  //           width: 150,
-                  //           child: Text('Details sheets as   PDF ',
-                  //               style: TextStyle(
-                  //                 fontSize: 14,
-                  //               ))),
-                  //       SizedBox(
-                  //         width: 18,
-                  //       ),
-                  //       InkWell(
-                  //           onTap: () {},
-                  //           child: Icon(
-                  //             Icons.picture_as_pdf,
-                  //             size: 24,
-                  //             color: Colors.teal,
-                  //           )),
-                  //     ],
-                  //   ),
-                  // ),
 
                   SizedBox(
                     height: 12,
@@ -517,7 +487,7 @@ class _Piece_List_viewState extends State<Piece_List_view> {
 
                         pieces[i].piece_direction ==
                             'help_shelf' ||
-                        (pieces[i].is_changed && pieces[i].piece_name.contains('drawer')) ||
+                        (pieces[i].piece_name.contains('drawer')) ||
                         pieces[i].piece_name
                             .contains("Helper")) {
                       return SizedBox();

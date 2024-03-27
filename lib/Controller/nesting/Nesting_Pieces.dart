@@ -89,7 +89,7 @@ class Nesting_Pieces {
 
     for(int r=0;r<my_pieces.length;r++){
       Piece_model p = my_pieces[r];
-      if(!p.nested){
+      if(!p.piece_inable){
         remain_pieces.add(p);
 
       }
@@ -119,7 +119,7 @@ class Nesting_Pieces {
 
     for (int r = 0; r < pieces.length; r++) {
       Piece_model my_piece = pieces[r];
-      if (!my_piece.nested) {
+      if (!my_piece.piece_inable) {
         for (int sh = 0; sh < sheets.length; sh++) {
           My_Sheet my_sheet = sheets[sh];
 
@@ -127,7 +127,7 @@ class Nesting_Pieces {
 
             insert_rect_in_sheet(my_sheet, my_piece);
 
-            my_piece.nested = true;
+            my_piece.piece_inable = true;
             my_container.pieces.add(my_piece);
 
             sheets.remove(my_sheet);
@@ -145,7 +145,7 @@ class Nesting_Pieces {
 
     for (int r = 0; r < pieces.length; r++) {
 
-      if (!pieces[r].nested) {
+      if (!pieces[r].piece_inable) {
         Piece_model rotated_piece = rotate_rect(pieces[r]);
         pieces.removeAt(r);
 
@@ -160,7 +160,7 @@ class Nesting_Pieces {
     for (int r = 0; r < remain_pieces.length; r++) {
 
 
-      if (!remain_pieces[r].nested) {
+      if (!remain_pieces[r].piece_inable) {
         remain_pieces[r] = rotate_rect(remain_pieces[r]);
 
         for (int sh = 0; sh < sheets.length; sh++) {
@@ -168,7 +168,7 @@ class Nesting_Pieces {
 
           if (can_contain(remain_pieces[r], my_sheet)) {
             insert_rect_in_sheet(my_sheet, remain_pieces[r]);
-            remain_pieces[r].nested = true;
+            remain_pieces[r].piece_inable = true;
             my_container.pieces.add(remain_pieces[r]);
 
 

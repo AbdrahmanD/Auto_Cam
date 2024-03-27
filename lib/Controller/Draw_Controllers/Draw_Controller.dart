@@ -339,7 +339,7 @@ if(select_window.value){
 
     bool piece_in_group = false;
 
-    Group_model group_model = Group_model([]);
+    Group_model group_model = Group_model("",[],true);
 
     if (hover_id != 100) {
       Piece_model hovered_piece =
@@ -729,7 +729,7 @@ if(select_window.value){
         box_repository.box_model.value.box_pieces.add(back_panel);
         box_repository.box_model.value.box_pieces.add(back_panel_Helper);
 
-        Group_model group_model = Group_model([back_panel,back_panel_Helper]);
+        Group_model group_model = Group_model("Helper",[back_panel,back_panel_Helper],true);
         box_repository.box_model.value.box_groups.add(group_model);
 
        inner.back_distance+=back_distance+material_thickness;
@@ -1115,6 +1115,8 @@ if(select_window.value){
 
     anlyze_inners();
   }
+
+
 
   // flip_piece() {
   //   Box_model b = box_repository.box_model.value;
@@ -1749,8 +1751,7 @@ if(select_window.value){
           my_piece.piece_name.contains("Helper")) {
         continue;
       } else {
-        my_piece.nested = false;
-        nesting_pieces.add(my_piece);
+         nesting_pieces.add(my_piece);
       }
     }
 

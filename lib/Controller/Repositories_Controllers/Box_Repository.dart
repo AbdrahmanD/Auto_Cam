@@ -7,6 +7,7 @@ import 'package:auto_cam/Model/Main_Models/CNC_Tool.dart';
 import 'package:auto_cam/Model/Main_Models/Cut_List_Item.dart';
 import 'package:auto_cam/Model/Main_Models/Drawer_Rail_Brand.dart';
 import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
+import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/project/Project_model.dart';
 import 'package:get/get.dart';
 
@@ -88,5 +89,23 @@ class Box_Repository extends GetxController {
 
     return box_pieces_arrang;
   }
+
+  enable_Piece(Piece_model p ,bool enable){
+
+    int index=  box_model.value.box_pieces.indexWhere((element) => element.piece_id==p.piece_id);
+
+    box_model.value.box_pieces[index].piece_inable=enable;
+
+Box_model nb=box_model.value;
+
+add_box_to_repo(nb);
+
+  }
+
+
+
+
+
+
 
 }

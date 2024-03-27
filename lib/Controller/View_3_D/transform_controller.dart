@@ -61,10 +61,12 @@ class transform_controller {
     box_model.box_pieces=[];
 
     for(int i=0;i<b.box_pieces.length;i++){
-  Piece_model p = Piece_model(b.box_pieces[i].piece_id, b.box_pieces[i].piece_name,
+  Piece_model p = Piece_model(
+      b.box_pieces[i].piece_id, b.box_pieces[i].piece_name,
       b.box_pieces[i].piece_direction, b.box_pieces[i].material_name,
       b.box_pieces[i].piece_width, b.box_pieces[i].piece_height,
       b.box_pieces[i].piece_thickness, b.box_pieces[i].piece_origin );
+  p.piece_inable=b.box_pieces[i].piece_inable;
   box_model.box_pieces.add(p);
 }
 

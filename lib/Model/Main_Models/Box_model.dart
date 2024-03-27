@@ -23,6 +23,7 @@ class Box_model {
  late Point_model box_origin;
    List<Piece_model> box_pieces=[];
    List<Group_model> box_groups=[];
+   List<List<Group_model> > drawer_groups=[];
    List<Piece_model> box_deleted_pieces=[];
    int piece_id=0;
 
@@ -1325,7 +1326,7 @@ Map<String, dynamic> toJson() {
    }
    box_pieces.add(door_piece);
 
-    Group_model door_grope=Group_model([door_piece,door_Hinges_Helper]);
+    Group_model door_grope=Group_model("Helper",[door_piece,door_Hinges_Helper],true);
     box_groups.add(door_grope);
 
 
@@ -1571,10 +1572,10 @@ Map<String, dynamic> toJson() {
       box_pieces.add(l_door_Hinges_Helper);
 
 
-      Group_model l_door_grope=Group_model([door_piece_1,l_door_Hinges_Helper]);
+      Group_model l_door_grope=Group_model("Helper",[door_piece_1,l_door_Hinges_Helper],true);
       box_groups.add(l_door_grope);
 
-      Group_model r_door_grope=Group_model([door_piece_2,r_door_Hinges_Helper]);
+      Group_model r_door_grope=Group_model("Helper",[door_piece_2,r_door_Hinges_Helper],true);
       box_groups.add(r_door_grope);
 
 

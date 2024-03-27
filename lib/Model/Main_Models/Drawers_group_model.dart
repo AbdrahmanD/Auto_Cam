@@ -65,7 +65,7 @@ late bool inner_drawer;
 
     Draw_Controller draw_controller = Get.find();
 
-    
+    List<Group_model> corrent_group=[];
 
     double deferent_between_face_Y_and_box_y=drawer_face_down_distace;
 
@@ -98,6 +98,8 @@ late bool inner_drawer;
         right_gape).toStringAsFixed(1));
 
     double drawer_box_width = double.parse((inner.piece_width - side_gap).toStringAsFixed(1));
+
+    int drawer_groub_num=draw_controller.box_repository.box_model.value.drawer_groups.length+1;
 
     for (int i = 0; i < drawer_quantity; i++) {
 
@@ -136,11 +138,18 @@ late bool inner_drawer;
       }
 
 
-      draw_controller.box_repository.box_model.value.box_pieces.add(
-          add_drawer_face(draw_controller.box_repository.box_model.value.get_id("Drawer Face")
-              , drawer_id + 1,i+1, drawer_face_origin,
-              face_height, face_width,dx,dy,y_space,box_height,drawer_box_width));
+      Piece_model face=
+      add_drawer_face(draw_controller.box_repository.box_model.value.get_id("Drawer Face")
+          , drawer_id + 1,i+1, drawer_face_origin,
+          face_height, face_width,dx,dy,y_space,box_height,drawer_box_width);
 
+      draw_controller.box_repository.box_model.value.box_pieces.add(face);
+
+
+
+Group_model drawer_pieces_as_group=Group_model("Drawer ${drawer_groub_num}-${i+1}", [],true);
+
+      drawer_pieces_as_group.pieces.add(face);
 
       var drawer_pieces = add_drawer_box( drawer_id +1, i + 1,
           drawer_box_origin, drawer_box_width, box_height,dx,dy,y_space ,
@@ -149,11 +158,18 @@ late bool inner_drawer;
 
       drawer_pieces.forEach((element) {
         draw_controller.box_repository.box_model.value.box_pieces.add(element);
+        drawer_pieces_as_group.pieces.add(element);
 
       });
 
 
+      corrent_group.add(drawer_pieces_as_group);
+
+
     }
+    draw_controller.box_repository.box_model.value.drawer_groups.add(corrent_group);
+
+
   }
 
 
@@ -197,7 +213,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_left = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("DB Left"),
-        'drawer Left DBL ',
+        'Drawer Left ',
         'V',
         "MDF",
         drawer_box_depth,
@@ -210,7 +226,7 @@ late bool inner_drawer;
     /// right side
     Piece_model drawer_box_right = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("DB Right"),
-        'drawer right DBR ',
+        'Drawer right ',
         'V',
         "MDF",
         drawer_box_depth,
@@ -229,7 +245,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_front = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("DB Front"),
-        'drawer Front DBF ',
+        'Drawer Front ',
         'F',
         "MDF",
        correct_value( box_width - drawer_box_material_thickness * 2),
@@ -247,7 +263,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_back = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("DB Back"),
-        'drawer back DBP ',
+        'Drawer back ',
         'F',
         "MDF",
         correct_value(box_width - drawer_box_material_thickness * 2),
@@ -264,7 +280,7 @@ late bool inner_drawer;
 
     Piece_model drawer_box_base_panel = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("Drawer Panel"),
-        'drawer base_panel',
+        'Drawer base_panel',
         'H',
         "MDF",
 
@@ -284,7 +300,7 @@ double_face?
 
     Piece_model drawer_box_base_panel_Helper = Piece_model(
       draw_controller.box_repository.box_model.value.get_id("Helper"),
-        'drawer back_panel_Helper',
+        'Drawer back_panel_Helper',
         'H',
         "MDF",
 
@@ -297,7 +313,7 @@ double_face?
         ),
          );
 
-    Group_model drawer_base_panel=Group_model([drawer_box_base_panel,drawer_box_base_panel_Helper]);
+    Group_model drawer_base_panel=Group_model("Helper",[drawer_box_base_panel,drawer_box_base_panel_Helper],true);
     draw_controller.box_repository.box_model.value.box_groups.add(drawer_base_panel);
 
 
@@ -333,7 +349,7 @@ double_face?
    );
 
 
-    Group_model drawer_sildes=Group_model([drawer_right_slider,drawer_left_slider]);
+    Group_model drawer_sildes=Group_model("Helper",[drawer_right_slider,drawer_left_slider],true);
 
     draw_controller.box_repository.box_model.value.box_groups.add(drawer_sildes);
 

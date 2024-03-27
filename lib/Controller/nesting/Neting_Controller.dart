@@ -52,7 +52,7 @@ List<Nesting_Painter> nesting_painters=[];
     List<Piece_model> my_pieces  = add_cutting_gap_to_pieces(my_pieces0);
 
     my_pieces.forEach((element) {
-      element.nested = false;
+      element.piece_inable = false;
     });
 
 

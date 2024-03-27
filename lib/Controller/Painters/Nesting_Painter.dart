@@ -33,9 +33,8 @@ late String hover_id;
 
         // print('hover id : $hover_id , piece id : $i');
 
-        if (container.pieces[i].nested) {
           draw_nested_rect(canvas, scale, container.pieces[i], container.pieces[i].piece_id, hover, selected);
-        }
+
       }
 
       if (corners.length != 0) {
