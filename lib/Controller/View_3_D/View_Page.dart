@@ -10,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class View_Page extends StatefulWidget {
   late Size screen_size;
@@ -137,6 +138,7 @@ class _View_PageState extends State<View_Page> {
                       }
                     }
                   },
+
                   child: Listener(
                     /// zooming by scrolling mouse wheel
                     onPointerSignal: (PointerSignalEvent event) {
@@ -168,6 +170,7 @@ class _View_PageState extends State<View_Page> {
 
                         setState(() {});
                       },
+
 
 
 
@@ -299,7 +302,19 @@ class _View_PageState extends State<View_Page> {
 
                         },
 
+onDoubleTap: (){
+  if (
+  (!( draw_controller.hover_id == 100) &&  draw_controller.box_repository.box_model.value.box_pieces[ draw_controller.hover_id].piece_name
+      .contains('inner'))
+      || ( draw_controller.hover_id == 100)
 
+  ) {
+    Get.defaultDialog(
+        radius: 12,
+        title: draw_controller.general_list(),
+        content: draw_controller.Context_list());
+  }
+},
                         child: Obx(
                               () => CustomPaint(
                             painter: transfomer.camera_cordinate_draw(screen_size),

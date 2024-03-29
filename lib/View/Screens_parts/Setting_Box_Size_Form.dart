@@ -10,6 +10,7 @@ import 'package:auto_cam/Model/Main_Models/JoinHolePattern.dart';
 import 'package:auto_cam/Model/Main_Models/Piece_model.dart';
 import 'package:auto_cam/View/Main_Screen.dart';
 import 'package:auto_cam/View/Screens_parts/Box_Type.dart';
+import 'package:auto_cam/View/Screens_parts/Cut_List_review.dart';
 import 'package:auto_cam/View/Setting_Page.dart';
 import 'package:auto_cam/project/Nesting_View.dart';
 import 'package:auto_cam/View/Piece_List_view.dart';
@@ -520,12 +521,84 @@ maxLines: 3,      minLines: 1,            decoration: InputDecoration(
           ///////////////////////
           ///////////////////////
 
+          ///save the box
+          Container(
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 36,
+                ),
+                Container(
+                    width: 100,
+                    child: Text('Save Box',
+                        style: TextStyle(
+                          fontSize: 14,
+                        ))),
+                SizedBox(
+                  width: 18,
+                ),
+                InkWell(
+                    onTap: () {
+                      draw_Controller.save_Box();
+                    },
+                    child: Icon(
+                      Icons.save,
+                      size: 36,
+                      color: Colors.teal,
+                    )),
+              ],
+            ),
+          ),
+
+
+          SizedBox(
+            height: 12,
+          ),
+
           Container(
             height: 1,
             color: Colors.grey,
           ),
 
           SizedBox(height: 16,),
+
+          ///review boring drawing
+          Container(
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 18,
+                ),
+                Container(
+                    width: 120,
+                    child: Text('Review drilling files ',
+                        style: TextStyle(
+                          fontSize: 14,
+                        ))),
+                SizedBox(
+                  width: 18,
+                ),
+                InkWell(
+                    onTap: () {
+                      draw_Controller.analyze();
+                      Future.delayed(Duration(milliseconds: 1000))
+                          .then((value) => Get.to(Piece_List_view(false)));
+                    },
+                    child: Icon(
+                      Icons.draw,
+                      size: 36,
+                      color: Colors.teal,
+                    )),
+              ],
+            ),
+          ),
+
+
+          SizedBox(
+            height: 12,
+          ),
+
+
           ///review cut list
           Container(
             child: Row(
@@ -546,7 +619,7 @@ maxLines: 3,      minLines: 1,            decoration: InputDecoration(
                     onTap: () {
                       draw_Controller.analyze();
                       Future.delayed(Duration(milliseconds: 1000))
-                          .then((value) => Get.to(Piece_List_view(false)));
+                          .then((value) => Get.to(Cut_List_review()));
                     },
                     child: Icon(
                       Icons.list,
@@ -562,39 +635,8 @@ maxLines: 3,      minLines: 1,            decoration: InputDecoration(
             height: 12,
           ),
 
-          ///save the box
-          Container(
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 18,
-                ),
-                Container(
-                    width: 120,
-                    child: Text('Save cabinet',
-                        style: TextStyle(
-                          fontSize: 14,
-                        ))),
-                SizedBox(
-                  width: 18,
-                ),
-                InkWell(
-                    onTap: () {
-                      draw_Controller.save_Box();
-                      },
-                    child: Icon(
-                      Icons.save,
-                      size: 36,
-                      color: Colors.teal,
-                    )),
-              ],
-            ),
-          ),
 
 
-          SizedBox(
-            height: 12,
-          ),
 
           ///print shop drawing
           Container(

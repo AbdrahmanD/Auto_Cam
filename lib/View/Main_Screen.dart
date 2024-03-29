@@ -11,6 +11,7 @@ import 'package:auto_cam/project/Project_Editor.dart';
 import 'package:auto_cam/project/Project_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Main_Screen extends StatefulWidget {
 
@@ -337,7 +338,7 @@ class _Main_ScreenState extends State<Main_Screen> {
             SizedBox(
               height: 24,
             ),
-            Container(
+           ! kIsWeb?  Container(
               width: w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -363,7 +364,7 @@ class _Main_ScreenState extends State<Main_Screen> {
 
                 ],
               ),
-            ),
+            ):
 
             SizedBox(
               height: 24,

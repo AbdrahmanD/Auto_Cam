@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
+
 
 class Active_controller extends GetxController {
   int num = 0;
@@ -12,50 +16,58 @@ class Active_controller extends GetxController {
 
   Active_controller() {
 
-    if (my_setting_data.read("installation_unique_key") == null)  {
-      my_setting_data.write("installation_unique_key", generat_unique_code());
-    }
+    if (kIsWeb) {
 
-    /// nun_limit_active
-    if (my_setting_data.read("un_limit_active") != null &&
-        my_setting_data.read("un_limit_active") == true) {
       active = true;
-    }
 
-    /// limit_active
-    else if (my_setting_data.read("limit_active") != null &&
-             my_setting_data.read("limit_active") == true)
-    {
-      if (my_setting_data.read("num") != null)
+
+    } else {
+
+
+      if (my_setting_data.read("installation_unique_key") == null)  {
+        my_setting_data.write("installation_unique_key", generat_unique_code());
+      }
+
+      /// nun_limit_active
+      if (my_setting_data.read("un_limit_active") != null &&
+          my_setting_data.read("un_limit_active") == true) {
+        active = true;
+      }
+
+      /// limit_active
+      else if (my_setting_data.read("limit_active") != null &&
+          my_setting_data.read("limit_active") == true)
       {
-        num = my_setting_data.read("num");
+        if (my_setting_data.read("num") != null)
+        {
+          num = my_setting_data.read("num");
 
-        if (num < limit) {
+          if (num < limit) {
+            active = true;
+            num++;
+            my_setting_data.write("num", num);
+          }
+          else{
+
+            // print("num big =$num");
+
+          }
+        }
+        else
+        {
           active = true;
           num++;
           my_setting_data.write("num", num);
         }
-        else{
 
-          // print("num big =$num");
+      }
 
-        }
-      }
-      else
-      {
-        active = true;
-        num++;
-        my_setting_data.write("num", num);
-      }
 
     }
-    //
-    // /// not active
-    // else {
-    //   active = false;
-    // }
 
-    print("active from active controller = $active");
+
+
+
 
 
   }
