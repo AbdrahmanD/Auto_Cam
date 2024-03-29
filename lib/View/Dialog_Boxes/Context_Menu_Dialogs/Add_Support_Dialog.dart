@@ -54,6 +54,7 @@ class _Add_Support_Dialog extends State<Add_Support_Dialog> {
   left_change(){
 
 late double full_distance;
+
     if(vertical){
       full_distance= draw_Controller.box_repository.box_model.value.
       box_pieces[draw_Controller.hover_id].piece_width;
@@ -123,15 +124,15 @@ setState(() {});
 
         if (!partition_center) {
 
-           if (proportional) {
-             left_or_down_Distance_value =
-                (double.parse((double.parse(Left_Distance.text.toString()).toStringAsFixed(2))) / 100) *
-                    (draw_Controller.box_repository.box_model.value
-                        .box_pieces[draw_Controller.hover_id].piece_width) -
-                    width / 2;
-
-
-          }
+          //  if (proportional) {
+          //    left_or_down_Distance_value =
+          //       (double.parse((double.parse(Left_Distance.text.toString()).toStringAsFixed(2))) / 100) *
+          //           (draw_Controller.box_repository.box_model.value
+          //               .box_pieces[draw_Controller.hover_id].piece_width) -
+          //           width / 2;
+          //
+          //
+          // }
 
           Support_Filler support_filler=Support_Filler(vertical, face, back, width, thickness, left_or_down_Distance_value);
 
@@ -145,7 +146,8 @@ draw_controller.add_support(support_filler, 1);
                         .box_pieces[draw_Controller.hover_id].piece_width /
                     2 -
                 width / 2;
-          }else{
+          }
+          else{
             left_or_down_Distance_value = draw_Controller.box_repository.box_model.value
                 .box_pieces[draw_Controller.hover_id].piece_height /
                 2 -
@@ -159,6 +161,7 @@ draw_controller.add_support(support_filler, 1);
       }
 
       else{
+
         Support_Filler support_filler=Support_Filler(vertical, face, back, width, thickness, left_or_down_Distance_value);
 
           draw_controller.add_support(support_filler, Quantity_value);
@@ -192,6 +195,7 @@ draw_controller.add_support(support_filler, 1);
     }
     setState(() {});
   }
+
 
 
   Draw_Controller draw_controller=Get.find();
@@ -248,8 +252,15 @@ draw_controller.add_support(support_filler, 1);
                   right_or_top="Top";
                   left_or_down="Down";
 
-                  left_or_down_Distance_value= draw_Controller.box_repository.box_model.value.
-                  box_pieces[draw_Controller.hover_id].piece_height-width;
+                  if(vertical){
+                    left_or_down_Distance_value= draw_Controller.box_repository.box_model.value.
+                    box_pieces[draw_Controller.hover_id].piece_width-width;
+                  }else{
+                    left_or_down_Distance_value= draw_Controller.box_repository.box_model.value.
+                    box_pieces[draw_Controller.hover_id].piece_height-width;
+                  }
+
+                  Left_Distance.text="${left_or_down_Distance_value}";
 
                   setState(() {
 
@@ -265,8 +276,14 @@ draw_controller.add_support(support_filler, 1);
                   right_or_top="Right";
                   left_or_down="Left";
 
-                  left_or_down_Distance_value= draw_Controller.box_repository.box_model.value.
-                  box_pieces[draw_Controller.hover_id].piece_width-width;
+                  if(vertical){
+                    left_or_down_Distance_value= draw_Controller.box_repository.box_model.value.
+                    box_pieces[draw_Controller.hover_id].piece_width-width;
+                  }else{
+                    left_or_down_Distance_value= draw_Controller.box_repository.box_model.value.
+                    box_pieces[draw_Controller.hover_id].piece_height-width;
+                  }
+                  Left_Distance.text="${left_or_down_Distance_value}";
 
                   setState(() {
 

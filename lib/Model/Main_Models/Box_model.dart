@@ -1005,7 +1005,7 @@ Map<String, dynamic> toJson() {
   /// support
 
   add_vertical_support_pattern(int inner, double left_Distence, double width,
-      double partition_material_thickness, int Partition_quantity )
+      double partition_material_thickness )
   {
 
     Piece_model new_piece = Piece_model(
@@ -1031,7 +1031,7 @@ Map<String, dynamic> toJson() {
       double partition_material_thickness, int Quantity)
   {
     if (Quantity == 1) {
-      add_vertical_support_pattern(inner, left_Distence, width, partition_material_thickness, Quantity );
+      add_vertical_support_pattern(inner, left_Distence, width, partition_material_thickness );
         Navigator.of(Get.overlayContext!).pop();
 
     }
@@ -1047,10 +1047,12 @@ Map<String, dynamic> toJson() {
             / (Quantity + 1))
             .toStringAsFixed(1));
 
-        add_vertical_support_pattern(inner, distance, width,  partition_material_thickness, Quantity  );
+        add_vertical_support_pattern(inner, distance, width,  partition_material_thickness  );
 
         for (int i = 1; i < Quantity; i++) {
-          add_vertical_support_pattern(box_pieces.length - 1, distance,width, partition_material_thickness,Quantity );
+          distance+=distance+width;
+          add_vertical_support_pattern(inner, distance,width, partition_material_thickness );
+
         }
 
 

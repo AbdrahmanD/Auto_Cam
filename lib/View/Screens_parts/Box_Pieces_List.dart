@@ -1,3 +1,4 @@
+import 'package:auto_cam/Controller/Draw_Controllers/Draw_Controller.dart';
 import 'package:auto_cam/Controller/Repositories_Controllers/Box_Repository.dart';
 import 'package:auto_cam/Model/Main_Models/Box_Pieces_Arrang.dart';
 import 'package:auto_cam/Model/Main_Models/Box_model.dart';
@@ -24,7 +25,7 @@ late Box_model b;
 
 _Box_Pieces_ListState(this.b);
 
-  Box_Repository box_repository = Get.find();
+Draw_Controller draw_controller= Get.find();
 
   late Box_Pieces_Arrang box_pieces_arrang;
 
@@ -32,7 +33,7 @@ _Box_Pieces_ListState(this.b);
   List<Piece_model> shelves=[];
   List<Piece_model> partitions=[];
   List<Piece_model> doors=[];
-  List<List<Group_model>> drawers=[];
+  List<List<Group_model>> all_drawers=[];
   List<Piece_model> supports=[];
   List<Piece_model> back_panels=[];
 
@@ -40,7 +41,8 @@ _Box_Pieces_ListState(this.b);
   List<bool> bool_shelves=[];
   List<bool> bool_partitions=[];
   List<bool> bool_doors=[];
-  List<bool> bool_drawers=[];
+List<bool> bool_drawers_group=[];
+List<List<bool>>    bool_single_drawers=[];
   List<bool> bool_supports=[];
   List<bool> bool_back_panels=[];
 
@@ -51,7 +53,7 @@ _Box_Pieces_ListState(this.b);
   bool expand_shelves=false;
   bool expand_partitions=false;
   bool expand_doors=false;
-  bool expand_drawers=false;
+  bool expand_all_drawers=false;
   bool expand_supports=false;
   bool expand_back_panels=false;
 
@@ -77,8 +79,29 @@ _Box_Pieces_ListState(this.b);
     for(int i=0;i<body.length;i++){if(bool_body[i]){height_body+=120;}else{height_body+=24;}}
     for(int i=0;i<shelves.length;i++){if(bool_shelves[i]){height_shelves+=120;}else{height_shelves+=24;}}
     for(int i=0;i<partitions.length;i++){if(bool_partitions[i]){height_partitions+=120;}else{height_partitions+=24;}}
-    for(int i=0;i<doors.length;i++){if(bool_doors[i]){height_doors+=120;}else{height_doors+=24;}}
-    for(int i=0;i<drawers.length;i++){if(bool_drawers[i]){height_drawers+=120;}else{height_drawers+=24;}}
+
+    for (int i = 0; i < doors.length; i++) {
+      height_doors += 24;
+
+      if (bool_doors[i]) {
+        height_doors += 120;
+      }
+    }
+
+    for(int i=0;i<all_drawers.length;i++){
+
+  height_drawers+=24;
+
+  for (int dg = 0; dg < all_drawers[i].length; dg++) {
+
+if(bool_drawers_group[i]){
+  height_drawers+=90;
+
+  }
+}
+    }
+
+
     for(int i=0;i<supports.length;i++){if(bool_supports[i]){height_supports+=120;}else{height_supports+=24;}}
     for(int i=0;i<back_panels.length;i++){if(bool_back_panels[i]){height_back_panels+=120;}else{height_back_panels+=24;}}
 
@@ -97,13 +120,13 @@ _Box_Pieces_ListState(this.b);
 
   my_initState() {
 
-    box_pieces_arrang = box_repository.arrange_box(b);
+    box_pieces_arrang = draw_controller.box_repository.arrange_box(b);
 
     body=box_pieces_arrang.body;
     shelves=box_pieces_arrang.shelves;
     partitions=box_pieces_arrang.partitions;
     doors=box_pieces_arrang.doors;
-    drawers=box_pieces_arrang.drawers;
+    all_drawers=box_pieces_arrang.drawers;
     supports=box_pieces_arrang.supports;
     back_panels=box_pieces_arrang.back_panels;
 
@@ -111,7 +134,14 @@ _Box_Pieces_ListState(this.b);
     for(int i=0;i<box_pieces_arrang.shelves.length;i++){bool_shelves.add(false);}
     for(int i=0;i<box_pieces_arrang.partitions.length;i++){bool_partitions.add(false);}
     for(int i=0;i<box_pieces_arrang.doors.length;i++){bool_doors.add(false);}
-    for(int i=0;i<box_pieces_arrang.drawers.length;i++){bool_drawers.add(false);}
+    for(int i=0;i<all_drawers.length;i++){
+     bool_drawers_group.add(false);
+     List<bool> sdb=[];
+     for(int dg=0;dg<all_drawers[i].length;dg++){
+       sdb.add(false);
+     }
+     bool_single_drawers.add(sdb);
+    }
     for(int i=0;i<box_pieces_arrang.supports.length;i++){bool_supports.add(false);}
     for(int i=0;i<box_pieces_arrang.back_panels.length;i++){bool_back_panels.add(false);}
 
@@ -145,7 +175,7 @@ ListView(
             expand_shelves=false;
             expand_partitions=false;
             expand_doors=false;
-            expand_drawers=false;
+            expand_all_drawers=false;
             expand_supports=false;
           }
           else{
@@ -158,7 +188,7 @@ ListView(
         ),
       ),
       SizedBox(width: 6,),
-      Text(box_repository.box_model.value.box_name),
+      Text(draw_controller.box_repository.box_model.value.box_name),
     ],),
 
 
@@ -192,6 +222,22 @@ ListView(
 
               bool expand_item=bool_body[i];
 
+              bool selected_piece=false;
+              if (draw_controller.selected_pieces.value.length>0) {
+                for(int s=0;s<draw_controller.selected_pieces.value.length;s++){
+                  Piece_model p=draw_controller.selected_pieces.value[s];
+                  Piece_model p2=draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                  element.piece_id==body[i].piece_id
+                  );
+                
+                  if(p.piece_id==p2.piece_id){
+                    selected_piece=true;
+                  }
+                }
+              }
+
+              // color:selected_piece?Colors.teal:Color.fromARGB(0, 0, 0, 0) ,
+
               return Row(mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(width: 26,),
@@ -220,13 +266,24 @@ ListView(
                           ),
                           SizedBox(width: 6,),
 
-                          Text(body[i].piece_name),
+                          InkWell(
+              onTap: (){
+                draw_controller.selected_pieces.value.add(
+                  draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                  element.piece_id==body[i].piece_id
+                  )
+                );
+              }
+                              ,child: Container(
+
+                              color:selected_piece?Colors.blue[300]:Color.fromARGB(0, 0, 0, 0) ,
+                              width:60,child: Text(body[i].piece_name))),
 
                           Container(height: 24,
                             child: Checkbox(value: body[i].piece_inable,
                                 onChanged: (v){
                               body[i].piece_inable=!body[i].piece_inable;
-                              box_repository.enable_Piece(body[i], body[i].piece_inable);
+                              draw_controller. box_repository.enable_Piece(body[i], body[i].piece_inable);
 
                               setState(() {
 
@@ -292,6 +349,23 @@ ListView(
 
               bool expand_item=bool_shelves[i];
 
+              bool selected_piece=false;
+              if (draw_controller.selected_pieces.value.length>0) {
+                for(int s=0;s<draw_controller.selected_pieces.value.length;s++){
+                  Piece_model p=draw_controller.selected_pieces.value[s];
+                  Piece_model p2=draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                  element.piece_id==shelves[i].piece_id
+                  );
+
+                  if(p.piece_id==p2.piece_id){
+                    selected_piece=true;
+                  }
+                }
+              }
+
+              // color:selected_piece?Colors.teal:Color.fromARGB(0, 0, 0, 0) ,
+
+
               return Row(mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(width: 26,),
@@ -320,7 +394,17 @@ ListView(
                             ),
                             SizedBox(width: 6,),
 
-                            Text(shelves[i].piece_name),
+                            InkWell(
+                                onTap: (){
+                                  draw_controller.selected_pieces.value.add(
+                                      draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                                      element.piece_id==shelves[i].piece_id
+                                      )
+                                  );
+                                }
+                                ,child: Container(
+                                color:selected_piece?Colors.blue[300]:Color.fromARGB(0, 0, 0, 0) ,
+                                width: 96,child: Text(shelves[i].piece_name))),
 
                             Container(height: 24,
                               child: Checkbox(value: shelves[i].piece_inable,
@@ -328,7 +412,7 @@ ListView(
 
                                     shelves[i].piece_inable=!shelves[i].piece_inable;
 
-                                    box_repository.enable_Piece(shelves[i], shelves[i].piece_inable);
+                                    draw_controller.box_repository.enable_Piece(shelves[i], shelves[i].piece_inable);
 
                                     setState(() {
 
@@ -393,6 +477,21 @@ ListView(
             itemBuilder: (context,i){
 
               bool expand_item=bool_partitions[i];
+              bool selected_piece=false;
+              if (draw_controller.selected_pieces.value.length>0) {
+                for(int s=0;s<draw_controller.selected_pieces.value.length;s++){
+                  Piece_model p=draw_controller.selected_pieces.value[s];
+                  Piece_model p2=draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                  element.piece_id==partitions[i].piece_id
+                  );
+
+                  if(p.piece_id==p2.piece_id){
+                    selected_piece=true;
+                  }
+                }
+              }
+
+              // color:selected_piece?Colors.teal:Color.fromARGB(0, 0, 0, 0) ,
 
               return Row(mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -422,15 +521,24 @@ ListView(
                             ),
                             SizedBox(width: 6,),
 
-                            Text(partitions[i].piece_name),
+                            InkWell(
+                                onTap: (){
+                                  draw_controller.selected_pieces.value.add(
+                                      draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                                      element.piece_id==partitions[i].piece_id
+                                      )
+                                  );
+                                }
+              ,child: Container(
+                                color:selected_piece?Colors.blue[300]:Color.fromARGB(0, 0, 0, 0) ,                                width: 96,child: Text(partitions[i].piece_name))),
 
                             Container(height: 24,
                               child: Checkbox(value: partitions[i].piece_inable,
                                   onChanged: (v){
                                     partitions[i].piece_inable=!partitions[i].piece_inable;
-                                    box_repository.enable_Piece(partitions[i], partitions[i].piece_inable);
+                                    draw_controller.box_repository.enable_Piece(partitions[i], partitions[i].piece_inable);
 
-                                    box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==partitions[i].piece_id).piece_inable= partitions[i].piece_inable;
+                                    draw_controller.  box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==partitions[i].piece_id).piece_inable= partitions[i].piece_inable;
 
                                     setState(() {
 
@@ -496,6 +604,23 @@ ListView(
 
               bool expand_item=bool_doors[i];
 
+              bool selected_piece=false;
+              if (draw_controller.selected_pieces.value.length>0) {
+                for(int s=0;s<draw_controller.selected_pieces.value.length;s++){
+                  Piece_model p=draw_controller.selected_pieces.value[s];
+                  Piece_model p2=draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                  element.piece_id==doors[i].piece_id
+                  );
+
+                  if(p.piece_id==p2.piece_id){
+                    selected_piece=true;
+                  }
+                }
+              }
+
+              // color:selected_piece?Colors.blue[300]:Color.fromARGB(0, 0, 0, 0) ,
+
+
               return Row(mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(width: 26,),
@@ -524,15 +649,23 @@ ListView(
                             ),
                             SizedBox(width: 6,),
 
-                            Text(doors[i].piece_name),
+                            InkWell(     onTap: (){
+                              draw_controller.selected_pieces.value.add(
+                                  draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                                  element.piece_id==doors[i].piece_id
+                                  )
+                              );
+                            },child: Container(
+                                color:selected_piece?Colors.blue[300]:Color.fromARGB(0, 0, 0, 0) ,
+                                width: 96,child: Text(doors[i].piece_name))),
 
                             Container(height: 24,
                               child: Checkbox(value: doors[i].piece_inable,
                                   onChanged: (v){
                                     doors[i].piece_inable=!doors[i].piece_inable;
-                                    box_repository.enable_Piece(doors[i], doors[i].piece_inable);
+                                    draw_controller.  box_repository.enable_Piece(doors[i], doors[i].piece_inable);
 
-                                    box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==doors[i].piece_id).piece_inable= doors[i].piece_inable;
+                                    draw_controller.  box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==doors[i].piece_id).piece_inable= doors[i].piece_inable;
 
                                     setState(() {
 
@@ -573,51 +706,52 @@ ListView(
 
 
     /// box drawers
-    (expand_box&& drawers.length>0)? Column(
+    (expand_box&& all_drawers.length>0)? Column(
       children: [
 
         /// Drawers
         Row(children: [
           SizedBox(width: 26,),
           Container(width: 24,height: 24,
-            child: InkWell(onTap: (){expand_drawers=!expand_drawers;
+            child: InkWell(onTap: (){expand_all_drawers=!expand_all_drawers;
+              refresh();
             setState(() {});},
                 child: Icon(
 
-                  !expand_drawers ? Icons.add_circle_outline:Icons.remove_circle_outline ,
-                  color: expand_drawers?Colors.red:Colors.teal, size: 18,)
+                  !expand_all_drawers ? Icons.add_circle_outline:Icons.remove_circle_outline ,
+                  color: expand_all_drawers?Colors.red:Colors.teal, size: 18,)
             ),
           ),
           SizedBox(width: 6,),
           Text("Drawers"),
         ],),
-        expand_drawers?Container(height:height_drawers,
-
+        expand_all_drawers?Container(height:height_drawers,
 
           child: ListView.builder(
-            itemCount: drawers.length,
+            itemCount: all_drawers.length,
             itemBuilder: (context,i){
 
-              bool expand_item=bool_drawers[i];
+            bool expand_item=bool_drawers_group[i] ;
 
               return Row(mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(width: 26,),
+                  SizedBox(width: 48,),
 
                   /// each item details
-                  Container(width: 230,
+                  Container(
                     height: expand_item?120:24,
                     child: Column(
                       children: [
                         Row(
                           children:
                           [
-                            SizedBox(width: 32,),
 
                             Container(width: 24,height: 24,
                               child: InkWell(onTap: (){
 
-                                bool_drawers[i]=!bool_drawers[i];
+                                bool_drawers_group[i]=!bool_drawers_group[i];
+
+
                                 refresh();
                               },
                                   child: Icon(
@@ -632,12 +766,20 @@ ListView(
 
                             Container(height: 24,
                               child: Checkbox(
-                                  value: drawers[i][0].group_enable,
+                                  value:  draw_controller.box_repository.box_model.value.drawer_groups[i][0].group_enable,
                                   onChanged: (v){
-                                    drawers[i][0].group_enable=!drawers[i][0].group_enable;
-                                    int group_id=double.parse("1").toInt();
-                                    // box_repository.box_model.value.box_groups[group_id].pieces[i].piece_inable=drawers[i].group_enable;
-                                    print("group_id : $group_id / drawer :${i}");
+
+
+                                    for(int g=0;g<draw_controller.box_repository.box_model.value.drawer_groups[i].length;g++){
+                                      draw_controller.  box_repository.box_model.value.drawer_groups[i][g].group_enable=!
+                                      draw_controller. box_repository.box_model.value.drawer_groups[i][g].group_enable;
+
+                                      for(int p=0;p<draw_controller.box_repository.box_model.value.drawer_groups[i][g].pieces.length;p++){
+                                    draw_controller.    box_repository.box_model.value.drawer_groups[i][g].pieces[p].piece_inable=!
+                                    draw_controller.     box_repository.box_model.value.drawer_groups[i][g].pieces[p].piece_inable;
+                                      }
+
+                                    }
 
                                     setState(() {
 
@@ -648,15 +790,30 @@ ListView(
                           ],mainAxisAlignment: MainAxisAlignment.start,
                         ),
 
-                        Container(width: 196,
+                        Container(width: 96,
                           height: expand_item?96:0,
-                          child: expand_item?Column(
-                            children: [
-                              Row(children: [SizedBox(width: 64,),Container(height: 24,width: 70,child: Text(style: TextStyle(fontSize: 12),"${drawers[i][0].group_name}"))],),
-                              // Row(children: [SizedBox(width: 64,),Container(height: 24,width: 48,child: Text("face ",style: TextStyle(fontSize: 12),)),Text(style: TextStyle(fontSize: 12),"${drawers[i].pieces[0].material_name}")],),
-                              // Row(children: [SizedBox(width: 64,),Container(height: 24,width: 48,child: Text("box ",style: TextStyle(fontSize: 12),)),Text(style: TextStyle(fontSize: 12),"${drawers[i].pieces[1].material_name}")],),
-                            ],
-                          ):SizedBox(),
+
+                            child:    expand_item?ListView.builder(
+                                itemCount: all_drawers[i].length,
+                                itemBuilder: (context,d){
+                                  return InkWell(onTap: (){
+
+
+                                      for(int p=0;p<draw_controller.box_repository.box_model.value.drawer_groups[i][d].pieces.length;p++){
+
+                                        draw_controller.selected_pieces.value.add(
+                                            draw_controller. box_repository.box_model.value.drawer_groups[i][d].pieces[p]
+                                        );
+
+
+
+                                    }
+
+
+                                  },child: Text("${all_drawers[i][d].group_name}"));
+
+                                }):SizedBox()
+
                         )
                       ],
                     ),
@@ -673,6 +830,7 @@ ListView(
 
       ],
     ):SizedBox(),
+
 
     /// box supports
     (expand_box&& supports.length>0)? Column(
@@ -702,6 +860,25 @@ ListView(
 
               bool expand_item=bool_supports[i];
 
+
+              bool selected_piece=false;
+              if (draw_controller.selected_pieces.value.length>0) {
+                for(int s=0;s<draw_controller.selected_pieces.value.length;s++){
+                  Piece_model p=draw_controller.selected_pieces.value[s];
+                  Piece_model p2=draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                  element.piece_id==supports[i].piece_id
+                  );
+
+                  if(p.piece_id==p2.piece_id){
+                    selected_piece=true;
+                  }
+                }
+              }
+
+              // color:selected_piece?Colors.blue[300]:Color.fromARGB(0, 0, 0, 0) ,
+
+
+
               return Row(mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(width: 26,),
@@ -730,15 +907,23 @@ ListView(
                             ),
                             SizedBox(width: 6,),
 
-                            Text(supports[i].piece_name),
+                            InkWell(     onTap: (){
+                              draw_controller.selected_pieces.value.add(
+                                  draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                                  element.piece_id==supports[i].piece_id
+                                  )
+                              );
+                            },child: Container(
+                                color:selected_piece?Colors.blue[300]:Color.fromARGB(0, 0, 0, 0) ,
+                                width: 96,child: Text(supports[i].piece_name))),
 
                             Container(height: 24,
                               child: Checkbox(value: supports[i].piece_inable,
                                   onChanged: (v){
                                     supports[i].piece_inable=!supports[i].piece_inable;
-                                    box_repository.enable_Piece(supports[i], supports[i].piece_inable);
+                                    draw_controller.box_repository.enable_Piece(supports[i], supports[i].piece_inable);
 
-                                    box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==supports[i].piece_id).piece_inable= supports[i].piece_inable;
+                                    draw_controller. box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==supports[i].piece_id).piece_inable= supports[i].piece_inable;
 
                                     setState(() {
 
@@ -804,6 +989,25 @@ ListView(
 
               bool expand_item=bool_back_panels[i];
 
+              bool selected_piece=false;
+              if (draw_controller.selected_pieces.value.length>0) {
+                for(int s=0;s<draw_controller.selected_pieces.value.length;s++){
+                  Piece_model p=draw_controller.selected_pieces.value[s];
+                  Piece_model p2=draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+                  element.piece_id==back_panels[i].piece_id
+                  );
+
+                  if(p.piece_id==p2.piece_id){
+                    selected_piece=true;
+                  }
+                }
+              }
+
+              // color:selected_piece?Colors.blue[300]:Color.fromARGB(0, 0, 0, 0) ,
+
+
+
+
               return Row(mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(width: 26,),
@@ -832,15 +1036,26 @@ ListView(
                             ),
                             SizedBox(width: 6,),
 
-                            Text(back_panels[i].piece_name),
+                            InkWell(
+              onTap: (){
+              draw_controller.selected_pieces.value.add(
+              draw_controller.box_repository.box_model.value.box_pieces.firstWhere((element) =>
+              element.piece_id==back_panels[i].piece_id
+              )
+              );
+              },
+                              child: Container(
+                                  color:selected_piece?Colors.blue[300]:Color.fromARGB(0, 0, 0, 0) ,
+                                  child: Text(back_panels[i].piece_name)),
+                            ),
 
                             Container(height: 24,
                               child: Checkbox(value: back_panels[i].piece_inable,
                                   onChanged: (v){
                                     back_panels[i].piece_inable=!back_panels[i].piece_inable;
-                                    box_repository.enable_Piece(back_panels[i], back_panels[i].piece_inable);
+                                    draw_controller.box_repository.enable_Piece(back_panels[i], back_panels[i].piece_inable);
 
-                                    box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==back_panels[i].piece_id).piece_inable= back_panels[i].piece_inable;
+                                    draw_controller. box_repository.box_model.value.box_pieces.firstWhere((element) => element.piece_id==back_panels[i].piece_id).piece_inable= back_panels[i].piece_inable;
 
                                     setState(() {
 

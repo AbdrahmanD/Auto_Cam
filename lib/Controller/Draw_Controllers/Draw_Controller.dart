@@ -584,6 +584,7 @@ if(select_window.value){
 
   /// add support
   add_support(Support_Filler support_filler, int quantity) {
+
     if (support_filler.vertical) {
       box_repository.box_model.value.add_vertical_support(
           hover_id,
